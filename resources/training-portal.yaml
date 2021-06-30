@@ -1,13 +1,10 @@
 apiVersion: training.eduk8s.io/v1alpha1
 kind: TrainingPortal
 metadata:
-  name: lab-markdown-sample
+  name: data-samples
 spec:
-  portal:
-    registration:
-      type: anonymous
   workshops:
-  - name: lab-markdown-sample
+  - name: data-e2e-demo
     capacity: 1
     expires: 60m
     orphaned: 5m

@@ -1,8 +1,6 @@
-name: Markdown Sample
+name: Tanzu Data End-to-End Demo
 
 modules:
     activate:
-    - workshop-overview
-    - setup-environment
-    - exercises/01-sample-content
-    - workshop-summary
+    - demo-overview
+    - demo-imdg
