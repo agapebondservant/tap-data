@@ -21,9 +21,9 @@ Let's go ahead and deploy our Gemfire cluster:
 kubectl create secret docker-registry image-pull-secret --namespace=gemfire-{{ session_namespace }}-cluster --docker-server=registry.pivotal.io --docker-username='{{PIVOTAL_REGISTRY_USERNAME}}' --docker-password='{{PIVOTAL_REGISTRY_USERNAME}}' && kubectl apply -f ~/other/resources/gemfire/gemfire-cluster.yaml -n gemfire-{{ session_namespace }}-cluster
 ```
 
-Notice the order in which the cluster members are created, as well as how the nodes are named. The Gemfire cluster is able to leverage an ordinal-based naming convention for its members based on the Kubernetes **StatefulSet**, which it uses. With StatefulSets, pods are given ordinal suffixes starting from 0 and incremented based on their startup order. The Gemfire operator is able to leverage the ordinal-based naming pattern to its advantage: the pods with the lowest ordinal suffixes are automatically set up as the **locator** nodes, while the other pods become the **server** nodes. 
+Notice the order in which the cluster members are created, as well as how the nodes are named. The Gemfire cluster leverages the Kubernetes **StatefulSet** for deploying its members. This brings several advantages: for example, it is able to leverage the StatefulSet's ordinal-based naming convention. With StatefulSets, pods are given ordinal suffixes which are incremented based on their startup order, starting from 0. The Gemfire operator uses this pattern to its advantage: the pods with the lowest ordinal suffixes are automatically set up as the **locator** nodes, while the other pods become the **server** nodes. 
 
-Next, we wil access the **gfsh** cli. **gfsh** is an interface that can be used for the lifecycle management and monitoring of Gemfire resources, including clusters and their members (locators/servers).
+Next, we wil launch the **gfsh** cli. **gfsh** is an interface that can be used for the lifecycle management and monitoring of Gemfire resources, including clusters and their members (locators/servers).
 ```execute
 kubectl -n gemfire-{{ session_namespace }}-cluster exec -it gemfire1-locator-0 -- gfsh
 ```
