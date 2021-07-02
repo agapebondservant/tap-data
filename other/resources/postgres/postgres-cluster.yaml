@@ -1,0 +1,7 @@
+apiVersion: sql.tanzu.vmware.com/v1
+kind: Postgres
+metadata:
+  name: pginstance-1
+spec:
+  highAvailability:
+    enabled: true

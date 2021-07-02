@@ -1,0 +1,9 @@
+---
+apiVersion: cert-manager.io/v1alpha2
+kind: ClusterIssuer
+metadata:
+  name: postgres-operator-selfsigned-clusterissuer
+  labels:
+    app: postgres-operator
+spec:
+  selfSigned: {}

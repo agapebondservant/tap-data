@@ -3,4 +3,6 @@ name: Tanzu Data End-to-End Demo
 modules:
     activate:
     - demo-overview
-    - demo-imdg
+    - deploy-postgres
+    - deploy-rabbitmq
+    - deploy-imdg

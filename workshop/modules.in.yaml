@@ -11,12 +11,12 @@ modules:
 config:
     vars:
     - name: DATA_E2E_REGISTRY_USERNAME
-      value: oawofolu
+      value: ${DATA_E2E_REGISTRY_USERNAME}
     - name: DATA_E2E_REGISTRY_PASSWORD
-      value: 8ead1438-7b5f-4212-b0c8-7813df575b33
+      value: ${DATA_E2E_REGISTRY_PASSWORD}
     - name: DATA_E2E_REGISTRY_URL
-      value: oawofolu/data-e2e
+      value: ${DATA_E2E_REGISTRY_URL}
     - name: DATA_E2E_PIVOTAL_REGISTRY_USERNAME
-      value: tanzudatademo@gmail.com
+      value: ${DATA_E2E_PIVOTAL_REGISTRY_USERNAME}
     - name: DATA_E2E_PIVOTAL_REGISTRY_PASSWORD
-      value: Vmware1!
+      value: ${DATA_E2E_PIVOTAL_REGISTRY_PASSWORD}

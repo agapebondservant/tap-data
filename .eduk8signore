@@ -5,3 +5,4 @@
 ./README.md
 ./kustomization.yaml
 ./resources
+./workshop/modules.in.yaml

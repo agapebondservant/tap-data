@@ -1,0 +1,10 @@
+---
+apiVersion: cert-manager.io/v1alpha2
+kind: Issuer
+metadata:
+  name: postgres-operator-selfsigned-issuer
+  namespace: default
+  labels:
+    app: postgres-operator
+spec:
+  selfSigned: {}
