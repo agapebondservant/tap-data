@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property>
+        <name>fs.s3a.endpoint</name>
+        <value>http://minio.tanzudata.ml</value>
+    </property>
+    <property>
+        <name>fs.s3a.access.key</name>
+        <value>qeLC1NBoDLwqYChXO0rp</value>
+    </property>
+    <property>
+        <name>fs.s3a.secret.key</name>
+        <value>OKpKEIpDA8Z4KipnkkU33wqzgU8RstgfPFQ9WYKU</value>
+    </property>
+    <property>
+        <name>fs.s3a.fast.upload</name>
+        <value>true</value>
+    </property>
+    <property>
+        <name>fs.s3a.path.style.access</name>
+        <value>true</value>
+    </property>
+</configuration>

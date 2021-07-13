@@ -3,6 +3,11 @@
 source .env
 envsubst < workshop/modules.in.yaml > workshop/modules.yaml
 envsubst < other/resources/postgres/overrides.in.yaml > other/resources/postgres/overrides.yaml
+envsubst < other/resources/greenplum/overrides.in.yaml > other/resources/greenplum/overrides.yaml
+envsubst < other/resources/greenplum/minio-site.in.xml > other/resources/greenplum/minio-site.xml
+
+# pre-initialize required services
+resources/setup.sh
 
 # rebuild workshop image
 DATA_E2E_WORKSHOP_IMAGE_VERSION=`date "+%Y%m%d.%H%M"`

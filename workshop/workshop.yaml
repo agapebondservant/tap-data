@@ -6,3 +6,4 @@ modules:
     - deploy-postgres
     - deploy-rabbitmq
     - deploy-imdg
+    - deploy-greenplum

@@ -1,0 +1,2 @@
+operatorImageRepository: ${DATA_E2E_REGISTRY_USERNAME}/greenplum-operator
+greenplumImageRepository: ${DATA_E2E_REGISTRY_USERNAME}/greenplum-for-kubernetes

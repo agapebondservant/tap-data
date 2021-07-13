@@ -5,7 +5,7 @@
 
 
 ####Kubernetes Cluster Pre-reqs
-- Create new cluster for Educates platform: tkg create cluster educates-cluster --plan=devharbor -w 3
+- Create new cluster for Educates platform: tkg create cluster educates-cluster --plan=devharbor -w 6
 
 - Create the default storage class (ensure that it is called generic, that the volume binding mode is WaitForFirstCustomer instead of Immediate, and the reclaimPolicy should be Retain) - storage-class-aws.yml
 
@@ -45,6 +45,14 @@ docker push (the registry url):0.1
 docker push (the registry url)
 MY_REGISTRY_USERNAME=(the username) MY_REGISTRY_PASSWORD=(the password) MY_REGISTRY_EMAIL=(the email) kubectl create secret docker-registry eduk8s-demo-creds --docker-username=$MY_REGISTRY_USERNAME --docker-password=$MY_REGISTRY_PASSWORD --docker-email=$MY_REGISTRY_EMAIL -n eduk8s
 
+- Label a subset of the nodes (for which anti-affinity/affinity rules will apply):
+a=0
+for n in $(kubectl get nodes --selector='!node-role.kubernetes.io/master' --output=jsonpath={.items..metadata.name}); do
+    if [ $a -eq 0 ]; then kubectl label node $n gpdb-worker=master; fi; 
+    if [ $a -eq 1 ]; then kubectl label node $n gpdb-worker=segment; fi; 
+    a=$((a+1)) 
+done
+
 ~~~~~~OR~~~~~~~~~~~~~~~~
 chmod +x resources/deploy-worshop.sh
 resources/deploy-workshop.sh
@@ -52,3 +60,40 @@ resources/deploy-workshop.sh
 - Deploy workshop:
 kubectl apply -k .
 
+- Deploy Minio (Server):
+(LEGACY APPROACH:)
+helm repo add minio-legacy https://helm.min.io/
+helm install --namespace minio --generate-name minio/minio
+kubectl create ns minio
+helm install --namespace minio --generate-name minio-legacy/minio
+export MINIO_ACCESS_KEY=$(kubectl get secret minio-1626071207 -o jsonpath="{.data.accesskey}" -n minio| base64 --decode)
+export MINIO_SECRET_KEY=$(kubectl get secret minio-1626071207 -o jsonpath="{.data.secretkey}" -n minio| base64 --decode)
+export MINIO_POD_NAME=$(kubectl get pods --namespace minio -l "release=minio-1626071207" -o jsonpath="{.items[0].metadata.name}")
+kubectl expose pod $MINIO_POD_NAME --port=80 --target-port=9000 --name=minio-svc --namespace=minio
+kubectl apply -f resources/minio-http-proxy.yaml
+
+
+(LATEST APPROACH:)
+helm repo add minio https://operator.min.io/
+helm install --namespace minio-operator --create-namespace --generate-name minio/minio-operator
+export MINIO_POD_NAME=$(kubectl get pods --namespace minio-operator -o jsonpath="{.items[0].metadata.name}")
+export MINIO_JWT=$(kubectl get secret $(kubectl get serviceaccount console-sa --namespace minio-operator -o jsonpath="{.secrets[0].name}") --namespace minio-operator -o jsonpath="{.data.token}" | base64 --decode)
+kubectl expose pod $MINIO_POD_NAME --port=80 --target-port=9090 --name=minio-svc --namespace=minio-operator
+kubectl apply -f resources/minio-http-proxy.yaml
+
+- Install Minio Client (on Linux):
+wget https://dl.min.io/client/mc/release/linux-amd64/mc
+chmod +x mc
+cp mc /usr/local/bin
+mc config host add data-e2e-minio http://minio.tanzudata.ml/ $MINIO_ACCESS_KEY $MINIO_SECRET_KEY
+
+(on Mac:)
+git -C /usr/local/Homebrew/Library/Taps/homebrew/homebrew-core fetch --unshallow
+git -C /usr/local/Homebrew/Library/Taps/homebrew/homebrew-cask fetch --unshallow
+brew install minio/stable/mc
+mc config host add data-e2e-minio http://minio.tanzudata.ml/ $MINIO_ACCESS_KEY $MINIO_SECRET_KEY
+
+- Deploy Greenplum:
+source .env
+envsubst < resources/setup.sh.in > resources/setup.sh
+./setup.sh

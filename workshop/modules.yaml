@@ -4,9 +4,15 @@ modules:
         exit_sign: Deploy Data Services
     deploy-postgres:
         name: Deploy Postgres
+        exit_sign: Deploy RabbitMQ
+    deploy-rabbitmq:
+        name: Deploy RabbitMQ
         exit_sign: Deploy IMDG
     deploy-imdg:
         name: Deploy IMDG
+        exit_sign: Deploy Data Warehouse
+    deploy-greenplum:
+        name: Deploy Data Warehouse
         exit_sign: Complete Workshop
 config:
     vars:
@@ -20,3 +26,9 @@ config:
       value: tanzudatademo@gmail.com
     - name: DATA_E2E_PIVOTAL_REGISTRY_PASSWORD
       value: Vmware1!
+    - name: DATA_E2E_MINIO_URL
+      value: http://minio.tanzudata.ml
+    - name: DATA_E2E_MINIO_ACCESS_KEY
+      value: qeLC1NBoDLwqYChXO0rp
+    - name: DATA_E2E_MINIO_SECRET_KEY
+      value: OKpKEIpDA8Z4KipnkkU33wqzgU8RstgfPFQ9WYKU

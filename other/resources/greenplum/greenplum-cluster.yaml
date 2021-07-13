@@ -1,0 +1,26 @@
+apiVersion: "greenplum.pivotal.io/v1"
+kind: "GreenplumCluster"
+metadata:
+  name: YOUR_GREENPLUM_CLUSTER
+spec:
+  masterAndStandby:
+    hostBasedAuthentication: |
+      host   all   gpadmin   0.0.0.0/0   trust
+    memory: "800Mi"
+    cpu: "0.5"
+    storageClassName: generic
+    storage: 1G
+    workerSelector: {
+      gpdb-worker: "master"
+    }
+  segments:
+    primarySegmentCount: 1
+    memory: "800Mi"
+    cpu: "0.5"
+    storageClassName: generic
+    storage: 2G
+    workerSelector: {
+      gpdb-worker: "segment"
+    }
+  pxf:
+    serviceName: "data-e2e-greenplum-pxf"

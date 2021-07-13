@@ -10,6 +10,9 @@ modules:
         exit_sign: Deploy IMDG
     deploy-imdg:
         name: Deploy IMDG
+        exit_sign: Deploy Data Warehouse
+    deploy-greenplum:
+        name: Deploy Data Warehouse
         exit_sign: Complete Workshop
 config:
     vars:
@@ -23,3 +26,9 @@ config:
       value: ${DATA_E2E_PIVOTAL_REGISTRY_USERNAME}
     - name: DATA_E2E_PIVOTAL_REGISTRY_PASSWORD
       value: ${DATA_E2E_PIVOTAL_REGISTRY_PASSWORD}
+    - name: DATA_E2E_MINIO_URL
+      value: ${DATA_E2E_MINIO_URL}
+    - name: DATA_E2E_MINIO_ACCESS_KEY
+      value: ${DATA_E2E_MINIO_ACCESS_KEY}
+    - name: DATA_E2E_MINIO_SECRET_KEY
+      value: ${DATA_E2E_MINIO_SECRET_KEY}
