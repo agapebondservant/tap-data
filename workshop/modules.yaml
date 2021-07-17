@@ -7,6 +7,9 @@ modules:
         exit_sign: Deploy RabbitMQ
     deploy-rabbitmq:
         name: Deploy RabbitMQ
+        exit_sign: Create Data Pipeline
+    create-datapipeline:
+        name: Create Data Pipeline
         exit_sign: Deploy IMDG
     deploy-imdg:
         name: Deploy IMDG
@@ -29,6 +32,12 @@ config:
     - name: DATA_E2E_MINIO_URL
       value: http://minio.tanzudata.ml
     - name: DATA_E2E_MINIO_ACCESS_KEY
-      value: qeLC1NBoDLwqYChXO0rp
+      value: yt1qRi6ufT9ZkGXO3v1k
     - name: DATA_E2E_MINIO_SECRET_KEY
-      value: OKpKEIpDA8Z4KipnkkU33wqzgU8RstgfPFQ9WYKU
+      value: cWFQ22lyAlWDKJkwtQBEypo5j9Gaz8PKoZRUjZ6W
+    - name: DATA_E2E_WAVEFRONT_ACCESS_TOKEN
+      value: d0bc6a3f-580c-4212-8b35-1c6edd1e4ffb
+    - name: DATA_E2E_WAVEFRONT_SOURCE
+      value: 3a4316f6-6501-4750-587b-939e
+    - name: DATA_E2E_GRAFANA_URL
+      value: http://grafana.tanzudata.ml

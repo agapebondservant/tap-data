@@ -7,6 +7,9 @@ modules:
         exit_sign: Deploy RabbitMQ
     deploy-rabbitmq:
         name: Deploy RabbitMQ
+        exit_sign: Create Data Pipeline
+    create-datapipeline:
+        name: Create Data Pipeline
         exit_sign: Deploy IMDG
     deploy-imdg:
         name: Deploy IMDG
@@ -32,3 +35,9 @@ config:
       value: ${DATA_E2E_MINIO_ACCESS_KEY}
     - name: DATA_E2E_MINIO_SECRET_KEY
       value: ${DATA_E2E_MINIO_SECRET_KEY}
+    - name: DATA_E2E_WAVEFRONT_ACCESS_TOKEN
+      value: ${DATA_E2E_WAVEFRONT_ACCESS_TOKEN}
+    - name: DATA_E2E_WAVEFRONT_SOURCE
+      value: ${DATA_E2E_WAVEFRONT_SOURCE}
+    - name: DATA_E2E_GRAFANA_URL
+      value: ${DATA_E2E_GRAFANA_URL}

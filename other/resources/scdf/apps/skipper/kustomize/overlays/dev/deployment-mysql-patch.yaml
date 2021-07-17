@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: skipper
+spec:
+  template:
+    spec:
+      containers:
+      - name: skipper
+        volumeMounts:
+          - name: database
+            mountPath: /workspace/runtime/secrets/database
+            readOnly: true
+      volumes:
+        - name: database
+          secret:
+            secretName: mysql
+            items:
+            - key: mysql-password
+              path: database-password 

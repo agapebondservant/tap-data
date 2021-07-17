@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://postgresql:5432/dataflow
+    username: postgres
+    password: ${database-password}
+    driverClassName: org.postgresql.Driver
+    testOnBorrow: true
+    validationQuery: "SELECT 1"

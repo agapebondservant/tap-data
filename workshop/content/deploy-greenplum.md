@@ -36,7 +36,7 @@ text: YOUR_GREENPLUM_CLUSTER
 Now, let's go ahead and deploy our new cluster.
 
 ```execute
-sed -i 's/YOUR_GREENPLUM_CLUSTER/gpdb-cluster-{{session_namespace}}/g' ~/other/resources/greenplum/greenplum-cluster.yaml && kubectl delete greenplumcluster gpdb-cluster-{{session_namespace}} --ignore-not-found=true --namespace greenplum-system && kubectl apply -f ~/other/resources/greenplum/greenplum-cluster.yaml -n greenplum-system
+sed -i 's/YOUR_GREENPLUM_CLUSTER/gpdb-cluster-{{session_namespace}}/g' ~/other/resources/greenplum/greenplum-cluster.yaml && kubectl delete greenplumcluster gpdb-cluster-{{session_namespace}} --ignore-not-found=true -n greenplum-system && kubectl apply -f ~/other/resources/greenplum/greenplum-cluster.yaml -n greenplum-system
 ```
 
 Now, we will test out PXF by performing a federated query. Open a bash shell:
@@ -52,6 +52,6 @@ psql -d gpadmin
 Create the PXF extension, then create an external table for the CSV file loaded earlier and query the external table:
 ```execute
 CREATE EXTENSION IF NOT EXISTS pxf;
-CREATE EXTERNAL TABLE IF NOT EXISTS pxf_s3_cities(names text, males int, females int)  LOCATION ('pxf://pxf-data/data-samples-w01-s001/usa_major_cities.csv?PROFILE=s3:text') FORMAT 'TEXT' (delimiter=E',');
+CREATE EXTERNAL TABLE pxf_s3_cities("NAME" text, "MALES" int, "FEMALES" int)  LOCATION ('pxf://pxf-data/data-samples-w01-s001/usa_major_cities.csv?PROFILE=s3:text&FILE_HEADER=USE&S3_SELECT=AUTO') FORMAT 'TEXT' (delimiter=E',');
 SELECT * FROM pxf_s3_cities;
 ```

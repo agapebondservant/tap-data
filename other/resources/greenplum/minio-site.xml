@@ -6,11 +6,11 @@
     </property>
     <property>
         <name>fs.s3a.access.key</name>
-        <value>qeLC1NBoDLwqYChXO0rp</value>
+        <value>yt1qRi6ufT9ZkGXO3v1k</value>
     </property>
     <property>
         <name>fs.s3a.secret.key</name>
-        <value>OKpKEIpDA8Z4KipnkkU33wqzgU8RstgfPFQ9WYKU</value>
+        <value>cWFQ22lyAlWDKJkwtQBEypo5j9Gaz8PKoZRUjZ6W</value>
     </property>
     <property>
         <name>fs.s3a.fast.upload</name>

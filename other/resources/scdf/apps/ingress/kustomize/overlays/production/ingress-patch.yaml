@@ -1,0 +1,13 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: scdf-ingress
+spec:
+  rules:
+  - host: data-flow.local
+    http:
+      paths:
+      - backend:
+          serviceName: scdf-server
+          servicePort: 80
+        path: /

@@ -5,7 +5,7 @@ COPY --chown=1001:0 . /home/eduk8s/
 # Install krew
 RUN /home/eduk8s/other/resources/krew/install_krew.sh && \
     mv /home/eduk8s/.krew/bin/* /opt/eduk8s/bin && \
-# Install kubectl cli, helm cli, k9s
+# Install kubectl cli, helm cli, k9s, yq, 
     mv /home/eduk8s/other/resources/bin/* /opt/eduk8s/bin && \
     mv /home/eduk8s/workshop /opt/workshop
 

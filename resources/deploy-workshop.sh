@@ -9,6 +9,8 @@ envsubst < other/resources/greenplum/minio-site.in.xml > other/resources/greenpl
 # pre-initialize required services
 resources/setup.sh
 
+echo "Moving on..."
+
 # rebuild workshop image
 DATA_E2E_WORKSHOP_IMAGE_VERSION=`date "+%Y%m%d.%H%M"`
 echo "Building version...$DATA_E2E_WORKSHOP_IMAGE_VERSION"

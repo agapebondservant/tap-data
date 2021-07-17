@@ -1,0 +1,14 @@
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: grafana-httpproxy
+  namespace: monitoring-tools
+spec:
+  routes:
+  - conditions:
+    - prefix: /
+    services:
+    - name: grafana
+      port: 3000
+  virtualhost:
+    fqdn: grafana.tanzudata.ml

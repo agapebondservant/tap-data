@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scdf-server
+  labels:
+    app: scdf-server
+spec:
+  selector:
+    matchLabels:
+      app: scdf-server
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: scdf-server
+    spec:
+      containers:
+      - name: scdf-server
+        image: springcloud/spring-cloud-dataflow-server
+        volumeMounts:
+          - name: config
+            mountPath: /workspace/runtime/config
+            readOnly: true
+        ports:
+        - containerPort: 80
+        livenessProbe:
+          httpGet:
+            path: /management/health
+            port: 8080
+          initialDelaySeconds: 90
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /management/info
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 15
+        resources:
+          limits:
+            cpu: 1.0
+            memory: 768Mi
+          requests:
+            cpu: 500m
+            memory: 768Mi
+        env:
+        - name: SPRING_CONFIG_ADDITIONAL_LOCATION
+          value: /workspace/runtime/config/
+        - name: KUBERNETES_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: "metadata.namespace"
+        - name: SPRING_CLOUD_KUBERNETES_CONFIG_ENABLE_API
+          value: 'false'
+        - name: SPRING_CLOUD_KUBERNETES_SECRETS_PATHS
+          value: /workspace/runtime/secrets
+      serviceAccountName: scdf-data-flow
+      volumes:
+        - name: config
+          configMap:
+            name: scdf-server

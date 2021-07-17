@@ -6,12 +6,13 @@
 Let's deploy the Tanzu RabbitMQ **operator**:
 
 ```execute
-kubectl create ns rabbitmq-{{ session_namespace }}-system --dry-run -o yaml | kubectl apply -f - && kubectl create secret docker-registry image-pull-secret --namespace=rabbitmq-{{ session_namespace }}-system --docker-username='{{ DATA_E2E_REGISTRY_USERNAME }}' --docker-password='{{ DATA_E2E_REGISTRY_PASSWORD }}' --dry-run -o yaml | kubectl apply -f - && kubectl apply -f "https://github.com/rabbitmq/cluster-operator/releases/latest/download/cluster-operator.yml" -n rabbitmq-{{ session_namespace }}-system
+command: kubectl create ns rabbitmq-system --dry-run -o yaml | kubectl apply -f - &&  kubectl create secret docker-registry image-pull-secret --namespace=rabbitmq-system --docker-username='{{ DATA_E2E_REGISTRY_USERNAME }}' --docker-password='{{ DATA_E2E_REGISTRY_PASSWORD }}' --dry-run -o yaml | kubectl apply -f - && kubectl apply -f "https://github.com/rabbitmq/cluster-operator/releases/latest/download/cluster-operator.yml" --namespace=rabbitmq-system
+clear: true
 ```
 
 Install the **krew** cli plugin:
 ```execute
-kubectl krew install rabbitmq
+export PATH="${PATH}:${HOME}/.krew/bin" && kubectl krew install rabbitmq
 ```
 
 The **krew** plugin provides a native approach for managing RabbitMQ clusters. View a list of supported commands:
@@ -19,7 +20,12 @@ The **krew** plugin provides a native approach for managing RabbitMQ clusters. V
 kubectl rabbitmq help
 ```
 
-Next, let's deploy a highly available Tanzu RabbitMQ **cluster**:
+Next, let's deploy a highly available Tanzu RabbitMQ **cluster**. First deploy a cluster with just 1 replicas:
 ```execute
-kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster.yaml -n rabbitmq-{{ session_namespace }}-system
+kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-monitor.yaml; kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster.yaml -n {{ session_namespace }}
+```
+
+Next, scale the cluster to 2 replicas (odd number is recommended):
+```execute
+kubectl edit rabbitmqcluster rabbitcluster1 -n {{ session_namespace }}
 ```

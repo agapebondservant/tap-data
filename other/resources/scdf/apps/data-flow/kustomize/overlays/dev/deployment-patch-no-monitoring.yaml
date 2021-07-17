@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scdf-server
+spec:
+  template:
+    spec:
+      containers:
+      - name: scdf-server
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: database
+        volumeMounts:
+          - name: dockerconfig
+            mountPath: /workspace/runtime/secrets/dockerconfig
+            readOnly: true
+      imagePullSecrets:
+      - name: scdf-image-regcred
+      volumes:
+        - name: dockerconfig
+          secret:
+            secretName: scdf-image-regcred

@@ -1,0 +1,9 @@
+commonLabels:
+  app.kubernetes.io/name: scdf-server
+resources:
+  - roles.yaml
+  - role-binding.yaml
+  - service-account.yaml
+  - service.yaml
+  - deployment.yaml
+namespace: ${YOUR_SCDF_NAMESPACE}

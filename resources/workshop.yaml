@@ -21,6 +21,10 @@ spec:
     dashboards:
     - name: Jupyter
       url: "$(ingress_protocol)://$(session_namespace)-jupyter.$(ingress_domain)/"
+    - name:  Grafana
+      url: "http://grafana.tanzudata.ml"
+    - name: Wavefront
+      url: "https://vmware.wavefront.com/dashboards/data-e2e-scdf"
     namespaces:
       #! Allow workshop to run containers as root (note: this is different from the workshop instances which will host deployments created during the course of the workshop)
       #! security:
@@ -46,7 +50,7 @@ spec:
       memory: 2Gi
     #! other
     namespaces:
-      budget: small
+      budget: custom
     applications:
       terminal:
         enabled: true

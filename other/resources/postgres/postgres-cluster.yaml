@@ -3,5 +3,6 @@ kind: Postgres
 metadata:
   name: pginstance-1
 spec:
+  storageClassName: generic
   highAvailability:
     enabled: true

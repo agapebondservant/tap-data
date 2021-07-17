@@ -1,0 +1,14 @@
+management:
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+        rsocket:
+          enabled: true
+          host: scdf-prometheus-proxy
+          port: 7001
+spring:
+  cloud:
+    dataflow:
+      metrics.dashboard:
+        url: 'http://localhost:3000'
