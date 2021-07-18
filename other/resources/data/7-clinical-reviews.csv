@@ -1,0 +1,1001 @@
+clinic_id,clinic_name,state,clinic_full_name,region,dog_breed,cat_breed,fish_breed,bird_breed,treatment_cost,wait_time,recommended
+C-7650240,Boca Pharmacal Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,German Shepherd,Maine Coone,,,150,19,1
+C-1484172,Topco Associates Pet and Animal Emerging Clinic,NM,"Clinic XXXXXX XXXXX, NM",Northeast,Golden Retriever,Persian,,,173,23,1
+C-6941229,Walgreens,IA,"Clinic XXXXXX XXXXX, IA",West,Labrador Retriever,,,,112,22,1
+C-7258806,Mylan Institutional Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Beagle,,,,120,17,1
+C-6692908,Pharmacia and Upjohn Pet and Animal Emerging Clinic,OK,"Clinic XXXXXX XXXXX, OK",Midwest,Beagle,,,,80,23,1
+C-9744420,Taro Pharmaceuticals U.S.A. Pet and Animal Emerging Clinic,NE,"Clinic XXXXXX XXXXX, NE",West,Boxer,,,,87,23,1
+C-8350481,DSHealthcare,MA,"Clinic XXXXXX XXXXX, MA",South,Bulldog,,Goldfish,Lovebird,141,25,0
+C-0677076,CVS Pharmacy Pet and Animal Emerging Clinic,NJ,"Clinic XXXXXX XXXXX, NJ",Northeast,Golden Retriever,,,,109,29,0
+C-5657240,Pfizer Laboratories Div Pfizer Pet and Animal Emerging Clinic,NJ,"Clinic XXXXXX XXXXX, NJ",Northeast,German Shepherd,,,,139,25,0
+C-8471630,The Procter & Gamble Manufacturing Pet and Animal Emerging Clinic,MI,"Clinic XXXXXX XXXXX, MI",Northeast,Labrador Retriever,Sphynx,,,146,22,1
+C-2171304,NCS HealthCare of KY Inc dba Vangard Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,,Maine Coone,,,145,16,1
+C-7680367,Access Business Group Pet and Animal Emerging Clinic,ID,"Clinic XXXXXX XXXXX, ID",West,Boxer,,,,144,18,1
+C-8185040,L Perrigo Pet and Animal Emerging Clinic,DC,"Clinic XXXXXX XXXXX, DC",Northeast,Labrador Retriever,,,,139,9,1
+C-7173048,Empack,CO,"Clinic XXXXXX XXXXX, CO",West,,Scottish Fold,,,154,12,1
+C-4460888,Pharmacia and Upjohn Pet and Animal Emerging Clinic,MD,"Clinic XXXXXX XXXXX, MD",Northeast,Boxer,,,,144,26,0
+C-3982906,WOCKHARDT Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,,,,,144,21,1
+C-6796356,Solco healthcare U.S. Pet and Animal Emerging Clinic,NY,"Clinic XXXXXX XXXXX, NY",Northeast,Beagle,,,,116,35,0
+C-2227409,Delon Laboratories (1990) Pet and Animal Emerging Clinic,MS,"Clinic XXXXXX XXXXX, MS",West,,,Betta Fish,Finch,128,23,1
+C-9268257,Amerisource Pet and Animal Emerging Clinic,CT,"Clinic XXXXXX XXXXX, CT",Northeast,,,,,81,21,1
+C-9629736,U.S. Pet and Animal Emerging Clinic,PA,"Clinic XXXXXX XXXXX, PA",West,German Shepherd,Scottish Fold,,,108,23,1
+C-5601285,SJ Creations Pet and Animal Emerging Clinic,NJ,"Clinic XXXXXX XXXXX, NJ",Northeast,Bulldog,American Bobtail,,,109,21,1
+C-4023413,Fresenius Kabi USA Pet and Animal Emerging Clinic,IN,"Clinic XXXXXX XXXXX, IN",West,Yorkshire Terrier,,Cory Catfish,African Gray Parrot,92,17,1
+C-7363300,Allergy Laboratories Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Yorkshire Terrier,,,,105,21,1
+C-5814177,Mechanical Servants Pet and Animal Emerging Clinic,DC,"Clinic XXXXXX XXXXX, DC",Northeast,Boxer,,,,110,13,1
+C-7186775,Kmart Pet and Animal Emerging Clinic,DC,"Clinic XXXXXX XXXXX, DC",Northeast,Golden Retriever,,Cory Catfish,Dove,164,12,1
+C-7355717,American Health Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,,,,,89,28,1
+C-4668812,Physicians Total Care Pet and Animal Emerging Clinic,TN,"Clinic XXXXXX XXXXX, TN",South,Yorkshire Terrier,,,,108,22,1
+C-1375667,Whisk Products Pet and Animal Emerging Clinic,OK,"Clinic XXXXXX XXXXX, OK",Midwest,Yorkshire Terrier,Sphynx,,,114,13,1
+C-0190273,Alaven Pharmaceutical Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,Beagle,,,,130,14,1
+C-3829341,Walgreens,CA,"Clinic XXXXXX XXXXX, CA",West,German Shepherd,,,,73,17,1
+C-7183156,Conopco Inc. d/b/a Pet and Animal Emerging Clinic,OR,"Clinic XXXXXX XXXXX, OR",South,Golden Retriever,,,,116,23,1
+C-3213706,Physicians Total Care Pet and Animal Emerging Clinic,OR,"Clinic XXXXXX XXXXX, OR",South,Beagle,,,,96,14,1
+C-6914919,McKesson Packaging Serivces a business unit of McKesson Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,,Sphynx,Goldfish,Parrotlet,146,22,1
+C-8336775,RITE AID Pet and Animal Emerging Clinic,NY,"Clinic XXXXXX XXXXX, NY",Northeast,,,,,155,19,1
+C-5438026,SHISEIDO AMERICA Pet and Animal Emerging Clinic,WV,"Clinic XXXXXX XXXXX, WV",South,,Persian,,,154,22,1
+C-5714113,Agbanga Karite LLC / EveryDay Shea / Alaffia Sustainable Skin Pet and Animal Emerging Clinic,IA,"Clinic XXXXXX XXXXX, IA",West,Golden Retriever,,,,155,25,0
+C-4093014,Greenstone Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,,,,,122,26,0
+C-4801579,Energique Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,Boxer,,Goldfish,Lovebird,103,22,1
+C-6388141,Meditrend Inc. DBA Progena Professional Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,,,,,119,26,0
+C-0272807,St Marys Medical Park Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Bulldog,,,,107,18,1
+C-2860760,Physicians Total Care Pet and Animal Emerging Clinic,OH,"Clinic XXXXXX XXXXX, OH",Northeast,Labrador Retriever,,,,98,19,1
+C-7129435,LG Household and Healthcare Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,Beagle,,,,157,22,1
+C-0360448,REMEDYREPACK Pet and Animal Emerging Clinic,IN,"Clinic XXXXXX XXXXX, IN",West,,Persian,,,84,13,1
+C-3337444,Barr Laboratories Pet and Animal Emerging Clinic,IL,"Clinic XXXXXX XXXXX, IL",West,,,,,115,18,1
+C-4225828,Nelco Laboratories Pet and Animal Emerging Clinic,RI,"Clinic XXXXXX XXXXX, RI",Northeast,,,,,166,26,0
+C-5741001,AvKARE Pet and Animal Emerging Clinic,KS,"Clinic XXXXXX XXXXX, KS",South,,Persian,Betta Fish,Finch,115,17,1
+C-6575705,Vivier Pharma Pet and Animal Emerging Clinic,AK,"Clinic XXXXXX XXXXX, AK",#N/A,,American Shorthair,,,165,17,1
+C-6026626,Mycone Dental Supply Co. Inc DBA Keystone Industries and Deepak Products Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,Labrador Retriever,,,,107,18,1
+C-4936699,Alvogen Pet and Animal Emerging Clinic,OK,"Clinic XXXXXX XXXXX, OK",Midwest,Yorkshire Terrier,Maine Coone,,,110,20,1
+C-6864956,Ningbo Meiduo General Products Co. Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,Yorkshire Terrier,Maine Coone,,,122,14,1
+C-4080038,Lake Erie Medical DBA Quality Care Products Pet and Animal Emerging Clinic,AZ,"Clinic XXXXXX XXXXX, AZ",West,Golden Retriever,Siamese,,,99,21,1
+C-6902175,SESVALIA USA Pet and Animal Emerging Clinic,AZ,"Clinic XXXXXX XXXXX, AZ",West,Bulldog,,,,78,21,1
+C-0303641,REMEDYREPACK Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Boxer,,,,122,23,1
+C-7094024,Jubilant HollisterStier Pet and Animal Emerging Clinic,NC,"Clinic XXXXXX XXXXX, NC",West,,,,,66,22,1
+C-9070137,Laboratoires Clarins Pet and Animal Emerging Clinic,NV,"Clinic XXXXXX XXXXX, NV",Northeast,Golden Retriever,,Betta Fish,Parrotlet,105,17,1
+C-8822018,MAKEUP ART Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Golden Retriever,,,,107,19,1
+C-5030646,Physicians Total Care Pet and Animal Emerging Clinic,NY,"Clinic XXXXXX XXXXX, NY",Northeast,,,,,141,14,1
+C-0905807,West-ward Pharmaceutical Pet and Animal Emerging Clinic,GA,"Clinic XXXXXX XXXXX, GA",South,Beagle,Persian,,,112,21,1
+C-2118723,Markwins Beauty Products Pet and Animal Emerging Clinic,WI,"Clinic XXXXXX XXXXX, WI",South,,,,,102,22,1
+C-5117804,NASH-FINCH Pet and Animal Emerging Clinic,IL,"Clinic XXXXXX XXXXX, IL",West,German Shepherd,Maine Coone,,,106,27,0
+C-0007799,Procter & Gamble Manufacturing Pet and Animal Emerging Clinic,PA,"Clinic XXXXXX XXXXX, PA",West,Yorkshire Terrier,,,,148,14,1
+C-7032303,Cephalon Pet and Animal Emerging Clinic,DC,"Clinic XXXXXX XXXXX, DC",Northeast,Golden Retriever,,,,113,15,1
+C-4646107,STAT Rx USA Pet and Animal Emerging Clinic,NY,"Clinic XXXXXX XXXXX, NY",Northeast,Yorkshire Terrier,,Betta Fish,Finch,57,16,1
+C-0009958,Colgate Oral Pharmaceuticals Pet and Animal Emerging Clinic,OK,"Clinic XXXXXX XXXXX, OK",Midwest,,,Cory Catfish,Dove,93,21,1
+C-2961266,B. Braun Medical Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,Boxer,,,,173,21,1
+C-5284095,Sandoz Pet and Animal Emerging Clinic,AZ,"Clinic XXXXXX XXXXX, AZ",West,Beagle,,,,138,18,1
+C-4266841,REMEDYREPACK Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Beagle,,Goldfish,Finch,109,26,0
+C-4563046,AAA Pharmaceutical Pet and Animal Emerging Clinic,IL,"Clinic XXXXXX XXXXX, IL",West,,,,,128,20,1
+C-3060634,Cargo Cosmetics Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,Persian,,,57,25,1
+C-1765085,Sandoz Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,Golden Retriever,,,,156,34,0
+C-8640799,Bliss World Pet and Animal Emerging Clinic,OH,"Clinic XXXXXX XXXXX, OH",Northeast,Golden Retriever,,,,76,25,1
+C-8522107,Apotex Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,,,,,94,19,1
+C-0258802,Amneal Pharmaceuticals of New York Pet and Animal Emerging Clinic,IN,"Clinic XXXXXX XXXXX, IN",West,,,,,78,21,1
+C-1184498,Reckitt Benckiser Pet and Animal Emerging Clinic,WV,"Clinic XXXXXX XXXXX, WV",South,,,,,121,13,1
+C-5679975,Kareway Product Pet and Animal Emerging Clinic,WI,"Clinic XXXXXX XXXXX, WI",South,Beagle,,,,143,22,1
+C-7407663,Mylan Pharmaceuticals Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,,,Guppy,Parrotlet,132,23,1
+C-3261951,ALK-Abello Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Beagle,Scottish Fold,,,152,13,1
+C-6963787,U.S. Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,German Shepherd,,,,150,19,1
+C-2207742,Natural Health Pet and Animal Emerging Clinic,MA,"Clinic XXXXXX XXXXX, MA",South,Bulldog,,,,84,17,1
+C-5248067,Physicians Total Care Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,,Scottish Fold,,,103,10,1
+C-4274952,Physicians Total Care Pet and Animal Emerging Clinic,MN,"Clinic XXXXXX XXXXX, MN",South,,Siamese,,,125,20,1
+C-2706989,Washington Homeopathic Pet and Animal Emerging Clinic,OH,"Clinic XXXXXX XXXXX, OH",Northeast,,,,,118,20,1
+C-8890710,Novartis Consumer Health Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,German Shepherd,,Angelfish,Dove,133,12,1
+C-1180448,HOMEOLAB USA Pet and Animal Emerging Clinic,IA,"Clinic XXXXXX XXXXX, IA",West,Bulldog,,,,147,16,1
+C-2606141,Genzyme Pet and Animal Emerging Clinic,OR,"Clinic XXXXXX XXXXX, OR",South,Golden Retriever,,,,87,21,1
+C-8021177,Western Family Foods Pet and Animal Emerging Clinic,MN,"Clinic XXXXXX XXXXX, MN",South,Yorkshire Terrier,,,,107,23,1
+C-9661319,Procter & Gamble Manufacturing Pet and Animal Emerging Clinic,DC,"Clinic XXXXXX XXXXX, DC",Northeast,Bulldog,,,,94,30,1
+C-1932107,Dolgencorp Pet and Animal Emerging Clinic,LA,"Clinic XXXXXX XXXXX, LA",South,,,,,85,17,1
+C-2858310,REMEDYREPACK Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Boxer,,,,121,24,1
+C-4761042,Heckman Healthcare Service & Supplies Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Yorkshire Terrier,Maine Coone,,,127,25,0
+C-9528941,Cobalt Laboratories Pet and Animal Emerging Clinic,NC,"Clinic XXXXXX XXXXX, NC",West,Labrador Retriever,,,,76,22,1
+C-1220473,Coastal Welding Supply Pet and Animal Emerging Clinic,NV,"Clinic XXXXXX XXXXX, NV",Northeast,Beagle,,,,144,22,1
+C-8273749,Valu Merchandisers Pet and Animal Emerging Clinic,OK,"Clinic XXXXXX XXXXX, OK",Midwest,,,,,109,21,1
+C-1300637,Airgas-West Pet and Animal Emerging Clinic,CO,"Clinic XXXXXX XXXXX, CO",West,,,,,138,11,1
+C-5476343,Dolgencorp Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,German Shepherd,Persian,,,117,22,1
+C-0237977,CVS Pharmacy Pet and Animal Emerging Clinic,MD,"Clinic XXXXXX XXXXX, MD",Northeast,Boxer,Sphynx,,,64,20,1
+C-2927333,Cardinal Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,,,,139,14,1
+C-4161281,PD-Rx Pharmaceuticals Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,Yorkshire Terrier,Sphynx,,,170,16,1
+C-5970748,Prime Enterprises Pet and Animal Emerging Clinic,CO,"Clinic XXXXXX XXXXX, CO",West,German Shepherd,,,,78,21,1
+C-7650240,Boca Pharmacal Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,,Scottish Fold,,,126,17,1
+C-1484172,Topco Associates Pet and Animal Emerging Clinic,NM,"Clinic XXXXXX XXXXX, NM",Northeast,Golden Retriever,,,,128,20,1
+C-6941229,Walgreens,IA,"Clinic XXXXXX XXXXX, IA",West,Labrador Retriever,,Guppy,Dove,166,19,1
+C-7258806,Mylan Institutional Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,German Shepherd,,,,99,31,1
+C-6692908,Pharmacia and Upjohn Pet and Animal Emerging Clinic,OK,"Clinic XXXXXX XXXXX, OK",Midwest,,,,,174,17,1
+C-9744420,Taro Pharmaceuticals U.S.A. Pet and Animal Emerging Clinic,NE,"Clinic XXXXXX XXXXX, NE",West,Bulldog,,,,116,26,0
+C-8350481,DSHealthcare,MA,"Clinic XXXXXX XXXXX, MA",South,Bulldog,,,,93,18,1
+C-0677076,CVS Pharmacy Pet and Animal Emerging Clinic,NJ,"Clinic XXXXXX XXXXX, NJ",Northeast,Boxer,,,,173,6,1
+C-5657240,Pfizer Laboratories Div Pfizer Pet and Animal Emerging Clinic,NJ,"Clinic XXXXXX XXXXX, NJ",Northeast,Boxer,,,,153,23,1
+C-8471630,The Procter & Gamble Manufacturing Pet and Animal Emerging Clinic,MI,"Clinic XXXXXX XXXXX, MI",Northeast,Yorkshire Terrier,,,,133,17,1
+C-2171304,NCS HealthCare of KY Inc dba Vangard Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,Yorkshire Terrier,Persian,,,163,22,1
+C-7680367,Access Business Group Pet and Animal Emerging Clinic,ID,"Clinic XXXXXX XXXXX, ID",West,Boxer,,,,48,15,1
+C-8185040,L Perrigo Pet and Animal Emerging Clinic,DC,"Clinic XXXXXX XXXXX, DC",Northeast,Boxer,,,,89,24,1
+C-7173048,Empack,CO,"Clinic XXXXXX XXXXX, CO",West,Labrador Retriever,,,,108,21,1
+C-4460888,Pharmacia and Upjohn Pet and Animal Emerging Clinic,MD,"Clinic XXXXXX XXXXX, MD",Northeast,Golden Retriever,,,,118,16,1
+C-3982906,WOCKHARDT Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,Yorkshire Terrier,,Betta Fish,Lovebird,106,5,1
+C-6796356,Solco healthcare U.S. Pet and Animal Emerging Clinic,NY,"Clinic XXXXXX XXXXX, NY",Northeast,German Shepherd,,,,68,17,1
+C-2227409,Delon Laboratories (1990) Pet and Animal Emerging Clinic,MS,"Clinic XXXXXX XXXXX, MS",West,German Shepherd,Sphynx,,,101,24,1
+C-9268257,Amerisource Pet and Animal Emerging Clinic,CT,"Clinic XXXXXX XXXXX, CT",Northeast,,,,,141,24,1
+C-9629736,U.S. Pet and Animal Emerging Clinic,PA,"Clinic XXXXXX XXXXX, PA",West,,,,,88,19,1
+C-5601285,SJ Creations Pet and Animal Emerging Clinic,NJ,"Clinic XXXXXX XXXXX, NJ",Northeast,,,Angelfish,Parrotlet,97,25,1
+C-4023413,Fresenius Kabi USA Pet and Animal Emerging Clinic,IN,"Clinic XXXXXX XXXXX, IN",West,Bulldog,,,,103,25,0
+C-7363300,Allergy Laboratories Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Yorkshire Terrier,,,,137,25,0
+C-5814177,Mechanical Servants Pet and Animal Emerging Clinic,DC,"Clinic XXXXXX XXXXX, DC",Northeast,Labrador Retriever,Scottish Fold,,,86,14,1
+C-7186775,Kmart Pet and Animal Emerging Clinic,DC,"Clinic XXXXXX XXXXX, DC",Northeast,,,,,65,21,1
+C-7355717,American Health Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,,,,,169,25,0
+C-4668812,Physicians Total Care Pet and Animal Emerging Clinic,TN,"Clinic XXXXXX XXXXX, TN",South,German Shepherd,American Shorthair,,,125,22,1
+C-1375667,Whisk Products Pet and Animal Emerging Clinic,OK,"Clinic XXXXXX XXXXX, OK",Midwest,,,,,155,21,1
+C-0190273,Alaven Pharmaceutical Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,Labrador Retriever,,,,54,23,1
+C-3829341,Walgreens,CA,"Clinic XXXXXX XXXXX, CA",West,,,,,115,16,1
+C-7183156,Conopco Inc. d/b/a Pet and Animal Emerging Clinic,OR,"Clinic XXXXXX XXXXX, OR",South,,,,,91,28,1
+C-3213706,Physicians Total Care Pet and Animal Emerging Clinic,OR,"Clinic XXXXXX XXXXX, OR",South,Bulldog,,,,93,18,1
+C-6914919,McKesson Packaging Serivces a business unit of McKesson Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,Beagle,,,,60,21,1
+C-8336775,RITE AID Pet and Animal Emerging Clinic,NY,"Clinic XXXXXX XXXXX, NY",Northeast,,,,,85,24,1
+C-5438026,SHISEIDO AMERICA Pet and Animal Emerging Clinic,WV,"Clinic XXXXXX XXXXX, WV",South,Bulldog,Persian,,,82,24,1
+C-5714113,Agbanga Karite LLC / EveryDay Shea / Alaffia Sustainable Skin Pet and Animal Emerging Clinic,IA,"Clinic XXXXXX XXXXX, IA",West,Beagle,,,,82,14,1
+C-4093014,Greenstone Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,Yorkshire Terrier,,,,112,20,1
+C-4801579,Energique Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,Golden Retriever,,,,155,22,1
+C-6388141,Meditrend Inc. DBA Progena Professional Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,Golden Retriever,Sphynx,,,88,9,1
+C-0272807,St Marys Medical Park Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,,,,69,16,1
+C-2860760,Physicians Total Care Pet and Animal Emerging Clinic,OH,"Clinic XXXXXX XXXXX, OH",Northeast,Boxer,,Betta Fish,Dove,142,19,1
+C-7129435,LG Household and Healthcare Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,Bulldog,,,,125,23,1
+C-0360448,REMEDYREPACK Pet and Animal Emerging Clinic,IN,"Clinic XXXXXX XXXXX, IN",West,,,,,45,21,1
+C-3337444,Barr Laboratories Pet and Animal Emerging Clinic,IL,"Clinic XXXXXX XXXXX, IL",West,,,,,145,16,1
+C-4225828,Nelco Laboratories Pet and Animal Emerging Clinic,RI,"Clinic XXXXXX XXXXX, RI",Northeast,,,,,110,19,1
+C-5741001,AvKARE Pet and Animal Emerging Clinic,KS,"Clinic XXXXXX XXXXX, KS",South,Beagle,,,,102,24,1
+C-6575705,Vivier Pharma Pet and Animal Emerging Clinic,AK,"Clinic XXXXXX XXXXX, AK",#N/A,Beagle,,,,108,20,1
+C-6026626,Mycone Dental Supply Co. Inc DBA Keystone Industries and Deepak Products Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,German Shepherd,,,,89,20,1
+C-4936699,Alvogen Pet and Animal Emerging Clinic,OK,"Clinic XXXXXX XXXXX, OK",Midwest,Bulldog,,,,163,22,1
+C-6864956,Ningbo Meiduo General Products Co. Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,Labrador Retriever,Maine Coone,,,61,14,1
+C-4080038,Lake Erie Medical DBA Quality Care Products Pet and Animal Emerging Clinic,AZ,"Clinic XXXXXX XXXXX, AZ",West,Boxer,American Bobtail,,,100,13,1
+C-6902175,SESVALIA USA Pet and Animal Emerging Clinic,AZ,"Clinic XXXXXX XXXXX, AZ",West,Beagle,American Bobtail,,,100,17,1
+C-0303641,REMEDYREPACK Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,,,,153,26,0
+C-7094024,Jubilant HollisterStier Pet and Animal Emerging Clinic,NC,"Clinic XXXXXX XXXXX, NC",West,Bulldog,,,,154,23,1
+C-9070137,Laboratoires Clarins Pet and Animal Emerging Clinic,NV,"Clinic XXXXXX XXXXX, NV",Northeast,German Shepherd,Sphynx,,,127,23,1
+C-8822018,MAKEUP ART Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,German Shepherd,,,,155,18,1
+C-5030646,Physicians Total Care Pet and Animal Emerging Clinic,NY,"Clinic XXXXXX XXXXX, NY",Northeast,,Maine Coone,Cory Catfish,Parrotlet,116,25,0
+C-0905807,West-ward Pharmaceutical Pet and Animal Emerging Clinic,GA,"Clinic XXXXXX XXXXX, GA",South,Yorkshire Terrier,,,,124,18,1
+C-2118723,Markwins Beauty Products Pet and Animal Emerging Clinic,WI,"Clinic XXXXXX XXXXX, WI",South,Labrador Retriever,American Bobtail,,,123,22,1
+C-5117804,NASH-FINCH Pet and Animal Emerging Clinic,IL,"Clinic XXXXXX XXXXX, IL",West,Labrador Retriever,,,,120,19,1
+C-0007799,Procter & Gamble Manufacturing Pet and Animal Emerging Clinic,PA,"Clinic XXXXXX XXXXX, PA",West,Yorkshire Terrier,,,,108,15,1
+C-7032303,Cephalon Pet and Animal Emerging Clinic,DC,"Clinic XXXXXX XXXXX, DC",Northeast,,Persian,,,161,4,1
+C-4646107,STAT Rx USA Pet and Animal Emerging Clinic,NY,"Clinic XXXXXX XXXXX, NY",Northeast,German Shepherd,,,,118,21,1
+C-0009958,Colgate Oral Pharmaceuticals Pet and Animal Emerging Clinic,OK,"Clinic XXXXXX XXXXX, OK",Midwest,,,,,129,17,1
+C-2961266,B. Braun Medical Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,Golden Retriever,Scottish Fold,,,152,19,1
+C-5284095,Sandoz Pet and Animal Emerging Clinic,AZ,"Clinic XXXXXX XXXXX, AZ",West,,,,,133,18,1
+C-4266841,REMEDYREPACK Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Labrador Retriever,,,,109,25,0
+C-4563046,AAA Pharmaceutical Pet and Animal Emerging Clinic,IL,"Clinic XXXXXX XXXXX, IL",West,,,,,151,14,1
+C-3060634,Cargo Cosmetics Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Boxer,,,,84,19,1
+C-1765085,Sandoz Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,,,Cory Catfish,African Gray Parrot,119,16,1
+C-8640799,Bliss World Pet and Animal Emerging Clinic,OH,"Clinic XXXXXX XXXXX, OH",Northeast,Golden Retriever,,,,127,18,1
+C-8522107,Apotex Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,Golden Retriever,,,,96,20,1
+C-0258802,Amneal Pharmaceuticals of New York Pet and Animal Emerging Clinic,IN,"Clinic XXXXXX XXXXX, IN",West,Golden Retriever,,,,97,12,1
+C-1184498,Reckitt Benckiser Pet and Animal Emerging Clinic,WV,"Clinic XXXXXX XXXXX, WV",South,,,,,101,25,0
+C-5679975,Kareway Product Pet and Animal Emerging Clinic,WI,"Clinic XXXXXX XXXXX, WI",South,German Shepherd,,,,66,18,1
+C-7407663,Mylan Pharmaceuticals Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,Yorkshire Terrier,,,,155,18,1
+C-3261951,ALK-Abello Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,German Shepherd,American Shorthair,,,118,25,0
+C-6963787,U.S. Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Golden Retriever,Sphynx,Cory Catfish,African Gray Parrot,113,9,1
+C-2207742,Natural Health Pet and Animal Emerging Clinic,MA,"Clinic XXXXXX XXXXX, MA",South,,Scottish Fold,,,145,16,1
+C-5248067,Physicians Total Care Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,Bulldog,,,,140,14,1
+C-4274952,Physicians Total Care Pet and Animal Emerging Clinic,MN,"Clinic XXXXXX XXXXX, MN",South,Boxer,,Angelfish,Lovebird,155,20,1
+C-2706989,Washington Homeopathic Pet and Animal Emerging Clinic,OH,"Clinic XXXXXX XXXXX, OH",Northeast,,,,,128,13,1
+C-8890710,Novartis Consumer Health Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,,,,,42,23,1
+C-1180448,HOMEOLAB USA Pet and Animal Emerging Clinic,IA,"Clinic XXXXXX XXXXX, IA",West,German Shepherd,,,,145,26,0
+C-2606141,Genzyme Pet and Animal Emerging Clinic,OR,"Clinic XXXXXX XXXXX, OR",South,Boxer,,,,111,22,1
+C-8021177,Western Family Foods Pet and Animal Emerging Clinic,MN,"Clinic XXXXXX XXXXX, MN",South,,,,,115,17,1
+C-9661319,Procter & Gamble Manufacturing Pet and Animal Emerging Clinic,DC,"Clinic XXXXXX XXXXX, DC",Northeast,,,,,85,20,1
+C-1932107,Dolgencorp Pet and Animal Emerging Clinic,LA,"Clinic XXXXXX XXXXX, LA",South,,,,,107,20,1
+C-2858310,REMEDYREPACK Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Golden Retriever,,,,142,10,1
+C-4761042,Heckman Healthcare Service & Supplies Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Boxer,,,,112,18,1
+C-9528941,Cobalt Laboratories Pet and Animal Emerging Clinic,NC,"Clinic XXXXXX XXXXX, NC",West,Beagle,,,,95,27,1
+C-1220473,Coastal Welding Supply Pet and Animal Emerging Clinic,NV,"Clinic XXXXXX XXXXX, NV",Northeast,Labrador Retriever,,,,112,14,1
+C-8273749,Valu Merchandisers Pet and Animal Emerging Clinic,OK,"Clinic XXXXXX XXXXX, OK",Midwest,,,,,117,25,0
+C-1300637,Airgas-West Pet and Animal Emerging Clinic,CO,"Clinic XXXXXX XXXXX, CO",West,Boxer,,,,96,24,1
+C-5476343,Dolgencorp Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,,,,,72,17,1
+C-0237977,CVS Pharmacy Pet and Animal Emerging Clinic,MD,"Clinic XXXXXX XXXXX, MD",Northeast,,,,,93,21,1
+C-2927333,Cardinal Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Golden Retriever,Scottish Fold,,,130,18,1
+C-4161281,PD-Rx Pharmaceuticals Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,Yorkshire Terrier,,,,94,25,1
+C-5970748,Prime Enterprises Pet and Animal Emerging Clinic,CO,"Clinic XXXXXX XXXXX, CO",West,,Siamese,,,103,18,1
+C-7650240,Boca Pharmacal Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,,,,,105,20,1
+C-1484172,Topco Associates Pet and Animal Emerging Clinic,NM,"Clinic XXXXXX XXXXX, NM",Northeast,Labrador Retriever,American Shorthair,,,101,26,0
+C-6941229,Walgreens,IA,"Clinic XXXXXX XXXXX, IA",West,German Shepherd,,,,108,22,1
+C-7258806,Mylan Institutional Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,,,,96,17,1
+C-6692908,Pharmacia and Upjohn Pet and Animal Emerging Clinic,OK,"Clinic XXXXXX XXXXX, OK",Midwest,Beagle,,,,137,16,1
+C-9744420,Taro Pharmaceuticals U.S.A. Pet and Animal Emerging Clinic,NE,"Clinic XXXXXX XXXXX, NE",West,Labrador Retriever,Maine Coone,,,124,20,1
+C-8350481,DSHealthcare,MA,"Clinic XXXXXX XXXXX, MA",South,,Sphynx,,,120,25,0
+C-0677076,CVS Pharmacy Pet and Animal Emerging Clinic,NJ,"Clinic XXXXXX XXXXX, NJ",Northeast,,,Cory Catfish,African Gray Parrot,130,21,1
+C-5657240,Pfizer Laboratories Div Pfizer Pet and Animal Emerging Clinic,NJ,"Clinic XXXXXX XXXXX, NJ",Northeast,,,,,87,21,1
+C-8471630,The Procter & Gamble Manufacturing Pet and Animal Emerging Clinic,MI,"Clinic XXXXXX XXXXX, MI",Northeast,Labrador Retriever,,,,98,16,1
+C-2171304,NCS HealthCare of KY Inc dba Vangard Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,,,,,98,17,1
+C-7680367,Access Business Group Pet and Animal Emerging Clinic,ID,"Clinic XXXXXX XXXXX, ID",West,,,,,137,19,1
+C-8185040,L Perrigo Pet and Animal Emerging Clinic,DC,"Clinic XXXXXX XXXXX, DC",Northeast,,,,,140,14,1
+C-7173048,Empack,CO,"Clinic XXXXXX XXXXX, CO",West,Labrador Retriever,,,,191,20,1
+C-4460888,Pharmacia and Upjohn Pet and Animal Emerging Clinic,MD,"Clinic XXXXXX XXXXX, MD",Northeast,German Shepherd,,,,89,19,1
+C-3982906,WOCKHARDT Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,,,,,154,18,1
+C-6796356,Solco healthcare U.S. Pet and Animal Emerging Clinic,NY,"Clinic XXXXXX XXXXX, NY",Northeast,,,,,128,13,1
+C-2227409,Delon Laboratories (1990) Pet and Animal Emerging Clinic,MS,"Clinic XXXXXX XXXXX, MS",West,,,,,69,17,1
+C-9268257,Amerisource Pet and Animal Emerging Clinic,CT,"Clinic XXXXXX XXXXX, CT",Northeast,Labrador Retriever,,,,107,21,1
+C-9629736,U.S. Pet and Animal Emerging Clinic,PA,"Clinic XXXXXX XXXXX, PA",West,,,,,138,14,1
+C-5601285,SJ Creations Pet and Animal Emerging Clinic,NJ,"Clinic XXXXXX XXXXX, NJ",Northeast,Golden Retriever,,,,145,22,1
+C-4023413,Fresenius Kabi USA Pet and Animal Emerging Clinic,IN,"Clinic XXXXXX XXXXX, IN",West,Golden Retriever,Scottish Fold,,,149,22,1
+C-7363300,Allergy Laboratories Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,,,,170,13,1
+C-5814177,Mechanical Servants Pet and Animal Emerging Clinic,DC,"Clinic XXXXXX XXXXX, DC",Northeast,German Shepherd,,,,102,27,0
+C-7186775,Kmart Pet and Animal Emerging Clinic,DC,"Clinic XXXXXX XXXXX, DC",Northeast,,American Bobtail,,,156,23,1
+C-7355717,American Health Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,,,,,159,21,1
+C-4668812,Physicians Total Care Pet and Animal Emerging Clinic,TN,"Clinic XXXXXX XXXXX, TN",South,,,,,64,24,1
+C-1375667,Whisk Products Pet and Animal Emerging Clinic,OK,"Clinic XXXXXX XXXXX, OK",Midwest,,American Bobtail,,,187,24,1
+C-0190273,Alaven Pharmaceutical Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,German Shepherd,,,,140,12,1
+C-3829341,Walgreens,CA,"Clinic XXXXXX XXXXX, CA",West,,,,,91,16,1
+C-7183156,Conopco Inc. d/b/a Pet and Animal Emerging Clinic,OR,"Clinic XXXXXX XXXXX, OR",South,,,,,98,20,1
+C-3213706,Physicians Total Care Pet and Animal Emerging Clinic,OR,"Clinic XXXXXX XXXXX, OR",South,,,,,104,13,1
+C-6914919,McKesson Packaging Serivces a business unit of McKesson Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,,,,,149,29,0
+C-8336775,RITE AID Pet and Animal Emerging Clinic,NY,"Clinic XXXXXX XXXXX, NY",Northeast,Beagle,,Angelfish,Finch,110,28,0
+C-5438026,SHISEIDO AMERICA Pet and Animal Emerging Clinic,WV,"Clinic XXXXXX XXXXX, WV",South,,Sphynx,,,90,20,1
+C-5714113,Agbanga Karite LLC / EveryDay Shea / Alaffia Sustainable Skin Pet and Animal Emerging Clinic,IA,"Clinic XXXXXX XXXXX, IA",West,Boxer,,,,125,17,1
+C-4093014,Greenstone Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,,,,,149,15,1
+C-4801579,Energique Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,Labrador Retriever,,,,118,13,1
+C-6388141,Meditrend Inc. DBA Progena Professional Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,,,,,162,23,1
+C-0272807,St Marys Medical Park Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Golden Retriever,,,,163,21,1
+C-2860760,Physicians Total Care Pet and Animal Emerging Clinic,OH,"Clinic XXXXXX XXXXX, OH",Northeast,Beagle,Siamese,,,142,15,1
+C-7129435,LG Household and Healthcare Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,Beagle,,,,160,20,1
+C-0360448,REMEDYREPACK Pet and Animal Emerging Clinic,IN,"Clinic XXXXXX XXXXX, IN",West,German Shepherd,,,,132,21,1
+C-3337444,Barr Laboratories Pet and Animal Emerging Clinic,IL,"Clinic XXXXXX XXXXX, IL",West,,Siamese,,,100,30,0
+C-4225828,Nelco Laboratories Pet and Animal Emerging Clinic,RI,"Clinic XXXXXX XXXXX, RI",Northeast,Labrador Retriever,,,,127,19,1
+C-5741001,AvKARE Pet and Animal Emerging Clinic,KS,"Clinic XXXXXX XXXXX, KS",South,,,,,85,22,1
+C-6575705,Vivier Pharma Pet and Animal Emerging Clinic,AK,"Clinic XXXXXX XXXXX, AK",#N/A,Yorkshire Terrier,,,,111,17,1
+C-6026626,Mycone Dental Supply Co. Inc DBA Keystone Industries and Deepak Products Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,,,,,140,27,0
+C-4936699,Alvogen Pet and Animal Emerging Clinic,OK,"Clinic XXXXXX XXXXX, OK",Midwest,Yorkshire Terrier,,,,137,14,1
+C-6864956,Ningbo Meiduo General Products Co. Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,Boxer,American Bobtail,,,124,20,1
+C-4080038,Lake Erie Medical DBA Quality Care Products Pet and Animal Emerging Clinic,AZ,"Clinic XXXXXX XXXXX, AZ",West,,,,,85,17,1
+C-6902175,SESVALIA USA Pet and Animal Emerging Clinic,AZ,"Clinic XXXXXX XXXXX, AZ",West,Yorkshire Terrier,,,,138,17,1
+C-0303641,REMEDYREPACK Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,Sphynx,,,157,17,1
+C-7094024,Jubilant HollisterStier Pet and Animal Emerging Clinic,NC,"Clinic XXXXXX XXXXX, NC",West,Yorkshire Terrier,,,,105,17,1
+C-9070137,Laboratoires Clarins Pet and Animal Emerging Clinic,NV,"Clinic XXXXXX XXXXX, NV",Northeast,,Persian,,,101,23,1
+C-8822018,MAKEUP ART Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Yorkshire Terrier,Scottish Fold,,,94,11,1
+C-5030646,Physicians Total Care Pet and Animal Emerging Clinic,NY,"Clinic XXXXXX XXXXX, NY",Northeast,,,,,113,22,1
+C-0905807,West-ward Pharmaceutical Pet and Animal Emerging Clinic,GA,"Clinic XXXXXX XXXXX, GA",South,,American Shorthair,,,171,28,0
+C-2118723,Markwins Beauty Products Pet and Animal Emerging Clinic,WI,"Clinic XXXXXX XXXXX, WI",South,,,,,153,14,1
+C-5117804,NASH-FINCH Pet and Animal Emerging Clinic,IL,"Clinic XXXXXX XXXXX, IL",West,German Shepherd,,,,179,20,1
+C-0007799,Procter & Gamble Manufacturing Pet and Animal Emerging Clinic,PA,"Clinic XXXXXX XXXXX, PA",West,Beagle,,,,192,21,1
+C-7032303,Cephalon Pet and Animal Emerging Clinic,DC,"Clinic XXXXXX XXXXX, DC",Northeast,Bulldog,American Bobtail,,,135,15,1
+C-4646107,STAT Rx USA Pet and Animal Emerging Clinic,NY,"Clinic XXXXXX XXXXX, NY",Northeast,German Shepherd,American Bobtail,Angelfish,African Gray Parrot,90,11,1
+C-0009958,Colgate Oral Pharmaceuticals Pet and Animal Emerging Clinic,OK,"Clinic XXXXXX XXXXX, OK",Midwest,,,,,133,21,1
+C-2961266,B. Braun Medical Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,Labrador Retriever,Scottish Fold,,,175,17,1
+C-5284095,Sandoz Pet and Animal Emerging Clinic,AZ,"Clinic XXXXXX XXXXX, AZ",West,,,,,130,19,1
+C-4266841,REMEDYREPACK Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,,,,131,22,1
+C-4563046,AAA Pharmaceutical Pet and Animal Emerging Clinic,IL,"Clinic XXXXXX XXXXX, IL",West,Yorkshire Terrier,,,,127,12,1
+C-3060634,Cargo Cosmetics Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,,,,144,22,1
+C-1765085,Sandoz Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,Yorkshire Terrier,Scottish Fold,,,90,12,1
+C-8640799,Bliss World Pet and Animal Emerging Clinic,OH,"Clinic XXXXXX XXXXX, OH",Northeast,German Shepherd,American Shorthair,,,85,14,1
+C-8522107,Apotex Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,Beagle,,,,130,21,1
+C-0258802,Amneal Pharmaceuticals of New York Pet and Animal Emerging Clinic,IN,"Clinic XXXXXX XXXXX, IN",West,Boxer,,Cory Catfish,Parrotlet,106,21,1
+C-1184498,Reckitt Benckiser Pet and Animal Emerging Clinic,WV,"Clinic XXXXXX XXXXX, WV",South,German Shepherd,,,,116,11,1
+C-5679975,Kareway Product Pet and Animal Emerging Clinic,WI,"Clinic XXXXXX XXXXX, WI",South,Bulldog,,,,66,18,1
+C-7407663,Mylan Pharmaceuticals Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,,Persian,,,94,22,1
+C-3261951,ALK-Abello Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Boxer,Sphynx,,,104,27,0
+C-6963787,U.S. Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,,,,115,17,1
+C-2207742,Natural Health Pet and Animal Emerging Clinic,MA,"Clinic XXXXXX XXXXX, MA",South,,,,,74,20,1
+C-5248067,Physicians Total Care Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,Boxer,,,,93,15,1
+C-4274952,Physicians Total Care Pet and Animal Emerging Clinic,MN,"Clinic XXXXXX XXXXX, MN",South,Golden Retriever,,,,104,23,1
+C-2706989,Washington Homeopathic Pet and Animal Emerging Clinic,OH,"Clinic XXXXXX XXXXX, OH",Northeast,,,Betta Fish,African Gray Parrot,106,21,1
+C-8890710,Novartis Consumer Health Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,Yorkshire Terrier,,,,105,25,0
+C-1180448,HOMEOLAB USA Pet and Animal Emerging Clinic,IA,"Clinic XXXXXX XXXXX, IA",West,Labrador Retriever,Maine Coone,,,107,16,1
+C-2606141,Genzyme Pet and Animal Emerging Clinic,OR,"Clinic XXXXXX XXXXX, OR",South,Beagle,,,,116,16,1
+C-8021177,Western Family Foods Pet and Animal Emerging Clinic,MN,"Clinic XXXXXX XXXXX, MN",South,,Sphynx,Angelfish,Finch,143,30,0
+C-9661319,Procter & Gamble Manufacturing Pet and Animal Emerging Clinic,DC,"Clinic XXXXXX XXXXX, DC",Northeast,German Shepherd,,,,134,14,1
+C-1932107,Dolgencorp Pet and Animal Emerging Clinic,LA,"Clinic XXXXXX XXXXX, LA",South,Labrador Retriever,,,,108,22,1
+C-2858310,REMEDYREPACK Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Boxer,American Bobtail,,,176,22,1
+C-4761042,Heckman Healthcare Service & Supplies Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,,,,158,19,1
+C-9528941,Cobalt Laboratories Pet and Animal Emerging Clinic,NC,"Clinic XXXXXX XXXXX, NC",West,Bulldog,,,,91,14,1
+C-1220473,Coastal Welding Supply Pet and Animal Emerging Clinic,NV,"Clinic XXXXXX XXXXX, NV",Northeast,German Shepherd,American Bobtail,,,161,8,1
+C-8273749,Valu Merchandisers Pet and Animal Emerging Clinic,OK,"Clinic XXXXXX XXXXX, OK",Midwest,,Persian,,,89,16,1
+C-1300637,Airgas-West Pet and Animal Emerging Clinic,CO,"Clinic XXXXXX XXXXX, CO",West,Labrador Retriever,,Cory Catfish,Dove,148,24,1
+C-5476343,Dolgencorp Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,Boxer,American Bobtail,,,118,15,1
+C-0237977,CVS Pharmacy Pet and Animal Emerging Clinic,MD,"Clinic XXXXXX XXXXX, MD",Northeast,,Maine Coone,,,137,15,1
+C-2927333,Cardinal Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,Scottish Fold,,,131,27,0
+C-4161281,PD-Rx Pharmaceuticals Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,,Scottish Fold,,,83,29,1
+C-5970748,Prime Enterprises Pet and Animal Emerging Clinic,CO,"Clinic XXXXXX XXXXX, CO",West,German Shepherd,,,,88,15,1
+C-7650240,Boca Pharmacal Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,,Maine Coone,,,103,23,1
+C-1484172,Topco Associates Pet and Animal Emerging Clinic,NM,"Clinic XXXXXX XXXXX, NM",Northeast,,Scottish Fold,Cory Catfish,Lovebird,101,13,1
+C-6941229,Walgreens,IA,"Clinic XXXXXX XXXXX, IA",West,Labrador Retriever,,,,113,17,1
+C-7258806,Mylan Institutional Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,,,,137,15,1
+C-6692908,Pharmacia and Upjohn Pet and Animal Emerging Clinic,OK,"Clinic XXXXXX XXXXX, OK",Midwest,,Scottish Fold,,,129,14,1
+C-9744420,Taro Pharmaceuticals U.S.A. Pet and Animal Emerging Clinic,NE,"Clinic XXXXXX XXXXX, NE",West,,,,,129,18,1
+C-8350481,DSHealthcare,MA,"Clinic XXXXXX XXXXX, MA",South,,,,,125,21,1
+C-0677076,CVS Pharmacy Pet and Animal Emerging Clinic,NJ,"Clinic XXXXXX XXXXX, NJ",Northeast,Boxer,,,,158,30,0
+C-5657240,Pfizer Laboratories Div Pfizer Pet and Animal Emerging Clinic,NJ,"Clinic XXXXXX XXXXX, NJ",Northeast,Yorkshire Terrier,,,,148,17,1
+C-8471630,The Procter & Gamble Manufacturing Pet and Animal Emerging Clinic,MI,"Clinic XXXXXX XXXXX, MI",Northeast,German Shepherd,,Cory Catfish,Dove,132,26,0
+C-2171304,NCS HealthCare of KY Inc dba Vangard Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,German Shepherd,American Shorthair,,,140,16,1
+C-7680367,Access Business Group Pet and Animal Emerging Clinic,ID,"Clinic XXXXXX XXXXX, ID",West,Beagle,,,,137,20,1
+C-8185040,L Perrigo Pet and Animal Emerging Clinic,DC,"Clinic XXXXXX XXXXX, DC",Northeast,,,Guppy,Dove,154,17,1
+C-7173048,Empack,CO,"Clinic XXXXXX XXXXX, CO",West,,,,,144,18,1
+C-4460888,Pharmacia and Upjohn Pet and Animal Emerging Clinic,MD,"Clinic XXXXXX XXXXX, MD",Northeast,German Shepherd,American Bobtail,,,116,11,1
+C-3982906,WOCKHARDT Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,,,Angelfish,African Gray Parrot,118,22,1
+C-6796356,Solco healthcare U.S. Pet and Animal Emerging Clinic,NY,"Clinic XXXXXX XXXXX, NY",Northeast,Yorkshire Terrier,,,,117,21,1
+C-2227409,Delon Laboratories (1990) Pet and Animal Emerging Clinic,MS,"Clinic XXXXXX XXXXX, MS",West,Golden Retriever,,,,123,22,1
+C-9268257,Amerisource Pet and Animal Emerging Clinic,CT,"Clinic XXXXXX XXXXX, CT",Northeast,,,,,141,22,1
+C-9629736,U.S. Pet and Animal Emerging Clinic,PA,"Clinic XXXXXX XXXXX, PA",West,,,,,69,19,1
+C-5601285,SJ Creations Pet and Animal Emerging Clinic,NJ,"Clinic XXXXXX XXXXX, NJ",Northeast,Yorkshire Terrier,,,,161,25,0
+C-4023413,Fresenius Kabi USA Pet and Animal Emerging Clinic,IN,"Clinic XXXXXX XXXXX, IN",West,,,,,160,35,0
+C-7363300,Allergy Laboratories Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Labrador Retriever,,,,146,29,0
+C-5814177,Mechanical Servants Pet and Animal Emerging Clinic,DC,"Clinic XXXXXX XXXXX, DC",Northeast,,,,,143,12,1
+C-7186775,Kmart Pet and Animal Emerging Clinic,DC,"Clinic XXXXXX XXXXX, DC",Northeast,German Shepherd,,,,122,16,1
+C-7355717,American Health Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,Bulldog,American Bobtail,Betta Fish,Parrotlet,112,12,1
+C-4668812,Physicians Total Care Pet and Animal Emerging Clinic,TN,"Clinic XXXXXX XXXXX, TN",South,Bulldog,,,,135,20,1
+C-1375667,Whisk Products Pet and Animal Emerging Clinic,OK,"Clinic XXXXXX XXXXX, OK",Midwest,Labrador Retriever,,,,161,13,1
+C-0190273,Alaven Pharmaceutical Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,Labrador Retriever,,,,94,12,1
+C-3829341,Walgreens,CA,"Clinic XXXXXX XXXXX, CA",West,Bulldog,,,,129,26,0
+C-7183156,Conopco Inc. d/b/a Pet and Animal Emerging Clinic,OR,"Clinic XXXXXX XXXXX, OR",South,,American Bobtail,,,143,17,1
+C-3213706,Physicians Total Care Pet and Animal Emerging Clinic,OR,"Clinic XXXXXX XXXXX, OR",South,German Shepherd,,,,145,22,1
+C-6914919,McKesson Packaging Serivces a business unit of McKesson Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,,,,,195,23,1
+C-8336775,RITE AID Pet and Animal Emerging Clinic,NY,"Clinic XXXXXX XXXXX, NY",Northeast,,,,,146,28,0
+C-5438026,SHISEIDO AMERICA Pet and Animal Emerging Clinic,WV,"Clinic XXXXXX XXXXX, WV",South,,Sphynx,,,163,28,0
+C-5714113,Agbanga Karite LLC / EveryDay Shea / Alaffia Sustainable Skin Pet and Animal Emerging Clinic,IA,"Clinic XXXXXX XXXXX, IA",West,,,,,118,21,1
+C-4093014,Greenstone Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,,American Bobtail,Angelfish,Dove,108,14,1
+C-4801579,Energique Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,,Siamese,,,118,18,1
+C-6388141,Meditrend Inc. DBA Progena Professional Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,Beagle,,,,92,21,1
+C-0272807,St Marys Medical Park Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Beagle,,,,88,15,1
+C-2860760,Physicians Total Care Pet and Animal Emerging Clinic,OH,"Clinic XXXXXX XXXXX, OH",Northeast,,Maine Coone,,,95,20,1
+C-7129435,LG Household and Healthcare Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,Golden Retriever,,,,100,21,1
+C-0360448,REMEDYREPACK Pet and Animal Emerging Clinic,IN,"Clinic XXXXXX XXXXX, IN",West,Boxer,,,,83,27,1
+C-3337444,Barr Laboratories Pet and Animal Emerging Clinic,IL,"Clinic XXXXXX XXXXX, IL",West,,Maine Coone,,,81,19,1
+C-4225828,Nelco Laboratories Pet and Animal Emerging Clinic,RI,"Clinic XXXXXX XXXXX, RI",Northeast,,American Shorthair,,,156,16,1
+C-5741001,AvKARE Pet and Animal Emerging Clinic,KS,"Clinic XXXXXX XXXXX, KS",South,German Shepherd,,,,144,24,1
+C-6575705,Vivier Pharma Pet and Animal Emerging Clinic,AK,"Clinic XXXXXX XXXXX, AK",#N/A,,Siamese,,,172,21,1
+C-6026626,Mycone Dental Supply Co. Inc DBA Keystone Industries and Deepak Products Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,Golden Retriever,,,,135,20,1
+C-4936699,Alvogen Pet and Animal Emerging Clinic,OK,"Clinic XXXXXX XXXXX, OK",Midwest,Bulldog,,Angelfish,Finch,125,22,1
+C-6864956,Ningbo Meiduo General Products Co. Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,Yorkshire Terrier,American Bobtail,,,97,17,1
+C-4080038,Lake Erie Medical DBA Quality Care Products Pet and Animal Emerging Clinic,AZ,"Clinic XXXXXX XXXXX, AZ",West,,American Bobtail,,,142,19,1
+C-6902175,SESVALIA USA Pet and Animal Emerging Clinic,AZ,"Clinic XXXXXX XXXXX, AZ",West,Bulldog,,,,179,23,1
+C-0303641,REMEDYREPACK Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Boxer,,,,105,24,1
+C-7094024,Jubilant HollisterStier Pet and Animal Emerging Clinic,NC,"Clinic XXXXXX XXXXX, NC",West,,Sphynx,,,103,13,1
+C-9070137,Laboratoires Clarins Pet and Animal Emerging Clinic,NV,"Clinic XXXXXX XXXXX, NV",Northeast,,American Bobtail,,,113,6,1
+C-8822018,MAKEUP ART Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Bulldog,,,,125,23,1
+C-5030646,Physicians Total Care Pet and Animal Emerging Clinic,NY,"Clinic XXXXXX XXXXX, NY",Northeast,,,,,139,31,0
+C-0905807,West-ward Pharmaceutical Pet and Animal Emerging Clinic,GA,"Clinic XXXXXX XXXXX, GA",South,,Maine Coone,,,106,21,1
+C-2118723,Markwins Beauty Products Pet and Animal Emerging Clinic,WI,"Clinic XXXXXX XXXXX, WI",South,Golden Retriever,Scottish Fold,,,124,22,1
+C-5117804,NASH-FINCH Pet and Animal Emerging Clinic,IL,"Clinic XXXXXX XXXXX, IL",West,Bulldog,,,,98,25,1
+C-0007799,Procter & Gamble Manufacturing Pet and Animal Emerging Clinic,PA,"Clinic XXXXXX XXXXX, PA",West,,Persian,,,134,25,0
+C-7032303,Cephalon Pet and Animal Emerging Clinic,DC,"Clinic XXXXXX XXXXX, DC",Northeast,Beagle,,,,99,17,1
+C-4646107,STAT Rx USA Pet and Animal Emerging Clinic,NY,"Clinic XXXXXX XXXXX, NY",Northeast,Labrador Retriever,,,,139,14,1
+C-0009958,Colgate Oral Pharmaceuticals Pet and Animal Emerging Clinic,OK,"Clinic XXXXXX XXXXX, OK",Midwest,Labrador Retriever,Persian,,,137,21,1
+C-2961266,B. Braun Medical Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,,American Bobtail,,,77,22,1
+C-5284095,Sandoz Pet and Animal Emerging Clinic,AZ,"Clinic XXXXXX XXXXX, AZ",West,Boxer,,,,116,17,1
+C-4266841,REMEDYREPACK Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Beagle,,,,68,26,1
+C-4563046,AAA Pharmaceutical Pet and Animal Emerging Clinic,IL,"Clinic XXXXXX XXXXX, IL",West,,Sphynx,,,89,13,1
+C-3060634,Cargo Cosmetics Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,,,,95,24,1
+C-1765085,Sandoz Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,German Shepherd,American Shorthair,Betta Fish,Lovebird,181,27,0
+C-8640799,Bliss World Pet and Animal Emerging Clinic,OH,"Clinic XXXXXX XXXXX, OH",Northeast,,,,,126,17,1
+C-8522107,Apotex Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,,,,,120,18,1
+C-0258802,Amneal Pharmaceuticals of New York Pet and Animal Emerging Clinic,IN,"Clinic XXXXXX XXXXX, IN",West,,,,,146,23,1
+C-1184498,Reckitt Benckiser Pet and Animal Emerging Clinic,WV,"Clinic XXXXXX XXXXX, WV",South,Boxer,,,,121,28,0
+C-5679975,Kareway Product Pet and Animal Emerging Clinic,WI,"Clinic XXXXXX XXXXX, WI",South,Bulldog,,,,109,16,1
+C-7407663,Mylan Pharmaceuticals Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,,American Bobtail,,,151,23,1
+C-3261951,ALK-Abello Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Yorkshire Terrier,,,,106,16,1
+C-6963787,U.S. Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Labrador Retriever,,Cory Catfish,African Gray Parrot,140,26,0
+C-2207742,Natural Health Pet and Animal Emerging Clinic,MA,"Clinic XXXXXX XXXXX, MA",South,Boxer,Sphynx,,,74,25,1
+C-5248067,Physicians Total Care Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,Labrador Retriever,,,,144,18,1
+C-4274952,Physicians Total Care Pet and Animal Emerging Clinic,MN,"Clinic XXXXXX XXXXX, MN",South,Yorkshire Terrier,,,,118,14,1
+C-2706989,Washington Homeopathic Pet and Animal Emerging Clinic,OH,"Clinic XXXXXX XXXXX, OH",Northeast,Bulldog,,,,148,6,1
+C-8890710,Novartis Consumer Health Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,Boxer,,Betta Fish,Parrotlet,81,22,1
+C-1180448,HOMEOLAB USA Pet and Animal Emerging Clinic,IA,"Clinic XXXXXX XXXXX, IA",West,Golden Retriever,,,,157,26,0
+C-2606141,Genzyme Pet and Animal Emerging Clinic,OR,"Clinic XXXXXX XXXXX, OR",South,Golden Retriever,,,,117,21,1
+C-8021177,Western Family Foods Pet and Animal Emerging Clinic,MN,"Clinic XXXXXX XXXXX, MN",South,,Scottish Fold,Goldfish,Dove,131,20,1
+C-9661319,Procter & Gamble Manufacturing Pet and Animal Emerging Clinic,DC,"Clinic XXXXXX XXXXX, DC",Northeast,Beagle,,,,141,24,1
+C-1932107,Dolgencorp Pet and Animal Emerging Clinic,LA,"Clinic XXXXXX XXXXX, LA",South,German Shepherd,Maine Coone,,,174,15,1
+C-2858310,REMEDYREPACK Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,Persian,,,105,15,1
+C-4761042,Heckman Healthcare Service & Supplies Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Golden Retriever,,,,134,17,1
+C-9528941,Cobalt Laboratories Pet and Animal Emerging Clinic,NC,"Clinic XXXXXX XXXXX, NC",West,,Persian,,,118,21,1
+C-1220473,Coastal Welding Supply Pet and Animal Emerging Clinic,NV,"Clinic XXXXXX XXXXX, NV",Northeast,Golden Retriever,,,,112,29,0
+C-8273749,Valu Merchandisers Pet and Animal Emerging Clinic,OK,"Clinic XXXXXX XXXXX, OK",Midwest,Yorkshire Terrier,,,,87,25,1
+C-1300637,Airgas-West Pet and Animal Emerging Clinic,CO,"Clinic XXXXXX XXXXX, CO",West,Yorkshire Terrier,,,,108,23,1
+C-5476343,Dolgencorp Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,,,Cory Catfish,Lovebird,101,16,1
+C-0237977,CVS Pharmacy Pet and Animal Emerging Clinic,MD,"Clinic XXXXXX XXXXX, MD",Northeast,Boxer,,,,108,19,1
+C-2927333,Cardinal Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,,,,87,22,1
+C-4161281,PD-Rx Pharmaceuticals Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,Labrador Retriever,,,,125,19,1
+C-5970748,Prime Enterprises Pet and Animal Emerging Clinic,CO,"Clinic XXXXXX XXXXX, CO",West,German Shepherd,,,,109,15,1
+C-7650240,Boca Pharmacal Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,,,Guppy,Parrotlet,110,19,1
+C-1484172,Topco Associates Pet and Animal Emerging Clinic,NM,"Clinic XXXXXX XXXXX, NM",Northeast,German Shepherd,,,,109,21,1
+C-6941229,Walgreens,IA,"Clinic XXXXXX XXXXX, IA",West,,,,,164,29,0
+C-7258806,Mylan Institutional Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,German Shepherd,Maine Coone,,,150,22,1
+C-6692908,Pharmacia and Upjohn Pet and Animal Emerging Clinic,OK,"Clinic XXXXXX XXXXX, OK",Midwest,,,,,140,22,1
+C-9744420,Taro Pharmaceuticals U.S.A. Pet and Animal Emerging Clinic,NE,"Clinic XXXXXX XXXXX, NE",West,Beagle,,,,151,23,1
+C-8350481,DSHealthcare,MA,"Clinic XXXXXX XXXXX, MA",South,,,,,161,15,1
+C-0677076,CVS Pharmacy Pet and Animal Emerging Clinic,NJ,"Clinic XXXXXX XXXXX, NJ",Northeast,Bulldog,,Goldfish,Finch,118,16,1
+C-5657240,Pfizer Laboratories Div Pfizer Pet and Animal Emerging Clinic,NJ,"Clinic XXXXXX XXXXX, NJ",Northeast,Labrador Retriever,,,,141,23,1
+C-8471630,The Procter & Gamble Manufacturing Pet and Animal Emerging Clinic,MI,"Clinic XXXXXX XXXXX, MI",Northeast,German Shepherd,,,,82,21,1
+C-2171304,NCS HealthCare of KY Inc dba Vangard Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,,,,,134,25,0
+C-7680367,Access Business Group Pet and Animal Emerging Clinic,ID,"Clinic XXXXXX XXXXX, ID",West,,,,,128,26,0
+C-8185040,L Perrigo Pet and Animal Emerging Clinic,DC,"Clinic XXXXXX XXXXX, DC",Northeast,Labrador Retriever,American Shorthair,,,118,18,1
+C-7173048,Empack,CO,"Clinic XXXXXX XXXXX, CO",West,,,Goldfish,Lovebird,110,23,1
+C-4460888,Pharmacia and Upjohn Pet and Animal Emerging Clinic,MD,"Clinic XXXXXX XXXXX, MD",Northeast,,,,,99,20,1
+C-3982906,WOCKHARDT Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,,,,,133,25,0
+C-6796356,Solco healthcare U.S. Pet and Animal Emerging Clinic,NY,"Clinic XXXXXX XXXXX, NY",Northeast,,,,,143,16,1
+C-2227409,Delon Laboratories (1990) Pet and Animal Emerging Clinic,MS,"Clinic XXXXXX XXXXX, MS",West,,,,,99,16,1
+C-9268257,Amerisource Pet and Animal Emerging Clinic,CT,"Clinic XXXXXX XXXXX, CT",Northeast,,,,,122,20,1
+C-9629736,U.S. Pet and Animal Emerging Clinic,PA,"Clinic XXXXXX XXXXX, PA",West,Beagle,,,,132,23,1
+C-5601285,SJ Creations Pet and Animal Emerging Clinic,NJ,"Clinic XXXXXX XXXXX, NJ",Northeast,,,,,150,22,1
+C-4023413,Fresenius Kabi USA Pet and Animal Emerging Clinic,IN,"Clinic XXXXXX XXXXX, IN",West,,Siamese,,,119,20,1
+C-7363300,Allergy Laboratories Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,,,,133,24,1
+C-5814177,Mechanical Servants Pet and Animal Emerging Clinic,DC,"Clinic XXXXXX XXXXX, DC",Northeast,Beagle,,,,120,18,1
+C-7186775,Kmart Pet and Animal Emerging Clinic,DC,"Clinic XXXXXX XXXXX, DC",Northeast,,American Bobtail,,,95,26,1
+C-7355717,American Health Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,,,,,122,15,1
+C-4668812,Physicians Total Care Pet and Animal Emerging Clinic,TN,"Clinic XXXXXX XXXXX, TN",South,Yorkshire Terrier,,,,137,24,1
+C-1375667,Whisk Products Pet and Animal Emerging Clinic,OK,"Clinic XXXXXX XXXXX, OK",Midwest,Golden Retriever,,,,154,23,1
+C-0190273,Alaven Pharmaceutical Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,Beagle,Scottish Fold,,,135,13,1
+C-3829341,Walgreens,CA,"Clinic XXXXXX XXXXX, CA",West,German Shepherd,Maine Coone,,,80,23,1
+C-7183156,Conopco Inc. d/b/a Pet and Animal Emerging Clinic,OR,"Clinic XXXXXX XXXXX, OR",South,Bulldog,,,,39,19,1
+C-3213706,Physicians Total Care Pet and Animal Emerging Clinic,OR,"Clinic XXXXXX XXXXX, OR",South,Yorkshire Terrier,,,,113,13,1
+C-6914919,McKesson Packaging Serivces a business unit of McKesson Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,,Sphynx,,,109,24,1
+C-8336775,RITE AID Pet and Animal Emerging Clinic,NY,"Clinic XXXXXX XXXXX, NY",Northeast,,,,,101,28,0
+C-5438026,SHISEIDO AMERICA Pet and Animal Emerging Clinic,WV,"Clinic XXXXXX XXXXX, WV",South,German Shepherd,,,,112,16,1
+C-5714113,Agbanga Karite LLC / EveryDay Shea / Alaffia Sustainable Skin Pet and Animal Emerging Clinic,IA,"Clinic XXXXXX XXXXX, IA",West,Golden Retriever,,,,115,21,1
+C-4093014,Greenstone Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,,,Angelfish,Parrotlet,120,15,1
+C-4801579,Energique Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,Golden Retriever,,,,73,25,1
+C-6388141,Meditrend Inc. DBA Progena Professional Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,Golden Retriever,,,,92,28,1
+C-0272807,St Marys Medical Park Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,Scottish Fold,,,104,21,1
+C-2860760,Physicians Total Care Pet and Animal Emerging Clinic,OH,"Clinic XXXXXX XXXXX, OH",Northeast,Bulldog,,,,138,23,1
+C-7129435,LG Household and Healthcare Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,Beagle,,,,162,14,1
+C-0360448,REMEDYREPACK Pet and Animal Emerging Clinic,IN,"Clinic XXXXXX XXXXX, IN",West,German Shepherd,Persian,,,98,20,1
+C-3337444,Barr Laboratories Pet and Animal Emerging Clinic,IL,"Clinic XXXXXX XXXXX, IL",West,Labrador Retriever,,,,99,28,1
+C-4225828,Nelco Laboratories Pet and Animal Emerging Clinic,RI,"Clinic XXXXXX XXXXX, RI",Northeast,,Persian,,,139,22,1
+C-5741001,AvKARE Pet and Animal Emerging Clinic,KS,"Clinic XXXXXX XXXXX, KS",South,Golden Retriever,,,,134,23,1
+C-6575705,Vivier Pharma Pet and Animal Emerging Clinic,AK,"Clinic XXXXXX XXXXX, AK",#N/A,,Maine Coone,,,134,29,0
+C-6026626,Mycone Dental Supply Co. Inc DBA Keystone Industries and Deepak Products Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,,,,,125,23,1
+C-4936699,Alvogen Pet and Animal Emerging Clinic,OK,"Clinic XXXXXX XXXXX, OK",Midwest,,,,,107,19,1
+C-6864956,Ningbo Meiduo General Products Co. Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,,,,,139,25,0
+C-4080038,Lake Erie Medical DBA Quality Care Products Pet and Animal Emerging Clinic,AZ,"Clinic XXXXXX XXXXX, AZ",West,,,,,130,20,1
+C-6902175,SESVALIA USA Pet and Animal Emerging Clinic,AZ,"Clinic XXXXXX XXXXX, AZ",West,Boxer,,,,80,23,1
+C-0303641,REMEDYREPACK Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Golden Retriever,,,,107,16,1
+C-7094024,Jubilant HollisterStier Pet and Animal Emerging Clinic,NC,"Clinic XXXXXX XXXXX, NC",West,,,,,139,20,1
+C-9070137,Laboratoires Clarins Pet and Animal Emerging Clinic,NV,"Clinic XXXXXX XXXXX, NV",Northeast,Labrador Retriever,,,,113,17,1
+C-8822018,MAKEUP ART Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Boxer,,,,115,14,1
+C-5030646,Physicians Total Care Pet and Animal Emerging Clinic,NY,"Clinic XXXXXX XXXXX, NY",Northeast,Bulldog,,,,126,25,0
+C-0905807,West-ward Pharmaceutical Pet and Animal Emerging Clinic,GA,"Clinic XXXXXX XXXXX, GA",South,,,,,155,21,1
+C-2118723,Markwins Beauty Products Pet and Animal Emerging Clinic,WI,"Clinic XXXXXX XXXXX, WI",South,,American Bobtail,,,142,13,1
+C-5117804,NASH-FINCH Pet and Animal Emerging Clinic,IL,"Clinic XXXXXX XXXXX, IL",West,,American Shorthair,Betta Fish,Lovebird,132,25,0
+C-0007799,Procter & Gamble Manufacturing Pet and Animal Emerging Clinic,PA,"Clinic XXXXXX XXXXX, PA",West,Labrador Retriever,,,,130,21,1
+C-7032303,Cephalon Pet and Animal Emerging Clinic,DC,"Clinic XXXXXX XXXXX, DC",Northeast,Boxer,Sphynx,,,111,21,1
+C-4646107,STAT Rx USA Pet and Animal Emerging Clinic,NY,"Clinic XXXXXX XXXXX, NY",Northeast,Bulldog,,Angelfish,Lovebird,99,24,1
+C-0009958,Colgate Oral Pharmaceuticals Pet and Animal Emerging Clinic,OK,"Clinic XXXXXX XXXXX, OK",Midwest,,,,,94,23,1
+C-2961266,B. Braun Medical Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,German Shepherd,,,,126,7,1
+C-5284095,Sandoz Pet and Animal Emerging Clinic,AZ,"Clinic XXXXXX XXXXX, AZ",West,Golden Retriever,,Cory Catfish,Dove,122,23,1
+C-4266841,REMEDYREPACK Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Yorkshire Terrier,,,,69,27,1
+C-4563046,AAA Pharmaceutical Pet and Animal Emerging Clinic,IL,"Clinic XXXXXX XXXXX, IL",West,,,,,99,15,1
+C-3060634,Cargo Cosmetics Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,Maine Coone,,,104,21,1
+C-1765085,Sandoz Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,,,,,103,17,1
+C-8640799,Bliss World Pet and Animal Emerging Clinic,OH,"Clinic XXXXXX XXXXX, OH",Northeast,,,,,146,26,0
+C-8522107,Apotex Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,Yorkshire Terrier,,,,151,21,1
+C-0258802,Amneal Pharmaceuticals of New York Pet and Animal Emerging Clinic,IN,"Clinic XXXXXX XXXXX, IN",West,,,,,75,23,1
+C-1184498,Reckitt Benckiser Pet and Animal Emerging Clinic,WV,"Clinic XXXXXX XXXXX, WV",South,German Shepherd,,,,100,20,1
+C-5679975,Kareway Product Pet and Animal Emerging Clinic,WI,"Clinic XXXXXX XXXXX, WI",South,,Siamese,,,150,21,1
+C-7407663,Mylan Pharmaceuticals Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,,Scottish Fold,,,173,21,1
+C-3261951,ALK-Abello Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Boxer,,,,167,11,1
+C-6963787,U.S. Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,,Betta Fish,Parrotlet,153,22,1
+C-2207742,Natural Health Pet and Animal Emerging Clinic,MA,"Clinic XXXXXX XXXXX, MA",South,,Maine Coone,,,99,22,1
+C-5248067,Physicians Total Care Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,,,,,128,14,1
+C-4274952,Physicians Total Care Pet and Animal Emerging Clinic,MN,"Clinic XXXXXX XXXXX, MN",South,,,,,163,20,1
+C-2706989,Washington Homeopathic Pet and Animal Emerging Clinic,OH,"Clinic XXXXXX XXXXX, OH",Northeast,Boxer,,,,129,26,0
+C-8890710,Novartis Consumer Health Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,Bulldog,,,,147,27,0
+C-1180448,HOMEOLAB USA Pet and Animal Emerging Clinic,IA,"Clinic XXXXXX XXXXX, IA",West,Golden Retriever,,,,154,23,1
+C-2606141,Genzyme Pet and Animal Emerging Clinic,OR,"Clinic XXXXXX XXXXX, OR",South,,Persian,,,188,17,1
+C-8021177,Western Family Foods Pet and Animal Emerging Clinic,MN,"Clinic XXXXXX XXXXX, MN",South,Bulldog,,,,137,16,1
+C-9661319,Procter & Gamble Manufacturing Pet and Animal Emerging Clinic,DC,"Clinic XXXXXX XXXXX, DC",Northeast,German Shepherd,Persian,,,99,26,1
+C-1932107,Dolgencorp Pet and Animal Emerging Clinic,LA,"Clinic XXXXXX XXXXX, LA",South,Golden Retriever,Maine Coone,Goldfish,Lovebird,115,12,1
+C-2858310,REMEDYREPACK Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,,,,111,27,0
+C-4761042,Heckman Healthcare Service & Supplies Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,,,,118,21,1
+C-9528941,Cobalt Laboratories Pet and Animal Emerging Clinic,NC,"Clinic XXXXXX XXXXX, NC",West,,American Shorthair,,,90,25,1
+C-1220473,Coastal Welding Supply Pet and Animal Emerging Clinic,NV,"Clinic XXXXXX XXXXX, NV",Northeast,,American Bobtail,,,113,24,1
+C-8273749,Valu Merchandisers Pet and Animal Emerging Clinic,OK,"Clinic XXXXXX XXXXX, OK",Midwest,Golden Retriever,,,,106,23,1
+C-1300637,Airgas-West Pet and Animal Emerging Clinic,CO,"Clinic XXXXXX XXXXX, CO",West,,,,,139,21,1
+C-5476343,Dolgencorp Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,German Shepherd,,Guppy,African Gray Parrot,130,14,1
+C-0237977,CVS Pharmacy Pet and Animal Emerging Clinic,MD,"Clinic XXXXXX XXXXX, MD",Northeast,Bulldog,,,,112,20,1
+C-2927333,Cardinal Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,German Shepherd,American Shorthair,,,169,17,1
+C-4161281,PD-Rx Pharmaceuticals Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,German Shepherd,,,,68,11,1
+C-5970748,Prime Enterprises Pet and Animal Emerging Clinic,CO,"Clinic XXXXXX XXXXX, CO",West,Golden Retriever,Scottish Fold,,,155,19,1
+C-7650240,Boca Pharmacal Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,Bulldog,Maine Coone,,,119,24,1
+C-1484172,Topco Associates Pet and Animal Emerging Clinic,NM,"Clinic XXXXXX XXXXX, NM",Northeast,Boxer,,,,49,12,1
+C-6941229,Walgreens,IA,"Clinic XXXXXX XXXXX, IA",West,,,,,39,26,1
+C-7258806,Mylan Institutional Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,,,,108,5,1
+C-6692908,Pharmacia and Upjohn Pet and Animal Emerging Clinic,OK,"Clinic XXXXXX XXXXX, OK",Midwest,,Scottish Fold,,,111,26,0
+C-9744420,Taro Pharmaceuticals U.S.A. Pet and Animal Emerging Clinic,NE,"Clinic XXXXXX XXXXX, NE",West,Boxer,,,,138,16,1
+C-8350481,DSHealthcare,MA,"Clinic XXXXXX XXXXX, MA",South,,,,,184,24,1
+C-0677076,CVS Pharmacy Pet and Animal Emerging Clinic,NJ,"Clinic XXXXXX XXXXX, NJ",Northeast,Beagle,,,,130,24,1
+C-5657240,Pfizer Laboratories Div Pfizer Pet and Animal Emerging Clinic,NJ,"Clinic XXXXXX XXXXX, NJ",Northeast,,,,,146,14,1
+C-8471630,The Procter & Gamble Manufacturing Pet and Animal Emerging Clinic,MI,"Clinic XXXXXX XXXXX, MI",Northeast,Golden Retriever,,,,42,25,1
+C-2171304,NCS HealthCare of KY Inc dba Vangard Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,,,Goldfish,Lovebird,186,20,1
+C-7680367,Access Business Group Pet and Animal Emerging Clinic,ID,"Clinic XXXXXX XXXXX, ID",West,Golden Retriever,American Bobtail,,,94,10,1
+C-8185040,L Perrigo Pet and Animal Emerging Clinic,DC,"Clinic XXXXXX XXXXX, DC",Northeast,,,,,147,14,1
+C-7173048,Empack,CO,"Clinic XXXXXX XXXXX, CO",West,Golden Retriever,Scottish Fold,Guppy,Parrotlet,104,27,0
+C-4460888,Pharmacia and Upjohn Pet and Animal Emerging Clinic,MD,"Clinic XXXXXX XXXXX, MD",Northeast,Yorkshire Terrier,,,,155,21,1
+C-3982906,WOCKHARDT Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,Golden Retriever,,,,132,11,1
+C-6796356,Solco healthcare U.S. Pet and Animal Emerging Clinic,NY,"Clinic XXXXXX XXXXX, NY",Northeast,,,,,89,20,1
+C-2227409,Delon Laboratories (1990) Pet and Animal Emerging Clinic,MS,"Clinic XXXXXX XXXXX, MS",West,,,,,178,18,1
+C-9268257,Amerisource Pet and Animal Emerging Clinic,CT,"Clinic XXXXXX XXXXX, CT",Northeast,,,,,106,37,0
+C-9629736,U.S. Pet and Animal Emerging Clinic,PA,"Clinic XXXXXX XXXXX, PA",West,Boxer,,Angelfish,Finch,167,19,1
+C-5601285,SJ Creations Pet and Animal Emerging Clinic,NJ,"Clinic XXXXXX XXXXX, NJ",Northeast,Bulldog,,Angelfish,Dove,124,18,1
+C-4023413,Fresenius Kabi USA Pet and Animal Emerging Clinic,IN,"Clinic XXXXXX XXXXX, IN",West,,,,,131,21,1
+C-7363300,Allergy Laboratories Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Bulldog,Maine Coone,,,130,17,1
+C-5814177,Mechanical Servants Pet and Animal Emerging Clinic,DC,"Clinic XXXXXX XXXXX, DC",Northeast,Golden Retriever,,,,105,22,1
+C-7186775,Kmart Pet and Animal Emerging Clinic,DC,"Clinic XXXXXX XXXXX, DC",Northeast,,Siamese,,,106,19,1
+C-7355717,American Health Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,German Shepherd,,,,132,23,1
+C-4668812,Physicians Total Care Pet and Animal Emerging Clinic,TN,"Clinic XXXXXX XXXXX, TN",South,,Sphynx,,,196,18,1
+C-1375667,Whisk Products Pet and Animal Emerging Clinic,OK,"Clinic XXXXXX XXXXX, OK",Midwest,German Shepherd,,,,81,13,1
+C-0190273,Alaven Pharmaceutical Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,,,,,160,15,1
+C-3829341,Walgreens,CA,"Clinic XXXXXX XXXXX, CA",West,,,,,135,17,1
+C-7183156,Conopco Inc. d/b/a Pet and Animal Emerging Clinic,OR,"Clinic XXXXXX XXXXX, OR",South,Beagle,,,,121,23,1
+C-3213706,Physicians Total Care Pet and Animal Emerging Clinic,OR,"Clinic XXXXXX XXXXX, OR",South,Bulldog,American Bobtail,Guppy,Dove,145,11,1
+C-6914919,McKesson Packaging Serivces a business unit of McKesson Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,Yorkshire Terrier,Maine Coone,,,82,10,1
+C-8336775,RITE AID Pet and Animal Emerging Clinic,NY,"Clinic XXXXXX XXXXX, NY",Northeast,Yorkshire Terrier,,Betta Fish,Dove,134,20,1
+C-5438026,SHISEIDO AMERICA Pet and Animal Emerging Clinic,WV,"Clinic XXXXXX XXXXX, WV",South,German Shepherd,,,,121,26,0
+C-5714113,Agbanga Karite LLC / EveryDay Shea / Alaffia Sustainable Skin Pet and Animal Emerging Clinic,IA,"Clinic XXXXXX XXXXX, IA",West,German Shepherd,Persian,,,141,14,1
+C-4093014,Greenstone Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,,,,,111,30,0
+C-4801579,Energique Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,,,,,83,19,1
+C-6388141,Meditrend Inc. DBA Progena Professional Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,Labrador Retriever,,,,70,21,1
+C-0272807,St Marys Medical Park Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,,,,139,26,0
+C-2860760,Physicians Total Care Pet and Animal Emerging Clinic,OH,"Clinic XXXXXX XXXXX, OH",Northeast,,,,,63,25,1
+C-7129435,LG Household and Healthcare Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,,American Bobtail,,,89,23,1
+C-0360448,REMEDYREPACK Pet and Animal Emerging Clinic,IN,"Clinic XXXXXX XXXXX, IN",West,,,,,144,14,1
+C-3337444,Barr Laboratories Pet and Animal Emerging Clinic,IL,"Clinic XXXXXX XXXXX, IL",West,,,,,94,12,1
+C-4225828,Nelco Laboratories Pet and Animal Emerging Clinic,RI,"Clinic XXXXXX XXXXX, RI",Northeast,,,Guppy,Dove,145,20,1
+C-5741001,AvKARE Pet and Animal Emerging Clinic,KS,"Clinic XXXXXX XXXXX, KS",South,Bulldog,,,,115,22,1
+C-6575705,Vivier Pharma Pet and Animal Emerging Clinic,AK,"Clinic XXXXXX XXXXX, AK",#N/A,,,,,118,33,0
+C-6026626,Mycone Dental Supply Co. Inc DBA Keystone Industries and Deepak Products Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,Beagle,,,,136,16,1
+C-4936699,Alvogen Pet and Animal Emerging Clinic,OK,"Clinic XXXXXX XXXXX, OK",Midwest,German Shepherd,,,,121,26,0
+C-6864956,Ningbo Meiduo General Products Co. Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,,,,,138,21,1
+C-4080038,Lake Erie Medical DBA Quality Care Products Pet and Animal Emerging Clinic,AZ,"Clinic XXXXXX XXXXX, AZ",West,,,,,99,16,1
+C-6902175,SESVALIA USA Pet and Animal Emerging Clinic,AZ,"Clinic XXXXXX XXXXX, AZ",West,Golden Retriever,American Bobtail,Angelfish,Dove,79,16,1
+C-0303641,REMEDYREPACK Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,,Angelfish,Lovebird,128,30,0
+C-7094024,Jubilant HollisterStier Pet and Animal Emerging Clinic,NC,"Clinic XXXXXX XXXXX, NC",West,Boxer,Sphynx,,,125,18,1
+C-9070137,Laboratoires Clarins Pet and Animal Emerging Clinic,NV,"Clinic XXXXXX XXXXX, NV",Northeast,,,,,80,24,1
+C-8822018,MAKEUP ART Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,German Shepherd,American Shorthair,,,78,18,1
+C-5030646,Physicians Total Care Pet and Animal Emerging Clinic,NY,"Clinic XXXXXX XXXXX, NY",Northeast,Bulldog,,,,139,22,1
+C-0905807,West-ward Pharmaceutical Pet and Animal Emerging Clinic,GA,"Clinic XXXXXX XXXXX, GA",South,Labrador Retriever,,,,47,21,1
+C-2118723,Markwins Beauty Products Pet and Animal Emerging Clinic,WI,"Clinic XXXXXX XXXXX, WI",South,,,,,124,18,1
+C-5117804,NASH-FINCH Pet and Animal Emerging Clinic,IL,"Clinic XXXXXX XXXXX, IL",West,Beagle,,,,95,21,1
+C-0007799,Procter & Gamble Manufacturing Pet and Animal Emerging Clinic,PA,"Clinic XXXXXX XXXXX, PA",West,Golden Retriever,Persian,,,80,23,1
+C-7032303,Cephalon Pet and Animal Emerging Clinic,DC,"Clinic XXXXXX XXXXX, DC",Northeast,,Sphynx,,,141,20,1
+C-4646107,STAT Rx USA Pet and Animal Emerging Clinic,NY,"Clinic XXXXXX XXXXX, NY",Northeast,Beagle,Sphynx,Betta Fish,African Gray Parrot,111,22,1
+C-0009958,Colgate Oral Pharmaceuticals Pet and Animal Emerging Clinic,OK,"Clinic XXXXXX XXXXX, OK",Midwest,Golden Retriever,,,,111,23,1
+C-2961266,B. Braun Medical Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,,,Guppy,Lovebird,78,22,1
+C-5284095,Sandoz Pet and Animal Emerging Clinic,AZ,"Clinic XXXXXX XXXXX, AZ",West,,Persian,,,150,17,1
+C-4266841,REMEDYREPACK Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,,,,112,27,0
+C-4563046,AAA Pharmaceutical Pet and Animal Emerging Clinic,IL,"Clinic XXXXXX XXXXX, IL",West,,,,,120,17,1
+C-3060634,Cargo Cosmetics Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Labrador Retriever,Sphynx,,,131,25,0
+C-1765085,Sandoz Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,Beagle,,,,98,21,1
+C-8640799,Bliss World Pet and Animal Emerging Clinic,OH,"Clinic XXXXXX XXXXX, OH",Northeast,Golden Retriever,,,,165,15,1
+C-8522107,Apotex Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,Golden Retriever,Sphynx,,,82,23,1
+C-0258802,Amneal Pharmaceuticals of New York Pet and Animal Emerging Clinic,IN,"Clinic XXXXXX XXXXX, IN",West,,,,,142,21,1
+C-1184498,Reckitt Benckiser Pet and Animal Emerging Clinic,WV,"Clinic XXXXXX XXXXX, WV",South,German Shepherd,,,,92,26,1
+C-5679975,Kareway Product Pet and Animal Emerging Clinic,WI,"Clinic XXXXXX XXXXX, WI",South,,,,,190,25,0
+C-7407663,Mylan Pharmaceuticals Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,,Scottish Fold,,,114,12,1
+C-3261951,ALK-Abello Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,,,,130,13,1
+C-6963787,U.S. Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,,,,136,20,1
+C-2207742,Natural Health Pet and Animal Emerging Clinic,MA,"Clinic XXXXXX XXXXX, MA",South,Beagle,Siamese,,,95,21,1
+C-5248067,Physicians Total Care Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,Labrador Retriever,Siamese,,,59,19,1
+C-4274952,Physicians Total Care Pet and Animal Emerging Clinic,MN,"Clinic XXXXXX XXXXX, MN",South,German Shepherd,Persian,,,99,23,1
+C-2706989,Washington Homeopathic Pet and Animal Emerging Clinic,OH,"Clinic XXXXXX XXXXX, OH",Northeast,Boxer,,,,128,27,0
+C-8890710,Novartis Consumer Health Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,Labrador Retriever,Siamese,,,138,22,1
+C-1180448,HOMEOLAB USA Pet and Animal Emerging Clinic,IA,"Clinic XXXXXX XXXXX, IA",West,Yorkshire Terrier,,,,156,25,0
+C-2606141,Genzyme Pet and Animal Emerging Clinic,OR,"Clinic XXXXXX XXXXX, OR",South,Bulldog,,,,159,15,1
+C-8021177,Western Family Foods Pet and Animal Emerging Clinic,MN,"Clinic XXXXXX XXXXX, MN",South,Labrador Retriever,,,,108,23,1
+C-9661319,Procter & Gamble Manufacturing Pet and Animal Emerging Clinic,DC,"Clinic XXXXXX XXXXX, DC",Northeast,,,,,160,18,1
+C-1932107,Dolgencorp Pet and Animal Emerging Clinic,LA,"Clinic XXXXXX XXXXX, LA",South,Labrador Retriever,Scottish Fold,,,102,22,1
+C-2858310,REMEDYREPACK Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,,,,127,30,0
+C-4761042,Heckman Healthcare Service & Supplies Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,,,,136,16,1
+C-9528941,Cobalt Laboratories Pet and Animal Emerging Clinic,NC,"Clinic XXXXXX XXXXX, NC",West,Beagle,,,,149,18,1
+C-1220473,Coastal Welding Supply Pet and Animal Emerging Clinic,NV,"Clinic XXXXXX XXXXX, NV",Northeast,Bulldog,,,,125,20,1
+C-8273749,Valu Merchandisers Pet and Animal Emerging Clinic,OK,"Clinic XXXXXX XXXXX, OK",Midwest,Bulldog,,,,98,29,1
+C-1300637,Airgas-West Pet and Animal Emerging Clinic,CO,"Clinic XXXXXX XXXXX, CO",West,Bulldog,Persian,,,182,23,1
+C-5476343,Dolgencorp Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,Golden Retriever,,,,144,15,1
+C-0237977,CVS Pharmacy Pet and Animal Emerging Clinic,MD,"Clinic XXXXXX XXXXX, MD",Northeast,Golden Retriever,,,,110,19,1
+C-2927333,Cardinal Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,Siamese,,,144,22,1
+C-4161281,PD-Rx Pharmaceuticals Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,,,Guppy,Finch,133,12,1
+C-5970748,Prime Enterprises Pet and Animal Emerging Clinic,CO,"Clinic XXXXXX XXXXX, CO",West,,,,,74,26,1
+C-7650240,Boca Pharmacal Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,,,,,114,10,1
+C-1484172,Topco Associates Pet and Animal Emerging Clinic,NM,"Clinic XXXXXX XXXXX, NM",Northeast,,,,,93,25,1
+C-6941229,Walgreens,IA,"Clinic XXXXXX XXXXX, IA",West,Beagle,,,,113,21,1
+C-7258806,Mylan Institutional Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Bulldog,,Cory Catfish,Lovebird,124,13,1
+C-6692908,Pharmacia and Upjohn Pet and Animal Emerging Clinic,OK,"Clinic XXXXXX XXXXX, OK",Midwest,Bulldog,,Goldfish,African Gray Parrot,130,21,1
+C-9744420,Taro Pharmaceuticals U.S.A. Pet and Animal Emerging Clinic,NE,"Clinic XXXXXX XXXXX, NE",West,,American Bobtail,,,100,11,1
+C-8350481,DSHealthcare,MA,"Clinic XXXXXX XXXXX, MA",South,,American Bobtail,,,122,18,1
+C-0677076,CVS Pharmacy Pet and Animal Emerging Clinic,NJ,"Clinic XXXXXX XXXXX, NJ",Northeast,Golden Retriever,,,,126,25,0
+C-5657240,Pfizer Laboratories Div Pfizer Pet and Animal Emerging Clinic,NJ,"Clinic XXXXXX XXXXX, NJ",Northeast,,,,,81,25,1
+C-8471630,The Procter & Gamble Manufacturing Pet and Animal Emerging Clinic,MI,"Clinic XXXXXX XXXXX, MI",Northeast,Boxer,,,,120,20,1
+C-2171304,NCS HealthCare of KY Inc dba Vangard Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,,Scottish Fold,,,115,21,1
+C-7680367,Access Business Group Pet and Animal Emerging Clinic,ID,"Clinic XXXXXX XXXXX, ID",West,Boxer,,,,131,21,1
+C-8185040,L Perrigo Pet and Animal Emerging Clinic,DC,"Clinic XXXXXX XXXXX, DC",Northeast,German Shepherd,,,,106,19,1
+C-7173048,Empack,CO,"Clinic XXXXXX XXXXX, CO",West,Golden Retriever,,,,111,18,1
+C-4460888,Pharmacia and Upjohn Pet and Animal Emerging Clinic,MD,"Clinic XXXXXX XXXXX, MD",Northeast,Yorkshire Terrier,Sphynx,,,93,18,1
+C-3982906,WOCKHARDT Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,,Persian,,,100,19,1
+C-6796356,Solco healthcare U.S. Pet and Animal Emerging Clinic,NY,"Clinic XXXXXX XXXXX, NY",Northeast,,American Bobtail,,,160,14,1
+C-2227409,Delon Laboratories (1990) Pet and Animal Emerging Clinic,MS,"Clinic XXXXXX XXXXX, MS",West,,,,,95,22,1
+C-9268257,Amerisource Pet and Animal Emerging Clinic,CT,"Clinic XXXXXX XXXXX, CT",Northeast,Bulldog,,,,125,28,0
+C-9629736,U.S. Pet and Animal Emerging Clinic,PA,"Clinic XXXXXX XXXXX, PA",West,German Shepherd,American Bobtail,,,114,6,1
+C-5601285,SJ Creations Pet and Animal Emerging Clinic,NJ,"Clinic XXXXXX XXXXX, NJ",Northeast,Boxer,Siamese,,,60,25,1
+C-4023413,Fresenius Kabi USA Pet and Animal Emerging Clinic,IN,"Clinic XXXXXX XXXXX, IN",West,Bulldog,American Shorthair,,,101,21,1
+C-7363300,Allergy Laboratories Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,,,,105,21,1
+C-5814177,Mechanical Servants Pet and Animal Emerging Clinic,DC,"Clinic XXXXXX XXXXX, DC",Northeast,Yorkshire Terrier,,,,171,23,1
+C-7186775,Kmart Pet and Animal Emerging Clinic,DC,"Clinic XXXXXX XXXXX, DC",Northeast,,,,,149,19,1
+C-7355717,American Health Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,Beagle,Maine Coone,,,139,24,1
+C-4668812,Physicians Total Care Pet and Animal Emerging Clinic,TN,"Clinic XXXXXX XXXXX, TN",South,Labrador Retriever,,,,134,20,1
+C-1375667,Whisk Products Pet and Animal Emerging Clinic,OK,"Clinic XXXXXX XXXXX, OK",Midwest,,,,,119,20,1
+C-0190273,Alaven Pharmaceutical Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,,,,,122,21,1
+C-3829341,Walgreens,CA,"Clinic XXXXXX XXXXX, CA",West,Bulldog,,,,35,20,1
+C-7183156,Conopco Inc. d/b/a Pet and Animal Emerging Clinic,OR,"Clinic XXXXXX XXXXX, OR",South,,,,,103,14,1
+C-3213706,Physicians Total Care Pet and Animal Emerging Clinic,OR,"Clinic XXXXXX XXXXX, OR",South,Yorkshire Terrier,,,,146,22,1
+C-6914919,McKesson Packaging Serivces a business unit of McKesson Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,Yorkshire Terrier,,Angelfish,Parrotlet,153,19,1
+C-8336775,RITE AID Pet and Animal Emerging Clinic,NY,"Clinic XXXXXX XXXXX, NY",Northeast,Bulldog,,,,158,22,1
+C-5438026,SHISEIDO AMERICA Pet and Animal Emerging Clinic,WV,"Clinic XXXXXX XXXXX, WV",South,,American Bobtail,Goldfish,African Gray Parrot,111,27,0
+C-5714113,Agbanga Karite LLC / EveryDay Shea / Alaffia Sustainable Skin Pet and Animal Emerging Clinic,IA,"Clinic XXXXXX XXXXX, IA",West,,,Cory Catfish,Parrotlet,55,21,1
+C-4093014,Greenstone Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,Yorkshire Terrier,,,,137,23,1
+C-4801579,Energique Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,,,Guppy,Parrotlet,75,25,1
+C-6388141,Meditrend Inc. DBA Progena Professional Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,,,,,107,29,0
+C-0272807,St Marys Medical Park Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,,,,92,30,1
+C-2860760,Physicians Total Care Pet and Animal Emerging Clinic,OH,"Clinic XXXXXX XXXXX, OH",Northeast,Bulldog,Maine Coone,,,101,15,1
+C-7129435,LG Household and Healthcare Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,,,,,85,21,1
+C-0360448,REMEDYREPACK Pet and Animal Emerging Clinic,IN,"Clinic XXXXXX XXXXX, IN",West,,Sphynx,,,152,19,1
+C-3337444,Barr Laboratories Pet and Animal Emerging Clinic,IL,"Clinic XXXXXX XXXXX, IL",West,Golden Retriever,Sphynx,,,131,26,0
+C-4225828,Nelco Laboratories Pet and Animal Emerging Clinic,RI,"Clinic XXXXXX XXXXX, RI",Northeast,Yorkshire Terrier,,,,126,22,1
+C-5741001,AvKARE Pet and Animal Emerging Clinic,KS,"Clinic XXXXXX XXXXX, KS",South,Yorkshire Terrier,,,,118,21,1
+C-6575705,Vivier Pharma Pet and Animal Emerging Clinic,AK,"Clinic XXXXXX XXXXX, AK",#N/A,,,,,95,22,1
+C-6026626,Mycone Dental Supply Co. Inc DBA Keystone Industries and Deepak Products Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,Bulldog,,,,143,12,1
+C-4936699,Alvogen Pet and Animal Emerging Clinic,OK,"Clinic XXXXXX XXXXX, OK",Midwest,Boxer,,,,109,23,1
+C-6864956,Ningbo Meiduo General Products Co. Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,Labrador Retriever,,,,170,23,1
+C-4080038,Lake Erie Medical DBA Quality Care Products Pet and Animal Emerging Clinic,AZ,"Clinic XXXXXX XXXXX, AZ",West,Labrador Retriever,,,,101,22,1
+C-6902175,SESVALIA USA Pet and Animal Emerging Clinic,AZ,"Clinic XXXXXX XXXXX, AZ",West,,American Bobtail,Guppy,Lovebird,79,19,1
+C-0303641,REMEDYREPACK Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Labrador Retriever,,,,92,16,1
+C-7094024,Jubilant HollisterStier Pet and Animal Emerging Clinic,NC,"Clinic XXXXXX XXXXX, NC",West,,Scottish Fold,,,139,18,1
+C-9070137,Laboratoires Clarins Pet and Animal Emerging Clinic,NV,"Clinic XXXXXX XXXXX, NV",Northeast,Golden Retriever,,,,141,15,1
+C-8822018,MAKEUP ART Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Yorkshire Terrier,,Angelfish,Lovebird,89,30,1
+C-5030646,Physicians Total Care Pet and Animal Emerging Clinic,NY,"Clinic XXXXXX XXXXX, NY",Northeast,,American Bobtail,,,124,20,1
+C-0905807,West-ward Pharmaceutical Pet and Animal Emerging Clinic,GA,"Clinic XXXXXX XXXXX, GA",South,Golden Retriever,,,,161,16,1
+C-2118723,Markwins Beauty Products Pet and Animal Emerging Clinic,WI,"Clinic XXXXXX XXXXX, WI",South,Yorkshire Terrier,,,,105,17,1
+C-5117804,NASH-FINCH Pet and Animal Emerging Clinic,IL,"Clinic XXXXXX XXXXX, IL",West,,American Bobtail,Guppy,Lovebird,103,19,1
+C-0007799,Procter & Gamble Manufacturing Pet and Animal Emerging Clinic,PA,"Clinic XXXXXX XXXXX, PA",West,Bulldog,,,,109,15,1
+C-7032303,Cephalon Pet and Animal Emerging Clinic,DC,"Clinic XXXXXX XXXXX, DC",Northeast,,Persian,,,96,22,1
+C-4646107,STAT Rx USA Pet and Animal Emerging Clinic,NY,"Clinic XXXXXX XXXXX, NY",Northeast,Yorkshire Terrier,,,,154,23,1
+C-0009958,Colgate Oral Pharmaceuticals Pet and Animal Emerging Clinic,OK,"Clinic XXXXXX XXXXX, OK",Midwest,,,,,97,15,1
+C-2961266,B. Braun Medical Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,,,,,152,12,1
+C-5284095,Sandoz Pet and Animal Emerging Clinic,AZ,"Clinic XXXXXX XXXXX, AZ",West,Beagle,,,,167,21,1
+C-4266841,REMEDYREPACK Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,Scottish Fold,,,170,24,1
+C-4563046,AAA Pharmaceutical Pet and Animal Emerging Clinic,IL,"Clinic XXXXXX XXXXX, IL",West,,,,,190,22,1
+C-3060634,Cargo Cosmetics Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,,,,136,20,1
+C-1765085,Sandoz Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,,,,,129,27,0
+C-8640799,Bliss World Pet and Animal Emerging Clinic,OH,"Clinic XXXXXX XXXXX, OH",Northeast,German Shepherd,Maine Coone,,,96,23,1
+C-8522107,Apotex Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,,,,,56,22,1
+C-0258802,Amneal Pharmaceuticals of New York Pet and Animal Emerging Clinic,IN,"Clinic XXXXXX XXXXX, IN",West,,,,,197,4,1
+C-1184498,Reckitt Benckiser Pet and Animal Emerging Clinic,WV,"Clinic XXXXXX XXXXX, WV",South,Yorkshire Terrier,,,,109,10,1
+C-5679975,Kareway Product Pet and Animal Emerging Clinic,WI,"Clinic XXXXXX XXXXX, WI",South,,Sphynx,,,144,24,1
+C-7407663,Mylan Pharmaceuticals Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,Boxer,,,,119,17,1
+C-3261951,ALK-Abello Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Labrador Retriever,,,,135,9,1
+C-6963787,U.S. Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,,,,107,17,1
+C-2207742,Natural Health Pet and Animal Emerging Clinic,MA,"Clinic XXXXXX XXXXX, MA",South,Beagle,,,,168,16,1
+C-5248067,Physicians Total Care Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,Boxer,,,,120,21,1
+C-4274952,Physicians Total Care Pet and Animal Emerging Clinic,MN,"Clinic XXXXXX XXXXX, MN",South,Beagle,,,,108,20,1
+C-2706989,Washington Homeopathic Pet and Animal Emerging Clinic,OH,"Clinic XXXXXX XXXXX, OH",Northeast,,,,,167,19,1
+C-8890710,Novartis Consumer Health Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,Boxer,,,,133,18,1
+C-1180448,HOMEOLAB USA Pet and Animal Emerging Clinic,IA,"Clinic XXXXXX XXXXX, IA",West,,,Goldfish,African Gray Parrot,162,16,1
+C-2606141,Genzyme Pet and Animal Emerging Clinic,OR,"Clinic XXXXXX XXXXX, OR",South,,,,,82,16,1
+C-8021177,Western Family Foods Pet and Animal Emerging Clinic,MN,"Clinic XXXXXX XXXXX, MN",South,Yorkshire Terrier,,,,184,15,1
+C-9661319,Procter & Gamble Manufacturing Pet and Animal Emerging Clinic,DC,"Clinic XXXXXX XXXXX, DC",Northeast,,Maine Coone,,,99,21,1
+C-1932107,Dolgencorp Pet and Animal Emerging Clinic,LA,"Clinic XXXXXX XXXXX, LA",South,Beagle,Siamese,,,120,18,1
+C-2858310,REMEDYREPACK Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Labrador Retriever,,,,145,26,0
+C-4761042,Heckman Healthcare Service & Supplies Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,,,,103,23,1
+C-9528941,Cobalt Laboratories Pet and Animal Emerging Clinic,NC,"Clinic XXXXXX XXXXX, NC",West,Boxer,,,,141,32,0
+C-1220473,Coastal Welding Supply Pet and Animal Emerging Clinic,NV,"Clinic XXXXXX XXXXX, NV",Northeast,,,,,130,20,1
+C-8273749,Valu Merchandisers Pet and Animal Emerging Clinic,OK,"Clinic XXXXXX XXXXX, OK",Midwest,,,,,85,23,1
+C-1300637,Airgas-West Pet and Animal Emerging Clinic,CO,"Clinic XXXXXX XXXXX, CO",West,,,Guppy,Finch,102,19,1
+C-5476343,Dolgencorp Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,Bulldog,,,,148,18,1
+C-0237977,CVS Pharmacy Pet and Animal Emerging Clinic,MD,"Clinic XXXXXX XXXXX, MD",Northeast,,American Shorthair,,,99,19,1
+C-2927333,Cardinal Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Yorkshire Terrier,,,,91,28,1
+C-4161281,PD-Rx Pharmaceuticals Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,,American Shorthair,,,102,25,0
+C-5970748,Prime Enterprises Pet and Animal Emerging Clinic,CO,"Clinic XXXXXX XXXXX, CO",West,,,,,124,11,1
+C-7650240,Boca Pharmacal Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,Yorkshire Terrier,,Goldfish,Lovebird,106,16,1
+C-1484172,Topco Associates Pet and Animal Emerging Clinic,NM,"Clinic XXXXXX XXXXX, NM",Northeast,,Persian,,,94,24,1
+C-6941229,Walgreens,IA,"Clinic XXXXXX XXXXX, IA",West,Yorkshire Terrier,,,,111,24,1
+C-7258806,Mylan Institutional Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,Sphynx,,,118,13,1
+C-6692908,Pharmacia and Upjohn Pet and Animal Emerging Clinic,OK,"Clinic XXXXXX XXXXX, OK",Midwest,,,,,128,18,1
+C-9744420,Taro Pharmaceuticals U.S.A. Pet and Animal Emerging Clinic,NE,"Clinic XXXXXX XXXXX, NE",West,German Shepherd,,,,125,25,0
+C-8350481,DSHealthcare,MA,"Clinic XXXXXX XXXXX, MA",South,,,,,144,17,1
+C-0677076,CVS Pharmacy Pet and Animal Emerging Clinic,NJ,"Clinic XXXXXX XXXXX, NJ",Northeast,Boxer,Scottish Fold,Betta Fish,African Gray Parrot,63,24,1
+C-5657240,Pfizer Laboratories Div Pfizer Pet and Animal Emerging Clinic,NJ,"Clinic XXXXXX XXXXX, NJ",Northeast,,,,,136,27,0
+C-8471630,The Procter & Gamble Manufacturing Pet and Animal Emerging Clinic,MI,"Clinic XXXXXX XXXXX, MI",Northeast,Bulldog,,,,157,17,1
+C-2171304,NCS HealthCare of KY Inc dba Vangard Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,Beagle,,,,125,16,1
+C-7680367,Access Business Group Pet and Animal Emerging Clinic,ID,"Clinic XXXXXX XXXXX, ID",West,Bulldog,,,,78,19,1
+C-8185040,L Perrigo Pet and Animal Emerging Clinic,DC,"Clinic XXXXXX XXXXX, DC",Northeast,Yorkshire Terrier,Scottish Fold,,,102,16,1
+C-7173048,Empack,CO,"Clinic XXXXXX XXXXX, CO",West,Labrador Retriever,,,,85,25,1
+C-4460888,Pharmacia and Upjohn Pet and Animal Emerging Clinic,MD,"Clinic XXXXXX XXXXX, MD",Northeast,Boxer,Sphynx,,,134,22,1
+C-3982906,WOCKHARDT Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,Labrador Retriever,,,,147,22,1
+C-6796356,Solco healthcare U.S. Pet and Animal Emerging Clinic,NY,"Clinic XXXXXX XXXXX, NY",Northeast,,,,,94,31,1
+C-2227409,Delon Laboratories (1990) Pet and Animal Emerging Clinic,MS,"Clinic XXXXXX XXXXX, MS",West,,,,,134,20,1
+C-9268257,Amerisource Pet and Animal Emerging Clinic,CT,"Clinic XXXXXX XXXXX, CT",Northeast,Beagle,Sphynx,,,136,19,1
+C-9629736,U.S. Pet and Animal Emerging Clinic,PA,"Clinic XXXXXX XXXXX, PA",West,Golden Retriever,,Goldfish,African Gray Parrot,127,19,1
+C-5601285,SJ Creations Pet and Animal Emerging Clinic,NJ,"Clinic XXXXXX XXXXX, NJ",Northeast,,,,,62,27,1
+C-4023413,Fresenius Kabi USA Pet and Animal Emerging Clinic,IN,"Clinic XXXXXX XXXXX, IN",West,German Shepherd,Maine Coone,,,136,18,1
+C-7363300,Allergy Laboratories Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Golden Retriever,,,,126,19,1
+C-5814177,Mechanical Servants Pet and Animal Emerging Clinic,DC,"Clinic XXXXXX XXXXX, DC",Northeast,Golden Retriever,,,,99,21,1
+C-7186775,Kmart Pet and Animal Emerging Clinic,DC,"Clinic XXXXXX XXXXX, DC",Northeast,,,,,120,25,0
+C-7355717,American Health Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,Labrador Retriever,,,,141,23,1
+C-4668812,Physicians Total Care Pet and Animal Emerging Clinic,TN,"Clinic XXXXXX XXXXX, TN",South,Labrador Retriever,,Guppy,Parrotlet,118,24,1
+C-1375667,Whisk Products Pet and Animal Emerging Clinic,OK,"Clinic XXXXXX XXXXX, OK",Midwest,,,,,108,35,0
+C-0190273,Alaven Pharmaceutical Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,,Sphynx,,,146,17,1
+C-3829341,Walgreens,CA,"Clinic XXXXXX XXXXX, CA",West,Boxer,American Shorthair,,,142,17,1
+C-7183156,Conopco Inc. d/b/a Pet and Animal Emerging Clinic,OR,"Clinic XXXXXX XXXXX, OR",South,,,,,111,26,0
+C-3213706,Physicians Total Care Pet and Animal Emerging Clinic,OR,"Clinic XXXXXX XXXXX, OR",South,Boxer,,,,150,14,1
+C-6914919,McKesson Packaging Serivces a business unit of McKesson Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,Boxer,Sphynx,,,167,11,1
+C-8336775,RITE AID Pet and Animal Emerging Clinic,NY,"Clinic XXXXXX XXXXX, NY",Northeast,,Scottish Fold,,,57,18,1
+C-5438026,SHISEIDO AMERICA Pet and Animal Emerging Clinic,WV,"Clinic XXXXXX XXXXX, WV",South,Labrador Retriever,,,,82,23,1
+C-5714113,Agbanga Karite LLC / EveryDay Shea / Alaffia Sustainable Skin Pet and Animal Emerging Clinic,IA,"Clinic XXXXXX XXXXX, IA",West,,,,,79,15,1
+C-4093014,Greenstone Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,Labrador Retriever,,,,52,18,1
+C-4801579,Energique Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,Boxer,,,,144,22,1
+C-6388141,Meditrend Inc. DBA Progena Professional Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,,,Betta Fish,African Gray Parrot,122,18,1
+C-0272807,St Marys Medical Park Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,,,,127,22,1
+C-2860760,Physicians Total Care Pet and Animal Emerging Clinic,OH,"Clinic XXXXXX XXXXX, OH",Northeast,,Maine Coone,,,104,29,0
+C-7129435,LG Household and Healthcare Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,,,,,124,12,1
+C-0360448,REMEDYREPACK Pet and Animal Emerging Clinic,IN,"Clinic XXXXXX XXXXX, IN",West,,Sphynx,,,72,22,1
+C-3337444,Barr Laboratories Pet and Animal Emerging Clinic,IL,"Clinic XXXXXX XXXXX, IL",West,,,,,138,14,1
+C-4225828,Nelco Laboratories Pet and Animal Emerging Clinic,RI,"Clinic XXXXXX XXXXX, RI",Northeast,Golden Retriever,American Bobtail,Guppy,African Gray Parrot,145,18,1
+C-5741001,AvKARE Pet and Animal Emerging Clinic,KS,"Clinic XXXXXX XXXXX, KS",South,,,,,147,18,1
+C-6575705,Vivier Pharma Pet and Animal Emerging Clinic,AK,"Clinic XXXXXX XXXXX, AK",#N/A,Boxer,,,,104,20,1
+C-6026626,Mycone Dental Supply Co. Inc DBA Keystone Industries and Deepak Products Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,,,,,125,18,1
+C-4936699,Alvogen Pet and Animal Emerging Clinic,OK,"Clinic XXXXXX XXXXX, OK",Midwest,Bulldog,Scottish Fold,,,97,16,1
+C-6864956,Ningbo Meiduo General Products Co. Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,,,,,96,14,1
+C-4080038,Lake Erie Medical DBA Quality Care Products Pet and Animal Emerging Clinic,AZ,"Clinic XXXXXX XXXXX, AZ",West,,,,,120,23,1
+C-6902175,SESVALIA USA Pet and Animal Emerging Clinic,AZ,"Clinic XXXXXX XXXXX, AZ",West,Golden Retriever,Sphynx,,,97,17,1
+C-0303641,REMEDYREPACK Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,,,,146,22,1
+C-7094024,Jubilant HollisterStier Pet and Animal Emerging Clinic,NC,"Clinic XXXXXX XXXXX, NC",West,Beagle,,,,89,26,1
+C-9070137,Laboratoires Clarins Pet and Animal Emerging Clinic,NV,"Clinic XXXXXX XXXXX, NV",Northeast,Boxer,,,,128,17,1
+C-8822018,MAKEUP ART Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,,Goldfish,Finch,143,10,1
+C-5030646,Physicians Total Care Pet and Animal Emerging Clinic,NY,"Clinic XXXXXX XXXXX, NY",Northeast,Labrador Retriever,,,,136,12,1
+C-0905807,West-ward Pharmaceutical Pet and Animal Emerging Clinic,GA,"Clinic XXXXXX XXXXX, GA",South,,,,,101,23,1
+C-2118723,Markwins Beauty Products Pet and Animal Emerging Clinic,WI,"Clinic XXXXXX XXXXX, WI",South,,,,,105,19,1
+C-5117804,NASH-FINCH Pet and Animal Emerging Clinic,IL,"Clinic XXXXXX XXXXX, IL",West,Labrador Retriever,,,,66,22,1
+C-0007799,Procter & Gamble Manufacturing Pet and Animal Emerging Clinic,PA,"Clinic XXXXXX XXXXX, PA",West,German Shepherd,,,,78,9,1
+C-7032303,Cephalon Pet and Animal Emerging Clinic,DC,"Clinic XXXXXX XXXXX, DC",Northeast,,,,,88,14,1
+C-4646107,STAT Rx USA Pet and Animal Emerging Clinic,NY,"Clinic XXXXXX XXXXX, NY",Northeast,Yorkshire Terrier,Persian,,,75,25,1
+C-0009958,Colgate Oral Pharmaceuticals Pet and Animal Emerging Clinic,OK,"Clinic XXXXXX XXXXX, OK",Midwest,Labrador Retriever,,,,174,23,1
+C-2961266,B. Braun Medical Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,,,,,135,26,0
+C-5284095,Sandoz Pet and Animal Emerging Clinic,AZ,"Clinic XXXXXX XXXXX, AZ",West,Beagle,American Bobtail,,,139,22,1
+C-4266841,REMEDYREPACK Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,,,,114,20,1
+C-4563046,AAA Pharmaceutical Pet and Animal Emerging Clinic,IL,"Clinic XXXXXX XXXXX, IL",West,,,,,108,23,1
+C-3060634,Cargo Cosmetics Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,Scottish Fold,,,180,21,1
+C-1765085,Sandoz Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,German Shepherd,American Shorthair,,,120,26,0
+C-8640799,Bliss World Pet and Animal Emerging Clinic,OH,"Clinic XXXXXX XXXXX, OH",Northeast,,,,,134,18,1
+C-8522107,Apotex Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,Golden Retriever,,,,155,20,1
+C-0258802,Amneal Pharmaceuticals of New York Pet and Animal Emerging Clinic,IN,"Clinic XXXXXX XXXXX, IN",West,Beagle,,,,181,20,1
+C-1184498,Reckitt Benckiser Pet and Animal Emerging Clinic,WV,"Clinic XXXXXX XXXXX, WV",South,German Shepherd,,,,127,19,1
+C-5679975,Kareway Product Pet and Animal Emerging Clinic,WI,"Clinic XXXXXX XXXXX, WI",South,German Shepherd,,Goldfish,African Gray Parrot,92,19,1
+C-7407663,Mylan Pharmaceuticals Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,Yorkshire Terrier,Persian,,,125,17,1
+C-3261951,ALK-Abello Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Beagle,American Bobtail,,,93,22,1
+C-6963787,U.S. Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Labrador Retriever,Scottish Fold,,,162,14,1
+C-2207742,Natural Health Pet and Animal Emerging Clinic,MA,"Clinic XXXXXX XXXXX, MA",South,German Shepherd,,,,75,33,1
+C-5248067,Physicians Total Care Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,Golden Retriever,American Shorthair,,,145,16,1
+C-4274952,Physicians Total Care Pet and Animal Emerging Clinic,MN,"Clinic XXXXXX XXXXX, MN",South,Beagle,Scottish Fold,,,102,25,0
+C-2706989,Washington Homeopathic Pet and Animal Emerging Clinic,OH,"Clinic XXXXXX XXXXX, OH",Northeast,,,,,148,13,1
+C-8890710,Novartis Consumer Health Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,,,Betta Fish,Lovebird,91,16,1
+C-1180448,HOMEOLAB USA Pet and Animal Emerging Clinic,IA,"Clinic XXXXXX XXXXX, IA",West,Boxer,Siamese,,,80,13,1
+C-2606141,Genzyme Pet and Animal Emerging Clinic,OR,"Clinic XXXXXX XXXXX, OR",South,,Persian,,,135,23,1
+C-8021177,Western Family Foods Pet and Animal Emerging Clinic,MN,"Clinic XXXXXX XXXXX, MN",South,Labrador Retriever,,,,115,13,1
+C-9661319,Procter & Gamble Manufacturing Pet and Animal Emerging Clinic,DC,"Clinic XXXXXX XXXXX, DC",Northeast,Beagle,,,,142,23,1
+C-1932107,Dolgencorp Pet and Animal Emerging Clinic,LA,"Clinic XXXXXX XXXXX, LA",South,Bulldog,Siamese,,,113,17,1
+C-2858310,REMEDYREPACK Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Golden Retriever,Persian,Cory Catfish,Lovebird,115,14,1
+C-4761042,Heckman Healthcare Service & Supplies Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Yorkshire Terrier,,,,160,23,1
+C-9528941,Cobalt Laboratories Pet and Animal Emerging Clinic,NC,"Clinic XXXXXX XXXXX, NC",West,,,,,93,25,1
+C-1220473,Coastal Welding Supply Pet and Animal Emerging Clinic,NV,"Clinic XXXXXX XXXXX, NV",Northeast,Boxer,Siamese,,,114,15,1
+C-8273749,Valu Merchandisers Pet and Animal Emerging Clinic,OK,"Clinic XXXXXX XXXXX, OK",Midwest,,Siamese,,,117,15,1
+C-1300637,Airgas-West Pet and Animal Emerging Clinic,CO,"Clinic XXXXXX XXXXX, CO",West,,,,,87,28,1
+C-5476343,Dolgencorp Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,,,,,89,19,1
+C-0237977,CVS Pharmacy Pet and Animal Emerging Clinic,MD,"Clinic XXXXXX XXXXX, MD",Northeast,Labrador Retriever,,,,124,20,1
+C-2927333,Cardinal Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,,,,115,22,1
+C-4161281,PD-Rx Pharmaceuticals Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,Yorkshire Terrier,,,,77,26,1
+C-5970748,Prime Enterprises Pet and Animal Emerging Clinic,CO,"Clinic XXXXXX XXXXX, CO",West,,,,,110,19,1
+C-7650240,Boca Pharmacal Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,German Shepherd,,Betta Fish,African Gray Parrot,132,23,1
+C-1484172,Topco Associates Pet and Animal Emerging Clinic,NM,"Clinic XXXXXX XXXXX, NM",Northeast,,Siamese,,,135,24,1
+C-6941229,Walgreens,IA,"Clinic XXXXXX XXXXX, IA",West,Boxer,Persian,,,135,24,1
+C-7258806,Mylan Institutional Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,,,,115,14,1
+C-6692908,Pharmacia and Upjohn Pet and Animal Emerging Clinic,OK,"Clinic XXXXXX XXXXX, OK",Midwest,Beagle,,,,136,27,0
+C-9744420,Taro Pharmaceuticals U.S.A. Pet and Animal Emerging Clinic,NE,"Clinic XXXXXX XXXXX, NE",West,,Scottish Fold,,,110,27,0
+C-8350481,DSHealthcare,MA,"Clinic XXXXXX XXXXX, MA",South,,,,,180,13,1
+C-0677076,CVS Pharmacy Pet and Animal Emerging Clinic,NJ,"Clinic XXXXXX XXXXX, NJ",Northeast,,Sphynx,,,183,22,1
+C-5657240,Pfizer Laboratories Div Pfizer Pet and Animal Emerging Clinic,NJ,"Clinic XXXXXX XXXXX, NJ",Northeast,,,,,135,23,1
+C-8471630,The Procter & Gamble Manufacturing Pet and Animal Emerging Clinic,MI,"Clinic XXXXXX XXXXX, MI",Northeast,Bulldog,,,,104,9,1
+C-2171304,NCS HealthCare of KY Inc dba Vangard Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,Golden Retriever,,,,123,17,1
+C-7680367,Access Business Group Pet and Animal Emerging Clinic,ID,"Clinic XXXXXX XXXXX, ID",West,Labrador Retriever,,,,118,25,0
+C-8185040,L Perrigo Pet and Animal Emerging Clinic,DC,"Clinic XXXXXX XXXXX, DC",Northeast,Yorkshire Terrier,,Goldfish,Lovebird,131,18,1
+C-7173048,Empack,CO,"Clinic XXXXXX XXXXX, CO",West,,,,,206,23,1
+C-4460888,Pharmacia and Upjohn Pet and Animal Emerging Clinic,MD,"Clinic XXXXXX XXXXX, MD",Northeast,Golden Retriever,Scottish Fold,,,114,27,0
+C-3982906,WOCKHARDT Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,,Persian,Cory Catfish,Dove,151,26,0
+C-6796356,Solco healthcare U.S. Pet and Animal Emerging Clinic,NY,"Clinic XXXXXX XXXXX, NY",Northeast,Yorkshire Terrier,,Cory Catfish,Parrotlet,96,22,1
+C-2227409,Delon Laboratories (1990) Pet and Animal Emerging Clinic,MS,"Clinic XXXXXX XXXXX, MS",West,,,,,106,12,1
+C-9268257,Amerisource Pet and Animal Emerging Clinic,CT,"Clinic XXXXXX XXXXX, CT",Northeast,,,,,103,13,1
+C-9629736,U.S. Pet and Animal Emerging Clinic,PA,"Clinic XXXXXX XXXXX, PA",West,,,,,188,18,1
+C-5601285,SJ Creations Pet and Animal Emerging Clinic,NJ,"Clinic XXXXXX XXXXX, NJ",Northeast,,,,,83,18,1
+C-4023413,Fresenius Kabi USA Pet and Animal Emerging Clinic,IN,"Clinic XXXXXX XXXXX, IN",West,Bulldog,,,,92,24,1
+C-7363300,Allergy Laboratories Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Boxer,,,,142,23,1
+C-5814177,Mechanical Servants Pet and Animal Emerging Clinic,DC,"Clinic XXXXXX XXXXX, DC",Northeast,,,,,101,19,1
+C-7186775,Kmart Pet and Animal Emerging Clinic,DC,"Clinic XXXXXX XXXXX, DC",Northeast,Boxer,,,,144,19,1
+C-7355717,American Health Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,Golden Retriever,,,,128,25,0
+C-4668812,Physicians Total Care Pet and Animal Emerging Clinic,TN,"Clinic XXXXXX XXXXX, TN",South,,,,,114,22,1
+C-1375667,Whisk Products Pet and Animal Emerging Clinic,OK,"Clinic XXXXXX XXXXX, OK",Midwest,Boxer,,,,164,14,1
+C-0190273,Alaven Pharmaceutical Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,,American Shorthair,,,75,14,1
+C-3829341,Walgreens,CA,"Clinic XXXXXX XXXXX, CA",West,Labrador Retriever,,,,167,23,1
+C-7183156,Conopco Inc. d/b/a Pet and Animal Emerging Clinic,OR,"Clinic XXXXXX XXXXX, OR",South,Bulldog,,,,127,28,0
+C-3213706,Physicians Total Care Pet and Animal Emerging Clinic,OR,"Clinic XXXXXX XXXXX, OR",South,Beagle,,,,141,11,1
+C-6914919,McKesson Packaging Serivces a business unit of McKesson Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,Beagle,,Guppy,Dove,155,22,1
+C-8336775,RITE AID Pet and Animal Emerging Clinic,NY,"Clinic XXXXXX XXXXX, NY",Northeast,Golden Retriever,,,,145,17,1
+C-5438026,SHISEIDO AMERICA Pet and Animal Emerging Clinic,WV,"Clinic XXXXXX XXXXX, WV",South,German Shepherd,Siamese,,,114,15,1
+C-5714113,Agbanga Karite LLC / EveryDay Shea / Alaffia Sustainable Skin Pet and Animal Emerging Clinic,IA,"Clinic XXXXXX XXXXX, IA",West,German Shepherd,,,,176,19,1
+C-4093014,Greenstone Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,Beagle,Sphynx,,,88,23,1
+C-4801579,Energique Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,,,,,94,19,1
+C-6388141,Meditrend Inc. DBA Progena Professional Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,German Shepherd,,,,149,25,0
+C-0272807,St Marys Medical Park Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Beagle,,,,131,31,0
+C-2860760,Physicians Total Care Pet and Animal Emerging Clinic,OH,"Clinic XXXXXX XXXXX, OH",Northeast,,,,,143,19,1
+C-7129435,LG Household and Healthcare Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,Labrador Retriever,,,,166,17,1
+C-0360448,REMEDYREPACK Pet and Animal Emerging Clinic,IN,"Clinic XXXXXX XXXXX, IN",West,Labrador Retriever,,,,143,19,1
+C-3337444,Barr Laboratories Pet and Animal Emerging Clinic,IL,"Clinic XXXXXX XXXXX, IL",West,Boxer,Maine Coone,,,115,29,0
+C-4225828,Nelco Laboratories Pet and Animal Emerging Clinic,RI,"Clinic XXXXXX XXXXX, RI",Northeast,Beagle,,,,103,20,1
+C-5741001,AvKARE Pet and Animal Emerging Clinic,KS,"Clinic XXXXXX XXXXX, KS",South,Beagle,Siamese,,,75,21,1
+C-6575705,Vivier Pharma Pet and Animal Emerging Clinic,AK,"Clinic XXXXXX XXXXX, AK",#N/A,German Shepherd,Maine Coone,,,136,23,1
+C-6026626,Mycone Dental Supply Co. Inc DBA Keystone Industries and Deepak Products Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,,,,,98,25,1
+C-4936699,Alvogen Pet and Animal Emerging Clinic,OK,"Clinic XXXXXX XXXXX, OK",Midwest,,,,,124,19,1
+C-6864956,Ningbo Meiduo General Products Co. Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,,American Shorthair,,,98,20,1
+C-4080038,Lake Erie Medical DBA Quality Care Products Pet and Animal Emerging Clinic,AZ,"Clinic XXXXXX XXXXX, AZ",West,Bulldog,,,,96,19,1
+C-6902175,SESVALIA USA Pet and Animal Emerging Clinic,AZ,"Clinic XXXXXX XXXXX, AZ",West,Boxer,American Shorthair,,,99,27,1
+C-0303641,REMEDYREPACK Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,,,,93,23,1
+C-7094024,Jubilant HollisterStier Pet and Animal Emerging Clinic,NC,"Clinic XXXXXX XXXXX, NC",West,,,,,103,13,1
+C-9070137,Laboratoires Clarins Pet and Animal Emerging Clinic,NV,"Clinic XXXXXX XXXXX, NV",Northeast,Bulldog,,,,123,17,1
+C-8822018,MAKEUP ART Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,German Shepherd,,,,109,24,1
+C-5030646,Physicians Total Care Pet and Animal Emerging Clinic,NY,"Clinic XXXXXX XXXXX, NY",Northeast,,,,,126,18,1
+C-0905807,West-ward Pharmaceutical Pet and Animal Emerging Clinic,GA,"Clinic XXXXXX XXXXX, GA",South,Yorkshire Terrier,,,,140,25,0
+C-2118723,Markwins Beauty Products Pet and Animal Emerging Clinic,WI,"Clinic XXXXXX XXXXX, WI",South,Bulldog,,,,102,18,1
+C-5117804,NASH-FINCH Pet and Animal Emerging Clinic,IL,"Clinic XXXXXX XXXXX, IL",West,,Sphynx,,,122,17,1
+C-0007799,Procter & Gamble Manufacturing Pet and Animal Emerging Clinic,PA,"Clinic XXXXXX XXXXX, PA",West,Bulldog,,Betta Fish,Parrotlet,148,16,1
+C-7032303,Cephalon Pet and Animal Emerging Clinic,DC,"Clinic XXXXXX XXXXX, DC",Northeast,,,,,101,25,0
+C-4646107,STAT Rx USA Pet and Animal Emerging Clinic,NY,"Clinic XXXXXX XXXXX, NY",Northeast,,Sphynx,,,195,28,0
+C-0009958,Colgate Oral Pharmaceuticals Pet and Animal Emerging Clinic,OK,"Clinic XXXXXX XXXXX, OK",Midwest,Bulldog,,,,122,23,1
+C-2961266,B. Braun Medical Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,,,,,152,16,1
+C-5284095,Sandoz Pet and Animal Emerging Clinic,AZ,"Clinic XXXXXX XXXXX, AZ",West,Labrador Retriever,,,,134,21,1
+C-4266841,REMEDYREPACK Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Boxer,Maine Coone,,,120,17,1
+C-4563046,AAA Pharmaceutical Pet and Animal Emerging Clinic,IL,"Clinic XXXXXX XXXXX, IL",West,,,,,127,13,1
+C-3060634,Cargo Cosmetics Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Beagle,Siamese,,,159,23,1
+C-1765085,Sandoz Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,Bulldog,,,,173,28,0
+C-8640799,Bliss World Pet and Animal Emerging Clinic,OH,"Clinic XXXXXX XXXXX, OH",Northeast,,,,,132,27,0
+C-8522107,Apotex Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,,,,,111,21,1
+C-0258802,Amneal Pharmaceuticals of New York Pet and Animal Emerging Clinic,IN,"Clinic XXXXXX XXXXX, IN",West,Bulldog,,,,159,33,0
+C-1184498,Reckitt Benckiser Pet and Animal Emerging Clinic,WV,"Clinic XXXXXX XXXXX, WV",South,Boxer,,,,125,15,1
+C-5679975,Kareway Product Pet and Animal Emerging Clinic,WI,"Clinic XXXXXX XXXXX, WI",South,Labrador Retriever,Scottish Fold,,,98,18,1
+C-7407663,Mylan Pharmaceuticals Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,Beagle,,,,144,22,1
+C-3261951,ALK-Abello Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Bulldog,,,,124,18,1
+C-6963787,U.S. Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,,Cory Catfish,Parrotlet,91,18,1
+C-2207742,Natural Health Pet and Animal Emerging Clinic,MA,"Clinic XXXXXX XXXXX, MA",South,,,,,110,19,1
+C-5248067,Physicians Total Care Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,,,,,110,27,0
+C-4274952,Physicians Total Care Pet and Animal Emerging Clinic,MN,"Clinic XXXXXX XXXXX, MN",South,Yorkshire Terrier,,Goldfish,African Gray Parrot,99,26,1
+C-2706989,Washington Homeopathic Pet and Animal Emerging Clinic,OH,"Clinic XXXXXX XXXXX, OH",Northeast,Labrador Retriever,,,,128,25,0
+C-8890710,Novartis Consumer Health Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,Beagle,,,,116,30,0
+C-1180448,HOMEOLAB USA Pet and Animal Emerging Clinic,IA,"Clinic XXXXXX XXXXX, IA",West,Yorkshire Terrier,,,,102,13,1
+C-2606141,Genzyme Pet and Animal Emerging Clinic,OR,"Clinic XXXXXX XXXXX, OR",South,Boxer,,Guppy,Parrotlet,102,12,1
+C-8021177,Western Family Foods Pet and Animal Emerging Clinic,MN,"Clinic XXXXXX XXXXX, MN",South,Bulldog,American Bobtail,,,172,19,1
+C-9661319,Procter & Gamble Manufacturing Pet and Animal Emerging Clinic,DC,"Clinic XXXXXX XXXXX, DC",Northeast,Yorkshire Terrier,,,,87,9,1
+C-1932107,Dolgencorp Pet and Animal Emerging Clinic,LA,"Clinic XXXXXX XXXXX, LA",South,Yorkshire Terrier,,,,96,23,1
+C-2858310,REMEDYREPACK Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,,,,91,14,1
+C-4761042,Heckman Healthcare Service & Supplies Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Yorkshire Terrier,,,,150,18,1
+C-9528941,Cobalt Laboratories Pet and Animal Emerging Clinic,NC,"Clinic XXXXXX XXXXX, NC",West,Beagle,Scottish Fold,Goldfish,Dove,165,14,1
+C-1220473,Coastal Welding Supply Pet and Animal Emerging Clinic,NV,"Clinic XXXXXX XXXXX, NV",Northeast,,,,,158,15,1
+C-8273749,Valu Merchandisers Pet and Animal Emerging Clinic,OK,"Clinic XXXXXX XXXXX, OK",Midwest,,,,,166,10,1
+C-1300637,Airgas-West Pet and Animal Emerging Clinic,CO,"Clinic XXXXXX XXXXX, CO",West,Beagle,,,,130,17,1
+C-5476343,Dolgencorp Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,,,,,73,19,1
+C-0237977,CVS Pharmacy Pet and Animal Emerging Clinic,MD,"Clinic XXXXXX XXXXX, MD",Northeast,Yorkshire Terrier,,,,137,23,1
+C-2927333,Cardinal Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,German Shepherd,American Bobtail,,,137,21,1
+C-4161281,PD-Rx Pharmaceuticals Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,Labrador Retriever,,Betta Fish,African Gray Parrot,93,18,1
+C-5970748,Prime Enterprises Pet and Animal Emerging Clinic,CO,"Clinic XXXXXX XXXXX, CO",West,,,,,129,25,0
+C-7650240,Boca Pharmacal Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,Golden Retriever,,Cory Catfish,Finch,144,21,1
+C-1484172,Topco Associates Pet and Animal Emerging Clinic,NM,"Clinic XXXXXX XXXXX, NM",Northeast,Bulldog,Scottish Fold,,,93,18,1
+C-6941229,Walgreens,IA,"Clinic XXXXXX XXXXX, IA",West,Golden Retriever,American Shorthair,,,134,25,0
+C-7258806,Mylan Institutional Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,,,,178,29,0
+C-6692908,Pharmacia and Upjohn Pet and Animal Emerging Clinic,OK,"Clinic XXXXXX XXXXX, OK",Midwest,German Shepherd,,,,153,23,1
+C-9744420,Taro Pharmaceuticals U.S.A. Pet and Animal Emerging Clinic,NE,"Clinic XXXXXX XXXXX, NE",West,,,,,86,26,1
+C-8350481,DSHealthcare,MA,"Clinic XXXXXX XXXXX, MA",South,,,,,121,18,1
+C-0677076,CVS Pharmacy Pet and Animal Emerging Clinic,NJ,"Clinic XXXXXX XXXXX, NJ",Northeast,Golden Retriever,American Shorthair,,,153,25,0
+C-5657240,Pfizer Laboratories Div Pfizer Pet and Animal Emerging Clinic,NJ,"Clinic XXXXXX XXXXX, NJ",Northeast,,,,,62,12,1
+C-8471630,The Procter & Gamble Manufacturing Pet and Animal Emerging Clinic,MI,"Clinic XXXXXX XXXXX, MI",Northeast,Labrador Retriever,,,,97,26,1
+C-2171304,NCS HealthCare of KY Inc dba Vangard Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,Boxer,,,,162,8,1
+C-7680367,Access Business Group Pet and Animal Emerging Clinic,ID,"Clinic XXXXXX XXXXX, ID",West,Beagle,American Bobtail,,,105,19,1
+C-8185040,L Perrigo Pet and Animal Emerging Clinic,DC,"Clinic XXXXXX XXXXX, DC",Northeast,German Shepherd,,,,115,18,1
+C-7173048,Empack,CO,"Clinic XXXXXX XXXXX, CO",West,Boxer,,,,154,27,0
+C-4460888,Pharmacia and Upjohn Pet and Animal Emerging Clinic,MD,"Clinic XXXXXX XXXXX, MD",Northeast,,,Angelfish,Parrotlet,93,15,1
+C-3982906,WOCKHARDT Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,Boxer,,,,72,22,1
+C-6796356,Solco healthcare U.S. Pet and Animal Emerging Clinic,NY,"Clinic XXXXXX XXXXX, NY",Northeast,Golden Retriever,Sphynx,,,162,22,1
+C-2227409,Delon Laboratories (1990) Pet and Animal Emerging Clinic,MS,"Clinic XXXXXX XXXXX, MS",West,Boxer,,,,144,23,1
+C-9268257,Amerisource Pet and Animal Emerging Clinic,CT,"Clinic XXXXXX XXXXX, CT",Northeast,Labrador Retriever,,,,137,18,1
+C-9629736,U.S. Pet and Animal Emerging Clinic,PA,"Clinic XXXXXX XXXXX, PA",West,Boxer,,,,158,22,1
+C-5601285,SJ Creations Pet and Animal Emerging Clinic,NJ,"Clinic XXXXXX XXXXX, NJ",Northeast,,,,,108,20,1
+C-4023413,Fresenius Kabi USA Pet and Animal Emerging Clinic,IN,"Clinic XXXXXX XXXXX, IN",West,German Shepherd,,,,137,20,1
+C-7363300,Allergy Laboratories Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,,,,111,28,0
+C-5814177,Mechanical Servants Pet and Animal Emerging Clinic,DC,"Clinic XXXXXX XXXXX, DC",Northeast,Golden Retriever,,,,102,20,1
+C-7186775,Kmart Pet and Animal Emerging Clinic,DC,"Clinic XXXXXX XXXXX, DC",Northeast,,Persian,,,115,10,1
+C-7355717,American Health Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,,,,,191,20,1
+C-4668812,Physicians Total Care Pet and Animal Emerging Clinic,TN,"Clinic XXXXXX XXXXX, TN",South,,,,,136,18,1
+C-1375667,Whisk Products Pet and Animal Emerging Clinic,OK,"Clinic XXXXXX XXXXX, OK",Midwest,,,,,114,23,1
+C-0190273,Alaven Pharmaceutical Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,Labrador Retriever,,,,163,18,1
+C-3829341,Walgreens,CA,"Clinic XXXXXX XXXXX, CA",West,,Maine Coone,,,96,17,1
+C-7183156,Conopco Inc. d/b/a Pet and Animal Emerging Clinic,OR,"Clinic XXXXXX XXXXX, OR",South,German Shepherd,,,,116,23,1
+C-3213706,Physicians Total Care Pet and Animal Emerging Clinic,OR,"Clinic XXXXXX XXXXX, OR",South,Golden Retriever,Persian,,,130,15,1
+C-6914919,McKesson Packaging Serivces a business unit of McKesson Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,,Scottish Fold,,,152,23,1
+C-8336775,RITE AID Pet and Animal Emerging Clinic,NY,"Clinic XXXXXX XXXXX, NY",Northeast,Boxer,Sphynx,,,138,17,1
+C-5438026,SHISEIDO AMERICA Pet and Animal Emerging Clinic,WV,"Clinic XXXXXX XXXXX, WV",South,,Siamese,Angelfish,African Gray Parrot,89,21,1
+C-5714113,Agbanga Karite LLC / EveryDay Shea / Alaffia Sustainable Skin Pet and Animal Emerging Clinic,IA,"Clinic XXXXXX XXXXX, IA",West,,,,,142,18,1
+C-4093014,Greenstone Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,,,Guppy,Lovebird,146,15,1
+C-4801579,Energique Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,,,,,153,19,1
+C-6388141,Meditrend Inc. DBA Progena Professional Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,German Shepherd,Maine Coone,,,84,23,1
+C-0272807,St Marys Medical Park Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,,,,114,15,1
+C-2860760,Physicians Total Care Pet and Animal Emerging Clinic,OH,"Clinic XXXXXX XXXXX, OH",Northeast,,,,,133,14,1
+C-7129435,LG Household and Healthcare Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,,,,,95,30,1
+C-0360448,REMEDYREPACK Pet and Animal Emerging Clinic,IN,"Clinic XXXXXX XXXXX, IN",West,,Persian,,,195,19,1
+C-3337444,Barr Laboratories Pet and Animal Emerging Clinic,IL,"Clinic XXXXXX XXXXX, IL",West,Boxer,,Guppy,Dove,152,16,1
+C-4225828,Nelco Laboratories Pet and Animal Emerging Clinic,RI,"Clinic XXXXXX XXXXX, RI",Northeast,,,,,94,20,1
+C-5741001,AvKARE Pet and Animal Emerging Clinic,KS,"Clinic XXXXXX XXXXX, KS",South,,,,,117,20,1
+C-6575705,Vivier Pharma Pet and Animal Emerging Clinic,AK,"Clinic XXXXXX XXXXX, AK",#N/A,Golden Retriever,Siamese,,,123,16,1
+C-6026626,Mycone Dental Supply Co. Inc DBA Keystone Industries and Deepak Products Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,Beagle,Scottish Fold,Cory Catfish,Finch,174,21,1
+C-4936699,Alvogen Pet and Animal Emerging Clinic,OK,"Clinic XXXXXX XXXXX, OK",Midwest,German Shepherd,American Bobtail,,,109,29,0
+C-6864956,Ningbo Meiduo General Products Co. Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,Labrador Retriever,,,,126,29,0
+C-4080038,Lake Erie Medical DBA Quality Care Products Pet and Animal Emerging Clinic,AZ,"Clinic XXXXXX XXXXX, AZ",West,Beagle,,,,159,22,1
+C-6902175,SESVALIA USA Pet and Animal Emerging Clinic,AZ,"Clinic XXXXXX XXXXX, AZ",West,,,,,145,20,1
+C-0303641,REMEDYREPACK Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Yorkshire Terrier,,,,101,23,1
+C-7094024,Jubilant HollisterStier Pet and Animal Emerging Clinic,NC,"Clinic XXXXXX XXXXX, NC",West,,,,,88,19,1
+C-9070137,Laboratoires Clarins Pet and Animal Emerging Clinic,NV,"Clinic XXXXXX XXXXX, NV",Northeast,Yorkshire Terrier,,,,95,19,1
+C-8822018,MAKEUP ART Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Labrador Retriever,,,,134,22,1
+C-5030646,Physicians Total Care Pet and Animal Emerging Clinic,NY,"Clinic XXXXXX XXXXX, NY",Northeast,Bulldog,Scottish Fold,,,161,24,1
+C-0905807,West-ward Pharmaceutical Pet and Animal Emerging Clinic,GA,"Clinic XXXXXX XXXXX, GA",South,Bulldog,Maine Coone,,,90,21,1
+C-2118723,Markwins Beauty Products Pet and Animal Emerging Clinic,WI,"Clinic XXXXXX XXXXX, WI",South,,,,,140,18,1
+C-5117804,NASH-FINCH Pet and Animal Emerging Clinic,IL,"Clinic XXXXXX XXXXX, IL",West,,,,,142,23,1
+C-0007799,Procter & Gamble Manufacturing Pet and Animal Emerging Clinic,PA,"Clinic XXXXXX XXXXX, PA",West,,,,,139,19,1
+C-7032303,Cephalon Pet and Animal Emerging Clinic,DC,"Clinic XXXXXX XXXXX, DC",Northeast,Bulldog,,,,115,20,1
+C-4646107,STAT Rx USA Pet and Animal Emerging Clinic,NY,"Clinic XXXXXX XXXXX, NY",Northeast,Boxer,,,,102,18,1
+C-0009958,Colgate Oral Pharmaceuticals Pet and Animal Emerging Clinic,OK,"Clinic XXXXXX XXXXX, OK",Midwest,,,,,79,15,1
+C-2961266,B. Braun Medical Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,Yorkshire Terrier,American Bobtail,Goldfish,Lovebird,146,21,1
+C-5284095,Sandoz Pet and Animal Emerging Clinic,AZ,"Clinic XXXXXX XXXXX, AZ",West,,,,,167,20,1
+C-4266841,REMEDYREPACK Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,,,,110,27,0
+C-4563046,AAA Pharmaceutical Pet and Animal Emerging Clinic,IL,"Clinic XXXXXX XXXXX, IL",West,,,,,124,17,1
+C-3060634,Cargo Cosmetics Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Labrador Retriever,,,,147,21,1
+C-1765085,Sandoz Pet and Animal Emerging Clinic,FL,"Clinic XXXXXX XXXXX, FL",South,Golden Retriever,Persian,,,129,17,1
+C-8640799,Bliss World Pet and Animal Emerging Clinic,OH,"Clinic XXXXXX XXXXX, OH",Northeast,Beagle,Maine Coone,,,104,25,0
+C-8522107,Apotex Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,Bulldog,,,,150,25,0
+C-0258802,Amneal Pharmaceuticals of New York Pet and Animal Emerging Clinic,IN,"Clinic XXXXXX XXXXX, IN",West,Beagle,Sphynx,,,116,14,1
+C-1184498,Reckitt Benckiser Pet and Animal Emerging Clinic,WV,"Clinic XXXXXX XXXXX, WV",South,Yorkshire Terrier,,,,135,14,1
+C-5679975,Kareway Product Pet and Animal Emerging Clinic,WI,"Clinic XXXXXX XXXXX, WI",South,Golden Retriever,,,,115,15,1
+C-7407663,Mylan Pharmaceuticals Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,,American Bobtail,Goldfish,Lovebird,125,14,1
+C-3261951,ALK-Abello Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,,,,93,20,1
+C-6963787,U.S. Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,,,,102,17,1
+C-2207742,Natural Health Pet and Animal Emerging Clinic,MA,"Clinic XXXXXX XXXXX, MA",South,Bulldog,,,,124,28,0
+C-5248067,Physicians Total Care Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,Labrador Retriever,,,,102,16,1
+C-4274952,Physicians Total Care Pet and Animal Emerging Clinic,MN,"Clinic XXXXXX XXXXX, MN",South,Beagle,,,,100,21,1
+C-2706989,Washington Homeopathic Pet and Animal Emerging Clinic,OH,"Clinic XXXXXX XXXXX, OH",Northeast,,,,,118,28,0
+C-8890710,Novartis Consumer Health Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,,,,,170,18,1
+C-1180448,HOMEOLAB USA Pet and Animal Emerging Clinic,IA,"Clinic XXXXXX XXXXX, IA",West,Boxer,,,,109,18,1
+C-2606141,Genzyme Pet and Animal Emerging Clinic,OR,"Clinic XXXXXX XXXXX, OR",South,Golden Retriever,Scottish Fold,,,169,21,1
+C-8021177,Western Family Foods Pet and Animal Emerging Clinic,MN,"Clinic XXXXXX XXXXX, MN",South,Beagle,,Betta Fish,African Gray Parrot,127,26,0
+C-9661319,Procter & Gamble Manufacturing Pet and Animal Emerging Clinic,DC,"Clinic XXXXXX XXXXX, DC",Northeast,Labrador Retriever,,,,192,20,1
+C-1932107,Dolgencorp Pet and Animal Emerging Clinic,LA,"Clinic XXXXXX XXXXX, LA",South,,,,,133,22,1
+C-2858310,REMEDYREPACK Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Boxer,Persian,,,128,17,1
+C-4761042,Heckman Healthcare Service & Supplies Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,,Goldfish,Parrotlet,161,31,0
+C-9528941,Cobalt Laboratories Pet and Animal Emerging Clinic,NC,"Clinic XXXXXX XXXXX, NC",West,,,,,150,21,1
+C-1220473,Coastal Welding Supply Pet and Animal Emerging Clinic,NV,"Clinic XXXXXX XXXXX, NV",Northeast,,,,,125,24,1
+C-8273749,Valu Merchandisers Pet and Animal Emerging Clinic,OK,"Clinic XXXXXX XXXXX, OK",Midwest,German Shepherd,American Shorthair,,,137,28,0
+C-1300637,Airgas-West Pet and Animal Emerging Clinic,CO,"Clinic XXXXXX XXXXX, CO",West,Beagle,,,,102,19,1
+C-5476343,Dolgencorp Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,,,,,165,22,1
+C-0237977,CVS Pharmacy Pet and Animal Emerging Clinic,MD,"Clinic XXXXXX XXXXX, MD",Northeast,Yorkshire Terrier,Scottish Fold,,,128,35,0
+C-2927333,Cardinal Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,Labrador Retriever,,,,109,25,0
+C-4161281,PD-Rx Pharmaceuticals Pet and Animal Emerging Clinic,TX,"Clinic XXXXXX XXXXX, TX",South,,,,,54,22,1
+C-5970748,Prime Enterprises Pet and Animal Emerging Clinic,CO,"Clinic XXXXXX XXXXX, CO",West,Labrador Retriever,,,,96,25,1
+C-6010707,American Health Pet and Animal Emerging Clinic,OH,"Clinic XXXXXX XXXXX, OH",Northeast,,,,,138,14,1
+C-1360965,Wyeth Pharmaceuticals Inc. a subsidiary of Pfizer Pet and Animal Emerging Clinic,MI,"Clinic XXXXXX XXXXX, MI",Northeast,Golden Retriever,,,,146,26,0
+C-4819400,Natural Health Pet and Animal Emerging Clinic,UT,"Clinic XXXXXX XXXXX, UT",South,,,,,100,26,0
+C-4199468,NATURE REPUBLIC CO. Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,,,,121,11,1
+C-8442765,TARGET,FL,"Clinic XXXXXX XXXXX, FL",South,,,Guppy,Dove,85,13,1
+C-9216284,PD-Rx Pharmaceuticals Pet and Animal Emerging Clinic,GA,"Clinic XXXXXX XXXXX, GA",South,,American Shorthair,,,66,27,1
+C-9757188,Mylan Pharmaceuticals Pet and Animal Emerging Clinic,CA,"Clinic XXXXXX XXXXX, CA",West,,,,,87,25,1
+C-6713678,CENTRIX PHARMACEUTICAL Pet and Animal Emerging Clinic,VA,"Clinic XXXXXX XXXXX, VA",West,,Scottish Fold,,,119,5,1
+C-1174636,Hawthorn Pharmaceuticals Pet and Animal Emerging Clinic,NV,"Clinic XXXXXX XXXXX, NV",Northeast,,,,,93,15,1
+C-6269132,Merz Pharmaceuticals Pet and Animal Emerging Clinic,WV,"Clinic XXXXXX XXXXX, WV",South,Yorkshire Terrier,,,,134,24,1
