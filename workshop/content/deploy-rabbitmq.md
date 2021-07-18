@@ -20,8 +20,7 @@ kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-monitor.yaml; kubec
 ```
 
 Meanwhile, let's take a look at a pre-built Grafana dashboard. It has been integrated with a Prometheus service which has auto-detected our cluster.
-```dashboard:create-dashboard
-name: Grafana
+```dashboard:open-url
 url: {{ ingress_protocol }}://grafana.{{ ingress_domain }}
 ```
 
