@@ -19,7 +19,7 @@ Next, let's deploy a highly available Tanzu RabbitMQ **cluster**. First deploy a
 kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-monitor.yaml; kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster.yaml -n {{ session_namespace }}
 ```
 
-Next, scale the cluster to 2 replicas (odd number is recommended):
+Next, scale the cluster to 3 replicas (odd number is recommended):
 ```execute
 kubectl edit rabbitmqcluster rabbitcluster1 -n {{ session_namespace }}
 ```
