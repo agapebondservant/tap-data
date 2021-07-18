@@ -5,22 +5,16 @@
 
 Let's deploy the Tanzu RabbitMQ **operator**:
 
-```terminal:execute
-command: kubectl create ns rabbitmq-system --dry-run -o yaml | kubectl apply -f - &&  kubectl create secret docker-registry image-pull-secret --namespace=rabbitmq-system --docker-username='{{ DATA_E2E_REGISTRY_USERNAME }}' --docker-password='{{ DATA_E2E_REGISTRY_PASSWORD }}' --dry-run -o yaml | kubectl apply -f - && kubectl apply -f "https://github.com/rabbitmq/cluster-operator/releases/latest/download/cluster-operator.yml" --namespace=rabbitmq-system
-clear: true
-```
-
-Install the **krew** cli plugin:
 ```execute
-export PATH="${PATH}:${HOME}/.krew/bin" && kubectl krew install rabbitmq
+clear && kubectl create ns rabbitmq-system --dry-run -o yaml | kubectl apply -f - &&  kubectl create secret docker-registry image-pull-secret --namespace=rabbitmq-system --docker-username='{{ DATA_E2E_REGISTRY_USERNAME }}' --docker-password='{{ DATA_E2E_REGISTRY_PASSWORD }}' --dry-run -o yaml | kubectl apply -f - && kubectl apply -f "https://github.com/rabbitmq/cluster-operator/releases/latest/download/cluster-operator.yml" --namespace=rabbitmq-system
 ```
 
 The **krew** plugin provides a native approach for managing RabbitMQ clusters. View a list of supported commands:
 ```execute
-kubectl rabbitmq help
+export PATH="${PATH}:${HOME}/.krew/bin" && kubectl krew install rabbitmq  && kubectl rabbitmq help
 ```
 
-Next, let's deploy a highly available Tanzu RabbitMQ **cluster**. First deploy a cluster with just 1 replicas:
+Next, let's deploy a highly available Tanzu RabbitMQ **cluster**. First deploy a cluster with just 1 replica:
 ```execute
 kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-monitor.yaml; kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster.yaml -n {{ session_namespace }}
 ```

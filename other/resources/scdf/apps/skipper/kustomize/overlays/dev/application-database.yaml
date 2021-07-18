@@ -1,7 +1,9 @@
 spring:
   datasource:
     url: jdbc:postgresql://postgresql:5432/dataflow
+    #! url: jdbc:postgresql://${DATA_E2E_POSTGRES_HOSTNAME}:5432/dataflow
     username: postgres
+    #! username: ${DATA_E2E_POSTGRES_USERNAME}
     password: ${database-password}
     driverClassName: org.postgresql.Driver
     testOnBorrow: true

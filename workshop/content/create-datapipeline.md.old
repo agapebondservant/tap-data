@@ -1,0 +1,20 @@
+
+### Create Data Pipeline
+
+Using the previously created data resources, we will set up a data pipeline using **VMware Spring Cloud Data Flow**. Let's set up a new data pipeline:
+
+<font color=red>DONT RUN THIS!!!</font>
+
+```execute
+clear && export DATA_E2E_WAVEFRONT_ACCESS_TOKEN={{ DATA_E2E_WAVEFRONT_ACCESS_TOKEN }} && export DATA_E2E_WAVEFRONT_SOURCE={{ DATA_E2E_WAVEFRONT_SOURCE  }} && export DATA_E2E_GRAFANA_URL={{ DATA_E2E_GRAFANA_URL }} && kubectl create secret docker-registry scdf-image-regcred --namespace={{ session_namespace }} --docker-server=registry.pivotal.io --docker-username='{{ DATA_E2E_PIVOTAL_REGISTRY_USERNAME }}' --docker-password='{{ DATA_E2E_PIVOTAL_REGISTRY_PASSWORD }}' --dry-run -o yaml | kubectl apply -f - && chmod +x ~/other/resources/scdf/configure.sh  && source ~/other/resources/scdf/configure.sh && kubectl create secret generic wavefront-api --from-literal=wavefront-api-token={{ DATA_E2E_WAVEFRONT_ACCESS_TOKEN }} --dry-run -o yaml | kubectl apply -f - && kubectl kustomize ~/other/resources/scdf/apps/skipper/kustomize/overlays/production/ | kapp deploy -y -a skipper -f - && kubectl kustomize ~/other/resources/scdf/apps/data-flow/kustomize/overlays/production/ | kapp deploy -y -a data-flow -f -
+```
+<font color=red>RUN THIS!!!</font>
+```execute
+clear && export DATA_E2E_WAVEFRONT_ACCESS_TOKEN={{ DATA_E2E_WAVEFRONT_ACCESS_TOKEN }} && export DATA_E2E_WAVEFRONT_SOURCE={{ DATA_E2E_WAVEFRONT_SOURCE  }} && export DATA_E2E_GRAFANA_URL={{ DATA_E2E_GRAFANA_URL }} && kubectl create secret docker-registry scdf-image-regcred --namespace={{ session_namespace }} --docker-server=registry.pivotal.io --docker-username='{{ DATA_E2E_PIVOTAL_REGISTRY_USERNAME }}' --docker-password='{{ DATA_E2E_PIVOTAL_REGISTRY_PASSWORD }}' --dry-run -o yaml | kubectl apply -f - && chmod +x ~/other/resources/scdf/configure.sh  && source ~/other/resources/scdf/configure.sh && kubectl create secret generic wavefront-api --from-literal=wavefront-api-token={{ DATA_E2E_WAVEFRONT_ACCESS_TOKEN }} --dry-run -o yaml | kubectl apply -f - && ~/other/resources/scdf/bin/install-dev.sh
+```
+
+Let's view the Spring Cloud Data Flow dashboard:
+```dashboard:create-dashboard
+name: Example
+url: {{ ingress_protocol }}://scdf-{{ session_namespace }}.{{ ingress_domain }}
+```

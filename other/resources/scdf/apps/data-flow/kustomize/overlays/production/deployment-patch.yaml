@@ -14,6 +14,9 @@ spec:
           - name: dockerconfig
             mountPath: /workspace/runtime/secrets/dockerconfig
             readOnly: true
+          #!- name: wavefront-api
+          #!  mountPath: /workspace/runtime/secrets/wavefront-api
+          #!  readOnly: true
         resources:
           limits:
             cpu: 1.0
@@ -27,3 +30,6 @@ spec:
         - name: dockerconfig
           secret:
             secretName: scdf-image-regcred
+        #!- name: wavefront-api
+        #!  secret:
+        #!    secretName: wavefront-api

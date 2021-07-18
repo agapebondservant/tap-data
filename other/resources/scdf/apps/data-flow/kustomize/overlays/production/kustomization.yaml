@@ -15,3 +15,5 @@ patches:
 - deployment-patch.yaml
 - deployment-database-patch.yaml
 - service-patch.yaml
+#!generatorOptions:
+#!  disableNameSuffixHash: true
