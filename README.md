@@ -97,12 +97,12 @@ kubectl apply -f resources/prometheus-proxy/proxyhelm/prometheus-proxy-http-prox
 
 RabbitMQ Dashboard: Dashboard ID 10991
 
-
-
 - Pre-deploy Greenplum and Spring Cloud Data Flow:
 source .env
-envsubst < resources/setup.sh.in > resources/setup.sh
 resources/setup.sh
+
+- Pre-deeploy Spring Cloud Data Flow:
+resources/setup-scdf.sh
 
 - Integrate Wavefront
 Wavefront Token: d0bc6a3f-580c-4212-8b35-1c6edd1e4ffb

@@ -19,7 +19,14 @@ Next, let's deploy a highly available Tanzu RabbitMQ **cluster**. First deploy a
 kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-monitor.yaml; kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster.yaml -n {{ session_namespace }}
 ```
 
+Meanwhile, let's take a look at a pre-built Grafana dashboard. It has been integrated with a Prometheus service which has auto-detected our cluster.
+```dashboard:create-dashboard
+name: Grafana
+url: {{ ingress_protocol }}://grafana.{{ ingress_domain }}
+```
+
 Next, scale the cluster to 3 replicas (odd number is recommended):
 ```execute
 kubectl edit rabbitmqcluster rabbitcluster1 -n {{ session_namespace }}
 ```
+
