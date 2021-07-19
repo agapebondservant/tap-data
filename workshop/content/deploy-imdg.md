@@ -24,8 +24,9 @@ kubectl create secret docker-registry image-pull-secret --namespace={{ session_n
 Notice the order in which the cluster members are created, as well as how the nodes are named. The Gemfire cluster leverages the Kubernetes **StatefulSet** for deploying its members. This brings several advantages: for example, it is able to leverage the StatefulSet's ordinal-based naming convention. With StatefulSets, pods are given ordinal suffixes which are incremented based on their startup order, starting from 0. The Gemfire operator uses this pattern to its advantage: the pods with the lowest ordinal suffixes are automatically set up as the **locator** nodes, while the other pods become the **server** nodes. 
 
 Next, we wil launch the **gfsh** cli. **gfsh** is an interface that can be used for the lifecycle management and monitoring of Gemfire resources, including clusters and their members (locators/servers).
+<font color="red">NOTE: WAIT FOR THE Gemfire Locator to appear before running.</font>
 ```execute
-kubectl wait --for=condition=Ready pod/gemfire1-locator-0 -n {{ session_namespace }} && kubectl -n {{ session_namespace }} exec -it gemfire1-locator-0 -- gfsh
+kubectl -n {{ session_namespace }} exec -it gemfire1-locator-0 -- gfsh
 ```
 
 Connect  to the local Gemfire cluster:

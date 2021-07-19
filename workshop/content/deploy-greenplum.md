@@ -57,3 +57,15 @@ CREATE EXTENSION IF NOT EXISTS pxf;
 CREATE EXTERNAL TABLE madlib.pxf_clinical_data_000(clinic_id varchar(10),clinic_name varchar(300),state varchar(2),region varchar(50),dog_breed  varchar(50),cat_breed varchar(50),fish_breed varchar(50),bird_breed varchar(50),treatment_cost int,wait_time int,recommended boolean)  LOCATION ('pxf://pxf-data/data-samples-w01-s001/1-clinical-reviews.csv?PROFILE=s3:text&FILE_HEADER=USE&S3_SELECT=AUTO') FORMAT 'TEXT' (delimiter=E',');
 SELECT * FROM madlib.pxf_clinical_data_000;
 ```
+
+Now, generate a **logistic regression** model from the data via **MADLib**:
+```execute
+SELECT madlib.logregr_train('madlib.pxf_clinical_data_000', 'madlib.clinical_data_logreg','recommended','ARRAY[1, treatment_cost, wait_time]');
+SELECT unnest(array['intercept', 'treatment_cost', 'wait_time']) as attribute,
+       unnest(coef) as coefficient,
+       unnest(std_err) as standard_error,
+       unnest(z_stats) as z_stat,
+       unnest(p_values) as pvalue,
+       unnest(odds_ratios) as odds_ratio
+    FROM madlib.clinical_data_logreg;
+```

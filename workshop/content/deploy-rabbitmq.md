@@ -20,8 +20,9 @@ kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-monitor.yaml; kubec
 ```
 
 Create an Ingress for the Management UI:
+<font color="red">Wait for cluster nodes to show up before running</font>
 ```execute
-kubectl wait --for=condition=Ready pod/rabbitcluster1-server-0 --timeout=90s -n {{ session_namespace }} && kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-httpproxy.yaml -n {{ session_namespace }}
+kubectl wait --for=condition=Ready pod/rabbitcluster1-server-0 -n {{ session_namespace }} && cat ~/other/resources/rabbitmq/rabbitmq-httpproxy.yaml | sed -e s/__TOKEN__/{{ session_namespace }}/g | kubectl apply -n {{ session_namespace }} -f -
 ```
 
 Meanwhile, let's take a look at a pre-built Grafana dashboard. It has been integrated with a Prometheus service which has auto-detected our cluster.
@@ -32,7 +33,7 @@ url: {{ ingress_protocol }}://grafana.{{ ingress_domain }}
 We can also view the Management UI, which is also pre-integrated with the Tanzu RabbitMQ operator.
 ```dashboard:create-dashboard
 name: RabbitMQ
-url: {{ ingress_protocol }}://rabbit.{{ ingress_domain }}
+url: {{ ingress_protocol }}://rabbit{{ session_namespace }}.{{ ingress_domain }}
 ```
 
 To login, you need the UI credentials:

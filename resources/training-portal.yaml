@@ -6,5 +6,5 @@ spec:
   workshops:
   - name: data-e2e-demo
     capacity: 1
-    expires: 60m
+    expires: 120m
     orphaned: 5m

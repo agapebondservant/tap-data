@@ -7,7 +7,7 @@ spec:
   description: An end-to-end demonstration of the Tanzu Data portfolio
   vendor: eduk8s.io
   difficulty: beginner
-  duration: 60m
+  duration: 120m
   url: https://github.com/agapebondservant/data-e2e-demo
   content:
     image: oawofolu/data-e2e:latest

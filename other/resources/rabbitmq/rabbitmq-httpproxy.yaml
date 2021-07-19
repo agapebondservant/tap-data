@@ -1,7 +1,7 @@
 apiVersion: projectcontour.io/v1
 kind: HTTPProxy
 metadata:
-  name: rabbit-httpproxy
+  name: rabbit__TOKEN__-httpproxy
 spec:
   routes:
   - conditions:
@@ -10,4 +10,4 @@ spec:
     - name: rabbitcluster1
       port: 15672
   virtualhost:
-    fqdn: rabbit.tanzudata.ml
+    fqdn: rabbit__TOKEN__.tanzudata.ml
