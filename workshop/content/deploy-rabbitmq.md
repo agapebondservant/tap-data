@@ -21,7 +21,7 @@ kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-monitor.yaml; kubec
 
 Create an Ingress for the Management UI:
 ```execute
-kubectl wait --for=condition=Ready pod/rabbitcluster1-server-0 && kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-httpproxy.yaml
+kubectl wait --for=condition=Ready pod/rabbitcluster1-server-0 --timeout=90s -n {{ session_namespace }} && kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-httpproxy.yaml -n {{ session_namespace }}
 ```
 
 Meanwhile, let's take a look at a pre-built Grafana dashboard. It has been integrated with a Prometheus service which has auto-detected our cluster.
