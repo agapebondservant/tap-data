@@ -41,8 +41,10 @@ sed -i 's/YOUR_GREENPLUM_CLUSTER/gpdb-cluster-{{session_namespace}}/g' ~/other/r
 
 Now, we will test out PXF by performing a federated query. Open a bash shell:
 ```execute
-kubectl exec -it master-0 -n greenplum-system -- bash -c "source ./.bashrc; madpack -p greenplum install"
+kubectl exec -it master-0 -n greenplum-system -- bash -c "source ./.bashrc; madpack -p greenplum install" && kubectl exec -it master-0 -n greenplum-system -- bash
 ```
+
+Notice we also installed the functions for **MADLib**.
 
 Connect to the **psql** subsytem:
 ```execute
@@ -52,6 +54,6 @@ psql -d gpadmin
 Create the PXF extension, then create an external table for the CSV file loaded earlier and query the external table:
 ```execute
 CREATE EXTENSION IF NOT EXISTS pxf;
-CREATE EXTERNAL TABLE pxf_clinical_data_000(clinic_id int,clinic_name varchar(300),state varchar(2),clinic_full_name varchar(300),region varchar(50),dog_breed  varchar(50),cat_breed varchar(50),fish_breed varchar(50),bird_breed varchar(50),treatment_cost int,wait_time int,recommended boolean)  LOCATION ('pxf://pxf-data/data-samples-w01-s001/1-clinical-reviews.csv?PROFILE=s3:text&FILE_HEADER=USE&S3_SELECT=AUTO') FORMAT 'TEXT' (delimiter=E',');
-SELECT * FROM pxf_clinical_data_000;
+CREATE EXTERNAL TABLE madlib.pxf_clinical_data_000(clinic_id int,clinic_name varchar(300),state varchar(2),clinic_full_name varchar(300),region varchar(50),dog_breed  varchar(50),cat_breed varchar(50),fish_breed varchar(50),bird_breed varchar(50),treatment_cost int,wait_time int,recommended boolean)  LOCATION ('pxf://pxf-data/data-samples-w01-s001/1-clinical-reviews.csv?PROFILE=s3:text&FILE_HEADER=USE&S3_SELECT=AUTO') FORMAT 'TEXT' (delimiter=E',');
+SELECT * FROM madlib.pxf_clinical_data_000;
 ```

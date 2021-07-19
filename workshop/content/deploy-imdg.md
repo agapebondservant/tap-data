@@ -25,7 +25,7 @@ Notice the order in which the cluster members are created, as well as how the no
 
 Next, we wil launch the **gfsh** cli. **gfsh** is an interface that can be used for the lifecycle management and monitoring of Gemfire resources, including clusters and their members (locators/servers).
 ```execute
-kubectl -n {{ session_namespace }} exec -it gemfire1-locator-0 -- gfsh
+kubectl wait --for=condition=Ready pod/gemfire1-locator-0 -n {{ session_namespace }} && kubectl -n {{ session_namespace }} exec -it gemfire1-locator-0 -- gfsh
 ```
 
 Connect  to the local Gemfire cluster:
