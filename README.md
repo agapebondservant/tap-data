@@ -79,6 +79,14 @@ git -C /usr/local/Homebrew/Library/Taps/homebrew/homebrew-cask fetch --unshallow
 brew install minio/stable/mc
 mc config host add data-e2e-minio http://minio.tanzudata.ml/ $MINIO_ACCESS_KEY $MINIO_SECRET_KEY
 
+- Add required artifacts to Minio:
+(Greenplum-Gemfire connector:)
+
+mc mb -p data-e2e-minio/artifacts
+mc cp other/resources/gemfire/gemfire-greenplum-3.4.1.jar data-e2e-minio/artifacts/gemfire-greenplum-3.4.1.jar
+mc policy set download data-e2e-minio/artifacts/gemfire-greenplum-3.4.1.jar
+
+
 - Install Prometheus and Grafana:
 helm repo add bitnami https://charts.bitnami.com/bitnami
 helm repo update
@@ -108,5 +116,3 @@ resources/setup-scdf.sh
 Wavefront Token: d0bc6a3f-580c-4212-8b35-1c6edd1e4ffb
 Wavefront URI: vmware.wavefront.com
 Source: 3a4316f6-6501-4750-587b-939e
-
-sed -i "s/YOUR_POSTGRES_PASSWORD/$DATA_E2E_POSTGRES_PASSWORD/g" $DATA_E2E_SCDF_DATAFLOW_PATH/production/deployment-database-patch.yaml
