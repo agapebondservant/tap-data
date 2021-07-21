@@ -8,3 +8,4 @@ modules:
     - cloud-native-datapipelines
     - deploy-greenplum
     - deploy-imdg
+    - create-datapipeline
