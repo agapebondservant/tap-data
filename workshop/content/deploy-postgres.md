@@ -3,13 +3,13 @@
 
 Let's view our **Petclinic app**. First, we launch it:
 ```execute
-kubectl delete deployment petclinic-app --ignore-not-found=false --namespace={{ session_namespace }} && kubectl delete svc petclinic-app --ignore-not-found=false --namespace={{ session_namespace }} && kubectl create deployment petclinic-app --image=oawofolu/spring-petclinic:1.0 --replicas=2 --namespace={{ session_namespace }} && kubectl expose deployment/petclinic-app --name petclinic-app --port=8080 --type=ClusterIP --namespace={{ session_namespace }}
+kubectl delete deployment petclinic-app --ignore-not-found=true --namespace={{ session_namespace }} && kubectl delete svc petclinic-app --ignore-not-found=true --namespace={{ session_namespace }} && kubectl create deployment petclinic-app --image=oawofolu/spring-petclinic:1.0 --namespace={{ session_namespace }} && kubectl scale deploy petclinic-app --replicas=2 --namespace={{ session_namespace }} && kubectl expose deployment/petclinic-app --name petclinic-app --port=8080 --type=ClusterIP --namespace={{ session_namespace }} && sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/petclinic/petclinic-httpproxy.yaml | kubectl apply -f -
 ```
 
 Then, we view it:
 ```dashboard:create-dashboard
 name: Petclinic
-url: {{ ingress_protocol }}://petclinic-app.{{ session_namespace }}.svc.cluster.local:8080
+url: {{ ingress_protocol }}://petclinic-{{ session_namespace }}.tanzudata.ml
 ```
 
 Let's go ahead and add a few new pet owners, then restart the app. We notice that if we restart the app, we lose all of our entries:
