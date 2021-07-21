@@ -16,6 +16,9 @@ modules:
         exit_sign: Deploy IMDG
     deploy-imdg:
         name: Deploy IMDG
+        exit_sign: Create Data Pipeline
+    create-datapipeline:
+        name: Create Data Pipeline
         exit_sign: Complete Workshop
 config:
     vars:

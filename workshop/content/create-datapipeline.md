@@ -26,3 +26,20 @@ Restore the UI for the other RabbitMQ cluster we created earlier.
 name: RabbitMQ
 url: {{ ingress_protocol }}://rabbit{{ session_namespace }}.{{ ingress_domain }}
 ```
+
+Now we should be able to view our data in our Gemfire region:
+```execute
+kubectl -n {{ session_namespace }} exec -it gemfire1-locator-0 -- gfsh
+```
+
+Connect  to the local Gemfire cluster:
+```execute
+connect
+```
+
+Run a query to view the data in our region: <font color="red">NOTE: You can also use autocomplete.
+```execute
+query --query="select row_to_json.value from /clinicalDataModel"
+```
+
+Next, we will build our real-time scoring interface and analytics dashboard.
