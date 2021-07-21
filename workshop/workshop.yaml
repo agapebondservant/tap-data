@@ -9,3 +9,4 @@ modules:
     - deploy-greenplum
     - deploy-imdg
     - create-datapipeline
+    - implement-data-analytics
