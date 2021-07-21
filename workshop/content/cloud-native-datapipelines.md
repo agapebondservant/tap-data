@@ -11,7 +11,7 @@ url: {{ ingress_protocol }}://scdf.{{ ingress_domain }}/dashboard
 
 Let's view the RabbitMQ console for the broker that will be leveraged by our pipelines - login with <i>admin/admin:</i>
 
-```dashboard:reload-dashboard
+```dashboard:create-dashboard
 name: RabbitMQ
 url: {{ ingress_protocol }}://rabbitmq.default.svc.cluster.local:15672/dashboard
 ```
