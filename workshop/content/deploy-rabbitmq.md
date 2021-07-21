@@ -41,7 +41,7 @@ To login, you need the UI credentials:
 kubectl get secret rabbitcluster1-default-user -o jsonpath="{.data.default_user\.conf}" | base64 --decode
 ```
 
-Next, scale the cluster to 3 replicas (odd number is recommended). Run the following and edit to include <b>3 replicas</b>:
+Next, scale the cluster to 3 replicas (odd number is recommended). In the vim editor that comes up, edit the number of replicas from 1 to 3 (replace the phrase **replicas: 1**):
 ```execute
 kubectl edit rabbitmqcluster rabbitcluster1 -n {{ session_namespace }}
 ```

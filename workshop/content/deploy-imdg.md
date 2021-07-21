@@ -24,8 +24,10 @@ kubectl create secret docker-registry image-pull-secret --namespace={{ session_n
 Notice the order in which the cluster members are created, as well as how the nodes are named. The Gemfire cluster leverages the Kubernetes **StatefulSet** for deploying its members. This brings several advantages: for example, it is able to leverage the StatefulSet's ordinal-based naming convention. With StatefulSets, pods are given ordinal suffixes which are incremented based on their startup order, starting from 0. The Gemfire operator uses this pattern to its advantage: the pods with the lowest ordinal suffixes are automatically set up as the **locator** nodes, while the other pods become the **server** nodes. 
 
 Next, let's update  the cluster by exposing the **Developer REST API** interface for Gemfire. We will need it later for our real-time predictive scoring. Here is the manifest:
-```editor:open-file
+```editor:select-matching-text
 file: ~/other/resources/gemfire/gemfire-cluster-with-devapi.yaml
+text: "servers"
+after: 16
 ```
 
 Let's proceed to update the cluster:
@@ -51,7 +53,7 @@ list  members
 
 Create a new region: <font color="red">NOTE: You can also create this with gfsh's autocomplete feature.</font>
 ```execute
-create  region --name=clinicalDataModel --type=REPLICATE_PERSISTED
+create  region --name=clinicalDataModel --type=REPLICATE_PERSISTENT
 ```
 
 Querying the new region should yield no results:

@@ -34,7 +34,7 @@ text: YOUR_GREENPLUM_CLUSTER
 ```
 
 Now, let's go ahead and deploy our new cluster.
-
+<font color="red">Do NOT run this unless this is the first workshop instance, i.e. the workspace ends with **s001**.</font>
 ```execute
 sed -i 's/YOUR_GREENPLUM_CLUSTER/gpdb-cluster-{{session_namespace}}/g' ~/other/resources/greenplum/greenplum-cluster.yaml && kubectl delete greenplumcluster gpdb-cluster-{{session_namespace}} --ignore-not-found=true -n greenplum-system && kubectl apply -f ~/other/resources/greenplum/greenplum-cluster.yaml -n greenplum-system
 ```
@@ -70,6 +70,8 @@ Let's view  the source data:
 ```execute
 SELECT * FROM madlib.pxf_clinical_data_000;
 ```
+
+Enter **Ctrl-C** to exit.
 
 Now, generate a **logistic regression** model from the data via **MADLib**:
 ```execute
