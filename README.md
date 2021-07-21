@@ -112,6 +112,11 @@ resources/setup.sh
 - Pre-deeploy Spring Cloud Data Flow:
 resources/setup-scdf.sh
 
+Register gemfire starter apps:
+sink.gemfire=docker:springcloudstream/gemfire-sink-rabbit:2.1.6.RELEASE
+source.gemfire=docker:springcloudstream/gemfire-source-rabbit:2.1.6.RELEASE
+source.gemfire-cq=docker:springcloudstream/gemfire-cq-source-rabbit:2.1.6.RELEASE
+
 - Integrate Wavefront
 Wavefront Token: d0bc6a3f-580c-4212-8b35-1c6edd1e4ffb
 Wavefront URI: vmware.wavefront.com

@@ -7,15 +7,15 @@ modules:
         exit_sign: Deploy RabbitMQ
     deploy-rabbitmq:
         name: Deploy RabbitMQ
-        exit_sign: Create Data Pipeline
-    create-datapipeline:
-        name: Create Data Pipeline
+        exit_sign: A Look At Cloud Native Data Pipelines
+    cloud-native-datapipelines:
+        name: A Look At Cloud Native Data Pipelines
+        exit_sign: Deploy IMDG
+    deploy-greenplum:
+        name: Deploy Data Warehouse
         exit_sign: Deploy IMDG
     deploy-imdg:
         name: Deploy IMDG
-        exit_sign: Deploy Data Warehouse
-    deploy-greenplum:
-        name: Deploy Data Warehouse
         exit_sign: Complete Workshop
 config:
     vars:

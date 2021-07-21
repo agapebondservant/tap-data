@@ -41,7 +41,7 @@ To login, you need the UI credentials:
 kubectl get secret rabbitcluster1-default-user -o jsonpath="{.data.default_user\.conf}" | base64 --decode
 ```
 
-Next, scale the cluster to 3 replicas (odd number is recommended):
+Next, scale the cluster to 3 replicas (odd number is recommended). Run the following and edit to include <b>3 replicas</b>:
 ```execute
 kubectl edit rabbitmqcluster rabbitcluster1 -n {{ session_namespace }}
 ```

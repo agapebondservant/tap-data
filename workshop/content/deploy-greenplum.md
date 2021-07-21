@@ -41,10 +41,18 @@ sed -i 's/YOUR_GREENPLUM_CLUSTER/gpdb-cluster-{{session_namespace}}/g' ~/other/r
 
 Now, we will test out PXF by performing a federated query. Open a bash shell:
 ```execute
-kubectl wait --for=condition=Ready pod/master-0 --timeout=90s -n greenplum-system && kubectl exec -it master-0 -n greenplum-system -- bash -c "source ./.bashrc; madpack -p greenplum install" && kubectl exec -it master-0 -n greenplum-system -- bash
+kubectl wait --for=condition=Ready pod/master-0 -n greenplum-system && kubectl exec -it master-0 -n greenplum-system -- bash
 ```
 
-Notice we also installed the functions for **MADLib**.
+Wait for the greenplum database to start up:
+```execute
+source ./.bashrc; gpstate  -s;
+```
+
+Install the functions for **MADLib**:
+```execute
+madpack -p greenplum install
+```
 
 Connect to the **psql** subsytem:
 ```execute
@@ -54,13 +62,14 @@ psql -d gpadmin
 Create the PXF extension, then create an external table for the CSV file loaded earlier and query the external table:
 ```execute
 CREATE EXTENSION IF NOT EXISTS pxf;
-CREATE EXTERNAL TABLE madlib.pxf_clinical_data_000(clinic_id varchar(10),clinic_name varchar(300),state varchar(2),region varchar(50),dog_breed  varchar(50),cat_breed varchar(50),fish_breed varchar(50),bird_breed varchar(50),treatment_cost int,wait_time int,recommended boolean)  LOCATION ('pxf://pxf-data/data-samples-w01-s001/1-clinical-reviews.csv?PROFILE=s3:text&FILE_HEADER=USE&S3_SELECT=AUTO') FORMAT 'TEXT' (delimiter=E',');
+CREATE EXTERNAL TABLE madlib.pxf_clinical_data_000(clinic_id varchar(10),clinic_name varchar(300),state varchar(2),region varchar(50),dog_breed  varchar(50),cat_breed varchar(50),fish_breed varchar(50),bird_breed varchar(50),treatment_cost int,wait_time int,recommended boolean)  LOCATION ('pxf://pxf-data/data-samples-w01-s001/other/resources/data/clinical-reviews-batch-001.csv?PROFILE=s3:text&FILE_HEADER=USE&S3_SELECT=AUTO') FORMAT 'TEXT' (delimiter=E',');
 SELECT * FROM madlib.pxf_clinical_data_000;
 ```
 
 Now, generate a **logistic regression** model from the data via **MADLib**:
 ```execute
 SELECT madlib.logregr_train('madlib.pxf_clinical_data_000', 'madlib.clinical_data_logreg','recommended','ARRAY[1, treatment_cost, wait_time]');
+
 SELECT unnest(array['intercept', 'treatment_cost', 'wait_time']) as attribute,
        unnest(coef) as coefficient,
        unnest(std_err) as standard_error,
@@ -68,4 +77,10 @@ SELECT unnest(array['intercept', 'treatment_cost', 'wait_time']) as attribute,
        unnest(p_values) as pvalue,
        unnest(odds_ratios) as odds_ratio
     FROM madlib.clinical_data_logreg;
+```
+
+Now that we have our logistic model, we have come to the **Predict**  stage of the machine learning workflow (**Remember - Formulate - Predict**). Let's go ahead and operationalize our model by publishing it via an interoperable interface, like a REST API. There are many approaches for this. With Tanzu Data, we have a low-code option available to use: we can use **Spring Cloud Data Flow** to set up a streaming job which will update Gemfire, an in-memory database which includes built-in support for exposing data objects via a REST management interface. Let's work on that next.
+
+```execute
+\q
 ```

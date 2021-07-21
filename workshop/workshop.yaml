@@ -5,6 +5,6 @@ modules:
     - demo-overview
     - deploy-postgres
     - deploy-rabbitmq
-    - create-datapipeline
-    - deploy-imdg
+    - cloud-native-datapipelines
     - deploy-greenplum
+    - deploy-imdg
