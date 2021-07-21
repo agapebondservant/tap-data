@@ -18,7 +18,7 @@ Let's view the RabbitMQ console for the broker that will be leveraged by our pip
 
 ```dashboard:reload-dashboard
 name: RabbitMQ
-url: {{ ingress_protocol }}://rabbitmq.default.svc.cluster.local:15672/dashboard
+url: {{ ingress_protocol }}://rabbitmain.tanzudata.ml/dashboard
 ```
 
 Restore the UI for the other RabbitMQ cluster we created earlier.

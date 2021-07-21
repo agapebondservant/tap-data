@@ -13,4 +13,5 @@ other/resources/scdf/bin/install-dev.sh #--monitoring prometheus
 kubectl apply -f other/resources/scdf/scdf-http-proxy-default.yaml
 cp ${SCDF_BASE_DATAFLOW_KUSTOMIZE_FL}.other ${SCDF_BASE_DATAFLOW_KUSTOMIZE_FL}
 cp ${SCDF_BASE_SKIPPER_KUSTOMIZE_FL}.other ${SCDF_BASE_SKIPPER_KUSTOMIZE_FL}
+kubectl apply -f other/resources/rabbitmq/rabbitmq-scdf.yaml 
 
