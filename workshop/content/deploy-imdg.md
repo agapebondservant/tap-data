@@ -23,7 +23,12 @@ kubectl create secret docker-registry image-pull-secret --namespace={{ session_n
 
 Notice the order in which the cluster members are created, as well as how the nodes are named. The Gemfire cluster leverages the Kubernetes **StatefulSet** for deploying its members. This brings several advantages: for example, it is able to leverage the StatefulSet's ordinal-based naming convention. With StatefulSets, pods are given ordinal suffixes which are incremented based on their startup order, starting from 0. The Gemfire operator uses this pattern to its advantage: the pods with the lowest ordinal suffixes are automatically set up as the **locator** nodes, while the other pods become the **server** nodes. 
 
-Next, let's update  the cluster by exposing the **Developer REST API** interface for Gemfire. We will need it later for our real-time predictive scoring.
+Next, let's update  the cluster by exposing the **Developer REST API** interface for Gemfire. We will need it later for our real-time predictive scoring. Here is the manifest:
+```editor:open-file
+file: ~/other/resources/gemfire/gemfire-cluster-with-devapi.yaml
+```
+
+Let's proceed to update the cluster:
 ```execute
 kubectl apply -f ~/other/resources/gemfire/gemfire-cluster-with-devapi.yaml -n {{ session_namespace }}
 ```

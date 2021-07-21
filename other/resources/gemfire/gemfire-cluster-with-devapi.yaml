@@ -4,10 +4,10 @@ metadata:
   name: gemfire1
 spec:
   image: registry.pivotal.io/tanzu-gemfire-for-kubernetes/gemfire-k8s:1.0.1
-    servers:
-      overrides:
-        gemfireProperties:
-          start-dev-rest-api: "true"
+  servers:
+    overrides:
+      gemfireProperties:
+        start-dev-rest-api: "true"
 ---
 apiVersion: v1
 kind: Service

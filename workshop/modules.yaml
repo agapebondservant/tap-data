@@ -19,7 +19,10 @@ modules:
         exit_sign: Create Data Pipeline
     create-datapipeline:
         name: Create Data Pipeline
-        exit_sign: Complete Workshop
+        exit_sign: Implement Data Analytics
+    implement-data-analytics:
+      name: Implement Data Analytics
+      exit_sign: Complete Workshop
 config:
     vars:
     - name: DATA_E2E_REGISTRY_USERNAME

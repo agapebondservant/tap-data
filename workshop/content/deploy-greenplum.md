@@ -41,7 +41,7 @@ sed -i 's/YOUR_GREENPLUM_CLUSTER/gpdb-cluster-{{session_namespace}}/g' ~/other/r
 
 Now, we will test out PXF by performing a federated query. Open a bash shell:
 ```execute
-kubectl wait --for=condition=Ready pod/master-0 -n greenplum-system && kubectl exec -it master-0 -n greenplum-system -- bash
+kubectl wait --for=condition=Ready pod/master-0 -n greenplum-system --timeout=300s && kubectl exec -it master-0 -n greenplum-system -- bash
 ```
 
 Wait for the greenplum database to start up:
@@ -63,7 +63,11 @@ Create the PXF extension, then create an external table for the CSV file loaded 
 ```execute
 CREATE EXTENSION IF NOT EXISTS pxf;
 DROP EXTERNAL TABLE IF EXISTS madlib.pxf_clinical_data_000;
-CREATE EXTERNAL TABLE madlib.pxf_clinical_data_000(clinic_id varchar(10),clinic_name varchar(300),state varchar(2),region varchar(50),dog_breed  varchar(50),cat_breed varchar(50),fish_breed varchar(50),bird_breed varchar(50),treatment_cost int,wait_time int,recommended boolean)  LOCATION ('pxf://pxf-data/data-samples-w01-s001/other/resources/data/clinical-reviews-batch-001.csv?PROFILE=s3:text&FILE_HEADER=USE&S3_SELECT=AUTO') FORMAT 'TEXT' (delimiter=E',');
+CREATE EXTERNAL TABLE madlib.pxf_clinical_data_000(clinic_id varchar(10),clinic_name varchar(300),state varchar(2),region varchar(50),dog_breed  varchar(50),cat_breed varchar(50),fish_breed varchar(50),bird_breed varchar(50),treatment_cost int,wait_time int,recommended boolean)  LOCATION ('pxf://pxf-data/data-samples-w01-s001/clinical-reviews-batch-001.csv?PROFILE=s3:text&FILE_HEADER=USE&S3_SELECT=AUTO') FORMAT 'TEXT' (delimiter=E',');
+```
+
+Let's view  the source data:
+```execute
 SELECT * FROM madlib.pxf_clinical_data_000;
 ```
 
@@ -84,4 +88,9 @@ Now that we have our logistic model, we have come to the **Predict**  stage of t
 
 ```execute
 \q
+```
+
+Exit the psql shell:
+```execute
+exit
 ```
