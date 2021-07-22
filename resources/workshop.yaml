@@ -51,8 +51,8 @@ spec:
       terminal:
         enabled: true
         layout: split
-      console:
-        enabled: true
-        vendor: octant
+      #!console:
+      #!  enabled: true
+      #!  vendor: octant
       editor:
         enabled: true
