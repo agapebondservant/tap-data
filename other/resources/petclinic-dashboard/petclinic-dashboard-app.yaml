@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: petclinic-app-dashboard
+  name: petclinic-app-dashboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: petclinic-app-dashboard
+  template:
+    metadata:
+      labels:
+        app: petclinic-app-dashboard
+    spec:
+      containers:
+      - image: oawofolu/spring-petclinic-dashboard:1.0
+        name: spring-petclinic
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: petclinic-app-dashboard
+  name: petclinic-app-dashboard
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: petclinic-app-dashboard
+  type: ClusterIP
+---
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: petclinic-YOUR_SESSION_NAMESPACE-httpproxy
+spec:
+  routes:
+  - conditions:
+    - prefix: /
+    services:
+    - name: petclinic-app-dashboard
+      port: 8080
+  virtualhost:
+    fqdn: petclinic-YOUR_SESSION_NAMESPACE.tanzudata.ml

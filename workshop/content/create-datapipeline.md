@@ -37,7 +37,7 @@ Connect  to the local Gemfire cluster:
 connect
 ```
 
-Run a query to view the data in our region: <font color="red">NOTE: You can also use autocomplete.
+Run a query to view the data in our region: <font color="red">NOTE: You can also use autocomplete.</font>
 ```execute
 query --query="select row_to_json.value from /clinicalDataModel"
 ```
