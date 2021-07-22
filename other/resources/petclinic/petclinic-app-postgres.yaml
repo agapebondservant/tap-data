@@ -26,6 +26,8 @@ spec:
           value: YOUR_DATASOURCE_PASSWORD
         - name: DATABASE
           value: postgresql
+        - name: SPRING_PROFILES_ACTIVE
+          value: postgresql
 ---
 apiVersion: v1
 kind: Service
