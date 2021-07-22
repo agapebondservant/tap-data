@@ -14,7 +14,12 @@ The **krew** plugin provides a native approach for managing RabbitMQ clusters. V
 export PATH="${PATH}:${HOME}/.krew/bin" && kubectl krew install rabbitmq  && kubectl rabbitmq help
 ```
 
-Next, let's deploy a highly available Tanzu RabbitMQ **cluster**. First deploy a cluster with just 1 replica:
+Next, let's deploy a highly available Tanzu RabbitMQ **cluster**. Here is the manifest:
+```editor:open-file
+file: ~/other/resources/rabbitmq/rabbitmq-cluster.yaml
+```
+
+First deploy a cluster with just 1 replica:
 ```execute
 kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-monitor.yaml; kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster.yaml -n {{ session_namespace }};
 ```
