@@ -5,7 +5,7 @@ metadata:
     app: petclinic-app
   name: petclinic-app
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: petclinic-app
