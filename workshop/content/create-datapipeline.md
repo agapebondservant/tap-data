@@ -11,7 +11,7 @@ url: {{ ingress_protocol }}://scdf.{{ ingress_domain }}/dashboard
 
 Here is the pipeline we will be creating:
 ```copy
-jdbc --spring.datasource.url="jdbc:postgresql://greenplum.greenplum-system.svc.cluster.local:5432/gpadmin" --spring.datasource.username="gpadmin" --spring.datasource.password="changeme" --jdbc.supplier.query="select row_to_json(logreg) from (select coef, log_likelihood, std_err,z_stats,p_values,odds_ratios,num_rows_processed,num_missing_rows_skipped,num_iterations,variance_covariance from madlib.clinical_data_logreg) logreg" | gemfire --gemfire.pool.host-addresses="gemfire1-locator-0.gemfire1-locator.data-samples-w01-s007.svc.cluster.local:10334" --gemfire.region.regionName="clinicalDataModel" --gemfire.sink.json="true" --gemfire.sink.keyExpression="new SimpleDateFormat(‘yyyyMMddHHmm’).format(new Date())"
+jdbc --spring.datasource.url="jdbc:postgresql://greenplum.greenplum-system.svc.cluster.local:5432/gpadmin" --spring.datasource.username="gpadmin" --spring.datasource.password="changeme" --jdbc.supplier.query="select row_to_json(logreg) from (select coef, log_likelihood, std_err,z_stats,p_values,odds_ratios,num_rows_processed,num_missing_rows_skipped,num_iterations,variance_covariance from madlib.clinical_data_logreg) logreg" | gemfire --gemfire.pool.host-addresses="gemfire1-locator-0.gemfire1-locator.data-samples-w01-s007.svc.cluster.local:10334" --gemfire.region.regionName="clinicalDataModel" --gemfire.sink.json="true" --gemfire.sink.keyExpression="1"
 ```
 
 Let's view the RabbitMQ console for the broker that will be leveraged by our pipelines - login with <i>admin/admin:</i>

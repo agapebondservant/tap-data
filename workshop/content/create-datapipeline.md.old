@@ -18,3 +18,17 @@ Let's view the Spring Cloud Data Flow dashboard:
 name: Example
 url: {{ ingress_protocol }}://scdf-{{ session_namespace }}.{{ ingress_domain }}
 ```
+
+Greenplum;
+Now, generate a **logistic regression** model from the data via **MADLib**:
+```execute
+SELECT madlib.logregr_train('madlib.pxf_clinical_data_000', 'madlib.clinical_data_logreg','recommended','ARRAY[1, treatment_cost, wait_time]');
+
+SELECT unnest(array['intercept', 'treatment_cost', 'wait_time']) as attribute,
+       unnest(coef) as coefficient,
+       unnest(std_err) as standard_error,
+       unnest(z_stats) as z_stat,
+       unnest(p_values) as pvalue,
+       unnest(odds_ratios) as odds_ratio
+    FROM madlib.clinical_data_logreg;
+```
