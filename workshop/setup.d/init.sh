@@ -1,1 +1,0 @@
-cat "SESSION_NAMESPACE=${SESSION_NAMESPACE}"  > exercises/jupyter/.env
