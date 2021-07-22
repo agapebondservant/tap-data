@@ -66,7 +66,7 @@ DROP EXTERNAL TABLE IF EXISTS madlib.pxf_clinical_data_000;
 CREATE EXTERNAL TABLE madlib.pxf_clinical_data_000(clinic_id varchar(10),clinic_name varchar(300),state varchar(2),region varchar(50),dog_breed  varchar(50),cat_breed varchar(50),fish_breed varchar(50),bird_breed varchar(50),treatment_cost int,wait_time int,recommended boolean)  LOCATION ('pxf://pxf-data/data-samples-w01-s001/clinical-reviews-batch-001.csv?PROFILE=s3:text&FILE_HEADER=USE&S3_SELECT=AUTO') FORMAT 'TEXT' (delimiter=E',');
 ```
 
-Let's view  the source data:
+Let's view  the source data: <font color="red">In **Jupyter**, run the *Training: Run logistic regression training in Greenplum* cell.</font>
 ```execute
 SELECT * FROM madlib.pxf_clinical_data_000;
 ```

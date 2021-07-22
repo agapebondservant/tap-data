@@ -43,6 +43,6 @@ spec:
     - prefix: /
     services:
     - name: petclinic-app
-      port: 80
+      port: 8080
   virtualhost:
     fqdn: petclinic-YOUR_SESSION_NAMESPACE.tanzudata.ml

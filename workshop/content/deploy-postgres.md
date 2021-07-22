@@ -5,14 +5,6 @@ Let's view our **Petclinic app**. First, we launch it:
 ```execute
 kubectl delete deployment petclinic-app --ignore-not-found=true --namespace={{ session_namespace }} && kubectl delete svc petclinic-app --ignore-not-found=true --namespace={{ session_namespace }} && sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/petclinic/petclinic-app-h2.yaml && kubectl apply -f ~/other/resources/petclinic/petclinic-app-h2.yaml
 ```
-- name: SPRING_DATASOURCE_URL
-          value: YOUR_DATASOURCE_URL #!"jdbc:postgresql://pginstance-1:5432/postgres"
-        - name: SPRING_DATASOURCE_USERNAME
-          value: YOUR_DATASOURCE_USERNAME #!"postgres"
-        - name: SPRING_DATASOURCE_PASSWORD
-          value: YOUR_DATASOURCE_PASSWORD
-        - name: DATABASE
-          value: YOUR_DATASOURCE_PROFILE #!postgresql
 
 Then, we view it:
 ```dashboard:create-dashboard
@@ -23,6 +15,12 @@ url: {{ ingress_protocol }}://petclinic-{{ session_namespace }}.tanzudata.ml
 Let's go ahead and add a few new pet owners, then restart the app. We notice that if we restart the app, we lose all of our entries:
 ```execute
 kubectl rollout restart deploy/petclinic-app && kubectl rollout status -w deployment/petclinic-app
+```
+
+Let's view it again - notice the owners are gone:
+```dashboard:reload-dashboard
+name: Petclinic
+url: {{ ingress_protocol }}://petclinic-{{ session_namespace }}.tanzudata.ml
 ```
 
 To resolve this, we will need to provision a persistent data store.
@@ -49,7 +47,7 @@ kubectl apply -f ~/other/resources/postgres/postgres-cluster.yaml -n {{ session_
 
 After that, we can redeploy our app:
 ```execute
-export tmp_db_db=$(kubectl get secrets pginstance-1-db-secret -o jsonpath='{.data.dbname}' | base64 -D) && export tmp_db_user=$(kubectl get secrets pginstance-1-db-secret -o jsonpath='{.data.username}' | base64 -D) && export tmp_db_pass=$(kubectl get secrets pginstance-1-db-secret -o jsonpath='{.data.password}' | base64 -D) && kubectl delete deployment petclinic-app --ignore-not-found=true --namespace={{ session_namespace }} && kubectl delete svc petclinic-app --ignore-not-found=true --namespace={{ session_namespace }} && sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/petclinic/petclinic-app-postgres.yaml && sed -i "s/YOUR_DATASOURCE_URL/jdbc:postgresql:\/\/pginstance-1:5432\/${tmp_db_db}/g" ~/other/resources/petclinic/petclinic-app-postgres.yaml && sed -i "s/YOUR_DATASOURCE_USERNAME/${tmp_db_user}/g" ~/other/resources/petclinic/petclinic-app-postgres.yaml && sed -i "s/YOUR_DATASOURCE_PASSWORD/${tmp_db_pass}/g" ~/other/resources/petclinic/petclinic-app-postgres.yaml && kubectl apply -f ~/other/resources/petclinic/petclinic-app-postgres.yaml
+export tmp_db_db=$(kubectl get secrets pginstance-1-db-secret -o jsonpath='{.data.dbname}' | base64 --decode) && export tmp_db_user=$(kubectl get secrets pginstance-1-db-secret -o jsonpath='{.data.username}' | base64 --decode) && export tmp_db_pass=$(kubectl get secrets pginstance-1-db-secret -o jsonpath='{.data.password}' | base64 --decode) && kubectl delete deployment petclinic-app --ignore-not-found=true --namespace={{ session_namespace }} && kubectl delete svc petclinic-app --ignore-not-found=true --namespace={{ session_namespace }} && sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/petclinic/petclinic-app-postgres.yaml && sed -i "s/YOUR_DATASOURCE_URL/jdbc:postgresql:\/\/pginstance-1:5432\/${tmp_db_db}/g" ~/other/resources/petclinic/petclinic-app-postgres.yaml && sed -i "s/YOUR_DATASOURCE_USERNAME/${tmp_db_user}/g" ~/other/resources/petclinic/petclinic-app-postgres.yaml && sed -i "s/YOUR_DATASOURCE_PASSWORD/${tmp_db_pass}/g" ~/other/resources/petclinic/petclinic-app-postgres.yaml && kubectl apply -f ~/other/resources/petclinic/petclinic-app-postgres.yaml
 ```
 
 This time, our data persists even after restarting:
