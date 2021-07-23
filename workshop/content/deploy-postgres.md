@@ -6,7 +6,9 @@ Let's view our **Petclinic app**. First, we launch it:
 kubectl delete deployment petclinic-app --ignore-not-found=true --namespace={{ session_namespace }} && kubectl delete svc petclinic-app --ignore-not-found=true --namespace={{ session_namespace }} && sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/petclinic/petclinic-app-h2.yaml && kubectl apply -f ~/other/resources/petclinic/petclinic-app-h2.yaml
 ```
 
-Then, we view it:
+Check on the status by viewing the logs (**L** on K9s). Click **Esc**  when complete.
+
+Next, we view it:
 ```dashboard:create-dashboard
 name: Petclinic
 url: {{ ingress_protocol }}://petclinic-{{ session_namespace }}.tanzudata.ml

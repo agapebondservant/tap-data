@@ -63,6 +63,7 @@ Create the PXF extension, then create an external table for the CSV file loaded 
 ```execute
 CREATE EXTENSION IF NOT EXISTS pxf;
 DROP EXTERNAL TABLE IF EXISTS madlib.pxf_clinical_data_000;
+DROP TABLE IF EXISTS madlib.clinical_data_logreg;
 CREATE EXTERNAL TABLE madlib.pxf_clinical_data_000(review_id int, clinic_id varchar(10),clinic_name varchar(300),state varchar(2),region varchar(50),dog_breed  varchar(50),cat_breed varchar(50),fish_breed varchar(50),bird_breed varchar(50),treatment_cost int,wait_time int,recommended boolean)  LOCATION ('pxf://pxf-data/data-samples-w01-s001/clinical-reviews-batch-001.csv?PROFILE=s3:text&FILE_HEADER=USE&S3_SELECT=AUTO') FORMAT 'TEXT' (delimiter=E',');
 ```
 
@@ -71,7 +72,7 @@ Let's view  the source data:
 SELECT * FROM madlib.pxf_clinical_data_000;
 ```
 
-<font color="red">In **Jupyter**, run the *Training: Run logistic regression training in Greenplum* cell. As Jupyter Notebook is being launched for the first time, launch the Jupyter Terminal app and run: <b>pip install -r jupyter/requirements.txt.</b></font>:
+<font color="red">In **Jupyter**, run the *Training: Run logistic regression training in Greenplum* cell. As Jupyter Notebook is being launched for the first time, login to the Jupyter app (password "jupyter"), launch the Jupyter Terminal app and run the command below: (will be copied to the clipboard) <b>pip install -r jupyter/requirements.txt.</b></font>:
 ```copy
 pip install -r jupyter/requirements.txt
 ```

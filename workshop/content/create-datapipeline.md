@@ -43,3 +43,8 @@ query --query="select row_to_json.value from /clinicalDataModel"
 ```
 
 Next, we will build our real-time scoring interface and analytics dashboard.
+
+Exit the **gfsh** shell:
+```execute
+exit
+```
