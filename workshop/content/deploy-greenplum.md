@@ -62,21 +62,32 @@ psql -d gpadmin
 Create the PXF extension, then create an external table for the CSV file loaded earlier and query the external table:
 ```execute
 CREATE EXTENSION IF NOT EXISTS pxf;
-DROP EXTERNAL TABLE IF EXISTS madlib.pxf_clinical_data_000;
+DROP EXTERNAL TABLE IF EXISTS madlib.pxf_clinical_data_000 CASCADE;
 DROP TABLE IF EXISTS madlib.clinical_data_logreg;
-CREATE EXTERNAL TABLE madlib.pxf_clinical_data_000(review_id varchar(8), clinic_id varchar(10),clinic_name varchar(300),state varchar(2),region varchar(50),dog_breed  varchar(50),cat_breed varchar(50),fish_breed varchar(50),bird_breed varchar(50),treatment_cost int,wait_time int,recommended boolean)  LOCATION ('pxf://pxf-data/data-samples-w01-s001/clinical-reviews-batch-001.csv?PROFILE=s3:text&FILE_HEADER=USE&S3_SELECT=AUTO') FORMAT 'TEXT' (delimiter=E',');
+DROP TABLE IF EXISTS madlib.clinical_data_logreg_summary;
+CREATE EXTERNAL TABLE madlib.pxf_clinical_data_000(review_id varchar(7), clinic_id varchar(10),clinic_name varchar(300),state varchar(2),region varchar(50),dog_breed  varchar(50),cat_breed varchar(50),fish_breed varchar(50),bird_breed varchar(50),treatment_cost int,wait_time int,recommended boolean)  LOCATION ('pxf://pxf-data/{{session_namespace}}/clinical-reviews-batch-001.csv?PROFILE=s3:text&FILE_HEADER=USE&S3_SELECT=AUTO') FORMAT 'TEXT' (delimiter=E',');
+CREATE VIEW madlib.pxf_clinical_data_000_vw AS SELECT * FROM madlib.pxf_clinical_data_000;
 ```
 
-Let's view  the source data: 
+Let's view the source data: 
 ```execute
 SELECT * FROM madlib.pxf_clinical_data_000;
 ```
 Enter **Ctrl-C** to exit.
 
-<font color="red">In **Jupyter**, run the *Training: Run logistic regression training in Greenplum* cell. As Jupyter Notebook is being launched for the first time, login to the Jupyter app (password "jupyter"), launch the Jupyter Terminal app and run the command below: (will be copied to the clipboard)</font>:
+<font color="red">In **Jupyter**, run the *Connect to Greenplum and view clinical recommendation data* cell. As Jupyter Notebook is being launched for the first time, login to the Jupyter app (password "jupyter"), launch the Jupyter Terminal app and run the command below: (will be copied to the clipboard)</font>:
 ```copy
 pip install -r jupyter/requirements.txt
 ```
+
+Next, let's generate the model:
+```
+SELECT madlib.logregr_train('madlib.pxf_clinical_data_000_vw',
+'madlib.clinical_data_logreg',
+'recommended','ARRAY[1, treatment_cost, wait_time]');
+```
+
+<font color="red">In **Jupyter**, run the *View Results* cell under *Training: Run logistic regression training in Greenplum* cell.</font>.
 
 Now that we have our logistic model, we have come to the **Predict**  stage of the machine learning workflow (**Remember - Formulate - Predict**). Let's go ahead and operationalize our model by publishing it via an interoperable interface, like a REST API. There are many approaches for this. With Tanzu Data, we have a low-code option available to use: we can use **Spring Cloud Data Flow** to set up a streaming job which will update Gemfire, an in-memory database which includes built-in support for exposing data objects via a REST management interface. Let's work on that next.
 
