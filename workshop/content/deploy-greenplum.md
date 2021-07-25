@@ -63,8 +63,7 @@ Create the PXF extension, then create an external table for the CSV file loaded 
 ```execute
 CREATE EXTENSION IF NOT EXISTS pxf;
 DROP EXTERNAL TABLE IF EXISTS madlib.pxf_clinical_data_000 CASCADE;
-DROP TABLE IF EXISTS madlib.clinical_data_logreg;
-DROP TABLE IF EXISTS madlib.clinical_data_logreg_summary;
+DROP TABLE IF EXISTS madlib.clinical_data_logreg, madlib.clinical_data_logreg_summary;
 CREATE EXTERNAL TABLE madlib.pxf_clinical_data_000(review_id varchar(7), clinic_id varchar(10),clinic_name varchar(300),state varchar(2),region varchar(50),dog_breed  varchar(50),cat_breed varchar(50),fish_breed varchar(50),bird_breed varchar(50),treatment_cost int,wait_time int,recommended boolean)  LOCATION ('pxf://pxf-data/{{session_namespace}}/clinical-reviews-batch-001.csv?PROFILE=s3:text&FILE_HEADER=USE&S3_SELECT=AUTO') FORMAT 'TEXT' (delimiter=E',');
 CREATE VIEW madlib.pxf_clinical_data_000_vw AS SELECT * FROM madlib.pxf_clinical_data_000;
 ```
@@ -80,15 +79,39 @@ Enter **Ctrl-C** to exit.
 pip install -r jupyter/requirements.txt
 ```
 
-Next, let's generate the model:
+Next, let's generate train and test subsets of the data using an 80/20 train-test split;
 ```execute
-SELECT madlib.logregr_train('madlib.pxf_clinical_data_000_vw',
-'madlib.clinical_data_logreg',
-'recommended','ARRAY[1, treatment_cost, wait_time]');
+DROP TABLE IF EXISTS madlib.pxf_clinical_data_000_out_train, madlib.pxf_clinical_data_000_out_test;
+SELECT madlib.train_test_split('madlib.pxf_clinical_data_000_vw','madlib.pxf_clinical_data_000_out',
+                                0.8, NULL, NULL, NULL, FALSE, TRUE);
+SELECT madlib.logregr_train('madlib.pxf_clinical_data_000_out_train','madlib.clinical_data_logreg','recommended','ARRAY[1, treatment_cost, wait_time]');
+
 ```
 
-<font color="red">In **Jupyter**, run the *Training: Run logistic regression training results from Greenplum* cell.</font>.
+Next, let's generate the model from the train set and use it to generate predictions from the test set:
+```execute
+SELECT madlib.logregr_train('madlib.pxf_clinical_data_000_out_train',
+'madlib.clinical_data_logreg',
+'recommended','ARRAY[1, treatment_cost, wait_time]');
 
+DROP TABLE IF EXISTS madlib.clinical_data_test_results;
+CREATE TABLE madlib.clinical_data_test_results(pred FLOAT8, obs BOOLEAN);
+INSERT INTO madlib.clinical_data_test_results(
+    SELECT madlib.logregr_predict_prob(coef, ARRAY[1, treatment_cost, wait_time]),source.recommended
+    FROM madlib.pxf_clinical_data_000_out_test source, madlib.clinical_data_logreg m);
+```
+
+Now we will be able to generate Binary Classifier metrics, which we will use to generate the **True Positive Rate** (tpr), **False Positive Rate** (fpr) and the AUROC curve:
+```execute
+DROP TABLE IF EXISTS madlib.clinical_data_test_result_metrics,  madlib.clinical_data_test_result_roc;
+SELECT madlib.binary_classifier( 'madlib.clinical_data_test_results', 'madlib.clinical_data_test_result_metrics', 'pred', 'obs');
+SELECT madlib.area_under_roc( 'madlib.clinical_data_test_results', 'madlib.clinical_data_test_result_roc', 'pred', 'obs');
+```
+
+<font color="red">In **Jupyter**, run the *Model Selection: View model metrics* cell.</font>
+
+<font color="red">In **Jupyter**, run the *Training: Run logistic regression training results from Greenplum* cell.</font>.
+ 
 Now that we have our logistic model, we have come to the **Predict**  stage of the machine learning workflow (**Remember - Formulate - Predict**). Let's go ahead and operationalize our model by publishing it via an interoperable interface, like a REST API. There are many approaches for this. With Tanzu Data, we have a low-code option available to use: we can use **Spring Cloud Data Flow** to set up a streaming job which will update Gemfire, an in-memory database which includes built-in support for exposing data objects via a REST management interface. Let's work on that next.
 
 ```execute
