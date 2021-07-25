@@ -64,7 +64,7 @@ Create the PXF extension, then create an external table for the CSV file loaded 
 CREATE EXTENSION IF NOT EXISTS pxf;
 DROP EXTERNAL TABLE IF EXISTS madlib.pxf_clinical_data_000;
 DROP TABLE IF EXISTS madlib.clinical_data_logreg;
-CREATE EXTERNAL TABLE madlib.pxf_clinical_data_000(review_id int, clinic_id varchar(10),clinic_name varchar(300),state varchar(2),region varchar(50),dog_breed  varchar(50),cat_breed varchar(50),fish_breed varchar(50),bird_breed varchar(50),treatment_cost int,wait_time int,recommended boolean)  LOCATION ('pxf://pxf-data/data-samples-w01-s001/clinical-reviews-batch-001.csv?PROFILE=s3:text&FILE_HEADER=USE&S3_SELECT=AUTO') FORMAT 'TEXT' (delimiter=E',');
+CREATE EXTERNAL TABLE madlib.pxf_clinical_data_000(review_id varchar(8), clinic_id varchar(10),clinic_name varchar(300),state varchar(2),region varchar(50),dog_breed  varchar(50),cat_breed varchar(50),fish_breed varchar(50),bird_breed varchar(50),treatment_cost int,wait_time int,recommended boolean)  LOCATION ('pxf://pxf-data/data-samples-w01-s001/clinical-reviews-batch-001.csv?PROFILE=s3:text&FILE_HEADER=USE&S3_SELECT=AUTO') FORMAT 'TEXT' (delimiter=E',');
 ```
 
 Let's view  the source data: 
