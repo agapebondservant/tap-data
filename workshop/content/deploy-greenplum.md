@@ -84,7 +84,6 @@ Next, let's generate train and test subsets of the data using an 80/20 train-tes
 DROP TABLE IF EXISTS madlib.pxf_clinical_data_000_out_train, madlib.pxf_clinical_data_000_out_test;
 SELECT madlib.train_test_split('madlib.pxf_clinical_data_000_vw','madlib.pxf_clinical_data_000_out',
                                 0.8, NULL, NULL, NULL, FALSE, TRUE);
-SELECT madlib.logregr_train('madlib.pxf_clinical_data_000_out_train','madlib.clinical_data_logreg','recommended','ARRAY[1, treatment_cost, wait_time]');
 
 ```
 
@@ -108,9 +107,9 @@ SELECT madlib.binary_classifier( 'madlib.clinical_data_test_results', 'madlib.cl
 SELECT madlib.area_under_roc( 'madlib.clinical_data_test_results', 'madlib.clinical_data_test_result_roc', 'pred', 'obs');
 ```
 
-<font color="red">In **Jupyter**, run the *Model Selection: View model metrics* cell.</font>
-
 <font color="red">In **Jupyter**, run the *Training: Run logistic regression training results from Greenplum* cell.</font>.
+
+<font color="red">In **Jupyter**, run the *Model Selection: View model metrics* cell.</font>
  
 Now that we have our logistic model, we have come to the **Predict**  stage of the machine learning workflow (**Remember - Formulate - Predict**). Let's go ahead and operationalize our model by publishing it via an interoperable interface, like a REST API. There are many approaches for this. With Tanzu Data, we have a low-code option available to use: we can use **Spring Cloud Data Flow** to set up a streaming job which will update Gemfire, an in-memory database which includes built-in support for exposing data objects via a REST management interface. Let's work on that next.
 
