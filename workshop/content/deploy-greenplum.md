@@ -36,7 +36,7 @@ text: YOUR_GREENPLUM_CLUSTER
 Now, let's go ahead and deploy our new cluster.
 <font color="red">Do NOT run this unless this is the first workshop instance, i.e. the workspace ends with **s001**.</font>
 ```execute
-sed -i 's/YOUR_GREENPLUM_CLUSTER/gpdb-cluster-{{session_namespace}}/g' ~/other/resources/greenplum/greenplum-cluster.yaml && kubectl delete greenplumcluster gpdb-cluster-{{session_namespace}} --ignore-not-found=true -n greenplum-system && kubectl apply -f ~/other/resources/greenplum/greenplum-cluster.yaml -n greenplum-system && kubectl get svc greenplum -n default -o json | jq '.spec.ports[0].name="gpdb" | .spec.ports[.spec.ports | length] |= . + {name:gpcc,port:28080,protocol:TCP,targetPort:28080} | {"spec":{"ports":.spec.ports}} ' | kubectl patch svc greenplum -n default --patch -
+sed -i 's/YOUR_GREENPLUM_CLUSTER/gpdb-cluster-{{session_namespace}}/g' ~/other/resources/greenplum/greenplum-cluster.yaml && kubectl delete greenplumcluster gpdb-cluster-{{session_namespace}} --ignore-not-found=true -n greenplum-system && kubectl apply -f ~/other/resources/greenplum/greenplum-cluster.yaml -n greenplum-system && kubectl wait --for=condition=Ready service/greenplum  --timeout=180s -n greenplum-system && kubectl get svc greenplum -n greenplum-system -o json | jq '.spec.ports[0].name="gpdb" | .spec.ports[.spec.ports | length] |= . + {name:gpcc,port:28080,protocol:TCP,targetPort:28080} | {"spec":{"ports":.spec.ports}} ' > gpcc.txt && kubectl patch svc greenplum -n greenplum-system --patch "cat gpcc.txt"
 ```
 
 Now, we will test out PXF by performing a federated query. Open a bash shell:
@@ -113,8 +113,20 @@ SELECT madlib.binary_classifier( 'madlib.clinical_data_test_results', 'madlib.cl
 SELECT madlib.area_under_roc( 'madlib.clinical_data_test_results', 'madlib.clinical_data_test_result_roc', 'pred', 'obs');
 ```
 
+### Greenplum Command Center (optional)
+
+Set up configuration for GPCC install:
+```execute
+echo -e "path = /greenplum" > /tmp/gpcc-config.txt && PGPASSWORD=changeme /tools/installGPCC/gpccinstall-* -c /tmp/gpcc-config.txt
+```
+
+Install Greenplum Command Center:
+```execute
+source /greenplum/greenplum-cc/gpcc_path.sh && PGPASSWORD=changeme gpcc start
+```
+
 View all the events in the Greenplum Command Center:
-```dashboard:open-dashboard
+```dashboard:create-dashboard
 name: Greenplum
 url: {{ ingress_protocol }}://{{ session_namespace }}-greenplum.{{ ingress_domain }}
 ```
