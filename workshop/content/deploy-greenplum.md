@@ -107,10 +107,6 @@ SELECT madlib.binary_classifier( 'madlib.clinical_data_test_results', 'madlib.cl
 SELECT madlib.area_under_roc( 'madlib.clinical_data_test_results', 'madlib.clinical_data_test_result_roc', 'pred', 'obs');
 ```
 
-<font color="red">In **Jupyter**, run the *Training: Run logistic regression training results from Greenplum* cell.</font>.
-
-<font color="red">In **Jupyter**, run the *Model Selection: View model metrics* cell.</font>
- 
 Now that we have our logistic model, we have come to the **Predict**  stage of the machine learning workflow (**Remember - Formulate - Predict**). Let's go ahead and operationalize our model by publishing it via an interoperable interface, like a REST API. There are many approaches for this. With Tanzu Data, we have a low-code option available to use: we can use **Spring Cloud Data Flow** to set up a streaming job which will update Gemfire, an in-memory database which includes built-in support for exposing data objects via a REST management interface. Let's work on that next.
 
 ```execute
