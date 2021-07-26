@@ -20,7 +20,8 @@ spec:
       port: 8888
     - name: gemfire1-dev-api
       port: 7070
-      protocol: http
+    - name: greenplum
+      port: 28080
     dashboards:
     - name: Jupyter
       url: "$(ingress_protocol)://$(session_namespace)-jupyter.$(ingress_domain)/"

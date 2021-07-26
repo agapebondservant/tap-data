@@ -36,7 +36,7 @@ text: YOUR_GREENPLUM_CLUSTER
 Now, let's go ahead and deploy our new cluster.
 <font color="red">Do NOT run this unless this is the first workshop instance, i.e. the workspace ends with **s001**.</font>
 ```execute
-sed -i 's/YOUR_GREENPLUM_CLUSTER/gpdb-cluster-{{session_namespace}}/g' ~/other/resources/greenplum/greenplum-cluster.yaml && kubectl delete greenplumcluster gpdb-cluster-{{session_namespace}} --ignore-not-found=true -n greenplum-system && kubectl apply -f ~/other/resources/greenplum/greenplum-cluster.yaml -n greenplum-system
+sed -i 's/YOUR_GREENPLUM_CLUSTER/gpdb-cluster-{{session_namespace}}/g' ~/other/resources/greenplum/greenplum-cluster.yaml && kubectl delete greenplumcluster gpdb-cluster-{{session_namespace}} --ignore-not-found=true -n greenplum-system && kubectl apply -f ~/other/resources/greenplum/greenplum-cluster.yaml -n greenplum-system && kubectl get svc greenplum -n default -o json | jq '.spec.ports[0].name="gpdb" | .spec.ports[.spec.ports | length] |= . + {name:gpcc,port:28080,protocol:TCP,targetPort:28080} | {"spec":{"ports":.spec.ports}} ' | kubectl patch svc greenplum -n default --patch -
 ```
 
 Now, we will test out PXF by performing a federated query. Open a bash shell:
@@ -47,6 +47,12 @@ kubectl wait --for=condition=Ready pod/master-0 -n greenplum-system --timeout=30
 Wait for the greenplum database to start up:
 ```execute
 source ./.bashrc; gpstate  -s;
+```
+
+Install Command Center:
+```execute
+echo -e "path = /greenplum" > /tmp/gpcc-config.txt && PGPASSWORD=changeme /tools/installGPCC/gpccinstall-* -c /tmp/gpcc-config.txt;
+source /greenplum/greenplum-cc/gpcc_path.sh && PGPASSWORD=changeme gpcc start;
 ```
 
 Install the functions for **MADLib**:
@@ -105,6 +111,12 @@ Now we will be able to generate Binary Classifier metrics, which we will use to 
 DROP TABLE IF EXISTS madlib.clinical_data_test_result_metrics,  madlib.clinical_data_test_result_roc;
 SELECT madlib.binary_classifier( 'madlib.clinical_data_test_results', 'madlib.clinical_data_test_result_metrics', 'pred', 'obs');
 SELECT madlib.area_under_roc( 'madlib.clinical_data_test_results', 'madlib.clinical_data_test_result_roc', 'pred', 'obs');
+```
+
+View all the events in the Greenplum Command Center:
+```dashboard:open-dashboard
+name: Greenplum
+url: {{ ingress_protocol }}://{{ session_namespace }}-greenplum.{{ ingress_domain }}
 ```
 
 Now that we have our logistic model, we have come to the **Predict**  stage of the machine learning workflow (**Remember - Formulate - Predict**). Let's go ahead and operationalize our model by publishing it via an interoperable interface, like a REST API. There are many approaches for this. With Tanzu Data, we have a low-code option available to use: we can use **Spring Cloud Data Flow** to set up a streaming job which will update Gemfire, an in-memory database which includes built-in support for exposing data objects via a REST management interface. Let's work on that next.
