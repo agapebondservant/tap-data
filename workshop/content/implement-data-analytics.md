@@ -1,7 +1,7 @@
 ### Data Analytics
 
 Invoke the newly deployed API for retrieving the **logistic regression** model via Gemfire:
-```
+```dashboard:create-dashboard
 name: Gemfire
 url: $(ingress_protocol)://$(session_namespace)-gemfire1-dev-api.$(ingress_domain)/geode/v1/clinicalDataModel
 ```
