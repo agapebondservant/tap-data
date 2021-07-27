@@ -41,7 +41,7 @@ sed -i 's/YOUR_GREENPLUM_CLUSTER/gpdb-cluster-{{session_namespace}}/g' ~/other/r
 
 Now, we will test out PXF by performing a federated query. Open a bash shell:
 ```execute
-kubectl wait --for=condition=Ready pod/master-0 -n greenplum-system --timeout=300s && kubectl get svc greenplum -n greenplum-system -o json | jq '.spec.ports[0].name="gpdb" | .spec.ports[.spec.ports | length] |= . + {name:gpcc,port:28080,protocol:"TCP",targetPort:28080} | {"spec":{"ports":.spec.ports}} ' > gpcc.txt && kubectl patch svc greenplum -n greenplum-system --patch "$(cat gpcc.txt)" && kubectl exec -it master-0 -n greenplum-system -- bash
+kubectl wait --for=condition=Ready pod/master-0 -n greenplum-system --timeout=300s && kubectl get svc greenplum -n greenplum-system -o json | jq '.spec.ports[0].name="gpdb" | .spec.ports[.spec.ports | length] |= . + {name:gpcc,port:28080,protocol:"TCP",targetPort:28080} | {"spec":{"ports":.spec.ports}} ' > /tmp/gpcc.txt && kubectl patch svc greenplum -n greenplum-system --patch "$(cat /tmp/gpcc.txt)" && kubectl exec -it master-0 -n greenplum-system -- bash
 ```
 
 Wait for the greenplum database to start up:
