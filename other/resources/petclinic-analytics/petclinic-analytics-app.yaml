@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: petclinic-app-analytics
+  name: petclinic-app-analytics
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: petclinic-app-analytics
+  template:
+    metadata:
+      labels:
+        app: petclinic-app-analytics
+    spec:
+      containers:
+      - image: oawofolu/petclinic-analytics:0.25
+        name: petclinic-analytics
+#!---
+#!apiVersion: v1
+#!kind: Service
+#!metadata:
+#!  labels:
+#!    app: petclinic-app-analytics
+#!  name: petclinic-app-analytics
+#!spec:
+#!  ports:
+#!  - port: 8050
+#!    protocol: TCP
+#!    targetPort: 8050
+#!  selector:
+#!    app: petclinic-app-analytics
+#!  type: ClusterIP
+#!---
+#!apiVersion: projectcontour.io/v1
+#!kind: HTTPProxy
+#!metadata:
+#!  name: petclinic-YOUR_SESSION_NAMESPACE-httpproxy
+#!spec:
+#!  routes:
+#!  - conditions:
+#!    - prefix: /
+#!    services:
+#!    - name: petclinic-app-analytics
+#!      port: 8080
+#!  virtualhost:
+#!    fqdn: petclinic-YOUR_SESSION_NAMESPACE.tanzudata.ml

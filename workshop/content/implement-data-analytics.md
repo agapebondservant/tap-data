@@ -8,3 +8,14 @@
 ```execute
 kubectl get svc gemfire1-dev-api -o jsonpath="{.status.loadBalancer.ingress[0].hostname}"
 ```
+
+Deploy the Petclinic Analytics App:
+```execute
+kubectl apply -f ~/other/resources/petclinic-analytics/petclinic-analytics-app.yaml
+```
+
+View the Petclinic Analytics App:
+```dashboard:reload-dashboard
+name: Petclinic
+url:  "$(ingress_protocol)://$(session_namespace)-petclinic-app-analytics.$(ingress_domain)/"
+```
