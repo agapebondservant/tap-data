@@ -11,7 +11,7 @@ kubectl get svc gemfire1-dev-api -o jsonpath="{.status.loadBalancer.ingress[0].h
 
 Deploy the Petclinic Analytics App:
 ```execute
-sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/petclinic/petclinic-analytics-app.yaml && kubectl apply -f ~/other/resources/petclinic-analytics/petclinic-analytics-app.yaml
+sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/petclinic-analytics/petclinic-analytics-app.yaml && kubectl apply -f ~/other/resources/petclinic-analytics/petclinic-analytics-app.yaml
 ```
 
 View the Petclinic Analytics App:
