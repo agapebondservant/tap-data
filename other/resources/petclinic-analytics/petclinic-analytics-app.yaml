@@ -18,32 +18,32 @@ spec:
       - image: oawofolu/petclinic-analytics:0.28
         name: petclinic-analytics
         imagePullPolicy: Always
-#!---
-#!apiVersion: v1
-#!kind: Service
-#!metadata:
-#!  labels:
-#!    app: petclinic-app-analytics
-#!  name: petclinic-app-analytics
-#!spec:
-#!  ports:
-#!  - port: 8050
-#!    protocol: TCP
-#!    targetPort: 8050
-#!  selector:
-#!    app: petclinic-app-analytics
-#!  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: petclinic-app-analytics
+  name: petclinic-app-analytics
+spec:
+  ports:
+  - port: 9150
+    protocol: TCP
+    targetPort: 8050
+  selector:
+    app: petclinic-app-analytics
+  type: ClusterIP
 ---
 apiVersion: projectcontour.io/v1
 kind: HTTPProxy
 metadata:
-  name: petclinic-YOUR_SESSION_NAMESPACE-httpproxy
+  name: petclinic-analytics-YOUR_SESSION_NAMESPACE-httpproxy
 spec:
   routes:
   - conditions:
     - prefix: /
     services:
     - name: petclinic-app-analytics
-      port: 8080
+      port: 9150
   virtualhost:
-    fqdn: petclinic-YOUR_SESSION_NAMESPACE.tanzudata.ml
+    fqdn: petclinic-analytics-YOUR_SESSION_NAMESPACE.tanzudata.ml
