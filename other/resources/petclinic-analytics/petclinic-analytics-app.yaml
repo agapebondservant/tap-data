@@ -15,7 +15,7 @@ spec:
         app: petclinic-app-analytics
     spec:
       containers:
-      - image: oawofolu/petclinic-analytics:0.28
+      - image: oawofolu/petclinic-analytics:0.30
         name: petclinic-analytics
         imagePullPolicy: Always
 ---
