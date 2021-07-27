@@ -10,3 +10,4 @@ modules:
     - deploy-imdg
     - create-datapipeline
     - implement-data-analytics
+    - handling-data-operations

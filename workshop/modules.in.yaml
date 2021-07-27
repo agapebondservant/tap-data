@@ -22,6 +22,9 @@ modules:
         exit_sign: Implement Data Analytics
     implement-data-analytics:
       name: Implement Data Analytics
+      exit_sign: Handling Data Operations
+    handling-data-operations:
+      name: Handling Data Operations
       exit_sign: Complete Workshop
 config:
     vars:
