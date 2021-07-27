@@ -17,5 +17,5 @@ kubectl apply -f ~/other/resources/petclinic-analytics/petclinic-analytics-app.y
 View the Petclinic Analytics App:
 ```dashboard:reload-dashboard
 name: Petclinic
-url:  "$(ingress_protocol)://$(session_namespace)-petclinic-app-analytics.$(ingress_domain)/"
+url:  "{{ingress_protocol}}://{{session_namespace}}-petclinic-app-analytics.{{ingress_domain}}/"
 ```

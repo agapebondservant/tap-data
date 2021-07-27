@@ -17,7 +17,7 @@ spec:
       containers:
       - image: oawofolu/petclinic-analytics:latest
         name: petclinic-analytics
-      imagePullPolicy: Always
+        imagePullPolicy: Always
 #!---
 #!apiVersion: v1
 #!kind: Service
