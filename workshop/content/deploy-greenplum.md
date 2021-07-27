@@ -49,15 +49,16 @@ Wait for the greenplum database to start up:
 source ./.bashrc; gpstate  -s;
 ```
 
-Install Command Center:
+## MADLib
+Install the functions for **MADLib**. <font color="red">NOTE: The following also installs the Greenplum Command Center; when shown the **End User License Agreement**, repeatly type **Ctrl-F** and enter "y" when prompted:</font>
 ```execute
-echo -e "path = /greenplum" > /tmp/gpcc-config.txt && PGPASSWORD=changeme /tools/installGPCC/gpccinstall-* -c /tmp/gpcc-config.txt;
-source /greenplum/greenplum-cc/gpcc_path.sh && PGPASSWORD=changeme gpcc start;
+echo -e "path = /greenplum\ndisplay_name = gpcc\nweb_port = 28080\nenable_ssl = false" > /tmp/gpcc-config.txt && PGPASSWORD=changeme /tools/installGPCC/gpccinstall-* -c /tmp/gpcc-config.txt &&  source /greenplum/greenplum-cc/gpcc_path.sh && PGPASSWORD=changeme gpcc start && madpack -p greenplum install
 ```
 
-Install the functions for **MADLib**:
-```execute
-madpack -p greenplum install
+View all the events in the Greenplum Command Center (login with creds *pgmon/changeme*):
+```dashboard:create-dashboard
+name: Greenplum
+url: {{ ingress_protocol }}://{{ session_namespace }}-greenplum.{{ ingress_domain }}
 ```
 
 Connect to the **psql** subsytem:
@@ -111,24 +112,6 @@ Now we will be able to generate Binary Classifier metrics, which we will use to 
 DROP TABLE IF EXISTS madlib.clinical_data_test_result_metrics,  madlib.clinical_data_test_result_roc;
 SELECT madlib.binary_classifier( 'madlib.clinical_data_test_results', 'madlib.clinical_data_test_result_metrics', 'pred', 'obs');
 SELECT madlib.area_under_roc( 'madlib.clinical_data_test_results', 'madlib.clinical_data_test_result_roc', 'pred', 'obs');
-```
-
-### Greenplum Command Center (optional)
-
-Set up configuration for GPCC install:
-```execute
-echo -e "path = /greenplum" > /tmp/gpcc-config.txt && PGPASSWORD=changeme /tools/installGPCC/gpccinstall-* -c /tmp/gpcc-config.txt
-```
-
-Install Greenplum Command Center:
-```execute
-source /greenplum/greenplum-cc/gpcc_path.sh && PGPASSWORD=changeme gpcc start
-```
-
-View all the events in the Greenplum Command Center:
-```dashboard:create-dashboard
-name: Greenplum
-url: {{ ingress_protocol }}://{{ session_namespace }}-greenplum.{{ ingress_domain }}
 ```
 
 Now that we have our logistic model, we have come to the **Predict**  stage of the machine learning workflow (**Remember - Formulate - Predict**). Let's go ahead and operationalize our model by publishing it via an interoperable interface, like a REST API. There are many approaches for this. With Tanzu Data, we have a low-code option available to use: we can use **Spring Cloud Data Flow** to set up a streaming job which will update Gemfire, an in-memory database which includes built-in support for exposing data objects via a REST management interface. Let's work on that next.

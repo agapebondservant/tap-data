@@ -20,8 +20,12 @@ spec:
       port: 8888
     - name: gemfire1-dev-api
       port: 7070
+      protocol: http
+      host: gemfire1-dev-api.$(session_namespace).svc.cluster.local 
     - name: greenplum
       port: 28080
+      protocol: http
+      host: greenplum.greenplum-system.svc.cluster.local
     dashboards:
     - name: Jupyter
       url: "$(ingress_protocol)://$(session_namespace)-jupyter.$(ingress_domain)/"
@@ -59,4 +63,6 @@ spec:
       #!  enabled: true
       #!  vendor: octant
       editor:
+        enabled: true
+      slides:
         enabled: true
