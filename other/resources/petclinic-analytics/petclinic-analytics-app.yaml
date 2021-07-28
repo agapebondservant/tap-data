@@ -37,13 +37,13 @@ spec:
 apiVersion: projectcontour.io/v1
 kind: HTTPProxy
 metadata:
-  name: petclinic-analytics-YOUR_SESSION_NAMESPACE-httpproxy
+ name: petclinic-analytics-YOUR_SESSION_NAMESPACE-httpproxy
 spec:
-  routes:
-  - conditions:
-    - prefix: /
-    services:
-    - name: petclinic-app-analytics
-      port: 9150
-  virtualhost:
-    fqdn: petclinic-analytics-YOUR_SESSION_NAMESPACE.tanzudata.ml
+ routes:
+ - conditions:
+   - prefix: /
+   services:
+   - name: petclinic-app-analytics
+     port: 9150
+ virtualhost:
+   fqdn: petclinic-analytics-YOUR_SESSION_NAMESPACE.tanzudata.ml
