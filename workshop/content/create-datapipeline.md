@@ -47,13 +47,6 @@ Run a query to view the data in our region: <font color="red">NOTE: You can also
 query --query="select row_to_json.value from /clinicalDataModel"
 ```
 
-
-In addition to **gfsh**, clients can also use the Gemfire **Developer API** to query regions. In turn, thihs can be used as the API endpoint for retrieving the **logistic regression** model built earlier:
-```dashboard:create-dashboard
-name: Gemfire
-url: {{ingress_protocol}}://{{session_namespace}}-gemfire1-dev-api.{{ingress_domain}}/geode/v1/clinicalDataModel
-```
-
 Next, we will build our real-time scoring interface and analytics dashboard.
 
 Exit the **gfsh** shell:
