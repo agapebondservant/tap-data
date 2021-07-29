@@ -23,7 +23,7 @@ url: {{ ingress_protocol }}://rabbitmain.tanzudata.ml
 
 Use the following credentials to login to the RabbitMQ Management console:
 ```execute
-kubectl get secret rabbitmq -o go-template='{{range $k,$v := .data}}{{printf "%s: " $k}}{{if not $v}}{{$v}}{{else}}{{$v | base64decode}}{{end}}{{"\n"}}{{end}}'
+printf "Username: $(kubectl get secret rabbitmq -o jsonpath='{.data.rabbitmq-erlang-cookie}' |base64  --decode)\nPassword: $(kubectl get secret rabbitmq -o jsonpath='{.data.rabbitmq-password}' |base64  --decode)\n"
 ```
 
 <font color="red">Reload the Management UI for the other RabbitMQ cluster we created earlier, if necessary:</font>
