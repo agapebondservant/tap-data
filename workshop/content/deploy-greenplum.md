@@ -55,7 +55,7 @@ Install the functions for **MADLib**. <font color="red">NOTE: The following also
 echo -e "path = /greenplum\ndisplay_name = gpcc\nweb_port = 28080\nenable_ssl = false" > /tmp/gpcc-config.txt && PGPASSWORD=changeme /tools/installGPCC/gpccinstall-* -c /tmp/gpcc-config.txt &&  source /greenplum/greenplum-cc/gpcc_path.sh && PGPASSWORD=changeme gpcc start && madpack -p greenplum install
 ```
 
-View all the events in the Greenplum Command Center (login with creds *pgmon/changeme*):
+View all the events in the Greenplum Command Center (login with creds *gpmon/changeme*):
 ```dashboard:create-dashboard
 name: Greenplum
 url: {{ ingress_protocol }}://{{ session_namespace }}-greenplum.{{ ingress_domain }}
