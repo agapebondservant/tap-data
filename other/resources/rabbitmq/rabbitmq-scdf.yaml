@@ -8,7 +8,7 @@ spec:
   - conditions:
     - prefix: /
     services:
-    - name: rabbitmq-headless.default.svc.cluster.local
+    - name: rabbitmq
       port: 15672
   virtualhost:
     fqdn: rabbitmain.tanzudata.ml

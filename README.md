@@ -105,11 +105,11 @@ kubectl apply -f resources/prometheus-proxy/proxyhelm/prometheus-proxy-http-prox
 
 RabbitMQ Dashboard: Dashboard ID 10991
 
-- Pre-deploy Greenplum and Spring Cloud Data Flow:
+- Pre-deploy Greenplum:
 source .env
 resources/setup.sh
 
-- Pre-deeploy Spring Cloud Data Flow:
+- Pre-deploy Spring Cloud Data Flow:
 resources/setup-scdf.sh
 
 Register gemfire starter apps:

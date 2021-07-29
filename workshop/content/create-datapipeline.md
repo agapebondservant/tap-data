@@ -18,10 +18,14 @@ Let's view the RabbitMQ console for the broker that will be leveraged by our pip
 
 ```dashboard:reload-dashboard
 name: RabbitMQ
-url: {{ ingress_protocol }}://rabbitmain.tanzudata.ml/dashboard
+url: {{ ingress_protocol }}://rabbitmain.tanzudata.ml
 ```
 
-Restore the UI for the other RabbitMQ cluster we created earlier.
+Use the following credentials to login to the RabbitMQ Management console:
+```execute
+kubectl get secret rabbitmq -o go-template='{{range $k,$v := .data}}{{printf "%s: " $k}}{{if not $v}}{{$v}}{{else}}{{$v | base64decode}}{{end}}{{"\n"}}{{end}}'
+
+<font color="red">Reload the Management UI for the other RabbitMQ cluster we created earlier, if necessary:</font>
 ```dashboard:reload-dashboard
 name: RabbitMQ
 url: {{ ingress_protocol }}://rabbit{{ session_namespace }}.{{ ingress_domain }}
