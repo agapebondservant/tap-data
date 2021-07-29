@@ -8,16 +8,3 @@ Let's view the Spring Cloud Data Flow dashboard:
 name: SCDF
 url: {{ ingress_protocol }}://scdf.{{ ingress_domain }}/dashboard
 ```
-
-Let's view the RabbitMQ console for the broker that will be leveraged by our pipelines - login with <i>admin/admin:</i>
-
-```dashboard:reload-dashboard
-name: RabbitMQ
-url: {{ ingress_protocol }}://rabbitmain.tanzudata.ml/dashboard
-```
-
-Restore the UI for the other RabbitMQ cluster we created earlier.
-```dashboard:reload-dashboard
-name: RabbitMQ
-url: {{ ingress_protocol }}://rabbit{{ session_namespace }}.{{ ingress_domain }}
-```
