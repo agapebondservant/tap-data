@@ -12,3 +12,7 @@
 .yarn
 *.swp
 .env
+workshop/modules.yaml
+other/resources/postgres/overrides.yaml
+other/resources/greenplum/overrides.yaml
+other/resources/greenplum/minio-site.xml
