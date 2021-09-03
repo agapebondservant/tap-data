@@ -35,6 +35,11 @@ Meanwhile, let's take a look at a pre-built Grafana dashboard. It has been integ
 url: {{ ingress_protocol }}://grafana.{{ ingress_domain }}
 ```
 
+<font color="red">Use the credentials below to login to the Grafana dashboard:</font>
+```execute
+printf "Username: admin\nPassword: $(kubectl get secret grafana-admin --namespace monitoring-tools -o jsonpath="{.data.GF_SECURITY_ADMIN_PASSWORD}" | base64 --decode)\n"
+```
+
 We can also view the Management UI, which is also pre-integrated with the Tanzu RabbitMQ operator.
 ```dashboard:create-dashboard
 name: RabbitMQ
@@ -50,3 +55,4 @@ Next, scale the cluster to 3 replicas (odd number is recommended). In the vim ed
 ```execute
 kubectl edit rabbitmqcluster rabbitcluster1 -n {{ session_namespace }}
 ```
+
