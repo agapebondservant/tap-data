@@ -1,0 +1,14 @@
+apiVersion: rabbitmq.com/v1beta1
+kind: RabbitmqCluster
+metadata:
+  name: rabbitcluster1
+spec:
+  image: rabbitmq:3.9-management
+  service:
+    type: LoadBalancer
+  rabbitmq:
+    additionalPlugins:
+      - rabbitmq_top
+      - rabbitmq_shovel
+      - rabbitmq_federation
+      - rabbitmq_streams

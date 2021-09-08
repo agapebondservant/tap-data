@@ -3,5 +3,6 @@ kind: Kustomization
 
 resources:
 - resources/workshop.yaml
+- resources/workshop-file-ingestion.yaml
 - resources/training-portal.yaml
 - resources/system-profile.yaml

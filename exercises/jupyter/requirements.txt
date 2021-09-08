@@ -5,3 +5,4 @@ python-dotenv
 pandas
 wheel
 scikit-learn
+faker

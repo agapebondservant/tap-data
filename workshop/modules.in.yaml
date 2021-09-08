@@ -10,7 +10,10 @@ modules:
         exit_sign: A Look at Cloud Native Data Pipelines
     cloud-native-datapipelines:
         name: Implementing Data Pipelines
-        exit_sign: Deploy Data Warehouse
+        exit_sign: Next
+    create-file-ingest-pipeline:
+        name: Create File Ingestion Pipeline
+        exit_sign: Complete Workshop
     deploy-greenplum:
         name: Deploy Data Warehouse
         exit_sign: Deploy IMDG
@@ -50,3 +53,5 @@ config:
       value: ${DATA_E2E_WAVEFRONT_SOURCE}
     - name: DATA_E2E_GRAFANA_URL
       value: ${DATA_E2E_GRAFANA_URL}
+    - name: WORKSHOP_TOPIC
+      value: data-file-ingestion

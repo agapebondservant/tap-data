@@ -2,6 +2,7 @@
 # populate interpolated variables
 source .env
 envsubst < workshop/modules.in.yaml > workshop/modules.yaml
+envsubst < other/resources/postgres/postgres-cluster-with-backups.in.yaml  > other/resources/postgres/postgres-cluster-with-backups.yaml
 envsubst < other/resources/postgres/overrides.in.yaml > other/resources/postgres/overrides.yaml
 envsubst < other/resources/greenplum/overrides.in.yaml > other/resources/greenplum/overrides.yaml
 envsubst < other/resources/greenplum/minio-site.in.xml > other/resources/greenplum/minio-site.xml
@@ -9,7 +10,7 @@ envsubst < other/resources/greenplum/minio-site.in.xml > other/resources/greenpl
 # pre-initialize required services
 resources/setup.sh
 
-# rebuild workshop image
+# rebuild workshop images
 DATA_E2E_WORKSHOP_IMAGE_VERSION=`date "+%Y%m%d.%H%M"`
 echo "Building version...$DATA_E2E_WORKSHOP_IMAGE_VERSION"
 echo $DATA_E2E_REGISTRY_PASSWORD | docker login --username=oawofolu --password-stdin

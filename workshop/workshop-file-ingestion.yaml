@@ -1,0 +1,8 @@
+name: File Ingestion Pipeline with Tanzu Data
+
+modules:
+    activate:
+    - deploy-postgres
+    - deploy-rabbitmq
+    - cloud-native-datapipelines
+    - create-file-ingest-pipeline

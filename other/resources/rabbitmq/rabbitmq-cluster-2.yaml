@@ -1,7 +1,0 @@
-apiVersion: rabbitmq.com/v1beta1
-kind: RabbitmqCluster
-metadata:
-  name: rabbitcluster2
-spec:
-  service:
-    type: LoadBalancer
