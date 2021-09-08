@@ -76,11 +76,6 @@ Exit the shell:
 exit
 ```
 
-Return  to the pod view.
-```execute-2
-exit
-```
-
 Create a new Stream, **test-streams**, in the RabbitMQ Admin window (under **Queues** tab):
 ```dashboard:reload-dashboard
 name: RabbitMQ
@@ -100,11 +95,5 @@ kubectl edit rabbitmqcluster rabbitcluster1 -n {{ session_namespace }}
 ```
 
 {% if WORKSHOP_TOPIC == 'data-file-ingestion' %}
-Sometimes, the ideal use case is to leverage RabbitMQ transparently as the messaging transport layer, without having to be aware of its inner workings or semantics. For that, we will leverage  **Spring Cloud Data Flow**:
-```dashboard:open-dashboard
-name: SCDF
-url: {{ ingress_protocol }}://scdf.{{ ingress_domain }}/dashboard
-```
-
-We will build a file ingestion pipeline next.
+Sometimes, the ideal use case is to leverage RabbitMQ transparently as the messaging transport layer, without having to be aware of its inner workings or semantics. For that, we will leverage  **Spring Cloud Data Flow**. We will build a file ingestion pipeline next.
 {% endif %}

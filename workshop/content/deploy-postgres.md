@@ -73,7 +73,7 @@ export tmp_db_db=$(kubectl get secrets pginstance-1-db-secret -o jsonpath='{.dat
 
 On the lower console, select the **primary** pod, launch the shell by typing **s**, then launch the **psql** console by executing the following:
 ```execute-2
-psql
+psql -d pginstance-1
 ```
 
 Create a new table, **test**, with a **JSONB** column:
