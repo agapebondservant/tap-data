@@ -47,15 +47,21 @@ Deploy CERT-MANAGER-ISSUER  (self-signed), CERTIFICATE-SIGNING-REQUEST, CERT-MAN
 - Deploy workshop:
 kubectl apply -k .
 
-- Deploy Minio (Server):
+- Deploy Minio (Server) with TLS:
+
+- Setup TLS cert for Minio:
+openssl genrsa -out minio-private.key 2048
+openssl req -new -x509 -nodes -days 730 -key private.key -out public.crt -config other/resources/minio/openssl.conf
+
 (LEGACY APPROACH:)
 helm repo add minio-legacy https://helm.min.io/
 kubectl create ns minio
-helm install --set resources.requests.memory=1.5Gi --namespace minio minio minio-legacy/minio
+kubectl create secret generic tls-ssl-minio --from-file=private.key --from-file=public.crt --namespace minio
+#kubectl create secret tls tls-ssl-minio --key=private.key --cert=public.crt --namespace minio
+helm install --set resources.requests.memory=1.5Gi,tls.enabled=true,tls.certSecret=tls-ssl-minio --namespace minio minio minio-legacy/minio
 export MINIO_ACCESS_KEY=$(kubectl get secret minio -o jsonpath="{.data.accesskey}" -n minio| base64 --decode)
 export MINIO_SECRET_KEY=$(kubectl get secret minio -o jsonpath="{.data.secretkey}" -n minio| base64 --decode)
 export MINIO_POD_NAME=$(kubectl get pods --namespace minio -l "release=minio" -o jsonpath="{.items[0].metadata.name}")
-kubectl expose pod $MINIO_POD_NAME --port=80 --target-port=9000 --name=minio-svc --namespace=minio
 kubectl apply -f resources/minio-http-proxy.yaml
 
 

@@ -53,5 +53,3 @@ config:
       value: ${DATA_E2E_WAVEFRONT_SOURCE}
     - name: DATA_E2E_GRAFANA_URL
       value: ${DATA_E2E_GRAFANA_URL}
-    - name: WORKSHOP_TOPIC
-      value: data-file-ingestion

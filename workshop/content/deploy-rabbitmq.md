@@ -51,7 +51,7 @@ To login, you need the UI credentials:
 kubectl get secret rabbitcluster1-default-user -o jsonpath="{.data.default_user\.conf}" | base64 --decode
 ```
 
-{% if WORKSHOP_TOPIC == 'data-file-ingestion' %}
+{% if ENV_WORKSHOP_TOPIC == 'data-file-ingestion' %}
 Tanzu RabbitMQ allows you to create **streams**. Streams are replayable structures which provide features such as scalable fan-out and time-travel.
 
 First, redeploy the RabbitMQ cluster by installing the **Streams** plugin:
@@ -94,6 +94,6 @@ Next, let's scale the cluster to 3 replicas (odd number is recommended). In the 
 kubectl edit rabbitmqcluster rabbitcluster1 -n {{ session_namespace }}
 ```
 
-{% if WORKSHOP_TOPIC == 'data-file-ingestion' %}
+{% if ENV_WORKSHOP_TOPIC == 'data-file-ingestion' %}
 Sometimes, the ideal use case is to leverage RabbitMQ transparently as the messaging transport layer, without having to be aware of its inner workings or semantics. For that, we will leverage  **Spring Cloud Data Flow**. We will build a file ingestion pipeline next.
 {% endif %}

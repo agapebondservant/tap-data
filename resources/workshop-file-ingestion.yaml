@@ -11,15 +11,14 @@ spec:
   url: https://github.com/agapebondservant/data-e2e-demo
   content:
     image: oawofolu/data-e2e:latest
-  config:
-    vars:
-      WORKSHOP_TOPIC: data-file-ingestion
   session:
     env:
     - name: ENABLE_JUPYTERLAB
       value: "true"
     - name: WORKSHOP_FILE
       value: workshop-file-ingestion.yaml
+    - name: WORKSHOP_TOPIC
+      value: data-file-ingestion
     ingresses:
     - name: jupyter
       port: 8888

@@ -12,6 +12,8 @@
 .yarn
 *.swp
 .env
+*.key
+*.crt
 workshop/modules.yaml
 other/resources/postgres/overrides.yaml
 other/resources/greenplum/overrides.yaml

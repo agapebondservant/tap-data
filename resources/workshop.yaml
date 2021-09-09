@@ -15,6 +15,8 @@ spec:
     env:
     - name: ENABLE_JUPYTERLAB
       value: "true"
+    - name: WORKSHOP_TOPIC
+      value: data-e2e
     ingresses:
     - name: jupyter
       port: 8888

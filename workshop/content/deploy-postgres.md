@@ -1,7 +1,7 @@
 
 ### Deploying Tanzu Postgres
 
-{% if WORKSHOP_TOPIC == 'data-e2e' %}
+{% if ENV_WORKSHOP_TOPIC == 'data-e2e' %}
 Let's view our **Petclinic app**. First, we launch it:
 ```execute
 kubectl delete deployment petclinic-app --ignore-not-found=true --namespace={{ session_namespace }} && kubectl delete svc petclinic-app --ignore-not-found=true --namespace={{ session_namespace }} && sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/petclinic/petclinic-app-h2.yaml && kubectl apply -f ~/other/resources/petclinic/petclinic-app-h2.yaml
@@ -55,7 +55,7 @@ Show the primary node: <font color='red'>NOTE: Wait for all 3 Postgres cluster n
 kubectl exec -it pginstance-1-1 -- bash -c 'pg_autoctl show state'
 ```
 
-{% if WORKSHOP_TOPIC == 'data-e2e' %}
+{% if ENV_WORKSHOP_TOPIC == 'data-e2e' %}
 After that, we can redeploy our app:
 ```execute
 export tmp_db_db=$(kubectl get secrets pginstance-1-db-secret -o jsonpath='{.data.dbname}' | base64 --decode) && export tmp_db_user=$(kubectl get secrets pginstance-1-db-secret -o jsonpath='{.data.username}' | base64 --decode) && export tmp_db_pass=$(kubectl get secrets pginstance-1-db-secret -o jsonpath='{.data.password}' | base64 --decode) && kubectl delete deployment petclinic-app --ignore-not-found=true --namespace={{ session_namespace }} && kubectl delete svc petclinic-app --ignore-not-found=true --namespace={{ session_namespace }} && sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/petclinic/petclinic-app-postgres.yaml && sed -i "s/YOUR_DATASOURCE_URL/jdbc:postgresql:\/\/pginstance-1:5432\/${tmp_db_db}/g" ~/other/resources/petclinic/petclinic-app-postgres.yaml && sed -i "s/YOUR_DATASOURCE_USERNAME/${tmp_db_user}/g" ~/other/resources/petclinic/petclinic-app-postgres.yaml && sed -i "s/YOUR_DATASOURCE_PASSWORD/${tmp_db_pass}/g" ~/other/resources/petclinic/petclinic-app-postgres.yaml && kubectl apply -f ~/other/resources/petclinic/petclinic-app-postgres.yaml
@@ -68,7 +68,7 @@ export tmp_db_db=$(kubectl get secrets pginstance-1-db-secret -o jsonpath='{.dat
 
 {% endif  %}
 
-{% if WORKSHOP_TOPIC == 'data-file-ingestion' %}
+{% if ENV_WORKSHOP_TOPIC == 'data-file-ingestion' %}
 #### Create a database table
 
 On the lower console, select the **primary** pod, launch the shell by typing **s**, then launch the **psql** console by executing the following:
@@ -104,7 +104,7 @@ Tanzu Postgres includes **pgbackrest** as its backup-restore solution for **pgda
 
 First, get the Minio login credentials:
 ```execute
-clear &&  mc config host add data-fileingest-minio http://{{DATA_E2E_MINIO_URL}} {{DATA_E2E_MINIO_ACCESS_KEY}} {{DATA_E2E_MINIO_SECRET_KEY}} && printf "Username: $(kubectl get secret minio -o jsonpath="{.data.accesskey}" -n minio| base64 --decode)\nPassword: $(kubectl get secret minio -o jsonpath="{.data.secretkey}" -n minio| base64 --decode)\n"
+clear &&  mc config host add data-fileingest-minio https://{{DATA_E2E_MINIO_URL}} {{DATA_E2E_MINIO_ACCESS_KEY}} {{DATA_E2E_MINIO_SECRET_KEY}} && printf "Username: $(kubectl get secret minio -o jsonpath="{.data.accesskey}" -n minio| base64 --decode)\nPassword: $(kubectl get secret minio -o jsonpath="{.data.secretkey}" -n minio| base64 --decode)\n"
 ```
 
 Let's create  a new bucket for our **pgdata** backups:
