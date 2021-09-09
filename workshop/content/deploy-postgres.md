@@ -104,17 +104,17 @@ Tanzu Postgres includes **pgbackrest** as its backup-restore solution for **pgda
 
 First, get the Minio login credentials:
 ```execute
-clear &&  mc config host add data-fileingest-minio https://{{DATA_E2E_MINIO_URL}} {{DATA_E2E_MINIO_ACCESS_KEY}} {{DATA_E2E_MINIO_SECRET_KEY}} && printf "Username: $(kubectl get secret minio -o jsonpath="{.data.accesskey}" -n minio| base64 --decode)\nPassword: $(kubectl get secret minio -o jsonpath="{.data.secretkey}" -n minio| base64 --decode)\n"
+clear &&  mc config host add --insecure data-fileingest-minio https://{{DATA_E2E_MINIO_URL}} {{DATA_E2E_MINIO_ACCESS_KEY}} {{DATA_E2E_MINIO_SECRET_KEY}} && printf "Username: $(kubectl get secret minio -o jsonpath="{.data.accesskey}" -n minio| base64 --decode)\nPassword: $(kubectl get secret minio -o jsonpath="{.data.secretkey}" -n minio| base64 --decode)\n"
 ```
 
 Let's create  a new bucket for our **pgdata** backups:
 ```execute
-mc mb -p data-fileingest-minio/pgbackups
+mc mb --insecure -p data-fileingest-minio/pgbackups
 ```
 
 View the newly created bucket:
 ```dashboard:open-url
-url: http://minio.tanzudata.ml/
+url: https://minio.tanzudata.ml/
 ```
 
 Next, let's view the manifest that we would use to enable **pgBackRest**:
@@ -130,12 +130,30 @@ Update the Postgres cluster to enable **pgBackRest**:
 kubectl  replace --force -f ~/other/resources/postgres/postgres-cluster-with-backups.yaml  -n {{ session_namespace }}
 ```
 
-Set up the **pgbackrest** configuration in the primary node: <font color='red'>NOTE: For Minio buckets, ill not work unless the Minio server has enabled TLS.</font>
+Set up the **pgbackrest** configuration in the primary node: 
 ```execute
 export $(kubectl exec -ti pginstance-1-1 -- bash -c "env | grep BACKUP_STANZA_NAME")
 ```
 
-<font color="red">TODO:</font> Create a backup  using **pgBackRest**.
+Create a backup  using **pgBackRest**.
 ```execute
-kubectl exec -it pginstance-1-1 -- bash -c 'pgbackrest check --stanza=${BACKUP_STANZA_NAME} && pgbackrest stanza-create --stanza=$BACKUP_STANZA_NAME && pgbackrest backup --stanza=${BACKUP_STANZA_NAME}'
+kubectl exec -it pginstance-1-1 -- bash -c 'pgbackrest stanza-create --stanza=$BACKUP_STANZA_NAME && pgbackrest backup --stanza=${BACKUP_STANZA_NAME}'
 ```
+
+View the generated backup files on Minio:
+View the newly created bucket:
+```dashboard:open-url
+url: https://minio.tanzudata.ml/
+```
+
+Get information about the last backup:
+```execute
+kubectl exec -it pginstance-1-1 -- bash -c 'pgbackrest info --stanza=${BACKUP_STANZA_NAME}'
+```
+
+View other commands provided by **pgBackRest**:
+```execute
+kubectl exec -it pginstance-1-1 -- bash -c 'pgbackrest help'
+```
+
+<font color="red">TODO:</font> Restore the last backup.

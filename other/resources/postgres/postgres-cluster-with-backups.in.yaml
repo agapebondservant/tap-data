@@ -10,7 +10,6 @@ stringData:
   key: ${DATA_E2E_MINIO_ACCESS_KEY}
   keySecret: ${DATA_E2E_MINIO_SECRET_KEY}
   verifyTLS: "false"
-  port: "80"
   uriStyle: "path"
 
 ---
