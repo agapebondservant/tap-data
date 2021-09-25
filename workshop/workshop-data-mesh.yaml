@@ -1,0 +1,6 @@
+name: Data Mesh with Spring Cloud Gateway and Tanzu Data
+
+modules:
+    activate:
+    - rabbitmq-deep-dive
+    - deploying-spring-cloud-gateway

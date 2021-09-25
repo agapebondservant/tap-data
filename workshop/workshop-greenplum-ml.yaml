@@ -1,0 +1,7 @@
+name: Machine Learning and Deep Learning with Greenplum
+
+modules:
+    activate:
+    - deploy-greenplum
+    - implement-data-analytics
+    - handling-data-operations

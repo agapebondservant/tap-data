@@ -1,0 +1,6 @@
+name: Tanzu RabbitMQ Deep Dive
+
+modules:
+    activate:
+    - deploy-rabbitmq
+    - rabbitmq-deep-dive

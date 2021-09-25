@@ -1,0 +1,5 @@
+name: Deploying Data Services on VSphere 7 with Tanzu VMService
+modules:
+    activate:
+    - deploy-rabbitmq
+    - rabbitmq-deep-dive

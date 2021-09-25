@@ -1,0 +1,10 @@
+name: Fraud Analytics, Anomaly Detection and Other Real-time Analytics with Tanzu Data
+
+modules:
+    activate:
+    - cloud-native-datapipelines
+    - deploy-greenplum
+    - deploy-imdg
+    - create-datapipeline
+    - implement-data-analytics
+    - handling-data-operations

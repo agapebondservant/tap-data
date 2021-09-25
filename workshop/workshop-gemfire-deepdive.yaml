@@ -1,0 +1,6 @@
+name: Tanzu Gemfire Deep Dive
+
+modules:
+    activate:
+    - deploy-imdg
+    - gemfire-deep-dive

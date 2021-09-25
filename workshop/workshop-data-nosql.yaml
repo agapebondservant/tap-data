@@ -1,0 +1,7 @@
+name: NoSQL with Tanzu Data
+
+modules:
+    activate:
+    - deploy-postgres
+    - deploy-imdg
+    - gemfire-deep-dive

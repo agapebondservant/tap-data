@@ -8,6 +8,9 @@ modules:
     deploy-rabbitmq:
         name: Deploy RabbitMQ
         exit_sign: A Look at Cloud Native Data Pipelines
+    rabbitmq-deep-dive:
+        name: RabbitMQ Deep Dive
+        exit_sign: Complete Workshop
     cloud-native-datapipelines:
         name: Implementing Data Pipelines
         exit_sign: Next
@@ -19,6 +22,12 @@ modules:
         exit_sign: Deploy IMDG
     deploy-imdg:
         name: Deploy IMDG
+        exit_sign: Create Data Pipeline
+    gemfire-deep-dive:
+        name: Gemfire Deep Dive
+        exit_sign: Create Data Pipeline
+    deploying-spring-cloud-gateway:
+        name: Deploy Spring Cloud Gateway
         exit_sign: Create Data Pipeline
     create-datapipeline:
         name: Create Data Pipeline

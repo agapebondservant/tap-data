@@ -10,7 +10,6 @@ stringData:
   key: 8zmApXWbQnQzI28BcaZB
   keySecret: Irq9Z6eSsJeC9Qmrm6SFbzby8UBQLlhPWKRX6uWY
   verifyTLS: "false"
-  port: "80"
   uriStyle: "path"
 
 ---
