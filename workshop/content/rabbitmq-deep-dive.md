@@ -54,6 +54,9 @@ kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-ha-quorum-queue.yaml -n {{ 
 Observe in the RabbitMQ adminstrative console that the queue has now been created. Publish a message to the queue with routing-key "demo-quorum", so that it will be routed via the default exchange. Then kill the primary node. The message still persists once the node recovers.
 
 #### Request-Response vs Publish-Subscribe
+A RabbitMQ consumer can register to receive enqueued messages from the RabbitMQ broker using one of two approaches. It can use a push-based approach, or a poll-based approach. The polling-based approach uses a Basic.Get RPC operation, which is a synchronous blocking operation and more of a request-response paradign. 
+
+Go to the **demo-classic** queue on the Queues tab, and click **Get Message** to dequeue the message that was published earlier.
 
 #### Exchange Routing
 
@@ -92,3 +95,5 @@ Publish a random JSON  message - retrieve the payload from here:
 ```execute
 pip install faker && python ~/other/resources/data/random-json-generator.py 10
 ```
+
+Sometimes, the ideal use case is to leverage RabbitMQ transparently as the messaging transport layer, without having to be aware of its inner workings or semantics. For that, we can leverage  **Spring Cloud Data Flow**.
