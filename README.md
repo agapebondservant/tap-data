@@ -19,6 +19,8 @@ kubectl apply -f resources/podsecuritypolicy.yaml
 
 - Install Contour: kubectl apply -f https://projectcontour.io/quickstart/v1.12.0/contour.yaml (NOTE: Change the Loadbalancer's healthcheck from HTTP to TCP in the AWS Console)
 
+- Install the Kubernetes Metrics server: kubectl apply -f resources/metrics-server.yaml; watch kubectl get deployment metrics-server -n kube-system
+
 - Install Educates Operator: kubectl apply -k https://github.com/eduk8s/eduk8s.git?ref=20.12.03.1
 
 - Verify installation: kubectl get all -n eduk8s

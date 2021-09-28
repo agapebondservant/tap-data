@@ -1,0 +1,10 @@
+---
+  apiVersion: rabbitmq.com/v1beta1
+  kind: Queue
+  spec:
+    name: demo-classic
+    autoDelete: false
+    durable: true 
+    type: classic
+    rabbitmqClusterReference:
+      name: rabbitcluster1

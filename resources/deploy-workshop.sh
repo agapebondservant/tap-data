@@ -19,6 +19,8 @@ tar -xzvf other/resources/helm*.tar.gz -C other/resources && \
     tar -zvxf other/resources/k9s*.tar.gz -C other/resources && \
     chmod +x other/resources/k9s && \
     mv other/resources/k9s other/resources/bin/k9s &&
+    chmod +x other/resources/imgpkg && \
+    mv other/resources/imgpkg other/resources/bin/imgpkg && \ 
     mv other/resources/linux-amd64/helm other/resources/bin/helm &&
     chmod +x workshop/terminal/*.sh
 

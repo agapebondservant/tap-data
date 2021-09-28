@@ -8,35 +8,35 @@ spec:
     capacity: 1
     expires: 120m
     orphaned: 5m
-  - name: data-file-ingestion
-    capacity: 1
-    expires: 120m
-    orphaned: 5m
-  - name: data-anomaly-detection
-    capacity: 1
-    expires: 120m
-    orphaned: 5m
-  - name: data-mesh
-    capacity: 1
-    expires: 120m
-    orphaned: 5m
-  - name: data-greenplum-ml
-    capacity: 1
-    expires: 120m
-    orphaned: 5m
+#  - name: data-file-ingestion
+#    capacity: 1
+#    expires: 120m
+#    orphaned: 5m
+#  - name: data-anomaly-detection
+#    capacity: 1
+#    expires: 120m
+#    orphaned: 5m
+#  - name: data-mesh
+#    capacity: 1
+#    expires: 120m
+#    orphaned: 5m
+#  - name: data-greenplum-ml
+#    capacity: 1
+#    expires: 120m
+#    orphaned: 5m
   - name: data-rabbitmq-deepdive
     capacity: 1
     expires: 120m
     orphaned: 5m
-  - name: data-nosql
-    capacity: 1
-    expires: 120m
-    orphaned: 5m
-  - name: data-gemfire-deepdive
-    capacity: 1
-    expires: 120m
-    orphaned: 5m
-  - name: data-vmservice
-    capacity: 1
-    expires: 120m
-    orphaned: 5m
+#  - name: data-nosql
+#    capacity: 1
+#    expires: 120m
+#    orphaned: 5m
+#  - name: data-gemfire-deepdive
+#    capacity: 1
+#    expires: 120m
+#    orphaned: 5m
+#  - name: data-vmservice
+#    capacity: 1
+#    expires: 120m
+#    orphaned: 5m
