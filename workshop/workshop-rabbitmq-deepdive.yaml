@@ -4,3 +4,4 @@ modules:
     activate:
     - deploy-rabbitmq
     - rabbitmq-deep-dive
+    - cloud-native-datapipelines

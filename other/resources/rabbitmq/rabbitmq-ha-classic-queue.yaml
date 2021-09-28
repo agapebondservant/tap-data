@@ -1,8 +1,10 @@
 ---
   apiVersion: rabbitmq.com/v1beta1
   kind: Queue
+  metadata:
+    name: demo.classic.red
   spec:
-    name: demo-classic
+    name: demo.classic.red
     autoDelete: false
     durable: true 
     type: classic

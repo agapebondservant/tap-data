@@ -1,8 +1,10 @@
 ---
   apiVersion: rabbitmq.com/v1beta1
   kind: Queue
+  metadata:
+    name: demo.quorum.green
   spec:
-    name: demo-quorum
+    name: demo.quorum.green
     autoDelete: false
     durable: true 
     type: quorum

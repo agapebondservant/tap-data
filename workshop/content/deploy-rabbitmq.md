@@ -51,11 +51,6 @@ To login, you need the UI credentials:
 kubectl get secret rabbitcluster1-default-user -o jsonpath="{.data.default_user\.conf}" | base64 --decode
 ```
 
-Next, let's scale the cluster to 3 replicas (odd number is recommended). In the vim editor that comes up, edit the number of replicas from 1 to 3 (replace the phrase **replicas: 1**):
-```execute
-kubectl edit rabbitmqcluster rabbitcluster1 -n {{ session_namespace }}
-```
-
 {% if ENV_WORKSHOP_TOPIC == 'data-file-ingestion' %}
 Sometimes, the ideal use case is to leverage RabbitMQ transparently as the messaging transport layer, without having to be aware of its inner workings or semantics. For that, we will leverage  **Spring Cloud Data Flow**. We will build a file ingestion pipeline next.
 {% endif %}

@@ -1,0 +1,37 @@
+---
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: demo.topic.exchange
+  namespace: rabbitmq-system
+spec:
+  name: demo.topic.exchange 
+  type: topic 
+  autoDelete: false
+  durable: true
+  rabbitmqClusterReference:
+    name: rabbitcluster1
+---
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding-green
+  namespace: rabbitmq-system
+spec:
+  source: demo.topic.exchange
+  destination: demo.quorum.green
+  destinationType: queue
+  rabbitmqClusterReference:
+    name: rabbitcluster1
+---
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: binding-red
+  namespace: rabbitmq-system
+spec:
+  source: demo.topic.exchange
+  destination: demo.classic.red
+  destinationType: queue
+  rabbitmqClusterReference:
+    name: rabbitcluster1
