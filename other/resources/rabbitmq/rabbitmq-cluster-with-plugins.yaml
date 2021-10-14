@@ -4,6 +4,7 @@ metadata:
   name: rabbitcluster1
 spec:
   image: rabbitmq:3.9-management
+  replicas: 3
   service:
     type: LoadBalancer
   rabbitmq:
@@ -11,4 +12,4 @@ spec:
       - rabbitmq_top
       - rabbitmq_shovel
       - rabbitmq_federation
-      - rabbitmq_streams
+      - rabbitmq_stream

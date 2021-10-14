@@ -112,14 +112,19 @@ kubectl get secret rabbitcluster2-default-user -o jsonpath="{.data.default_user\
 ```
 {% endif %}
 
+Redeploy the RabbitMQ cluster by installing the **Streams** and **Federation** plugins - here is the manifest:
+```editor:open-file
+file: ~/other/resources/rabbitmq/rabbitmq-cluster-with-plugins.yaml
+```
+
+Redeploy it:
+```execute
+kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-with-plugins.yaml -n {{ session_namespace }}
+```
+
 Once the **RabbitMQ** node is running, locate the primary RabbitMQ node and type **s** in the lower console window to launch the **RabbitMQ** node's shell: 
 ```execute-2
 s
-```
-
-Redeploy the RabbitMQ cluster by installing the **Streams** and **Federation** plugins:
-```execute
-kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-with-plugins.yaml -n {{ session_namespace }}
 ```
 
 Enable the **Federation** plugin:
