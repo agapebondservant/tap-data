@@ -66,7 +66,7 @@ s
 
 Create a new user called **demo** which will have access to the Management UI and full access to the default virtual host.
 ```execute-2
-rabbitmqctl add_user demo CHANGEME && rabbitmqctl set_permissions  -p / demo ".*" ".*" ".*" && rabbitmqctl set_user_tags demo monitoring
+rabbitmqctl add_user demo CHANGEME && rabbitmqctl set_permissions  -p / demo ".*" ".*" ".*" && rabbitmqctl set_user_tags demo administrator
 ```
 
 Observe that we used the command line management tool, **rabbitmqctl**, which is able to perform most RabbitMQ management operations:
@@ -93,14 +93,27 @@ kubectl edit rabbitmqcluster rabbitcluster1 -n {{ session_namespace }}
 
 ### UPGRADING TO TANZU RABBITMQ
 So far, the RabbitMQ  broker that we've deployed has been the OSS broker:
-```dashboard:open-dashboard
+```dashboard:reload-dashboard
 name: RabbitMQ
 url: {{ ingress_protocol }}://rabbit{{ session_namespace }}.{{ ingress_domain }}
 ```
 
-Upgrade the cluster to the Tanzu RabbitMQ distribution by updating the OCI image and perform a rolling upgrade. In the vim editor that comes up, edit the **image** field by changing it to **oawofolu/vmware-tanzu-rabbitmq**:
+Upgrade the cluster to the Tanzu RabbitMQ distribution by updating the OCI image and perform a rolling upgrade. In the vim editor that comes up, edit the **image** field by changing it to **oawofolu/vmware-tanzu-rabbitmq:1.2.0**:
 ```execute
 kubectl edit rabbitmqcluster rabbitcluster1 -n {{ session_namespace }}
 ```
 
-<font color="red">Discuss rolling upgrade</font>
+<font color="red">(<b>Discuss rolling upgrade</b>)</font>
+
+Watch the rolling upgrade as it updates each node one by one. Once it completes, observe that the nodes have been successfully upgraded to use Tanzu RabbitMQ:
+
+In the Grafana Dashboard:
+```dashboard:open-url
+url: {{ ingress_protocol }}://grafana.{{ ingress_domain }}
+```
+
+In the RabbitMQ Management UI (lougout, then log back in using credentials **demo/CHANGEME**):
+```dashboard:reload-dashboard
+name: RabbitMQ
+url: {{ ingress_protocol }}://rabbit{{ session_namespace }}.{{ ingress_domain }}
+```
