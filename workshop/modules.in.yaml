@@ -11,6 +11,9 @@ modules:
     rabbitmq-deep-dive:
         name: RabbitMQ Deep Dive
         exit_sign: Complete Workshop
+    rabbitmq-commercial-features:
+      name: RabbitMQ Commercial Features
+      exit_sign: A Look at Cloud Native Data Pipelines
     cloud-native-datapipelines:
         name: Implementing Data Pipelines
         exit_sign: Next

@@ -112,6 +112,7 @@ kubectl apply -f resources/prometheus-proxy/proxyhelm/
 kubectl apply -f resources/prometheus-proxy/proxyhelm/prometheus-proxy-http-proxy.yaml
 
 RabbitMQ Dashboard: Dashboard ID 10991
+Erlang-Distribution Dashboard: Dashboard ID 11352
 
 - Pre-deploy Greenplum:
 source .env

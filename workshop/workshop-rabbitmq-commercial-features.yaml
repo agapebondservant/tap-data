@@ -1,0 +1,7 @@
+name: Tanzu RabbitMQ Commercial Features
+
+modules:
+    activate:
+    - deploy-rabbitmq
+    - rabbitmq-commercial-features
+    - cloud-native-datapipelines
