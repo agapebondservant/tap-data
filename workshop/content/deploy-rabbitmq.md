@@ -90,3 +90,17 @@ Next, scale the cluster to 3 replicas (odd number is recommended). In the vim ed
 ```execute
 kubectl edit rabbitmqcluster rabbitcluster1 -n {{ session_namespace }}
 ```
+
+### UPGRADING TO TANZU RABBITMQ
+So far, the RabbitMQ  broker that we've deployed has been the OSS broker:
+```dashboard:open-dashboard
+name: RabbitMQ
+url: {{ ingress_protocol }}://rabbit{{ session_namespace }}.{{ ingress_domain }}
+```
+
+Upgrade the cluster to the Tanzu RabbitMQ distribution by updating the OCI image and perform a rolling upgrade. In the vim editor that comes up, edit the **image** field by changing it to **oawofolu/vmware-tanzu-rabbitmq**:
+```execute
+kubectl edit rabbitmqcluster rabbitcluster1 -n {{ session_namespace }}
+```
+
+<font color="red">Discuss rolling upgrade</font>
