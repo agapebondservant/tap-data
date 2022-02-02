@@ -71,27 +71,27 @@ Clear before proceeding:
 clear
 ```
 
-<font color="red">NOTE: SKIP this section if you are not demonstrating Wavefront.</font>
-<h2>WAVEFRONT/TANZU OBSERVABILITY INTEGRATION</h2>
+<h3><font color="red">NOTE: SKIP the section below if you are not demonstrating Wavefront.</font></h3>
+### WAVEFRONT/TANZU OBSERVABILITY INTEGRATION
 
 **Tanzu Gemfire** provides out-of-the-box integration with **Wavefront** (Tanzu Observability). On **Kubernetes**, this is enabled via the **Wavefront Collector**, which is an agent that runs on each node to collect and forward metrics to Wavefront. By simply installing the **Wavefront Collector**, 
 we should be able to access to a set of pre-defined metrics, dashboards and alerts for Tanzu Gemfire.
 
 First, launch the **Gemfire dashboard**:
 ```dashboard:create-dashboard
-name: Wavefront (GF)
+name: Wavefront
 url: https://vmware.wavefront.com/u/HNTF1BQs8V?t=vmware
 ```
 
 Observe that the dashboard is empty. This is because **Wavefront Collector** has not been set up yet. Install **Wavefront Collector** now:
 ```execute
-helm repo add wavefront https://wavefronthq.github.io/helm/ && kubectl create namespace wavefront --dry-run -o yaml | kubectl apply -f - && (helm uninstall wavefront -n wavefront || helm install wavefront wavefront/wavefront --set wavefront.url=https://vmware.wavefront.com --set wavefront.token={{ DATA_E2E_WAVEFRONT_ACCESS_TOKEN }} --set clusterName=tanzu-data-samples-cluster -n wavefront)
+helm repo add wavefront https://wavefronthq.github.io/helm/ && kubectl create namespace wavefront --dry-run -o yaml | kubectl apply -f - && (helm uninstall wavefront -n wavefront ; helm install wavefront wavefront/wavefront --set wavefront.url=https://vmware.wavefront.com --set wavefront.token={{ DATA_E2E_WAVEFRONT_ACCESS_TOKEN }} --set clusterName=tanzu-data-samples-cluster -n wavefront)
 ```
 
 The **Gemfire dashboard** should be populated with an initial set of metrics. <font color="red">NOTE: It may take up to a minute or so to reflect the changes.</font> 
 ```dashboard:reload-dashboard
-name: Wavefront (GF)
-url: https://vmware.wavefront.com/u/HNTF1BQs8V?t=vmware
+name: Wavefront
+url: {{ DATA_E2E_WAVEFRONT_GEMFIRE_DASHBOARD_URL }}
 ```
 
 Next, we will populate the **Tanzu Gemfire** cache servers with some **insurance claim** data.
@@ -107,7 +107,7 @@ python ~/other/resources/data/random-claim-generator.py -1 {{ ingress_protocol }
 
 The Wavefront Collector should have forwarded the newly generated to Wavefront:
 ```dashboard:reload-dashboard
-name: Petclinic
+name: Wavefront
 url: https://vmware.wavefront.com/u/HNTF1BQs8V?t=vmware
 ```
 
