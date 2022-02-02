@@ -71,15 +71,16 @@ Clear before proceeding:
 clear
 ```
 
-<font color="red"><h3>SKIP this section if you are not demonstrating Wavefront.</h3></font>
+<font color="red">NOTE: SKIP this section if you are not demonstrating Wavefront.</font>
 <h2>WAVEFRONT/TANZU OBSERVABILITY INTEGRATION</h2>
+
 **Tanzu Gemfire** provides out-of-the-box integration with **Wavefront** (Tanzu Observability). On **Kubernetes**, this is enabled via the **Wavefront Collector**, which is an agent that runs on each node to collect and forward metrics to Wavefront. By simply installing the **Wavefront Collector**, 
-we should access to a set of pre-defined metrics, dashboards and alerts for Tanzu Gemfire.
+we should be able to access to a set of pre-defined metrics, dashboards and alerts for Tanzu Gemfire.
 
 First, launch the **Gemfire dashboard**:
 ```dashboard:create-dashboard
-name: Petclinic
-url: {{ DATA_E2E_WAVEFRONT_GEMFIRE_DASHBOARD_URL }}
+name: Wavefront (GF)
+url: https://vmware.wavefront.com/u/HNTF1BQs8V?t=vmware
 ```
 
 Observe that the dashboard is empty. This is because **Wavefront Collector** has not been set up yet. Install **Wavefront Collector** now:
@@ -87,44 +88,30 @@ Observe that the dashboard is empty. This is because **Wavefront Collector** has
 helm repo add wavefront https://wavefronthq.github.io/helm/ && kubectl create namespace wavefront --dry-run -o yaml | kubectl apply -f - && (helm uninstall wavefront -n wavefront || helm install wavefront wavefront/wavefront --set wavefront.url=https://vmware.wavefront.com --set wavefront.token={{ DATA_E2E_WAVEFRONT_ACCESS_TOKEN }} --set clusterName=tanzu-data-samples-cluster -n wavefront)
 ```
 
-The **Gemfire dashboard** should be populated with an initial set of metrics. <font color="red">NOTE: It may take up to a minute or so to reflect the changes.</font>
+The **Gemfire dashboard** should be populated with an initial set of metrics. <font color="red">NOTE: It may take up to a minute or so to reflect the changes.</font> 
 ```dashboard:reload-dashboard
-name: Petclinic
-url: {{ DATA_E2E_WAVEFRONT_GEMFIRE_DASHBOARD_URL }}
+name: Wavefront (GF)
+url: https://vmware.wavefront.com/u/HNTF1BQs8V?t=vmware
 ```
 
 Next, we will populate the **Tanzu Gemfire** cache servers with some **insurance claim** data.
 Create a new **partitioned** region called "claims" - first connect to the cluster:
 ```execute
-kubectl -n {{ session_namespace }} exec -it gemfire1-locator-0 -- gfsh connect
-```
-
-Create the new region:
-```execute
-create region --name=claims --type=PARTITION_PERSISTENT
-```
-Exit the gfsh shell:
-```execute
-exit
-```
-
-Clear before proceeding:
-```execute
-clear
+kubectl -n {{ session_namespace }} exec -it gemfire1-locator-0 -- gfsh -e "connect" -e "create region --name=claims --type=PARTITION_PERSISTENT"
 ```
 
 Using the Gemfire Developer REST API, generate some data:
 ```execute
-~/other/resources/data/random-claim-generator.py -1 {{ ingress_protocol }}://gemfire1-dev-api.{{ session_namespace }}.svc.cluster.local:7070/gemfire-api/v1/claims &
+python ~/other/resources/data/random-claim-generator.py -1 {{ ingress_protocol }}://gemfire1-dev-api.{{ session_namespace }}.svc.cluster.local:7070/gemfire-api/v1/claims
 ```
 
 The Wavefront Collector should have forwarded the newly generated to Wavefront:
 ```dashboard:reload-dashboard
 name: Petclinic
-url: {{ DATA_E2E_WAVEFRONT_GEMFIRE_DASHBOARD_URL }}
+url: https://vmware.wavefront.com/u/HNTF1BQs8V?t=vmware
 ```
 
-Stop the data generation process:
+(Click to stop the data generation process at any point:)
 ```execute
 kill $!
 ```

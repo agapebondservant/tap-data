@@ -9,7 +9,7 @@ fake = Faker('en_US')
 import sys
 
 def put_content(content,root_url):
-    x = requests.put(f'{root_url}/{content.id}', data = json.dumps(content, indent=2), headers = {"Content-Type": "application/json"})
+    x = requests.put(f'{root_url}/{content["id"]}', data = json.dumps(content, indent=2), headers = {"Content-Type": "application/json"})
     print(x.text)
 
 # Usage
