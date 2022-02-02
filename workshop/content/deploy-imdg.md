@@ -87,7 +87,7 @@ Observe that the dashboard is empty. This is because **Wavefront Collector** has
 helm repo add wavefront https://wavefronthq.github.io/helm/ && kubectl create namespace wavefront --dry-run -o yaml | kubectl apply -f - && (helm uninstall wavefront -n wavefront || helm install wavefront wavefront/wavefront --set wavefront.url=https://vmware.wavefront.com --set wavefront.token={{ DATA_E2E_WAVEFRONT_ACCESS_TOKEN }} --set clusterName=tanzu-data-samples-cluster -n wavefront)
 ```
 
-The **Gemfire dashboard** should be populated with an initial set of metrics now:
+The **Gemfire dashboard** should be populated with an initial set of metrics. <font color="red">NOTE: It may take up to a minute or so to reflect the changes.</font>
 ```dashboard:reload-dashboard
 name: Petclinic
 url: {{ DATA_E2E_WAVEFRONT_GEMFIRE_DASHBOARD_URL }}
