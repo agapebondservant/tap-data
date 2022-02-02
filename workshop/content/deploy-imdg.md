@@ -113,7 +113,7 @@ url: {{ data_e2e_wavefront_gemfire_dashboard_url }}
 
 Next, try running an **adhoc query** against the data. Adhoc queries are relatively expensive. Notice the spike in Wavefront. (<font color="red">NOTE: Can execute this multiple times</font>)
 ```execute
-python -c "import requests; requests.post('{{ ingress_protocol }}://gemfire1-dev-api.{{ session_namespace }}.svc.cluster.local:7070/gemfire-api/v1/queries/adhoc?q="select count(id),city from /claims group by city"'))"
+python -c "import requests; r = requests.post('{{ ingress_protocol }}://gemfire1-dev-api.{{ session_namespace }}.svc.cluster.local:7070/gemfire-api/v1/queries/adhoc?q="select count(id),city from /claims group by city"')); print(r.text)"
 ```
 
 (<b>Enter **Ctrl-c** to stop the data generation process at any point.</b>)
