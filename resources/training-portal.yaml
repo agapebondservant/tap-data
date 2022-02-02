@@ -37,7 +37,7 @@ spec:
   #!  expires: 120m
   #!  orphaned: 5m
   - name: data-gemfire-deepdive
-    capacity: 1
+    capacity: 6
     expires: 120m
     orphaned: 5m
   #!- name: data-vmservice

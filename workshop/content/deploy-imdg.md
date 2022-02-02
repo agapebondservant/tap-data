@@ -111,7 +111,7 @@ url: https://vmware.wavefront.com/u/HNTF1BQs8V?t=vmware
 
 (<b>Enter **Ctrl-c** to stop the data generation process at any point.</b>)
 
-Next, try running an **adhoc query** against the data. Adhoc queries are relatively expensive. Notice the spike in Wavefront. (<font color="red">NOTE: Can execute this multiple times</font>)
+Next, try running an **adhoc query** against the data which will provide the **total number of claims per city**. Adhoc queries are relatively expensive. Notice the spike in Wavefront. (<font color="red">NOTE: Can execute this multiple times</font>)
 ```execute
 python ~/other/resources/data/run-adhoc-query.py "{{ ingress_protocol }}://gemfire1-dev-api.{{ session_namespace }}.svc.cluster.local:7070/gemfire-api/v1" "select count(id),city from /claims group by city"
 ```
