@@ -80,7 +80,7 @@ Kubernetes cluster, we should be able to access to a set of pre-defined metrics,
 
 First, launch the **Gemfire dashboard**:
 ```dashboard:open-url
-url: https://vmware.wavefront.com/u/HNTF1BQs8V?t=vmware
+url: https://vmware.wavefront.com/u/wzd2Ryn84v?t=vmware
 ```
 
 Observe that the dashboard is empty. This is because **Wavefront Collector** has not been set up yet. Install **Wavefront Collector** now:
@@ -90,7 +90,7 @@ helm repo add wavefront https://wavefronthq.github.io/helm/ && kubectl create na
 
 The **Gemfire dashboard** should be populated with an initial set of metrics. <font color="red">NOTE: It may take up to a minute or so to reflect the changes.</font> 
 ```dashboard:open-url
-url: https://vmware.wavefront.com/u/HNTF1BQs8V?t=vmware
+url: https://vmware.wavefront.com/u/wzd2Ryn84v?t=vmware
 ```
 
 Next, we will populate the **Tanzu Gemfire** cache servers with some **insurance claim** data.
@@ -106,7 +106,7 @@ python ~/other/resources/data/random-claim-generator.py -1 {{ ingress_protocol }
 
 The Wavefront Collector should have forwarded the newly generated to Wavefront:
 ```dashboard:open-url
-url: https://vmware.wavefront.com/u/HNTF1BQs8V?t=vmware
+url: https://vmware.wavefront.com/u/wzd2Ryn84v?t=vmware
 ```
 
 (<b>Enter **Ctrl-c** to stop the data generation process at any point.</b>)
