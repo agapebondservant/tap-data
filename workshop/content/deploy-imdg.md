@@ -72,10 +72,11 @@ clear
 ```
 
 <h3><font color="red">NOTE: SKIP the section below if you are not demonstrating Wavefront.</font></h3>
-### WAVEFRONT/TANZU OBSERVABILITY INTEGRATION
 
-**Tanzu Gemfire** provides out-of-the-box integration with **Wavefront** (Tanzu Observability). On **Kubernetes**, this is enabled via the **Wavefront Collector**, which is an agent that runs on each node to collect and forward metrics to Wavefront. By simply installing the **Wavefront Collector**, 
-we should be able to access to a set of pre-defined metrics, dashboards and alerts for Tanzu Gemfire.
+### Wavefront/Tanzu Observability Integration
+
+**Tanzu Gemfire** provides out-of-the-box integration with **Wavefront** (Tanzu Observability). On **Kubernetes**, this is enabled via the **Wavefront Collector**, which is an agent that runs on each node to collect and forward metrics to Wavefront. By simply installing the **Wavefront Collector** in our 
+Kubernetes cluster, we should be able to access to a set of pre-defined metrics, dashboards and alerts for Tanzu Gemfire.
 
 First, launch the **Gemfire dashboard**:
 ```dashboard:open-url
@@ -89,7 +90,7 @@ helm repo add wavefront https://wavefronthq.github.io/helm/ && kubectl create na
 
 The **Gemfire dashboard** should be populated with an initial set of metrics. <font color="red">NOTE: It may take up to a minute or so to reflect the changes.</font> 
 ```dashboard:open-url
-url: {{ DATA_E2E_WAVEFRONT_GEMFIRE_DASHBOARD_URL }}
+url: {{ data_e2e_wavefront_gemfire_dashboard_url }}
 ```
 
 Next, we will populate the **Tanzu Gemfire** cache servers with some **insurance claim** data.
@@ -105,7 +106,14 @@ python ~/other/resources/data/random-claim-generator.py -1 {{ ingress_protocol }
 
 The Wavefront Collector should have forwarded the newly generated to Wavefront:
 ```dashboard:open-url
-url: {{ DATA_E2E_WAVEFRONT_GEMFIRE_DASHBOARD_URL }}
+url: {{ data_e2e_wavefront_gemfire_dashboard_url }}
+```
+
+(<b>Enter **Ctrl-c** to stop the data generation process at any point.</b>)
+
+Next, try running an **adhoc query** against the data. (Repeat this to run multiple times)
+```execute
+python -c "import requests; requests.post('{{ ingress_protocol }}://gemfire1-dev-api.{{ session_namespace }}.svc.cluster.local:7070/gemfire-api/v1/queries/adhoc?q="select count(id),city from /claims group by city"'))"
 ```
 
 (<b>Enter **Ctrl-c** to stop the data generation process at any point.</b>)
