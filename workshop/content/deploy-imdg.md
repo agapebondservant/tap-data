@@ -90,7 +90,7 @@ helm repo add wavefront https://wavefronthq.github.io/helm/ && kubectl create na
 
 The **Gemfire dashboard** should be populated with an initial set of metrics. <font color="red">NOTE: It may take up to a minute or so to reflect the changes.</font> 
 ```dashboard:open-url
-url: {{ data_e2e_wavefront_gemfire_dashboard_url }}
+url: https://vmware.wavefront.com/u/HNTF1BQs8V?t=vmware
 ```
 
 Next, we will populate the **Tanzu Gemfire** cache servers with some **insurance claim** data.
@@ -106,14 +106,12 @@ python ~/other/resources/data/random-claim-generator.py -1 {{ ingress_protocol }
 
 The Wavefront Collector should have forwarded the newly generated to Wavefront:
 ```dashboard:open-url
-url: {{ data_e2e_wavefront_gemfire_dashboard_url }}
+url: https://vmware.wavefront.com/u/HNTF1BQs8V?t=vmware
 ```
 
 (<b>Enter **Ctrl-c** to stop the data generation process at any point.</b>)
 
 Next, try running an **adhoc query** against the data. Adhoc queries are relatively expensive. Notice the spike in Wavefront. (<font color="red">NOTE: Can execute this multiple times</font>)
 ```execute
-python -c "import requests; r = requests.post('{{ ingress_protocol }}://gemfire1-dev-api.{{ session_namespace }}.svc.cluster.local:7070/gemfire-api/v1/queries/adhoc?q="select count(id),city from /claims group by city"')); print(r.text)"
+python ~/other/resources/data/run-adhoc-query.py "{{ ingress_protocol }}://gemfire1-dev-api.{{ session_namespace }}.svc.cluster.local:7070/gemfire-api/v1" "select count(id),city from /claims group by city"
 ```
-
-(<b>Enter **Ctrl-c** to stop the data generation process at any point.</b>)
