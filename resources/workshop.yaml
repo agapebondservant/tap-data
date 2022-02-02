@@ -32,6 +32,10 @@ spec:
       port: 8050
       protocol: http
       host: "$(ingress_protocol):petclinic-app-analytics.$(session_namespace).svc.cluster.local" 
+    - name: petclinic-claims-dashboard
+      port: 8050
+      protocol: http
+      host: "$(ingress_protocol):petclinic-claims-dashboard.$(session_namespace).svc.cluster.local" 
     dashboards:
     - name: Jupyter
       url: "$(ingress_protocol)://$(session_namespace)-jupyter.$(ingress_domain)/"

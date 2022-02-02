@@ -115,3 +115,14 @@ Next, try running an **adhoc query** against the data which will provide the **t
 ```execute
 python ~/other/resources/data/run-adhoc-query.py "{{ ingress_protocol }}://gemfire1-dev-api.{{ session_namespace }}.svc.cluster.local:7070/gemfire-api/v1" "select count(id),city from /claims group by city"
 ```
+
+Now, we will view a realtime dashboard which makes use of the adhoc query from above. Deploy the Petclinic Claims app:
+```execute
+sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/petclinic-claims/petclinic-claims-app.yaml && kubectl apply -f ~/other/resources/petclinic-claims/petclinic-claims-app.yaml
+```
+
+View the Petclinic Claims app:
+```dashboard:reload-dashboard
+name: Petclinic
+url:  "{{ingress_protocol}}://petclinic-claims-dashboard-{{session_namespace}}.{{ingress_domain}}/"
+```
