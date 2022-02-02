@@ -83,7 +83,7 @@ First, launch the **Gemfire dashboard**:
 url: https://vmware.wavefront.com/u/rQ12n63X6F?t=vmware
 ```
 
-Observe that the dashboard is empty. This is because **Wavefront Collector** has not been set up yet. Install **Wavefront Collector** now:
+Observe that the dashboard is not showing the latest data. This is because **Wavefront Collector** has not been set up yet. Install **Wavefront Collector** now:
 ```execute
 helm repo add wavefront https://wavefronthq.github.io/helm/ && kubectl create namespace wavefront --dry-run -o yaml | kubectl apply -f - && (helm uninstall wavefront -n wavefront ; helm install wavefront wavefront/wavefront --set wavefront.url=https://vmware.wavefront.com --set wavefront.token={{ DATA_E2E_WAVEFRONT_ACCESS_TOKEN }} --set clusterName=tanzu-data-samples-cluster --set collector.discovery.annotationPrefix=wavefront.com -n wavefront)
 ```
@@ -122,7 +122,7 @@ sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/pe
 ```
 
 View the Petclinic Claims app:
-```dashboard:reload-dashboard
+```dashboard:create-dashboard
 name: Petclinic
 url:  "{{ingress_protocol}}://petclinic-claims-dashboard-{{session_namespace}}.{{ingress_domain}}/"
 ```
