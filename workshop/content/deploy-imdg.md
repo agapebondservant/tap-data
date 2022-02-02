@@ -78,8 +78,7 @@ clear
 we should be able to access to a set of pre-defined metrics, dashboards and alerts for Tanzu Gemfire.
 
 First, launch the **Gemfire dashboard**:
-```dashboard:create-dashboard
-name: Wavefront
+```dashboard:open-url
 url: https://vmware.wavefront.com/u/HNTF1BQs8V?t=vmware
 ```
 
@@ -89,8 +88,7 @@ helm repo add wavefront https://wavefronthq.github.io/helm/ && kubectl create na
 ```
 
 The **Gemfire dashboard** should be populated with an initial set of metrics. <font color="red">NOTE: It may take up to a minute or so to reflect the changes.</font> 
-```dashboard:reload-dashboard
-name: Wavefront
+```dashboard:open-url
 url: {{ DATA_E2E_WAVEFRONT_GEMFIRE_DASHBOARD_URL }}
 ```
 
@@ -106,12 +104,8 @@ python ~/other/resources/data/random-claim-generator.py -1 {{ ingress_protocol }
 ```
 
 The Wavefront Collector should have forwarded the newly generated to Wavefront:
-```dashboard:reload-dashboard
-name: Wavefront
-url: https://vmware.wavefront.com/u/HNTF1BQs8V?t=vmware
+```dashboard:open-url
+url: {{ DATA_E2E_WAVEFRONT_GEMFIRE_DASHBOARD_URL }}
 ```
 
-(Click to stop the data generation process at any point:)
-```execute
-kill $!
-```
+(<b>Enter **Ctrl-c** to stop the data generation process at any point.</b>)
