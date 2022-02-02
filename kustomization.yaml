@@ -11,6 +11,6 @@ resources:
 #- resources/workshop-greenplum-ml.yaml
 #- resources/workshop-rabbitmq-deepdive.yaml
 #- resources/workshop-data-vmservice.yaml
-- resources/workshop-rabbitmq-commercial-features.yaml
+#- resources/workshop-rabbitmq-commercial-features.yaml
 - resources/training-portal.yaml
 - resources/system-profile.yaml
