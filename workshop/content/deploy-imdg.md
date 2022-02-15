@@ -71,19 +71,29 @@ Clear before proceeding:
 clear
 ```
 
-<h3><font color="red">NOTE: SKIP the section below if you are not demonstrating Wavefront.</font></h3>
+<font color="red"><b>NOTE: SKIP the section below if you are not demonstrating Wavefront.</b></font>
 
 ### Wavefront/Tanzu Observability Integration
 
 **Tanzu Gemfire** provides out-of-the-box integration with **Wavefront** (Tanzu Observability). On **Kubernetes**, this is enabled via the **Wavefront Collector**, which is an agent that runs on each node to collect and forward metrics to Wavefront. By simply installing the **Wavefront Collector** in our 
 Kubernetes cluster, we should be able to access to a set of pre-defined metrics, dashboards and alerts for Tanzu Gemfire.
 
+First, create a new Gemfire cluster. This cluster will start out with only 1 server node:
+```editor:open-file
+file: ~/other/resources/gemfire/gemfire-cluster-with-1-replica.yaml
+```
+
+Create the cluster:
+```execute
+kubectl create secret docker-registry image-pull-secret --namespace={{ session_namespace }} --docker-server=registry.pivotal.io --docker-username='{{ DATA_E2E_PIVOTAL_REGISTRY_USERNAME }}' --docker-password='{{ DATA_E2E_PIVOTAL_REGISTRY_PASSWORD }}' --dry-run -o yaml | kubectl apply -f - && kubectl apply -f ~/other/resources/gemfire/gemfire-cluster-with-1-replica.yaml -n {{ session_namespace }}
+```
+
 First, launch the **Gemfire dashboard**:
 ```dashboard:open-url
 url: https://vmware.wavefront.com/u/rQ12n63X6F?t=vmware
 ```
 
-Observe that the dashboard is not showing the latest data. This is because **Wavefront Collector** has not been set up yet. Install **Wavefront Collector** now:
+Select the entry **tanzu-data-samples-cluster** under the **Kubernetes Cluster** field. Observe that the dashboard is not showing the latest data. This is because **Wavefront Collector** has not been set up yet. Install **Wavefront Collector** now:
 ```execute
 helm repo add wavefront https://wavefronthq.github.io/helm/ && kubectl create namespace wavefront --dry-run -o yaml | kubectl apply -f - && (helm uninstall wavefront -n wavefront ; helm install wavefront wavefront/wavefront --set wavefront.url=https://vmware.wavefront.com --set wavefront.token={{ DATA_E2E_WAVEFRONT_ACCESS_TOKEN }} --set clusterName=tanzu-data-samples-cluster --set collector.discovery.annotationPrefix=wavefront.com -n wavefront)
 ```
@@ -101,7 +111,7 @@ kubectl -n {{ session_namespace }} exec -it gemfire1-locator-0 -- gfsh -e "conne
 
 Using the Gemfire Developer REST API, generate some data:
 ```execute
-python ~/other/resources/data/random-claim-generator.py -1 {{ ingress_protocol }}://gemfire1-dev-api.{{ session_namespace }}.svc.cluster.local:7070/gemfire-api/v1/claims
+python ~/other/resources/data/random-claim-generator.py -1 {{ ingress_protocol }}://gemfire2-dev-api.{{ session_namespace }}.svc.cluster.local:7070/gemfire-api/v1/claims
 ```
 
 The Wavefront Collector should have forwarded the newly generated to Wavefront:
@@ -113,5 +123,5 @@ url: https://vmware.wavefront.com/u/rQ12n63X6F?t=vmware
 
 Next, try running an **adhoc query** against the data which will provide the **total number of claims per city**. Adhoc queries are relatively expensive. Notice the spike in Wavefront. (<font color="red">NOTE: Can execute this multiple times</font>)
 ```execute
-python ~/other/resources/data/run-adhoc-query.py "{{ ingress_protocol }}://gemfire1-dev-api.{{ session_namespace }}.svc.cluster.local:7070/gemfire-api/v1" "select count(id),city from /claims group by city"
+python ~/other/resources/data/run-adhoc-query.py "{{ ingress_protocol }}://gemfire2-dev-api.{{ session_namespace }}.svc.cluster.local:7070/gemfire-api/v1" "select count(id),city from /claims group by city"
 ```

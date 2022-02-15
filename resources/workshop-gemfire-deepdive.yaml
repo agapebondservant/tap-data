@@ -26,6 +26,10 @@ spec:
       port: 7070
       protocol: http
       host: "$(ingress_protocol):gemfire1-dev-api.$(session_namespace).svc.cluster.local"
+    - name: gemfire2-dev-api
+      port: 7070
+      protocol: http
+      host: "$(ingress_protocol):gemfire2-dev-api.$(session_namespace).svc.cluster.local"
     - name: greenplum
       port: 28080
       protocol: http
