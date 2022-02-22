@@ -32,5 +32,5 @@ docker push $DATA_E2E_REGISTRY_URL
 kubectl create secret docker-registry eduk8s-demo-creds --docker-username=$DATA_E2E_REGISTRY_USERNAME --docker-password=$DATA_E2E_REGISTRY_PASSWORD --docker-email=$DATA_E2E_REGISTRY_EMAIL -n eduk8s || true
 # redeploy workshop
 kubectl delete --all learningcenter-training 
-# kubectl apply -k .
+kubectl apply -k .
 watch kubectl get learningcenter-training
