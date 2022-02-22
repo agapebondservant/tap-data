@@ -1,16 +1,15 @@
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
+#! apiVersion: kustomize.config.k8s.io/v1beta1
+#! kind: Kustomization
 resources:
 - resources/workshop.yaml
-#- resources/workshop-file-ingestion.yaml
-#- resources/workshop-anomaly-detection.yaml
-#- resources/workshop-data-mesh.yaml
-#- resources/workshop-data-nosql.yaml
+#!- resources/workshop-file-ingestion.yaml
+#!- resources/workshop-anomaly-detection.yaml
+#!- resources/workshop-data-mesh.yaml
+#!- resources/workshop-data-nosql.yaml
 - resources/workshop-gemfire-deepdive.yaml
-#- resources/workshop-greenplum-ml.yaml
-#- resources/workshop-rabbitmq-deepdive.yaml
-#- resources/workshop-data-vmservice.yaml
-#- resources/workshop-rabbitmq-commercial-features.yaml
+#!- resources/workshop-greenplum-ml.yaml
+#!- resources/workshop-rabbitmq-deepdive.yaml
+#!- resources/workshop-data-vmservice.yaml
+#!- resources/workshop-rabbitmq-commercial-features.yaml
 - resources/training-portal.yaml
 - resources/system-profile.yaml

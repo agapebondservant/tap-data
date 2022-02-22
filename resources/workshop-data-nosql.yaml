@@ -1,4 +1,4 @@
-apiVersion: training.eduk8s.io/v1alpha2
+apiVersion: learningcenter.tanzu.vmware.com/v1beta1
 kind: Workshop
 metadata:
   name: data-nosql
@@ -10,7 +10,7 @@ spec:
   duration: 120m
   url: https://github.com/agapebondservant/data-e2e-demo
   content:
-    image: oawofolu/data-e2e:latest
+    image: oawofolu/new-data-e2e:latest
   session:
     env:
     - name: ENABLE_JUPYTERLAB

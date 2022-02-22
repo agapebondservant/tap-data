@@ -4,8 +4,11 @@
 (201203.030350.f72ecda)
 
 
-####Kubernetes Cluster Pre-reqs
-- Create new cluster for Educates platform: tkg create cluster data-cluster --plan=devharbor -w 7
+#### Kubernetes Cluster Pre-reqs
+- (Optional - required only if management cluster does not exist) tanzu management-cluster permissions aws set && tanzu management-cluster create new-data-cluster  --file resources/tanzu-aws.yaml -v 6
+(NOTE: Follow instructions for deploying a Tanzu Management cluster here: https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-index.html)
+
+- Create new cluster for Educates platform: tanzu cluster create tanzu-data-cluster --file resources/tanzu-aws.yaml; watch tanzu cluster get tanzu-data-cluster; tanzu cluster kubeconfig get tanzu-data-cluster --admin
 
 - Create the default storage class (ensure that it is called generic, that the volume binding mode is WaitForFirstCustomer instead of Immediate, and the reclaimPolicy should be Retain) - storage-class-aws.yml
 
@@ -17,21 +20,23 @@
 kube-apiserver --enable-admission-plugins PodSecurityPolicy
 kubectl apply -f resources/podsecuritypolicy.yaml
 
-- Install Contour: kubectl apply -f https://projectcontour.io/quickstart/v1.12.0/contour.yaml (NOTE: Change the Loadbalancer's healthcheck from HTTP to TCP in the AWS Console)
+- Install Contour: kubectl apply -f https://projectcontour.io/quickstart/v1.18.2/contour.yaml (NOTE: Change the Loadbalancer's healthcheck from HTTP to TCP in the AWS Console)
 
 - Install the Kubernetes Metrics server: kubectl apply -f resources/metrics-server.yaml; watch kubectl get deployment metrics-server -n kube-system
 
-- Install Educates Operator: kubectl apply -k https://github.com/eduk8s/eduk8s.git?ref=20.12.03.1
-
-- Verify installation: kubectl get all -n eduk8s
-
-- Specify ingress domain: kubectl set env deployment/eduk8s-operator -n eduk8s INGRESS_DOMAIN=tanzudata.ml
+- Install tanzu package for learning center:
+kubectl create ns tap-install
+tanzu secret registry add tap-registry   --username <YOUR-TANZU-REGISTRY-USERNAME> --password <YOUR-TANZU-REGISTRY-PASSWORD> --server registry.tanzu.vmware.com --export-to-all-namespaces --yes --namespace tap-install
+tanzu package repository add tanzu-tap-repository   --url registry.tanzu.vmware.com/tanzu-application-platform/tap-packages:1.0.1 --namespace tap-install
+tanzu package available list learningcenter.tanzu.vmware.com --namespace tap-install
+tanzu package install learning-center --package-name learningcenter.tanzu.vmware.com --version 0.1.0 -f resources/learning-center-config.yaml -n tap-install
+kubectl get all -n learningcenter
 
 - If using applications with websocket connections, increase idle timeout on ELB in AWS Management Console to 1 hour (default is 30 seconds)
 
 - Deploy cluster-scoped cert-manager:
 kubectl create ns cert-manager
-kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.3.0/cert-manager.yaml
+kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.5.3/cert-manager.yaml
 Deploy CERT-MANAGER-ISSUER  (self-signed), CERTIFICATE-SIGNING-REQUEST, CERT-MANAGER-ISSUER (CA): kubectl apply -f resources/cert-manager-issuer.yaml)
     
 - Build workshop image:
@@ -52,14 +57,14 @@ kubectl apply -k .
 - Deploy Minio (Server) with TLS:
 
 - Setup TLS cert for Minio:
-openssl genrsa -out minio-private.key 2048
+openssl genrsa -out private.key 2048
 openssl req -new -x509 -nodes -days 730 -key private.key -out public.crt -config other/resources/minio/openssl.conf
 
 (LEGACY APPROACH:)
 helm repo add minio-legacy https://helm.min.io/
 kubectl create ns minio
 kubectl create secret generic tls-ssl-minio --from-file=private.key --from-file=public.crt --namespace minio
-#kubectl create secret tls tls-ssl-minio --key=private.key --cert=public.crt --namespace minio
+#kubectl create secret tls tls-ssl-minio --key=minio-private.key --cert=public.crt --namespace minio
 helm install --set resources.requests.memory=1.5Gi,tls.enabled=true,tls.certSecret=tls-ssl-minio --namespace minio minio minio-legacy/minio
 export MINIO_ACCESS_KEY=$(kubectl get secret minio -o jsonpath="{.data.accesskey}" -n minio| base64 --decode)
 export MINIO_SECRET_KEY=$(kubectl get secret minio -o jsonpath="{.data.secretkey}" -n minio| base64 --decode)
@@ -79,13 +84,13 @@ kubectl apply -f resources/minio-http-proxy.yaml
 wget https://dl.min.io/client/mc/release/linux-amd64/mc
 chmod +x mc
 cp mc /usr/local/bin
-mc config host add data-e2e-minio http://minio.tanzudata.ml/ $MINIO_ACCESS_KEY $MINIO_SECRET_KEY
+mc config host add new-data-e2e-minio http://minio.mytanzu.ml/ $MINIO_ACCESS_KEY $MINIO_SECRET_KEY
 
 (on Mac:)
 git -C /usr/local/Homebrew/Library/Taps/homebrew/homebrew-core fetch --unshallow
 git -C /usr/local/Homebrew/Library/Taps/homebrew/homebrew-cask fetch --unshallow
 brew install minio/stable/mc
-mc config host add data-e2e-minio http://minio.tanzudata.ml/ $MINIO_ACCESS_KEY $MINIO_SECRET_KEY
+mc config host add new-data-e2e-minio http://minio.mytanzu.ml/ $MINIO_ACCESS_KEY $MINIO_SECRET_KEY
 
 - Add required artifacts to Minio:
 (Greenplum-Gemfire connector:)

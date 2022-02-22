@@ -10,4 +10,4 @@ spec:
     - name: scdf-server
       port: 80
   virtualhost:
-    fqdn: scdf.tanzudata.ml
+    fqdn: scdf.mytanzu.ml

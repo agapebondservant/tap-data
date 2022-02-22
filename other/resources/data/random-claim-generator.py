@@ -7,6 +7,7 @@ from datetime import datetime
 import os
 fake = Faker('en_US')
 import sys
+import time
 
 def put_content(content,root_url):
     x = requests.put(f'{root_url}/{content["id"]}', data = json.dumps(content, indent=2), headers = {"Content-Type": "application/json"})
@@ -14,7 +15,7 @@ def put_content(content,root_url):
 
 # Usage
 if len(sys.argv) == 1:
-    print(f'USAGE: {os.path.basename(sys.argv[0])} ((number of records OR -1 for unlimited records)) ((POST url)) ((cityname (optional)))')
+    print(f'USAGE: {os.path.basename(sys.argv[0])} ((number of records OR -1 for unlimited records)) ((update interval OR -1 for immediate)) ((post-url)) ((cityname (optional)))')
     quit()
 
 # Generate a list of 20 cities
@@ -22,8 +23,8 @@ cities = ['New York','Los Angeles','Chicago','Houston','Phoenix','Philadelphia',
             'Jacksonville', 'Fort Worth', 'Columbus', 'Indianapolis', 'Charlotte', 'San Francisco', 'Seattle', 'Denver', 'Washington']
 
 # Generate random data
-for i in range(sys.maxsize if int(sys.argv[1])==-1 else sys.argv[1]):
-    city = sys.argv[3] if len(sys.argv)>3 else cities[random.randint(0,19)]
+for i in range(sys.maxsize if int(sys.argv[1])==-1 else int(sys.argv[1])):
+    city = sys.argv[4] if len(sys.argv)>4 else cities[random.randint(0,19)]
     my_dict = { 'id': f'{city}{i}', 
     '@type': 'org.apache.geode.web.rest.domain.Claim',
     'name': fake.name(), 
@@ -35,4 +36,5 @@ for i in range(sys.maxsize if int(sys.argv[1])==-1 else sys.argv[1]):
     'amount': random.randint(200,1000)}
 
     print(json.dumps(my_dict, indent=2))
-    put_content(my_dict, sys.argv[2])
+    #time.sleep(int(sys.argv[2])) if int(sys.argv)>-1
+    put_content(my_dict, sys.argv[3])

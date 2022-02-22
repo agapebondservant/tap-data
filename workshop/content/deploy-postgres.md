@@ -12,7 +12,7 @@ Check on the status by viewing the logs (**L** on K9s). Click **Esc**  when comp
 Next, we view it:
 ```dashboard:create-dashboard
 name: Petclinic
-url: {{ ingress_protocol }}://petclinic-{{ session_namespace }}.tanzudata.ml
+url: {{ ingress_protocol }}://petclinic-{{ session_namespace }}.mytanzu.ml
 ```
 
 Let's go ahead and add a few new pet owners, then restart the app. We notice that if we restart the app, we lose all of our entries:
@@ -23,7 +23,7 @@ kubectl rollout restart deploy/petclinic-app && kubectl rollout status -w deploy
 Let's view it again - notice the owners are gone:
 ```dashboard:reload-dashboard
 name: Petclinic
-url: {{ ingress_protocol }}://petclinic-{{ session_namespace }}.tanzudata.ml
+url: {{ ingress_protocol }}://petclinic-{{ session_namespace }}.mytanzu.ml
 ```
 
 To resolve this, we will need to provision a persistent data store.
@@ -33,8 +33,6 @@ To resolve this, we will need to provision a persistent data store.
 **Tanzu Postgres** is a _full-featured_ object-relational data store.
 
 Let's deploy the Tanzu Postgres **operator**:
-
-<font color="red">NOTE: Do NOT run this if your workshop instance is not the first generated one, i.e. only run for workshop sessions ending in '001'.</font>
 
 ```execute
 kubectl create secret docker-registry image-pull-secret --namespace=default --docker-username='{{ DATA_E2E_REGISTRY_USERNAME }}' --docker-password='{{ DATA_E2E_REGISTRY_PASSWORD }}' --dry-run -o yaml | kubectl apply -f - && kubectl create secret docker-registry image-pull-secret --namespace={{ session_namespace }} --docker-username='{{ DATA_E2E_REGISTRY_USERNAME }}' --docker-password='{{ DATA_E2E_REGISTRY_PASSWORD }}' --dry-run -o yaml | kubectl apply -f - && helm uninstall postgres --namespace default; helm install postgres ~/other/resources/postgres/operator -f ~/other/resources/postgres/overrides.yaml --set tmpNamespace=default
@@ -114,7 +112,7 @@ mc mb --insecure -p data-fileingest-minio/pgbackups
 
 View the newly created bucket:
 ```dashboard:open-url
-url: https://minio.tanzudata.ml/
+url: https://minio.mytanzu.ml/
 ```
 
 Next, let's view the manifest that we would use to enable **pgBackRest**:
@@ -143,7 +141,7 @@ kubectl exec -it pginstance-1-1 -- bash -c 'pgbackrest stanza-create --stanza=$B
 View the generated backup files on Minio:
 View the newly created bucket:
 ```dashboard:open-url
-url: https://minio.tanzudata.ml/
+url: https://minio.mytanzu.ml/
 ```
 
 Get information about the last backup:

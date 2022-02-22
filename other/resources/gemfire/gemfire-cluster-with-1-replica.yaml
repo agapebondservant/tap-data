@@ -5,6 +5,7 @@ metadata:
 spec:
   image: registry.pivotal.io/tanzu-gemfire-for-kubernetes/gemfire-k8s:1.0.1
   servers:
+    replicas: 1
     overrides:
       gemfireProperties:
         start-dev-rest-api: "true"

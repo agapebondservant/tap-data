@@ -12,6 +12,6 @@ spec:
   pxfConf:
     s3Source:
       secret: data-e2e-greenplum-pxf-configs
-      endpoint: minio.tanzudata.ml
+      endpoint: minio.mytanzu.ml
       bucket: pxf-config
       protocol: http

@@ -6,9 +6,9 @@ type: generic
 stringData:
   bucket: pgbackups
   region: us-east-2
-  endpoint: minio.tanzudata.ml
-  key: 8zmApXWbQnQzI28BcaZB
-  keySecret: Irq9Z6eSsJeC9Qmrm6SFbzby8UBQLlhPWKRX6uWY
+  endpoint: minio.mytanzu.ml
+  key: PMi0YICflE8ZjCQlFAw2
+  keySecret: pTM99bLNCc3zgXn2jcgknjcjxCKETBhZSXzWVBH5
   verifyTLS: "false"
   uriStyle: "path"
 

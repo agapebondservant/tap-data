@@ -83,12 +83,13 @@ First, create a new Gemfire cluster. This cluster will start out with only 1 ser
 file: ~/other/resources/gemfire/gemfire-cluster-with-1-replica.yaml
 ```
 
-Create the cluster:
+Create the cluster.
 ```execute
 kubectl create secret docker-registry image-pull-secret --namespace={{ session_namespace }} --docker-server=registry.pivotal.io --docker-username='{{ DATA_E2E_PIVOTAL_REGISTRY_USERNAME }}' --docker-password='{{ DATA_E2E_PIVOTAL_REGISTRY_PASSWORD }}' --dry-run -o yaml | kubectl apply -f - && kubectl apply -f ~/other/resources/gemfire/gemfire-cluster-with-1-replica.yaml -n {{ session_namespace }}
 ```
 
-First, launch the **Gemfire dashboard**:
+Next, launch the **Gemfire dashboard**.
+<font color="red">NOTE: WAIT FOR THE new Gemfire Locator and Server nodes to appear before launching.</font>
 ```dashboard:open-url
 url: https://vmware.wavefront.com/u/rQ12n63X6F?t=vmware
 ```
@@ -106,12 +107,12 @@ url: https://vmware.wavefront.com/u/rQ12n63X6F?t=vmware
 Next, we will populate the **Tanzu Gemfire** cache servers with some **insurance claim** data.
 Create a new **partitioned** region called "claims" - first connect to the cluster:
 ```execute
-kubectl -n {{ session_namespace }} exec -it gemfire1-locator-0 -- gfsh -e "connect" -e "create region --name=claims --type=PARTITION_PERSISTENT"
+kubectl -n {{ session_namespace }} exec -it gemfire2-locator-0 -- gfsh -e "connect" -e "create region --name=claims --type=PARTITION_PERSISTENT"
 ```
 
 Using the Gemfire Developer REST API, generate some data:
 ```execute
-python ~/other/resources/data/random-claim-generator.py -1 {{ ingress_protocol }}://gemfire2-dev-api.{{ session_namespace }}.svc.cluster.local:7070/gemfire-api/v1/claims
+python ~/other/resources/data/random-claim-generator.py -1 -1 {{ ingress_protocol }}://gemfire2-dev-api.{{ session_namespace }}.svc.cluster.local:7070/gemfire-api/v1/claims
 ```
 
 The Wavefront Collector should have forwarded the newly generated to Wavefront:

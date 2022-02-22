@@ -11,4 +11,4 @@ spec:
     - name: prometheus-proxy
       port: 8080
   virtualhost:
-    fqdn: prometheus-proxy.tanzudata.ml
+    fqdn: prometheus-proxy.mytanzu.ml

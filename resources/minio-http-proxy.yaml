@@ -23,7 +23,7 @@ spec:
   #    port: 9000
   #    protocol: tls
   virtualhost:
-    fqdn: minio.tanzudata.ml
+    fqdn: minio.mytanzu.ml
     tls:
       #secretName: minio/contour-minio
       passthrough: true
