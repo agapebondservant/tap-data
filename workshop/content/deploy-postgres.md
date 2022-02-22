@@ -48,7 +48,7 @@ Let's deploy it:
 kubectl apply -f ~/other/resources/postgres/postgres-cluster.yaml -n {{ session_namespace }}
 ```
 
-Show the primary node: <font color='red'>NOTE: Wait for all 3 Postgres cluster nodes (pods) to show up in the lower console view before running.</font>
+Show the primary node: <font color='red'>NOTE: Wait for all 3 pods to show up in the lower console view before running.</font>
 ```execute
 kubectl exec -it pginstance-1-1 -- bash -c 'pg_autoctl show state'
 ```
