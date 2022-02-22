@@ -1,8 +1,5 @@
 ### Deploying Data E2E Workshop (AWS)
 
-- NOTE: eduk8s version used: 20.12.03.1 
-(201203.030350.f72ecda)
-
 
 #### Kubernetes Cluster Pre-reqs
 - (Optional - required only if management cluster does not exist) tanzu management-cluster permissions aws set && tanzu management-cluster create new-data-cluster  --file resources/tanzu-aws.yaml -v 6
