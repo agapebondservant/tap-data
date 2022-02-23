@@ -25,7 +25,7 @@ kubectl apply -f resources/podsecuritypolicy.yaml
 kubectl create ns tap-install
 tanzu secret registry add tap-registry   --username <YOUR-TANZU-REGISTRY-USERNAME> --password <YOUR-TANZU-REGISTRY-PASSWORD> --server registry.tanzu.vmware.com --export-to-all-namespaces --yes --namespace tap-install
 tanzu package repository add tanzu-tap-repository   --url registry.tanzu.vmware.com/tanzu-application-platform/tap-packages:1.0.1 --namespace tap-install
-tanzu package available list learningcenter.tanzu.vmware.com --namespace tap-install
+tanzu package available list learningcenter.tanzu.vmware.com --namespace tap-install # To view avaulable packages for learningcenter
 tanzu package install learning-center --package-name learningcenter.tanzu.vmware.com --version 0.1.0 -f resources/learning-center-config.yaml -n tap-install
 kubectl get all -n learningcenter
 

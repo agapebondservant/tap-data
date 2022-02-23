@@ -1,35 +1,15 @@
-#apiVersion: projectcontour.io/v1
-#kind: TLSCertificateDelegation
-#metadata:
-#  name: contour-minio
-#  namespace: minio
-#spec:
-#  delegations:
-#    - secretName: contour-minio
-#      targetNamespaces:
-#      - '*'
-#---
 apiVersion: projectcontour.io/v1
 kind: HTTPProxy
 metadata:
   name: minio-httpproxy
   namespace: minio
 spec:
-  #routes:
-  #- conditions:
-  #  - prefix: /
-  #  services:
-  #  - name: minio
-  #    port: 9000
-  #    protocol: tls
   virtualhost:
     fqdn: minio.mytanzu.ml
     tls:
-      #secretName: minio/contour-minio
       passthrough: true
   tcpproxy:
     services:
     - name: minio
       port: 9000
-      protocol: tls
     

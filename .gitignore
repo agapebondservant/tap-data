@@ -18,4 +18,4 @@ workshop/modules.yaml
 other/resources/postgres/overrides.yaml
 other/resources/greenplum/overrides.yaml
 other/resources/greenplum/minio-site.xml
-other/resources/resources/postgres/postgres-cluster-with-backups.yaml
+other/resources/postgres/postgres-cluster-with-backups.yaml
