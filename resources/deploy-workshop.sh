@@ -24,12 +24,12 @@ tar -xzvf other/resources/helm*.tar.gz -C other/resources && \
     mv other/resources/linux-amd64/helm other/resources/bin/helm &&
     chmod +x workshop/terminal/*.sh
 
-docker build -t $DATA_E2E_REGISTRY_URL:$DATA_E2E_WORKSHOP_IMAGE_VERSION .
+docker build -t $DATA_E2E_REGISTRY_URL:$DATA_E2E_WORKSHOP_IMAGE_VERSION --build-arg BASE_IMAGE=oawofolu/learning-platform-image:v1 .
 docker tag $DATA_E2E_REGISTRY_URL:$DATA_E2E_WORKSHOP_IMAGE_VERSION $DATA_E2E_REGISTRY_URL
 docker push $DATA_E2E_REGISTRY_URL:$DATA_E2E_WORKSHOP_IMAGE_VERSION
 docker push $DATA_E2E_REGISTRY_URL
 #  create imagePullSecret
-kubectl create secret docker-registry eduk8s-demo-creds --docker-username=$DATA_E2E_REGISTRY_USERNAME --docker-password=$DATA_E2E_REGISTRY_PASSWORD --docker-email=$DATA_E2E_REGISTRY_EMAIL -n eduk8s || true
+kubectl create secret docker-registry eduk8s-demo-creds --docker-username=$DATA_E2E_REGISTRY_USERNAME --docker-password=$DATA_E2E_REGISTRY_PASSWORD --docker-email=$DATA_E2E_REGISTRY_EMAIL -n learningcenter || true
 # redeploy workshop
 kubectl delete --all learningcenter-training 
 kubectl apply -k .
