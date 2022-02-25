@@ -132,7 +132,7 @@ streaming replication (synchronous and asynchronous - synchronous by default).
 Let's demonstrate it by killing the primary node by <b>selecting the primary node in the lower console and hitting <font color="red">Ctrl-K</font>.</b>
 Observe the activity in the cluster:
 ```execute
-watch kubectl exec -it pginstance-1-1 -- bash -c 'pg_autoctl show state'
+kubectl exec -it pginstance-1-1 -- bash -c 'pg_autoctl show state'
 ```
 
 After the promotion/demotion activity has completed (the new primary has been promoted and the other replica has been demoted to a mirror node), exit the loop.

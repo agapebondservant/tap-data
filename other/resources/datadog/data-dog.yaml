@@ -1,0 +1,6 @@
+datadog:
+  prometheusScrape:
+    enabled: true
+  logs:
+    enabled: true
+    containerCollectAll: true

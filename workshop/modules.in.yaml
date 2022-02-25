@@ -74,3 +74,7 @@ config:
       value: ${DATA_E2E_PG_DATADOG_PW}
     - name: DATA_E2E_DATADOG_API_KEY
       value: ${DATA_E2E_DATADOG_API_KEY}
+    - name: DATA_E2E_DATADOG_USER
+      value: ${DATA_E2E_DATADOG_USER}
+    - name: DATA_E2E_DATADOG_PASSWORD
+      value: ${DATA_E2E_DATADOG_PASSWORD}
