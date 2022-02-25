@@ -36,6 +36,10 @@ spec:
   #!  capacity: 1
   #!  expires: 120m
   #!  orphaned: 5m
+  - name: data-postgres-deepdive
+    capacity: 3
+    expires: 120m
+    orphaned: 5m
   - name: data-gemfire-deepdive
     capacity: 3
     expires: 120m

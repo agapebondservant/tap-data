@@ -1,2 +1,2 @@
-operatorImageRepository: ${DATA_E2E_REGISTRY_USERNAME}/postgres-operator
-postgresImageRepository: ${DATA_E2E_REGISTRY_USERNAME}/postgres-instance
+operatorImageRepository: ${DATA_E2E_REGISTRY_USERNAME}/postgres-operator:v1.5.0
+postgresImageRepository: ${DATA_E2E_REGISTRY_USERNAME}/postgres-instance:v1.5.0

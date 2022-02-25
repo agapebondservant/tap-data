@@ -5,20 +5,15 @@ items:
   metadata:
     annotations:
       kapp.k14s.io/update-strategy: always-replace
-      kubectl.kubernetes.io/last-applied-configuration: |
-        {"apiVersion":"storage.k8s.io/v1","kind":"StorageClass","metadata":{"annotations":{"kapp.k14s.io/update-strategy":"always-replace","storageclass.kubernetes.io/is-default-class":"true"},"name":"generic"},"parameters":{"fsType":"ext4","iopsPerGB":"10","type":"gp2"},"provisioner":"kubernetes.io/aws-ebs","reclaimPolicy":"Retain","volumeBindingMode":"WaitForFirstConsumer"}
       storageclass.kubernetes.io/is-default-class: "true"
-    creationTimestamp: "2020-05-26T13:46:55Z"
     name: generic
-    resourceVersion: "5307134"
-    selfLink: /apis/storage.k8s.io/v1/storageclasses/generic
-    uid: a0c3e888-c7f3-4d71-bb3a-34f6a33d71f8
   parameters:
     fsType: ext4
     iopsPerGB: "10"
     type: gp2
   provisioner: kubernetes.io/aws-ebs
   reclaimPolicy: Delete
+  allowVolumeExpansion: true
   volumeBindingMode: WaitForFirstConsumer
 kind: List
 metadata:

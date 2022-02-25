@@ -5,6 +5,7 @@ envsubst < workshop/modules.in.yaml > workshop/modules.yaml
 envsubst < other/resources/postgres/postgres-cluster-with-backups.in.yaml  > other/resources/postgres/postgres-cluster-with-backups.yaml
 envsubst < other/resources/postgres/overrides.in.yaml > other/resources/postgres/overrides.yaml
 envsubst < other/resources/greenplum/overrides.in.yaml > other/resources/greenplum/overrides.yaml
+envsubst < other/resources/datadog/data-dog.in.yaml > other/resources/datadog/data-dog.yaml
 envsubst < other/resources/greenplum/minio-site.in.xml > other/resources/greenplum/minio-site.xml
 
 # pre-initialize required services

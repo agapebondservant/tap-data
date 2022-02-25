@@ -14,6 +14,4 @@ In this session, we will demonstrate some of the major features of the **Tanzu D
 4. **A management control plane.** We will show how we accomplish DBaaS: managing and monitoring multiple data clusters using **Data Management for Tanzu**.
 5. **A reliable and elastic data architecture with fast data ingest.** We will demonstrate the resiliency, availability and streamlined operability of our data architecture by showing the **self-healing** and **continuous availability** of both the data nodes and the Dashboard app during an upgrade. We will also show its resilience despite randomly killing off nodes in the architecture.
 
-![Demo Architecture](images/tas.jpg)
-
 Let's get started!

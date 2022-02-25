@@ -9,3 +9,4 @@ postgresImageTag: v1.1.0
 
 # specify the name of the docker-registry secret to allow the cluster to authenticate with the container registry for pulling images
 dockerRegistrySecretName: regsecret
+

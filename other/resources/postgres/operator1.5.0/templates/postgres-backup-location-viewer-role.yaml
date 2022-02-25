@@ -1,0 +1,20 @@
+# permissions for end users to view postgresbackuplocations.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: postgresbackuplocation-viewer-role
+rules:
+  - apiGroups:
+      - sql.tanzu.vmware.com
+    resources:
+      - postgresbackuplocations
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - sql.tanzu.vmware.com
+    resources:
+      - postgresbackuplocations/status
+    verbs:
+      - get

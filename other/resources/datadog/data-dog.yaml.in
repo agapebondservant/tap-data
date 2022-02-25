@@ -1,0 +1,15 @@
+datadog:
+  prometheusScrape:
+    enabled: true
+  logs:
+    enabled: true
+    containerCollectAll: true
+  confd:
+    postgres.yaml: |-
+      init_config:
+
+      instances:
+        - host: pginstance-1.YOUR_SESSION_NAMESPACE
+          port: 5432
+          username: datadog
+          password: ${DATA_E2E_PG_DATADOG_PW}

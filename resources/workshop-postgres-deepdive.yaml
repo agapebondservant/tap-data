@@ -1,0 +1,80 @@
+apiVersion: learningcenter.tanzu.vmware.com/v1beta1
+kind: Workshop
+metadata:
+  name: data-postgres-deepdive
+spec:
+  title: Tanzu Postgres Deep Dive
+  description: Demonstration of features of Tanzu Postgres
+  vendor: eduk8s.io
+  difficulty: beginner
+  duration: 120m
+  url: https://github.com/agapebondservant/new-data-e2e-demo
+  content:
+    image: oawofolu/new-data-e2e:latest
+  session:
+    env:
+    - name: ENABLE_JUPYTERLAB
+      value: "true"
+    - name: WORKSHOP_FILE
+      value: workshop-postgres-deepdive.yaml
+    - name: WORKSHOP_TOPIC
+      value: data-postgres-deepdive
+    ingresses:
+    - name: jupyter
+      port: 8888
+    - name: gemfire1-dev-api
+      port: 7070
+      protocol: http
+      host: "$(ingress_protocol):gemfire1-dev-api.$(session_namespace).svc.cluster.local"
+    - name: greenplum
+      port: 28080
+      protocol: http
+      host: greenplum.greenplum-system.svc.cluster.local
+    - name: petclinic-app-analytics
+      port: 8050
+      protocol: http
+      host: "$(ingress_protocol):petclinic-app-analytics.$(session_namespace).svc.cluster.local" 
+    - name: petclinic-claims-dashboard
+      port: 8050
+      protocol: http
+      host: "$(ingress_protocol):petclinic-claims-dashboard.$(session_namespace).svc.cluster.local" 
+    dashboards:
+    - name: Jupyter
+      url: "$(ingress_protocol)://$(session_namespace)-jupyter.$(ingress_domain)/"
+    #! namespaces:
+      #! Allow workshop to run containers as root (note: this is different from the workshop instances which will host deployments created during the course of the workshop)
+      #! security:
+      #!   policy: anyuid
+      #! Create additional workspaces
+    objects:
+      #! Add elevated privileges to workshop instance's service account
+      - apiVersion: rbac.authorization.k8s.io/v1
+        kind: ClusterRoleBinding
+        metadata:
+          name: $(session_namespace)-admin
+          namespace: $(workshop_namespace)
+        roleRef:
+          apiGroup: rbac.authorization.k8s.io
+          kind: ClusterRole
+          name: cluster-admin
+        subjects:
+        - kind: ServiceAccount
+          namespace: $(workshop_namespace)
+          name: $(service_account)
+    #! increase memory allocation (default is 1GB with editor)
+    resources:
+      memory: 2Gi
+    #! other
+    namespaces:
+      budget: custom
+    applications:
+      terminal:
+        enabled: true
+        layout: split
+      #!console:
+      #!  enabled: true
+      #!  vendor: octant
+      editor:
+        enabled: true
+      slides:
+        enabled: true

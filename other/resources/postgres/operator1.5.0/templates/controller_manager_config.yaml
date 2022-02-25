@@ -1,0 +1,19 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-operator-config
+data:
+  controller_manager_config.yaml: |
+    apiVersion: sql.tanzu.vmware.com/v1
+    kind: PostgresOperatorConfiguration
+    health:
+      healthProbeBindAddress: :8081
+    metrics:
+      bindAddress: 127.0.0.1:8080
+    webhook:
+      port: 9443
+      certDir: /tmp/postgres-operator-webhook-server-cert-secret
+    leaderElection:
+      leaderElect: false
+    certManagerClusterIssuerName: {{ .Values.certManagerClusterIssuerName }}

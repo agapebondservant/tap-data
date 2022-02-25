@@ -4,5 +4,6 @@ metadata:
   name: pginstance-1
 spec:
   storageClassName: generic
+  monitorStorageClassName: generic
   highAvailability:
     enabled: true

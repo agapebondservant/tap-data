@@ -7,7 +7,7 @@
 
 - Create new cluster for Educates platform: tanzu cluster create tanzu-data-cluster --file resources/tanzu-aws.yaml; watch tanzu cluster get tanzu-data-cluster; tanzu cluster kubeconfig get tanzu-data-cluster --admin
 
-- Create the default storage class (ensure that it is called generic, that the volume binding mode is WaitForFirstCustomer instead of Immediate, and the reclaimPolicy should be Retain) - storage-class-aws.yml
+- Create the default storage class (ensure that it is called generic, that the volume binding mode is WaitForFirstCustomer instead of Immediate, and the reclaimPolicy should be Retain) - kubectl apply -f resources/storageclass.yaml
 
 - Mark the storage class as default: kubectl patch storageclass generic -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
 
@@ -98,10 +98,17 @@ mc policy set download data-e2e-minio/artifacts/gemfire-greenplum-3.4.1.jar
 
 
 - Install Prometheus and Grafana:
+- Prometheus:
 helm repo add bitnami https://charts.bitnami.com/bitnami
 helm repo update
-kubectl create ns monitoring-tools
-helm install prometheus bitnami/kube-prometheus --namespace monitoring-tools
+#kubectl create ns monitoring-tools
+#helm install prometheus bitnami/kube-prometheus --namespace monitoring-tools
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm install prometheus prometheus-community/kube-prometheus-stack --create-namespace --namespace=monitoring-tools \
+--set prometheus.service.port=8000 --set prometheus.service.type=ClusterIP --wait
+kubectl apply -f resources/prometheus-httpproxy.yaml
+
+- Grafana:
 helm install grafana bitnami/grafana --namespace monitoring-tools
 export DATA_E2E_GRAFANA_PASSWORD=$(kubectl get secret grafana-admin --namespace monitoring-tools -o jsonpath="{.data.GF_SECURITY_ADMIN_PASSWORD}" | base64 --decode)
 export GRAFANA_POD_NAME=$(kubectl get pods --namespace monitoring-tools -l "app.kubernetes.io/name=grafana,app.kubernetes.io/instance=grafana" -o jsonpath="{.items[0].metadata.name}")
@@ -112,6 +119,11 @@ export GRAFANA_POD_NAME=$(kubectl get pods --namespace monitoring-tools -l "app.
 For Prometheus RSocket Proxy:
 kubectl apply -f resources/prometheus-proxy/proxyhelm/
 kubectl apply -f resources/prometheus-proxy/proxyhelm/prometheus-proxy-http-proxy.yaml
+
+- Install Datadog:
+helm repo add datadog https://helm.datadoghq.com
+helm repo update
+helm install datadog -f datadog-values.yaml --set datadog.site='datadoghq.com' --set datadog.apiKey='872f2e7482a0ab3a72a9487b1a05adbb' datadog/datadog
 
 RabbitMQ Dashboard: Dashboard ID 10991
 Erlang-Distribution Dashboard: Dashboard ID 11352

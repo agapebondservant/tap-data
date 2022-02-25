@@ -5,6 +5,9 @@ modules:
     deploy-postgres:
         name: Deploy Postgres
         exit_sign: Deploy RabbitMQ
+    postgres-deep-dive:
+      name: Postgres Deep Dive
+      exit_sign: Complete Workshop
     deploy-rabbitmq:
         name: Deploy RabbitMQ
         exit_sign: A Look at Cloud Native Data Pipelines
@@ -53,6 +56,8 @@ config:
       value: ${DATA_E2E_PIVOTAL_REGISTRY_USERNAME}
     - name: DATA_E2E_PIVOTAL_REGISTRY_PASSWORD
       value: ${DATA_E2E_PIVOTAL_REGISTRY_PASSWORD}
+    - name: DATA_E2E_MINIO_PG_REGION
+      value: ${DATA_E2E_MINIO_PG_REGION}
     - name: DATA_E2E_MINIO_URL
       value: ${DATA_E2E_MINIO_URL}
     - name: DATA_E2E_MINIO_ACCESS_KEY
@@ -65,3 +70,5 @@ config:
       value: ${DATA_E2E_WAVEFRONT_SOURCE}
     - name: DATA_E2E_GRAFANA_URL
       value: ${DATA_E2E_GRAFANA_URL}
+    - name: DATA_E2E_PG_DATADOG_PW
+      value: ${DATA_E2E_PG_DATADOG_PW}

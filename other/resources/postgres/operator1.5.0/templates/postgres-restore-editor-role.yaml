@@ -1,0 +1,24 @@
+# permissions for end users to edit postgresrestores.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: postgresrestore-editor-role
+rules:
+  - apiGroups:
+      - postgres.sql.tanzu.vmware.com
+    resources:
+      - postgresrestores
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - postgres.sql.tanzu.vmware.com
+    resources:
+      - postgresrestores/status
+    verbs:
+      - get

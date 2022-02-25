@@ -5,7 +5,7 @@ metadata:
 type: generic
 stringData:
   bucket: pgbackups
-  region: us-east-2
+  region: ${DATA_E2E_MINIO_PG_REGION}
   endpoint: ${DATA_E2E_MINIO_URL}
   key: ${DATA_E2E_MINIO_ACCESS_KEY}
   keySecret: ${DATA_E2E_MINIO_SECRET_KEY}
@@ -19,6 +19,7 @@ metadata:
   name: pginstance-1
 spec:
   storageClassName: generic
+  monitorStorageClassName: generic
   highAvailability:
     enabled: true
   backupLocationSecret:
