@@ -72,3 +72,5 @@ config:
       value: ${DATA_E2E_GRAFANA_URL}
     - name: DATA_E2E_PG_DATADOG_PW
       value: ${DATA_E2E_PG_DATADOG_PW}
+    - name: DATA_E2E_DATADOG_API_KEY
+      value: ${DATA_E2E_DATADOG_API_KEY}

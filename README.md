@@ -123,7 +123,8 @@ kubectl apply -f resources/prometheus-proxy/proxyhelm/prometheus-proxy-http-prox
 - Install Datadog:
 helm repo add datadog https://helm.datadoghq.com
 helm repo update
-helm install datadog -f datadog-values.yaml --set datadog.site='datadoghq.com' --set datadog.apiKey='872f2e7482a0ab3a72a9487b1a05adbb' datadog/datadog
+helm install datadog -f datadog-values.yaml \
+- --set datadog.site='datadoghq.com' --set datadog.apiKey='${DATA_E2E_DATADOG_API_KEY}' datadog/datadog
 
 RabbitMQ Dashboard: Dashboard ID 10991
 Erlang-Distribution Dashboard: Dashboard ID 11352
