@@ -132,10 +132,8 @@ streaming replication (synchronous and asynchronous - synchronous by default).
 Let's demonstrate it by killing the primary node by <b>selecting the primary node in the lower console and hitting <font color="red">Ctrl-K</font>.</b>
 Observe the activity in the cluster:
 ```execute
-watch "kubectl exec -it pginstance-1-1 -- bash -c 'pg_autoctl show state'"
+kubectl exec -it pginstance-1-1 -- bash -c 'pg_autoctl show state'
 ```
-
-<font color="red">Click **Ctrl-C** to exit once the promotion is complete.</font>
 
 #### Monitoring Postgres Data
 Tanzu Postgres includes a **Postgres Exporter** which collects and exposes Prometheus metrics via a _/metrics_ endpoint.
