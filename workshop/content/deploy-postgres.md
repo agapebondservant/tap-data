@@ -132,8 +132,10 @@ streaming replication (synchronous and asynchronous - synchronous by default).
 Let's demonstrate it by killing the primary node by <b>selecting the primary node in the lower console and hitting <font color="red">Ctrl-K</font>.</b>
 Observe the activity in the cluster:
 ```execute
-kubectl exec -it pginstance-1-1 -- bash -c 'pg_autoctl show state'
+watch "kubectl exec -it pginstance-1-1 -- bash -c 'pg_autoctl show state'"
 ```
+
+<font color="red">Click **Ctrl-C** to exit once the promotion is complete.</font>
 
 #### Monitoring Postgres Data
 Tanzu Postgres includes a **Postgres Exporter** which collects and exposes Prometheus metrics via a _/metrics_ endpoint.
@@ -209,7 +211,7 @@ Next, trigger an on-demand backup by deploying a new **PostgresBackup** definiti
 file: ~/other/resources/postgres/postgres-backup.yaml
 ```
 
-Deploy the backup definition:
+Deploy the backup definition. <font color="red">TODO - wait for the 3 Postgres instance nodes to be restored first.</font>
 ```execute
 kubectl apply -f ~/other/resources/postgres/postgres-backup.yaml -n {{ session_namespace }}
 ```
