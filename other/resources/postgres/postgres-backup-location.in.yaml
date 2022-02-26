@@ -1,0 +1,40 @@
+---
+apiVersion: sql.tanzu.vmware.com/v1
+kind: PostgresBackupLocation
+metadata:
+  name: pg-simple-backuplocation
+spec:
+  storage:
+    s3:
+      bucket: "pg-backups"
+      bucketPath: "/1"
+      region: ${DATA_E2E_MINIO_PG_REGION}
+      endpoint: ${DATA_E2E_MINIO_URL}
+      forcePathStyle: false
+      enableSSL: false
+      secret:
+        name: pg-minio-secret
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: pg-minio-secret
+type: generic
+stringData:
+  # Credentials
+  accessKeyId: ${DATA_E2E_MINIO_ACCESS_KEY}
+  secretAccessKey: ${DATA_E2E_MINIO_SECRET_KEY}
+
+---
+apiVersion: sql.tanzu.vmware.com/v1
+kind: Postgres
+metadata:
+  name: pginstance-1
+spec:
+  storageClassName: generic
+  monitorStorageClassName: generic
+  highAvailability:
+    enabled: true
+  backupLocation:
+    name: pg-simple-backuplocation

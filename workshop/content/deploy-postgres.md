@@ -135,13 +135,6 @@ Observe the activity in the cluster:
 kubectl exec -it pginstance-1-1 -- bash -c 'pg_autoctl show state'
 ```
 
-After the promotion/demotion activity has completed (the new primary has been promoted and the other replica has been demoted to a mirror node), exit the loop.
-```terminal:interrupt
-session: 1
-```
-
-#### Demonstrating multi cluster deployments
-
 #### Monitoring Postgres Data
 Tanzu Postgres includes a **Postgres Exporter** which collects and exposes Prometheus metrics via a _/metrics_ endpoint.
 
@@ -156,6 +149,28 @@ Kill the port-forward to proceed:
 kill -9 $TMP_PG_PROC
 ```
 
+Now that the Prometheus metrics are being exposed, we will be able to deploy a **forwarder** which will scrape the Prometheus endpoints and forward the metrics to the Prometheus aggregator.
+The Prometheus operator provides a **PodMonitor** which will handle scraping and forwarding the exposed Postgres metrics.
+
+Set up the **PodMonitor**:
+```editor:open-file
+file: ~/other/resources/postgres/postgres-pod-monitor.yaml
+```
+
+Deploy the **PodMonitor**:
+```execute
+kubectl apply -f ~/other/resources/postgres/postgres-pod-monitor.yaml
+```
+
+Next, navigate to the Prometheus UI, select Status -> Targets and click "Collapse All" - _podMonitor_ metrics 
+should be shown (<font color="red">NOTE:</font> Wait for a few seconds if the metrics do not show up right away):
+```dashboard:open-url
+url: https://prometheus.mytanzu.ml
+```
+
+<font color="red">NOTE:</font> To view specific metrics collected by Prometheus, go the the Prometheus UI Home screen by 
+clicking on "Prometheus" in the menu bar, and enter **pg** in the Search bar. A list of metrics should be populated in the field.
+
 #### Backups and Restores
 Tanzu Postgres includes **pgbackrest** as its backup-restore solution for **pgdata** backups, using an S3-compatible store. Here, we will use **Minio** for backup storage.
 
@@ -166,7 +181,7 @@ clear &&  mc config host add --insecure data-fileingest-minio https://{{DATA_E2E
 
 Let's create  a new bucket for our **pgdata** backups:
 ```execute
-mc mb --insecure -p data-fileingest-minio/pgbackups
+mc mb --insecure -p data-fileingest-minio/pg-backups
 ```
 
 View the newly created bucket (login with the _Username_ and _Password_ printed earlier):
@@ -174,36 +189,42 @@ View the newly created bucket (login with the _Username_ and _Password_ printed 
 url: https://minio.mytanzu.ml/
 ```
 
-Next, let's view the manifest that we would use to enable **pgBackRest**:
+Next, let's view the manifest that we would use to configure the backup location **pgBackRest**:
 ```editor:open-file
-file: ~/other/resources/postgres/postgres-cluster-with-backups.yaml
-text: "apiVersion"
-before: 0
-after: 13
+file: ~/other/resources/postgres/postgres-backup-location.yaml
 ```
 
-Update the Postgres cluster to enable **pgBackRest**:
+Deploy the configuration for the backup location:
 ```execute
-kubectl  replace --force -f ~/other/resources/postgres/postgres-cluster-with-backups.yaml  -n {{ session_namespace }}
+kubectl  replace --force -f ~/other/resources/postgres/postgres-backup-location.yaml  -n {{ session_namespace }}
 ```
 
-Set up the **pgbackrest** configuration in the primary node: 
+Let's take a look at the backup configuration that was just deployed:
 ```execute
-export $(kubectl exec -ti pginstance-1-1 -- bash -c "env | grep BACKUP_STANZA_NAME")
+kubectl get postgresbackuplocation pg-simple-backuplocation -o jsonpath={.spec} -n {{ session_namespace }} | jq
 ```
 
-Create a backup  using **pgBackRest**.
+Next, trigger an on-demand backup by deploying a new **PostgresBackup** definition. View the manifest:
+```editor:open-file
+file: ~/other/resources/postgres/postgres-backup.yaml
+```
+
+Deploy the backup definition:
 ```execute
-kubectl exec -it pginstance-1-1 -- bash -c 'pgbackrest stanza-create --stanza=$BACKUP_STANZA_NAME && pgbackrest backup --stanza=${BACKUP_STANZA_NAME}'
+kubectl apply -f ~/other/resources/postgres/postgres-backup.yaml -n {{ session_namespace }}
 ```
 
-View the generated backup files on Minio:
-View the newly created bucket:
+View the generated backup files on Minio: <font color="red">TODO - working with DB team</font>
 ```dashboard:open-url
 url: https://minio.mytanzu.ml/
 ```
 
-Get information about the last backup:
+View the backup progress here:
+```execute
+kubectl get postgresbackup pg-simple-backup -n {{ session_namespace }}
+```
+
+Information about backups can also be gotten directly from the **pgbackrest** cli: <font color="red">TODO</font>
 ```execute
 kubectl exec -it pginstance-1-1 -- bash -c 'pgbackrest info --stanza=${BACKUP_STANZA_NAME}'
 ```
@@ -214,3 +235,6 @@ kubectl exec -it pginstance-1-1 -- bash -c 'pgbackrest help'
 ```
 
 <font color="red">TODO:</font> Restore the last backup.
+
+#### Demonstrating multi cluster deployments
+<font color="red">TODO:</font>

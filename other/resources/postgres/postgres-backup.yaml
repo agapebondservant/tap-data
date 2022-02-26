@@ -1,0 +1,9 @@
+---
+apiVersion: sql.tanzu.vmware.com/v1
+kind: PostgresBackup
+metadata:
+  name: pg-simple-backup
+spec:
+  sourceInstance:
+    name: pginstance-1
+  type: full
