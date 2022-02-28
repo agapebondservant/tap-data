@@ -126,6 +126,36 @@ helm repo update
 helm install datadog -f other/resources/datadog/data-dog.yaml \
 - --set datadog.site='datadoghq.com' --set datadog.apiKey='${DATA_E2E_DATADOG_API_KEY}' datadog/datadog
 
+- Install Application Accelerator:
+https://docs.vmware.com/en/Tanzu-Application-Platform/1.0/tap/GUID-cert-mgr-contour-fcd-install-cert-mgr.html
+Install FluxCD controller:
+==========================
+tanzu package available list fluxcd.source.controller.tanzu.vmware.com -n tap-install (ensure packages are listed)
+tanzu package install fluxcd-source-controller -p fluxcd.source.controller.tanzu.vmware.com -v 0.16.1 -n tap-install
+Verify that package is running: tanzu package installed get fluxcd-source-controller -n tap-install
+Verify "Reconcile Succeeded": kubectl get pods -n flux-system
+Install Source Controller:
+==========================
+tanzu package available list controller.source.apps.tanzu.vmware.com --namespace tap-install
+tanzu package install source-controller -p controller.source.apps.tanzu.vmware.com -v 0.2.0 -n tap-install
+Verify that package is running: tanzu package installed get source-controller -n tap-install
+Install App Accelerator:
+=======================
+tanzu package available list accelerator.apps.tanzu.vmware.com --namespace tap-install
+tanzu package install app-accelerator -p accelerator.apps.tanzu.vmware.com -v 1.0.1 -n tap-install -f resources/app-accelerator-values.yaml
+Verify that package is running: tanzu package installed get app-accelerator -n tap-install
+Get the IP address for the App Accelerator API: kubectl get service -n accelerator-system
+Install the TAP GUI:
+===================
+tanzu package available list tap-gui.tanzu.vmware.com --namespace tap-install
+source .env
+envsubst < resources/tap-gui-values.in.yaml > resources/tap-gui-values.yaml
+tanzu package install tap-gui \
+  --package-name tap-gui.tanzu.vmware.com \
+  --version 1.0.2 -n tap-install \
+  -f resources/tap-gui-values.yaml
+Verify installation: tanzu package installed get tap-gui -n tap-install
+
 RabbitMQ Dashboard: Dashboard ID 10991
 Erlang-Distribution Dashboard: Dashboard ID 11352
 

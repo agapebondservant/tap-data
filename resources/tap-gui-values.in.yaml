@@ -1,0 +1,14 @@
+service_type: LoadBalancer
+ingressEnabled: "false"
+ingressDomain: ${DATA_E2E_GIT_TAP_GUI_INGRESS}
+app_config:
+  app:
+    baseUrl: http://tap-gui.${DATA_E2E_GIT_TAP_GUI_INGRESS}
+  catalog:
+    locations:
+      - type: url
+        target: https://${DATA_E2E_GIT_TAP_GUI_REPO}/catalog-info.yaml
+  backend:
+    baseUrl: http://tap-gui.${DATA_E2E_GIT_TAP_GUI_INGRESS}
+    cors:
+      origin: http://tap-gui.${DATA_E2E_GIT_TAP_GUI_INGRESS}

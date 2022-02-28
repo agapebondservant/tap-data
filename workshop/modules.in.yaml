@@ -78,3 +78,5 @@ config:
       value: ${DATA_E2E_DATADOG_USER}
     - name: DATA_E2E_DATADOG_PASSWORD
       value: ${DATA_E2E_DATADOG_PASSWORD}
+    - name: DATA_E2E_TAP_BUILD_SERVICE_REPO
+      value: ${DATA_E2E_TAP_BUILD_SERVICE_REPO}
