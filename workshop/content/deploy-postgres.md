@@ -9,8 +9,7 @@ kubectl delete deployment petclinic-app --ignore-not-found=true --namespace={{ s
 Check on the status by viewing the logs (**L** on K9s). Click **Esc**  when complete.
 
 Next, we view it:
-```dashboard:create-dashboard
-name: Petclinic
+```dashboard:open-url
 url: {{ ingress_protocol }}://petclinic-{{ session_namespace }}.mytanzu.ml
 ```
 
@@ -165,6 +164,7 @@ kubectl apply -f ~/other/resources/postgres/postgres-pod-monitor.yaml
 Next, navigate to the Prometheus UI, select Status -> Targets and click "Collapse All" - _podMonitor_ metrics 
 should be shown (<font color="red">NOTE:</font> Wait for a few seconds if the metrics do not show up right away):
 ```dashboard:open-url
+name: Prometheus
 url: https://prometheus.mytanzu.ml
 ```
 
@@ -179,7 +179,7 @@ First, get the Minio login credentials:
 clear &&  mc config host add --insecure data-fileingest-minio https://{{DATA_E2E_MINIO_URL}} {{DATA_E2E_MINIO_ACCESS_KEY}} {{DATA_E2E_MINIO_SECRET_KEY}} && printf "Username: $(kubectl get secret minio -o jsonpath="{.data.accesskey}" -n minio| base64 --decode)\nPassword: $(kubectl get secret minio -o jsonpath="{.data.secretkey}" -n minio| base64 --decode)\n"
 ```
 
-Let's create  a new bucket for our **pgdata** backups:
+Let's create a new bucket for our **pgdata** backups:
 ```execute
 mc mb --insecure -p data-fileingest-minio/pg-backups
 ```
@@ -189,6 +189,24 @@ View the newly created bucket (login with the _Username_ and _Password_ printed 
 url: https://minio.mytanzu.ml/
 ```
 
+Update the Postgres cluster to enable **pgBackRest**:
+```execute
+kubectl replace --force -f ~/other/resources/postgres/postgres-cluster-with-backups.yaml  -n {{ session_namespace }}
+```
+
+Set up the **pgbackrest** configuration in the primary node:
+```execute
+export $(kubectl exec -ti pginstance-1-1 -- bash -c "env | grep BACKUP_STANZA_NAME")
+```
+
+Create a backup  using **pgBackRest**.
+```execute
+kubectl exec -it pginstance-1-1 -- bash -c 'pgbackrest stanza-create --stanza=$BACKUP_STANZA_NAME && pgbackrest backup --stanza=${BACKUP_STANZA_NAME}'
+```
+
+<font color="red">NOTE: The approach detailed below is EXPERIMENTAL.</font>
+
+<div style="border: 5px solid gray;">
 Next, let's view the manifest that we would use to configure the backup location **pgBackRest**:
 ```editor:open-file
 file: ~/other/resources/postgres/postgres-backup-location.yaml
@@ -213,6 +231,7 @@ Deploy the backup definition. <font color="red">TODO - wait for the 3 Postgres i
 ```execute
 kubectl apply -f ~/other/resources/postgres/postgres-backup.yaml -n {{ session_namespace }}
 ```
+</div>
 
 View the generated backup files on Minio: <font color="red">TODO - working with DB team</font>
 ```dashboard:open-url

@@ -54,19 +54,66 @@ kubectl apply -k .
 - Deploy Minio (Server) with TLS:
 
 - Setup TLS cert for Minio:
-openssl genrsa -out private.key 2048
-openssl req -new -x509 -nodes -days 730 -key private.key -out public.crt -config other/resources/minio/openssl.conf
+openssl genrsa -out tls.key 2048
+#openssl genrsa -out private.key 2048
+openssl req -new -x509 -nodes -days 730 -key tls.key -out tls.crt -config other/resources/minio/openssl.conf
+#openssl req -new -x509 -nodes -days 730 -key private.key -out public.crt -config other/resources/minio/openssl.conf
 
 (LEGACY APPROACH:)
 helm repo add minio-legacy https://helm.min.io/
 kubectl create ns minio
+#kubectl create secret generic tls-ssl-minio --from-file=tls.key --from-file=tls.crt --namespace minio
 kubectl create secret generic tls-ssl-minio --from-file=private.key --from-file=public.crt --namespace minio
-#kubectl create secret tls tls-ssl-minio --key=minio-private.key --cert=public.crt --namespace minio
 helm install --set resources.requests.memory=1.5Gi,tls.enabled=true,tls.certSecret=tls-ssl-minio --namespace minio minio minio-legacy/minio
+#helm install --set resources.requests.memory=1.5Gi,tls.enabled=true,tls.publicCrt=tls.crt,tls.privateKey=tls.key,tls.certSecret=tls-ssl-minio --namespace minio minio minio-legacy/minio
 export MINIO_ACCESS_KEY=$(kubectl get secret minio -o jsonpath="{.data.accesskey}" -n minio| base64 --decode)
 export MINIO_SECRET_KEY=$(kubectl get secret minio -o jsonpath="{.data.secretkey}" -n minio| base64 --decode)
 export MINIO_POD_NAME=$(kubectl get pods --namespace minio -l "release=minio" -o jsonpath="{.items[0].metadata.name}")
+export MINIO_SERVER_URL=minio.mytanzu.ml
 kubectl apply -f resources/minio-http-proxy.yaml
+
+(TROUBLESHOOTING RECOMMENDED APPROACH:)
+kubectl create namespace minio || true
+kubectl apply -f resources/minio-tls-cert.yaml -n minio
+helm repo add minio-operator https://charts.min.io/
+helm repo update
+
+until kubectl get secret minio-tls -n minio; \
+do \
+@echo "Waiting for minio-tls secret..."; \
+sleep 1; \
+done
+
+helm upgrade minio minio-operator/minio \
+--install \
+--create-namespace \
+--namespace minio \
+--set replicas=1 \
+--set mode=standalone \
+--set resources.requests.memory=256Mi \
+--set persistence.size=1Gi \
+--set persistence.storageClass=generic \
+--set service.type=ClusterIP \
+--set consoleService.type=ClusterIP \
+--set rootUser=admin \
+--set rootPassword=adminsecret \
+--set buckets[0].name=pg-backups,buckets[0].policy=public,buckets[0].purge=false \
+--set tls.enabled=true \
+--set tls.certSecret=minio-tls \
+--set tls.publicCrt=tls.crt \
+--set tls.privateKey=tls.key \
+--set DeploymentUpdate.type=Recreate \
+-f resources/minio-values.yaml
+
+kubectl rollout status -n minio deployment.apps/minio
+
+export MINIO_POD_NAME=$(kubectl get pods --namespace minio -l "release=minio" -o jsonpath="{.items[0].metadata.name}")
+export MINIO_ACCESS_KEY=$(kubectl get secret minio -o jsonpath="{.data.rootUser}" -n minio| base64 --decode)
+export MINIO_SECRET_KEY=$(kubectl get secret minio -o jsonpath="{.data.rootPassword}" -n minio| base64 --decode)
+
+kubectl apply -f resources/minio-operator-http-proxy.yaml
+
+
 
 
 (LATEST APPROACH:)

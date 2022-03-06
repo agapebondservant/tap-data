@@ -1,0 +1,26 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: minio-selfsigned-issuer
+  namespace: minio
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: minio-certificate
+  namespace: minio
+spec:
+  isCA: false
+  dnsNames:
+    - localhost
+    - minio
+    - minio.minio.svc
+    - minio.minio.svc.cluster.local
+    - minio.mytanzu.ml
+  issuerRef:
+    kind: Issuer
+    name: minio-selfsigned-issuer
+  secretName: minio-tls

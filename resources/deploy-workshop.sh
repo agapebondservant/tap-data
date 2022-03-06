@@ -3,6 +3,7 @@
 source .env
 envsubst < workshop/modules.in.yaml > workshop/modules.yaml
 envsubst < other/resources/postgres/postgres-backup-location.in.yaml  > other/resources/postgres/postgres-backup-location.yaml
+envsubst < other/resources/postgres/postgres-cluster-with-backups.in.yaml > other/resources/postgres/postgres-cluster-with-backups.yaml
 envsubst < other/resources/postgres/overrides.in.yaml > other/resources/postgres/overrides.yaml
 envsubst < other/resources/greenplum/overrides.in.yaml > other/resources/greenplum/overrides.yaml
 envsubst < other/resources/datadog/data-dog-with-db-config.in.yaml > other/resources/datadog/data-dog-with-db-config.yaml

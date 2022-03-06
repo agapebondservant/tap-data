@@ -1,0 +1,3 @@
+extraEnvs:
+  - name: MINIO_SERVER_URL
+    value: https://minio.mytanzu.ml
