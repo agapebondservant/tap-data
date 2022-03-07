@@ -1,0 +1,14 @@
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: pgadmin-httpproxy
+  namespace: pgadmin
+spec:
+  routes:
+    - conditions:
+        - prefix: /
+      services:
+        - name: pgadmin-pgadmin4
+          port: 80
+  virtualhost:
+    fqdn: pgadmin.mytanzu.ml

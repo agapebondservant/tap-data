@@ -1,0 +1,9 @@
+apiVersion: sql.tanzu.vmware.com/v1
+kind: Postgres
+metadata:
+  name: pginstance-2
+spec:
+  storageClassName: generic
+  monitorStorageClassName: generic
+  highAvailability:
+    enabled: true

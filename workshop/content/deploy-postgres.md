@@ -33,7 +33,7 @@ To resolve this, we will need to provision a persistent data store.
 Let's deploy the Tanzu Postgres **operator**:
 
 ```execute
-kubectl create secret docker-registry image-pull-secret --namespace=default --docker-username='{{ DATA_E2E_REGISTRY_USERNAME }}' --docker-password='{{ DATA_E2E_REGISTRY_PASSWORD }}' --dry-run -o yaml | kubectl apply -f - && kubectl create secret docker-registry image-pull-secret --namespace={{ session_namespace }} --docker-username='{{ DATA_E2E_REGISTRY_USERNAME }}' --docker-password='{{ DATA_E2E_REGISTRY_PASSWORD }}' --dry-run -o yaml | kubectl apply -f - && helm uninstall postgres --namespace default; helm uninstall postgres --namespace {{ session_namespace }}; for i in $(kubectl get clusterrole | grep postgres); do kubectl delete clusterrole ${i}; done; for i in $(kubectl get clusterrolebinding | grep postgres); do kubectl delete clusterrolebinding ${i}; done; for i in $(kubectl get certificate -n cert-manager | grep postgres); do kubectl delete certificate -n cert-manager ${i}; done; for i in $(kubectl get clusterissuer | grep postgres); do kubectl delete clusterissuer ${i}; done; for i in $(kubectl get mutatingwebhookconfiguration | grep postgres); do kubectl delete mutatingwebhookconfiguration ${i}; done; for i in $(kubectl get validatingwebhookconfiguration | grep postgres); do kubectl delete validatingwebhookconfiguration ${i}; done; for i in $(kubectl get crd | grep postgres); do kubectl delete crd ${i}; done; helm install postgres ~/other/resources/postgres/operator1.5.0 -f ~/other/resources/postgres/overrides.yaml --namespace {{ session_namespace }} --wait &> /dev/null; kubectl apply -f ~/other/resources/postgres/operator1.5.0/crds/
+kubectl create secret docker-registry image-pull-secret --namespace=default --docker-username='{{ DATA_E2E_REGISTRY_USERNAME }}' --docker-password='{{ DATA_E2E_REGISTRY_PASSWORD }}' --dry-run -o yaml | kubectl apply -f - && kubectl create secret docker-registry image-pull-secret --namespace={{ session_namespace }} --docker-username='{{ DATA_E2E_REGISTRY_USERNAME }}' --docker-password='{{ DATA_E2E_REGISTRY_PASSWORD }}' --dry-run -o yaml | kubectl apply -f - && helm uninstall postgres --namespace default; helm uninstall postgres --namespace {{ session_namespace }}; for i in $(kubectl get clusterrole | grep postgres); do kubectl delete clusterrole ${i} > /dev/null 2>&1; done; for i in $(kubectl get clusterrolebinding | grep postgres); do kubectl delete clusterrolebinding ${i} > /dev/null 2>&1; done; for i in $(kubectl get certificate -n cert-manager | grep postgres); do kubectl delete certificate -n cert-manager ${i} > /dev/null 2>&1; done; for i in $(kubectl get clusterissuer | grep postgres); do kubectl delete clusterissuer ${i} > /dev/null 2>&1; done; for i in $(kubectl get mutatingwebhookconfiguration | grep postgres); do kubectl delete mutatingwebhookconfiguration ${i} > /dev/null 2>&1; done; for i in $(kubectl get validatingwebhookconfiguration | grep postgres); do kubectl delete validatingwebhookconfiguration ${i} > /dev/null 2>&1; done; for i in $(kubectl get crd | grep postgres); do kubectl delete crd ${i} > /dev/null 2>&1; done; helm install postgres ~/other/resources/postgres/operator1.5.0 -f ~/other/resources/postgres/overrides.yaml --namespace {{ session_namespace }} --wait &> /dev/null; kubectl apply -f ~/other/resources/postgres/operator1.5.0/crds/
 ```
 
 The operator deploys a set of **Custom Resource Definitions** which encapsulate various advanced, DB-specific concepts as managed Kubernetes resources. 
@@ -191,7 +191,7 @@ url: https://minio.mytanzu.ml/
 
 Update the Postgres cluster to enable **pgBackRest**:
 ```execute
-kubectl replace --force -f ~/other/resources/postgres/postgres-cluster-with-backups.yaml  -n {{ session_namespace }}
+kubectl apply -f ~/other/resources/postgres/postgres-cluster-with-backups.yaml  -n {{ session_namespace }}
 ```
 
 Set up the **pgbackrest** configuration in the primary node:
@@ -203,35 +203,6 @@ Create a backup  using **pgBackRest**.
 ```execute
 kubectl exec -it pginstance-1-1 -- bash -c 'pgbackrest stanza-create --stanza=$BACKUP_STANZA_NAME && pgbackrest backup --stanza=${BACKUP_STANZA_NAME}'
 ```
-
-<font color="red">NOTE: The approach detailed below is EXPERIMENTAL.</font>
-
-<div style="border: 5px solid gray;">
-Next, let's view the manifest that we would use to configure the backup location **pgBackRest**:
-```editor:open-file
-file: ~/other/resources/postgres/postgres-backup-location.yaml
-```
-
-Deploy the configuration for the backup location:
-```execute
-kubectl  replace --force -f ~/other/resources/postgres/postgres-backup-location.yaml  -n {{ session_namespace }}
-```
-
-Let's take a look at the backup configuration that was just deployed:
-```execute
-kubectl get postgresbackuplocation pg-simple-backuplocation -o jsonpath={.spec} -n {{ session_namespace }} | jq
-```
-
-Next, trigger an on-demand backup by deploying a new **PostgresBackup** definition. View the manifest:
-```editor:open-file
-file: ~/other/resources/postgres/postgres-backup.yaml
-```
-
-Deploy the backup definition. <font color="red">TODO - wait for the 3 Postgres instance nodes to be restored first.</font>
-```execute
-kubectl apply -f ~/other/resources/postgres/postgres-backup.yaml -n {{ session_namespace }}
-```
-</div>
 
 View the generated backup files on Minio: <font color="red">TODO - working with DB team</font>
 ```dashboard:open-url
@@ -256,4 +227,57 @@ kubectl exec -it pginstance-1-1 -- bash -c 'pgbackrest help'
 <font color="red">TODO:</font> Restore the last backup.
 
 #### Demonstrating multi cluster deployments
-<font color="red">TODO:</font>
+The **Operator pattern** of Tanzu Postgres allows for the deployment of multiple Postgres clusters from a centralized controller.
+This greatly simplifies configuration management for each Postgres cluster.
+
+In order to further streamline cluster management, a **GitOps** workflow is preferred. Among other things, the **GitOps** 
+approach provides a way to enforce "separation of concerns" between the team that *owns* the database 
+and the team that *deploys* it. Database owners can make changes to the database without requiring access to the underlying 
+Kubernetes cluster, which simplifies access management and improves repeatability/reliability. 
+Also, because **GitOps** is a declarative, "closed loop" approach, 
+where git is used as the source of truth for the database clusters, tracking and applying changes is now an automated process, 
+rather than being a pipeline-driven process (common with more traditional, imperative pipelines).
+
+To demonstrate the multi-cluster deployment capability of the **Tanzu Postgres** operator using GitOps, we will use **ArgoCD**.
+
+Let's set up ArgoCD:
+```execute
+git clone https://oawofolu:{{DATA_E2E_GIT_FLUXDEMO_TOKEN}}@gitlab.com/oawofolu/postgres-repo.git && cd postgres-repo && git rm app/pginstance2.yaml > /dev/null 2>&1; git config --global user.email 'eduk8s@example.com'; git config --global user.name 'Educates'; git commit -a -m 'New commit' && git push; cd $HOME && kubectl config set-context --current --namespace=argocd && argocd app delete postgres-${session_namespace} -y >/dev/null 2>&1; argocd login --core && sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/postgres/postgres-argocd-app.yaml && kubectl apply -f ~/other/resources/postgres/postgres-argocd-app.yaml
+```
+
+Next, we will add a manifest representing a new cluster, **pginstance-2**, to our ArgoCD-tracked repository. Copy the content of this file:
+```editor:open-file
+file: ~/other/resources/postgres/postgres-cluster-2.yaml
+```
+
+Go to **GitLab**:
+```dashboard:open-url
+url: https://gitlab.com/oawofolu/postgres-repo.git
+```
+
+Go into the **app** folder, then paste the previously copied content in a new file called **pginstance2.yaml** and commit.
+You should see a new ArgoCD application:
+```execute
+watch argocd app get postgres-{{session_namespace}}
+```
+
+Eventually, the pods for the new cluster should start showing up below. Enter **Ctrl-C** to exit the *watch* statement.
+
+Meanwhile, ensure that you are able to access your databases. **pgAdmin** is a popular graphical interface for many database adminstration tasks.
+Launch **pgAdmin** here (use "chart@example.local/SuperSecret" as login credentials:)
+```dashboard:open-url
+url: http://pgadmin.{{ ingress_domain }}
+```
+
+Next, create a connection to the database. Click on "Add New Server" and enter the following:
+```execute
+printf "Under General tab:\n  Server: pginstance-1.{{session_namespace}}\nUnder Connection tab:\n  Host name: pginstance-1.{{session_namespace}}.svc.cluster.local\n  Maintenance Database: pginstance-1\n  Username: pgadmin\n  Password: $(kubectl get secret pginstance-1-db-secret -n {{session_namespace}} -o jsonpath='{.data.password}' | base64 --decode)\n"
+```
+
+(When done, select the server "Servers" and click "Remove Server".)
+
+
+<font color="red"><b>NOTE: Restore default context before proceeding.</b></font>
+```execute
+kubectl config set-context --current --namespace={{session_namespace}}
+```

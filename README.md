@@ -203,6 +203,23 @@ tanzu package install tap-gui \
   -f resources/tap-gui-values.yaml
 Verify installation: tanzu package installed get tap-gui -n tap-install
 
+  
+Install ArgoCD:
+==============
+kubectl create namespace argocd
+kubectl apply -n argocd -f resources/argocd.yaml
+
+Install pgAdmin:
+===============
+kubectl create ns pgadmin
+helm repo add runix https://helm.runix.net/
+helm repo update
+helm install pgadmin runix/pgadmin4 --namespace=pgadmin \
+--set persistence.storageClass=generic
+kubectl apply -f resources/pgadmin.yaml
+export PGADMIN_POD_NAME=$(kubectl get pods --namespace pgadmin -l "app.kubernetes.io/name=pgadmin4,app.kubernetes.io/instance=pgadmin" -o jsonpath="{.items[0].metadata.name}")
+Connect to your-svc.your-namespace.svc.cluster.local
+
 RabbitMQ Dashboard: Dashboard ID 10991
 Erlang-Distribution Dashboard: Dashboard ID 11352
 
