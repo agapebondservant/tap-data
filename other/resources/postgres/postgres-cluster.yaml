@@ -7,3 +7,5 @@ spec:
   monitorStorageClassName: generic
   highAvailability:
     enabled: true
+  seccompProfile:
+    type: Unconfined

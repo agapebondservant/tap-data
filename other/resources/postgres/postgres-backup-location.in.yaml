@@ -36,5 +36,7 @@ spec:
   monitorStorageClassName: generic
   highAvailability:
     enabled: true
+  seccompProfile:
+    type: Unconfined
   backupLocation:
     name: pg-simple-backuplocation

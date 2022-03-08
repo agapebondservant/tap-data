@@ -3,7 +3,7 @@ apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
   name: minio-selfsigned-issuer
-  namespace: minio
+  namespace: minio-operator
 spec:
   selfSigned: {}
 ---
@@ -11,7 +11,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: minio-certificate
-  namespace: minio
+  namespace: minio-operator
 spec:
   isCA: false
   dnsNames:

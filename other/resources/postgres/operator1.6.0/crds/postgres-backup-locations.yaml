@@ -1,0 +1,120 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.8.0
+  creationTimestamp: null
+  name: postgresbackuplocations.sql.tanzu.vmware.com
+  labels:
+    app: postgres-operator
+spec:
+  group: sql.tanzu.vmware.com
+  names:
+    kind: PostgresBackupLocation
+    listKind: PostgresBackupLocationList
+    plural: postgresbackuplocations
+    singular: postgresbackuplocation
+  scope: Namespaced
+  versions:
+    - name: v1
+      schema:
+        openAPIV3Schema:
+          description: PostgresBackupLocation is the Schema for the postgresbackuplocations API
+          properties:
+            apiVersion:
+              description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+              type: string
+            kind:
+              description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+              type: string
+            metadata:
+              type: object
+            spec:
+              description: PostgresBackupLocationSpec defines the desired state of PostgresBackupLocation
+              properties:
+                retentionPolicy:
+                  properties:
+                    diffRetention:
+                      description: DiffRetention describes the retention policy for differential backaups
+                      properties:
+                        number:
+                          description: Number is number of differential backups to retain
+                          type: integer
+                      required:
+                        - number
+                      type: object
+                    fullRetention:
+                      description: FullRetention describes the retention policy for full backups
+                      properties:
+                        number:
+                          description: Number is number of days for Type time or number of backups for Type count
+                          type: integer
+                        type:
+                          description: Type represents a time period (days) or count of full backups to keep
+                          enum:
+                            - count
+                            - time
+                          type: string
+                      required:
+                        - number
+                        - type
+                      type: object
+                  type: object
+                storage:
+                  properties:
+                    s3:
+                      description: S3 describes the configuration for S3 backups
+                      properties:
+                        bucket:
+                          description: Bucket describes the location in which backups will be stored
+                          type: string
+                        bucketPath:
+                          default: /
+                          description: BucketPath describes the path where backups and archive are stored
+                          type: string
+                        enableSSL:
+                          default: true
+                          description: EnableSSL forces S3 server validation
+                          type: boolean
+                        endpoint:
+                          description: Endpoint describes the S3 endpoint to be used for backup
+                          type: string
+                        forcePathStyle:
+                          description: ForcePathStyle forces the use of path-style addressing for s3 operations
+                          type: boolean
+                        region:
+                          default: us-east-1
+                          type: string
+                        secret:
+                          description: Secret describes the secret that'll be used to access provided s3 bucket
+                          properties:
+                            name:
+                              description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names TODO: Add other useful fields. apiVersion, kind, uid?'
+                              type: string
+                          type: object
+                      required:
+                        - bucket
+                        - enableSSL
+                        - endpoint
+                        - secret
+                      type: object
+                  type: object
+              type: object
+            status:
+              description: PostgresBackupLocationStatus defines the observed state of PostgresBackupLocation
+              properties:
+                currentSecretResourceVersion:
+                  type: string
+              type: object
+          type: object
+      served: true
+      storage: true
+      subresources:
+        status: {}
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []

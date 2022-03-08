@@ -1,0 +1,37 @@
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  annotations:
+    # these annotations populate the clientConfig.caBundle field
+    # under the webhooks key
+    cert-manager.io/inject-ca-from: {{ .Release.Namespace }}/postgres-operator-serving-cert
+  creationTimestamp: null
+  name: postgres-operator-mutating-webhook-configuration
+  labels:
+    app: postgres-operator
+webhooks:
+- admissionReviewVersions:
+  - v1beta1
+  - v1
+  clientConfig:
+    # unset, will be set by cert-manager
+    # see cert-manager.io/inject-ca-from annotation above
+    caBundle: ""
+    service:
+      name: postgres-operator-webhook-service
+      namespace: {{ .Release.Namespace }}
+      path: /mutate-sql-tanzu-vmware-com-v1-postgres
+  failurePolicy: Fail
+  name: mpostgres.kb.io
+  rules:
+    - apiGroups:
+        - sql.tanzu.vmware.com
+      apiVersions:
+        - v1
+      operations:
+        - CREATE
+        - UPDATE
+      resources:
+        - postgres
+  sideEffects: NoneOnDryRun

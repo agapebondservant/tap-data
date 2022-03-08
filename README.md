@@ -73,21 +73,21 @@ export MINIO_SERVER_URL=minio.mytanzu.ml
 kubectl apply -f resources/minio-http-proxy.yaml
 
 (TROUBLESHOOTING RECOMMENDED APPROACH:)
-kubectl create namespace minio || true
-kubectl apply -f resources/minio-tls-cert.yaml -n minio
+kubectl create namespace minio-operator || true
+kubectl apply -f resources/minio-tls-cert.yaml -n minio-operator
 helm repo add minio-operator https://charts.min.io/
 helm repo update
 
-until kubectl get secret minio-tls -n minio; \
+until kubectl get secret minio-tls -n minio-operator; \
 do \
 @echo "Waiting for minio-tls secret..."; \
 sleep 1; \
 done
 
-helm upgrade minio minio-operator/minio \
+helm upgrade minio-operator minio-operator/minio \
 --install \
 --create-namespace \
---namespace minio \
+--namespace minio-operator \
 --set replicas=1 \
 --set mode=standalone \
 --set resources.requests.memory=256Mi \
@@ -105,11 +105,11 @@ helm upgrade minio minio-operator/minio \
 --set DeploymentUpdate.type=Recreate \
 -f resources/minio-values.yaml
 
-kubectl rollout status -n minio deployment.apps/minio
+kubectl rollout status -n minio-operator deployment.apps/minio
 
-export MINIO_POD_NAME=$(kubectl get pods --namespace minio -l "release=minio" -o jsonpath="{.items[0].metadata.name}")
-export MINIO_ACCESS_KEY=$(kubectl get secret minio -o jsonpath="{.data.rootUser}" -n minio| base64 --decode)
-export MINIO_SECRET_KEY=$(kubectl get secret minio -o jsonpath="{.data.rootPassword}" -n minio| base64 --decode)
+export MINIO_POD_NAME=$(kubectl get pods --namespace minio-operator -l "release=minio" -o jsonpath="{.items[0].metadata.name}")
+export MINIO_ACCESS_KEY=$(kubectl get secret minio -o jsonpath="{.data.rootUser}" -n minio-operator| base64 --decode)
+export MINIO_SECRET_KEY=$(kubectl get secret minio -o jsonpath="{.data.rootPassword}" -n minio-operator| base64 --decode)
 
 kubectl apply -f resources/minio-operator-http-proxy.yaml
 

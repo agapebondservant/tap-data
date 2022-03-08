@@ -1,0 +1,87 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.8.0
+  creationTimestamp: null
+  name: postgresbackupschedules.sql.tanzu.vmware.com
+  labels:
+    app: postgres-operator
+spec:
+  group: sql.tanzu.vmware.com
+  names:
+    kind: PostgresBackupSchedule
+    listKind: PostgresBackupScheduleList
+    plural: postgresbackupschedules
+    singular: postgresbackupschedule
+  scope: Namespaced
+  versions:
+    - name: v1
+      schema:
+        openAPIV3Schema:
+          description: PostgresBackupSchedule is the Schema for the postgresbackupschedules API
+          properties:
+            apiVersion:
+              description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+              type: string
+            kind:
+              description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+              type: string
+            metadata:
+              type: object
+            spec:
+              description: PostgresBackupScheduleSpec defines the desired state of PostgresBackupSchedule
+              properties:
+                backupTemplate:
+                  description: BackupTemplate describes the backup specification template
+                  properties:
+                    spec:
+                      description: PostgresBackupSpec defines the desired state of PostgresBackup
+                      properties:
+                        sourceInstance:
+                          description: Instance specifies the postgres instance name that you want to backup
+                          properties:
+                            name:
+                              description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names TODO: Add other useful fields. apiVersion, kind, uid?'
+                              type: string
+                          type: object
+                        type:
+                          default: full
+                          description: Type describes the backup type to be taken
+                          enum:
+                            - full
+                            - incremental
+                            - differential
+                          type: string
+                      required:
+                        - sourceInstance
+                      type: object
+                  required:
+                    - spec
+                  type: object
+                schedule:
+                  description: Schedule describes when the backup should be scheduled in cron time syntax
+                  type: string
+              required:
+                - backupTemplate
+                - schedule
+              type: object
+            status:
+              description: PostgresBackupScheduleStatus defines the observed state of PostgresBackupSchedule
+              properties:
+                message:
+                  description: Message indicates a brief description of the status of the backup schedule
+                  type: string
+              type: object
+          type: object
+      served: true
+      storage: true
+      subresources:
+        status: {}
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []

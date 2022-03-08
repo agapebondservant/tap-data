@@ -1,4 +1,4 @@
-![Tanzu Data](images/postgres_ha.png)
+![High-Level Architecture of Tanzu Postgres operator](images/postgres_ha.png)
 
 {% if ENV_WORKSHOP_TOPIC == 'data-e2e' %}
 Let's view our **Petclinic app**. First, we launch it:
@@ -33,7 +33,7 @@ To resolve this, we will need to provision a persistent data store.
 Let's deploy the Tanzu Postgres **operator**:
 
 ```execute
-kubectl create secret docker-registry image-pull-secret --namespace=default --docker-username='{{ DATA_E2E_REGISTRY_USERNAME }}' --docker-password='{{ DATA_E2E_REGISTRY_PASSWORD }}' --dry-run -o yaml | kubectl apply -f - && kubectl create secret docker-registry image-pull-secret --namespace={{ session_namespace }} --docker-username='{{ DATA_E2E_REGISTRY_USERNAME }}' --docker-password='{{ DATA_E2E_REGISTRY_PASSWORD }}' --dry-run -o yaml | kubectl apply -f - && helm uninstall postgres --namespace default; helm uninstall postgres --namespace {{ session_namespace }}; for i in $(kubectl get clusterrole | grep postgres); do kubectl delete clusterrole ${i} > /dev/null 2>&1; done; for i in $(kubectl get clusterrolebinding | grep postgres); do kubectl delete clusterrolebinding ${i} > /dev/null 2>&1; done; for i in $(kubectl get certificate -n cert-manager | grep postgres); do kubectl delete certificate -n cert-manager ${i} > /dev/null 2>&1; done; for i in $(kubectl get clusterissuer | grep postgres); do kubectl delete clusterissuer ${i} > /dev/null 2>&1; done; for i in $(kubectl get mutatingwebhookconfiguration | grep postgres); do kubectl delete mutatingwebhookconfiguration ${i} > /dev/null 2>&1; done; for i in $(kubectl get validatingwebhookconfiguration | grep postgres); do kubectl delete validatingwebhookconfiguration ${i} > /dev/null 2>&1; done; for i in $(kubectl get crd | grep postgres); do kubectl delete crd ${i} > /dev/null 2>&1; done; helm install postgres ~/other/resources/postgres/operator1.5.0 -f ~/other/resources/postgres/overrides.yaml --namespace {{ session_namespace }} --wait &> /dev/null; kubectl apply -f ~/other/resources/postgres/operator1.5.0/crds/
+kubectl create secret docker-registry image-pull-secret --namespace=default --docker-username='{{ DATA_E2E_REGISTRY_USERNAME }}' --docker-password='{{ DATA_E2E_REGISTRY_PASSWORD }}' --dry-run -o yaml | kubectl apply -f - && kubectl create secret docker-registry image-pull-secret --namespace={{ session_namespace }} --docker-username='{{ DATA_E2E_REGISTRY_USERNAME }}' --docker-password='{{ DATA_E2E_REGISTRY_PASSWORD }}' --dry-run -o yaml | kubectl apply -f - && helm uninstall postgres --namespace default; helm uninstall postgres --namespace {{ session_namespace }}; for i in $(kubectl get clusterrole | grep postgres); do kubectl delete clusterrole ${i} > /dev/null 2>&1; done; for i in $(kubectl get clusterrolebinding | grep postgres); do kubectl delete clusterrolebinding ${i} > /dev/null 2>&1; done; for i in $(kubectl get certificate -n cert-manager | grep postgres); do kubectl delete certificate -n cert-manager ${i} > /dev/null 2>&1; done; for i in $(kubectl get clusterissuer | grep postgres); do kubectl delete clusterissuer ${i} > /dev/null 2>&1; done; for i in $(kubectl get mutatingwebhookconfiguration | grep postgres); do kubectl delete mutatingwebhookconfiguration ${i} > /dev/null 2>&1; done; for i in $(kubectl get validatingwebhookconfiguration | grep postgres); do kubectl delete validatingwebhookconfiguration ${i} > /dev/null 2>&1; done; for i in $(kubectl get crd | grep postgres); do kubectl delete crd ${i} > /dev/null 2>&1; done; helm install postgres ~/other/resources/postgres/operator1.6.0 -f ~/other/resources/postgres/overrides.yaml --namespace {{ session_namespace }} --wait &> /dev/null; kubectl apply -f ~/other/resources/postgres/operator1.6.0/crds/
 ```
 
 The operator deploys a set of **Custom Resource Definitions** which encapsulate various advanced, DB-specific concepts as managed Kubernetes resources. 
@@ -135,6 +135,7 @@ kubectl exec -it pginstance-1-1 -- bash -c 'pg_autoctl show state'
 ```
 
 #### Monitoring Postgres Data
+![Tanzu Postgres Operator Monitoring](images/postgres_metrics.png)
 Tanzu Postgres includes a **Postgres Exporter** which collects and exposes Prometheus metrics via a _/metrics_ endpoint.
 
 Show a sampling of the emitted metrics:
@@ -165,7 +166,7 @@ Next, navigate to the Prometheus UI, select Status -> Targets and click "Collaps
 should be shown (<font color="red">NOTE:</font> Wait for a few seconds if the metrics do not show up right away):
 ```dashboard:open-url
 name: Prometheus
-url: https://prometheus.mytanzu.ml
+url: http://prometheus.mytanzu.ml
 ```
 
 <font color="red">NOTE:</font> To view specific metrics collected by Prometheus, go the the Prometheus UI Home screen by 
@@ -189,19 +190,29 @@ View the newly created bucket (login with the _Username_ and _Password_ printed 
 url: https://minio.mytanzu.ml/
 ```
 
-Update the Postgres cluster to enable **pgBackRest**:
-```execute
-kubectl apply -f ~/other/resources/postgres/postgres-cluster-with-backups.yaml  -n {{ session_namespace }}
+Next, let's view the manifest that we would use to configure the backup location **pgBackRest**:
+```editor:open-file
+file: ~/other/resources/postgres/postgres-backup-location.yaml
 ```
 
-Set up the **pgbackrest** configuration in the primary node:
+Deploy the configuration for the backup location:
 ```execute
-export $(kubectl exec -ti pginstance-1-1 -- bash -c "env | grep BACKUP_STANZA_NAME")
+kubectl  apply -f ~/other/resources/postgres/postgres-backup-location.yaml  -n {{ session_namespace }}
 ```
 
-Create a backup  using **pgBackRest**.
+Let's take a look at the backup configuration that was just deployed:
 ```execute
-kubectl exec -it pginstance-1-1 -- bash -c 'pgbackrest stanza-create --stanza=$BACKUP_STANZA_NAME && pgbackrest backup --stanza=${BACKUP_STANZA_NAME}'
+kubectl get postgresbackuplocation pg-simple-backuplocation -o jsonpath={.spec} -n {{ session_namespace }} | jq
+```
+
+Next, trigger an on-demand backup by deploying a new **PostgresBackup** definition. View the manifest:
+```editor:open-file
+file: ~/other/resources/postgres/postgres-backup.yaml
+```
+
+Deploy the backup definition. <font color="red">TODO - wait for the 3 Postgres instance nodes to be restored first.</font>
+```execute
+kubectl apply -f ~/other/resources/postgres/postgres-backup.yaml -n {{ session_namespace }}
 ```
 
 View the generated backup files on Minio: <font color="red">TODO - working with DB team</font>
@@ -242,7 +253,7 @@ To demonstrate the multi-cluster deployment capability of the **Tanzu Postgres**
 
 Let's set up ArgoCD:
 ```execute
-git clone https://oawofolu:{{DATA_E2E_GIT_FLUXDEMO_TOKEN}}@gitlab.com/oawofolu/postgres-repo.git && cd postgres-repo && git rm app/pginstance2.yaml > /dev/null 2>&1; git config --global user.email 'eduk8s@example.com'; git config --global user.name 'Educates'; git commit -a -m 'New commit' && git push; cd $HOME && kubectl config set-context --current --namespace=argocd && argocd app delete postgres-${session_namespace} -y >/dev/null 2>&1; argocd login --core && sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/postgres/postgres-argocd-app.yaml && kubectl apply -f ~/other/resources/postgres/postgres-argocd-app.yaml
+git clone https://oawofolu:{{DATA_E2E_GIT_FLUXDEMO_TOKEN}}@gitlab.com/oawofolu/postgres-repo.git && cd postgres-repo && git rm app/pginstance2.yaml > /dev/null 2>&1; git config --global user.email 'eduk8s@example.com'; git config --global user.name 'Educates'; git commit -a -m 'New commit' && git push; cd $HOME && kubectl config set-context --current --namespace=argocd && ./argocd app delete postgres-${session_namespace} -y >/dev/null 2>&1; ./argocd login --core && sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/postgres/postgres-argocd-app.yaml && kubectl apply -f ~/other/resources/postgres/postgres-argocd-app.yaml
 ```
 
 Next, we will add a manifest representing a new cluster, **pginstance-2**, to our ArgoCD-tracked repository. Copy the content of this file:
@@ -258,7 +269,7 @@ url: https://gitlab.com/oawofolu/postgres-repo.git
 Go into the **app** folder, then paste the previously copied content in a new file called **pginstance2.yaml** and commit.
 You should see a new ArgoCD application:
 ```execute
-watch argocd app get postgres-{{session_namespace}}
+watch ./argocd app get postgres-{{session_namespace}}
 ```
 
 Eventually, the pods for the new cluster should start showing up below. Enter **Ctrl-C** to exit the *watch* statement.

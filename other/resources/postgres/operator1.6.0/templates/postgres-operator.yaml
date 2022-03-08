@@ -1,0 +1,67 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-operator
+  labels:
+    app: postgres-operator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres-operator
+  template:
+    metadata:
+      labels:
+        app: postgres-operator
+    spec:
+      serviceAccountName: postgres-operator-service-account
+      securityContext:
+        runAsGroup: 1000
+        runAsUser: 1000
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: postgres-operator
+          image: {{ .Values.operatorImage }}
+          command:
+            - /manager
+          imagePullPolicy: IfNotPresent
+          terminationMessagePolicy: "FallbackToLogsOnError"
+          env:
+            - name: POSTGRES_IMAGE
+              value: {{ .Values.postgresImage }}
+            - name: DOCKER_REGISTRY_SECRET_NAME
+              value: {{ .Values.dockerRegistrySecretName }}
+          resources: {{ toYaml .Values.resources | nindent 12 }}
+          readinessProbe:
+            httpGet:
+              port: 8081
+              path: /readyz
+          ports:
+            - containerPort: 9443
+              name: webhook-server
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /tmp/postgres-operator-webhook-server-cert-secret
+              name: postgres-operator-webhook-server-cert-secret
+              readOnly: true
+            - mountPath: /config.yaml
+              name: manager-config
+              subPath: controller_manager_config.yaml
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+      imagePullSecrets:
+        - name: {{ .Values.dockerRegistrySecretName }}
+      volumes:
+        - name: postgres-operator-webhook-server-cert-secret
+          secret:
+            defaultMode: 420
+            secretName: postgres-operator-webhook-server-cert
+        - name: manager-config
+          configMap:
+            name: postgres-operator-config

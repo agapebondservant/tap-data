@@ -1,0 +1,24 @@
+# permissions for end users to edit postgresbackups.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: postgresbackup-editor-role
+rules:
+- apiGroups:
+  - sql.tanzu.vmware.com
+  resources:
+  - postgresbackups
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - sql.tanzu.vmware.com
+  resources:
+  - postgresbackups/status
+  verbs:
+  - get

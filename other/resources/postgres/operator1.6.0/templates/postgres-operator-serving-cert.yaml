@@ -1,0 +1,15 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: postgres-operator-serving-cert
+  labels:
+    app: postgres-operator
+spec:
+  dnsNames:
+    - postgres-operator-webhook-service.{{ .Release.Namespace }}.svc
+    - postgres-operator-webhook-service.{{ .Release.Namespace }}.svc.cluster.local
+  issuerRef:
+    kind: ClusterIssuer
+    name: {{ .Values.certManagerClusterIssuerName }}
+  secretName: postgres-operator-webhook-server-cert
