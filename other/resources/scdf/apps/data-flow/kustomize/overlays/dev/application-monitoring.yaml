@@ -11,7 +11,7 @@ spring:
   cloud:
     dataflow:
       grafana-info:
-        url: 'http://grafana.mytanzu.ml'
+        url: 'http://grafana.tanzudatatap.ml'
       applicationProperties:
         stream:
           management:
@@ -34,4 +34,4 @@ spring:
                   #!  host: prometheus-proxy
                   #!  port: 7001
       metrics.dashboard:
-        url: 'http://grafana.mytanzu.ml'
+        url: 'http://grafana.tanzudatatap.ml'

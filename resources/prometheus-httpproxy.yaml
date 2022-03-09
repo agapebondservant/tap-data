@@ -11,4 +11,4 @@ spec:
     - name: prometheus-kube-prometheus-prometheus
       port: 8000
   virtualhost:
-    fqdn: prometheus.mytanzu.ml
+    fqdn: prometheus.tanzudatatap.ml

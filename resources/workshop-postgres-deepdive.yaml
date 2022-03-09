@@ -10,7 +10,7 @@ spec:
   duration: 120m
   url: https://github.com/agapebondservant/new-data-e2e-demo
   content:
-    image: oawofolu/new-data-e2e:latest
+    image: oawofolu/tanzu-data-tap:latest
   session:
     env:
     - name: ENABLE_JUPYTERLAB

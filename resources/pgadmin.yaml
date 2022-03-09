@@ -11,4 +11,4 @@ spec:
         - name: pgadmin-pgadmin4
           port: 80
   virtualhost:
-    fqdn: pgadmin.mytanzu.ml
+    fqdn: pgadmin.tanzudatatap.ml

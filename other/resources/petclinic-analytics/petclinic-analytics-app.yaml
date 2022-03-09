@@ -46,4 +46,4 @@ spec:
    - name: petclinic-app-analytics
      port: 9150
  virtualhost:
-   fqdn: petclinic-analytics-YOUR_SESSION_NAMESPACE.mytanzu.ml
+   fqdn: petclinic-analytics-YOUR_SESSION_NAMESPACE.tanzudatatap.ml

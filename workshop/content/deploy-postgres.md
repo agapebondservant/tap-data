@@ -10,7 +10,7 @@ Check on the status by viewing the logs (**L** on K9s). Click **Esc**  when comp
 
 Next, we view it:
 ```dashboard:open-url
-url: {{ ingress_protocol }}://petclinic-{{ session_namespace }}.mytanzu.ml
+url: {{ ingress_protocol }}://petclinic-{{ session_namespace }}.tanzudatatap.ml
 ```
 
 Let's go ahead and add a few new pet owners, then restart the app. We notice that if we restart the app, we lose all of our entries:
@@ -21,7 +21,7 @@ kubectl rollout restart deploy/petclinic-app && kubectl rollout status -w deploy
 Let's view it again - notice the owners are gone:
 ```dashboard:reload-dashboard
 name: Petclinic
-url: {{ ingress_protocol }}://petclinic-{{ session_namespace }}.mytanzu.ml
+url: {{ ingress_protocol }}://petclinic-{{ session_namespace }}.tanzudatatap.ml
 ```
 
 To resolve this, we will need to provision a persistent data store.
@@ -166,7 +166,7 @@ Next, navigate to the Prometheus UI, select Status -> Targets and click "Collaps
 should be shown (<font color="red">NOTE:</font> Wait for a few seconds if the metrics do not show up right away):
 ```dashboard:open-url
 name: Prometheus
-url: http://prometheus.mytanzu.ml
+url: http://prometheus.tanzudatatap.ml
 ```
 
 <font color="red">NOTE:</font> To view specific metrics collected by Prometheus, go the the Prometheus UI Home screen by 
@@ -187,7 +187,7 @@ mc mb --insecure -p data-fileingest-minio/pg-backups
 
 View the newly created bucket (login with the _Username_ and _Password_ printed earlier):
 ```dashboard:open-url
-url: https://minio.mytanzu.ml/
+url: https://minio.tanzudatatap.ml/
 ```
 
 Next, let's view the manifest that we would use to configure the backup location **pgBackRest**:
@@ -217,7 +217,7 @@ kubectl apply -f ~/other/resources/postgres/postgres-backup.yaml -n {{ session_n
 
 View the generated backup files on Minio: <font color="red">TODO - working with DB team</font>
 ```dashboard:open-url
-url: https://minio.mytanzu.ml/
+url: https://minio.tanzudatatap.ml/
 ```
 
 View the backup progress here:

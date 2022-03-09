@@ -69,7 +69,7 @@ helm install --set resources.requests.memory=1.5Gi,tls.enabled=true,tls.certSecr
 export MINIO_ACCESS_KEY=$(kubectl get secret minio -o jsonpath="{.data.accesskey}" -n minio| base64 --decode)
 export MINIO_SECRET_KEY=$(kubectl get secret minio -o jsonpath="{.data.secretkey}" -n minio| base64 --decode)
 export MINIO_POD_NAME=$(kubectl get pods --namespace minio -l "release=minio" -o jsonpath="{.items[0].metadata.name}")
-export MINIO_SERVER_URL=minio.mytanzu.ml
+export MINIO_SERVER_URL=minio.tanzudatatap.ml
 kubectl apply -f resources/minio-http-proxy.yaml
 
 (TROUBLESHOOTING RECOMMENDED APPROACH:)
@@ -128,13 +128,13 @@ kubectl apply -f resources/minio-http-proxy.yaml
 wget https://dl.min.io/client/mc/release/linux-amd64/mc
 chmod +x mc
 cp mc /usr/local/bin
-mc config host add new-data-e2e-minio http://minio.mytanzu.ml/ $MINIO_ACCESS_KEY $MINIO_SECRET_KEY
+mc config host add tanzu-data-tap-minio http://minio.tanzudatatap.ml/ $MINIO_ACCESS_KEY $MINIO_SECRET_KEY
 
 (on Mac:)
 git -C /usr/local/Homebrew/Library/Taps/homebrew/homebrew-core fetch --unshallow
 git -C /usr/local/Homebrew/Library/Taps/homebrew/homebrew-cask fetch --unshallow
 brew install minio/stable/mc
-mc config host add new-data-e2e-minio http://minio.mytanzu.ml/ $MINIO_ACCESS_KEY $MINIO_SECRET_KEY
+mc config host add tanzu-data-tap-minio http://minio.tanzudatatap.ml/ $MINIO_ACCESS_KEY $MINIO_SECRET_KEY
 
 - Add required artifacts to Minio:
 (Greenplum-Gemfire connector:)

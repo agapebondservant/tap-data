@@ -11,4 +11,4 @@ spec:
     - name: grafana
       port: 3000
   virtualhost:
-    fqdn: grafana.mytanzu.ml
+    fqdn: grafana.tanzudatatap.ml

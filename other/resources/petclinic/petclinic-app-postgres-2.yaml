@@ -58,4 +58,4 @@ spec:
     - name: petclinic-app
       port: 8080
   virtualhost:
-    fqdn: petclinic-YOUR_SESSION_NAMESPACE.mytanzu.ml
+    fqdn: petclinic-YOUR_SESSION_NAMESPACE.tanzudatatap.ml

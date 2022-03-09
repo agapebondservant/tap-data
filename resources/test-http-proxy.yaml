@@ -11,4 +11,4 @@ spec:
     - name: nginx-svc
       port: 80
   virtualhost:
-    fqdn: mynginx.mytanzu.ml
+    fqdn: mynginx.tanzudatatap.ml

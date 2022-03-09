@@ -4,9 +4,9 @@ spring:
   cloud:
     dataflow:
       metrics.dashboard:
-        url: 'http://grafana.mytanzu.ml'
+        url: 'http://grafana.tanzudatatap.ml'
       grafana-info:
-        url: 'http://grafana.mytanzu.ml'
+        url: 'http://grafana.tanzudatatap.ml'
       applicationProperties:
         stream:
           management:

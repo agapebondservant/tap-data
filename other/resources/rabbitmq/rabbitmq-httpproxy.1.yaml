@@ -10,4 +10,4 @@ spec:
     - name: rabbitcluster2
       port: 15672
   virtualhost:
-    fqdn: rabbit__TOKEN__.mytanzu.ml
+    fqdn: rabbit__TOKEN__.tanzudatatap.ml

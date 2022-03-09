@@ -11,4 +11,4 @@ spec:
     - name: rabbitmq
       port: 15672
   virtualhost:
-    fqdn: rabbitmain.mytanzu.ml
+    fqdn: rabbitmain.tanzudatatap.ml

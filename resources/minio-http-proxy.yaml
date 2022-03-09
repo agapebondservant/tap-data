@@ -5,7 +5,7 @@ metadata:
   namespace: minio
 spec:
   virtualhost:
-    fqdn: minio.mytanzu.ml
+    fqdn: minio.tanzudatatap.ml
     tls:
       passthrough: true
   tcpproxy:

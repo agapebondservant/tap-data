@@ -19,7 +19,7 @@ spec:
     - minio
     - minio.minio.svc
     - minio.minio.svc.cluster.local
-    - minio.mytanzu.ml
+    - minio.tanzudatatap.ml
   issuerRef:
     kind: Issuer
     name: minio-selfsigned-issuer

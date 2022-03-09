@@ -46,4 +46,4 @@ spec:
    - name: petclinic-claims-dashboard
      port: 9160
  virtualhost:
-   fqdn: petclinic-claims-dashboard-YOUR_SESSION_NAMESPACE.mytanzu.ml
+   fqdn: petclinic-claims-dashboard-YOUR_SESSION_NAMESPACE.tanzudatatap.ml
