@@ -1,9 +1,9 @@
 ---
 # specify the url for the docker image for the operator, e.g. gcr.io/<my_project>/postgres-operator
-operatorImage: oawofolu/tanzu-sql-postgres/postgres-operator:v1.6.0
+operatorImage: oawofolu/postgres-operator:v1.6.0
 
 # specify the docker image for postgres instance, e.g. gcr.io/<my_project>/postgres-instance
-postgresImage: oawofolu/tanzu-sql-postgres/postgres-instance:v1.6.0
+postgresImage: oawofolu/postgres-instance:v1.6.0
 
 # specify the name of the docker-registry secret to allow the cluster to authenticate with the container registry for pulling images
 dockerRegistrySecretName: regsecret
