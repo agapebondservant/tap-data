@@ -7,6 +7,7 @@ envsubst < other/resources/postgres/overrides.in.yaml > other/resources/postgres
 envsubst < other/resources/greenplum/overrides.in.yaml > other/resources/greenplum/overrides.yaml
 envsubst < other/resources/datadog/data-dog-with-db-config.in.yaml > other/resources/datadog/data-dog-with-db-config.yaml
 envsubst < other/resources/greenplum/minio-site.in.xml > other/resources/greenplum/minio-site.xml
+envsubst < other/resources/wavefront/wavefront.in.yaml > other/resources/wavefront/wavefront.yaml
 
 # pre-initialize required services
 resources/setup.sh

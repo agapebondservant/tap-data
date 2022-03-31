@@ -21,6 +21,7 @@ other/resources/greenplum/minio-site.xml
 other/resources/postgres/postgres-backup-location.yaml
 other/resources/postgres/postgres-cluster-with-backups.yaml
 other/resources/datadog/data-dog-with-db-config.yaml
+other/resources/wavefront/wavefront.yaml
 resources/tap-gui-values.yaml
 other/resources/bin/argocd
 resources/tap-values.yaml

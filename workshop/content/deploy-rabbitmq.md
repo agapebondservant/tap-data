@@ -40,9 +40,14 @@ url: {{ ingress_protocol }}://grafana.{{ ingress_domain }}
 printf "Username: admin\nPassword: $(kubectl get secret grafana-admin --namespace monitoring-tools -o jsonpath="{.data.GF_SECURITY_ADMIN_PASSWORD}" | base64 --decode)\n"
 ```
 
-We can also view a pre-built metrics dashboard in **Wavefront**. To enable this, the **Wavefront Collector** for Kubernetes is required to forward RabbitMQ metrics to the Wavefront proxy. Install it now:
+We can also view a pre-built metrics dashboard in **Wavefront**. To enable this, the **Wavefront Collector** for Kubernetes is required to forward metrics emitted by RabbitMQ (via the **rabbitmq_prometheus** plugin) to the Wavefront proxy. Install it now:
 ```execute
-helm repo add wavefront https://wavefronthq.github.io/helm/ && kubectl create namespace wavefront --dry-run -o yaml | kubectl apply -f - && (helm uninstall wavefront -n wavefront ; helm install wavefront wavefront/wavefront --set wavefront.url=https://vmware.wavefront.com --set wavefront.token={{ DATA_E2E_WAVEFRONT_ACCESS_TOKEN }} --set clusterName=tanzu-data-samples-cluster --set collector.discovery.annotationPrefix=wavefront.com -n wavefront)
+kubectl apply -f ~/other/resources/wavefront.yaml -n default && kubectl apply -f ~/other/resources/wavefront-collector.yaml -n wavefront-collector
+```
+
+View the Wavefront dashboard:
+```dashboard:open-url
+url: https://vmware.wavefront.com/u/Cn2TlXWTDl?t=vmware
 ```
 
 We can also view the Management UI, which is also pre-integrated with the Tanzu RabbitMQ operator.
