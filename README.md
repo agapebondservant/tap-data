@@ -5,7 +5,7 @@
 - (Optional - required only if management cluster does not exist) tanzu management-cluster permissions aws set && tanzu management-cluster create new-data-cluster  --file resources/tanzu-aws.yaml -v 6
 (NOTE: Follow instructions for deploying a Tanzu Management cluster here: https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-index.html)
 
-- Create new cluster for Educates platform: tanzu cluster create tanzu-data-cluster --file resources/tanzu-aws.yaml; watch tanzu cluster get tanzu-data-cluster; tanzu cluster kubeconfig get tanzu-data-cluster --admin
+- Create new cluster for Educates platform: tanzu cluster create tanzu-data-tap-cluster --file resources/tanzu-aws.yaml; watch tanzu cluster get tanzu-data-tap-cluster; tanzu cluster kubeconfig get tanzu-data-tap-cluster --admin
 
 - Create the default storage class (ensure that it is called generic, that the volume binding mode is WaitForFirstCustomer instead of Immediate, and the reclaimPolicy should be Retain) - kubectl apply -f resources/storageclass.yaml
 
@@ -21,13 +21,55 @@ kubectl apply -f resources/podsecuritypolicy.yaml
 
 - Install the Kubernetes Metrics server: kubectl apply -f resources/metrics-server.yaml; watch kubectl get deployment metrics-server -n kube-system
 
-- Install tanzu package for learning center:
+### Install TAP
+- TAP pre-reqs: https://docs.vmware.com/en/Tanzu-Application-Platform/1.0/tap/GUID-install-intro.html
+
+#### Install TAP command line tooling
+mkdir $HOME/tanzu
+export TANZU_CLI_NO_INIT=true
+cd $HOME/tanzu
+sudo install cli/core/0.11.1/tanzu-core-linux_amd64 /usr/local/bin/tanzu
+tanzu plugin install --local cli all
+tanzu plugin list
+##### imgpkg
+wget -O- https://carvel.dev/install.sh > install.sh
+sudo bash install.sh
+imgpkg version
+
+#### Relocate images to local registry
+docker login registry-1.docker.io
+docker login registry.tanzu.vmware.com
+source .env
+export INSTALL_REGISTRY_USERNAME=$DATA_E2E_REGISTRY_USERNAME
+export INSTALL_REGISTRY_PASSWORD=$DATA_E2E_REGISTRY_PASSWORD
+export TAP_VERSION=1.0.2
+export INSTALL_REGISTRY_HOSTNAME=index.docker.io
+imgpkg copy -b registry.tanzu.vmware.com/tanzu-application-platform/tap-packages:1.0.2 --to-repo index.docker.io/oawofolu/tap-packages
 kubectl create ns tap-install
-tanzu secret registry add tap-registry   --username <YOUR-TANZU-REGISTRY-USERNAME> --password <YOUR-TANZU-REGISTRY-PASSWORD> --server registry.tanzu.vmware.com --export-to-all-namespaces --yes --namespace tap-install
-tanzu package repository add tanzu-tap-repository   --url registry.tanzu.vmware.com/tanzu-application-platform/tap-packages:1.0.1 --namespace tap-install
+tanzu secret registry add tap-registry \
+--username ${INSTALL_REGISTRY_USERNAME} --password ${INSTALL_REGISTRY_PASSWORD} \
+--server ${INSTALL_REGISTRY_HOSTNAME} \
+--export-to-all-namespaces --yes --namespace tap-install
+tanzu package repository add tanzu-tap-repository \
+--url ${INSTALL_REGISTRY_HOSTNAME}/oawofolu/tap-packages:$TAP_VERSION \
+--namespace tap-install
+tanzu package repository get tanzu-tap-repository --namespace tap-install
+tanzu package available list --namespace tap-install
+tanzu package available list tap.tanzu.vmware.com --namespace tap-install
+tanzu package available get tap.tanzu.vmware.com/$TAP_VERSION --values-schema --namespace tap-install
+source .env
+envsubst < resources/tap-values.in.yaml > resources/tap-values.yaml
+tanzu package install tap -p tap.tanzu.vmware.com -v $TAP_VERSION --values-file resources/tap-values.yaml -n tap-install
+
+To check on a package's install status: tanzu package installed get tap<or name pf package> -n tap-install
+To check that all expected packages were installed successfully: tanzu package installed list -A -n tap-install
+
+
+- Install tanzu package for learning center:
 tanzu package available list learningcenter.tanzu.vmware.com --namespace tap-install # To view avaulable packages for learningcenter
-tanzu package install learning-center --package-name learningcenter.tanzu.vmware.com --version 0.1.0 -f resources/learning-center-config.yaml -n tap-install
+tanzu package install learning-center --package-name learningcenter.tanzu.vmware.com --version 0.1.1 -f resources/learning-center-config.yaml -n tap-install
 kubectl get all -n learningcenter
+tanzu package available list workshops.learningcenter.tanzu.vmware.com --namespace tap-install
 
 - If using applications with websocket connections, increase idle timeout on ELB in AWS Management Console to 1 hour (default is 30 seconds)
 
@@ -42,8 +84,8 @@ Deploy CERT-MANAGER-ISSUER  (self-signed), CERTIFICATE-SIGNING-REQUEST, CERT-MAN
 #Only perform the following if there are 7+ nodes in= the k8s cluster
 #- Label a subset of the nodes (for which anti-affinity/affinity rules will apply):
 #a=0
-# for n in $(kubectl get nodes --selector='!node-role.kubernetes.io/master' --output=jsonpath={.items..metadata.name}); do
- #   if [ $a -eq 0 ]; then kubectl label node $n gpdb-worker=master; fi; 
+#for n in $(kubectl get nodes --selector='!node-role.kubernetes.io/master' --output=jsonpath={.items..metadata.name}); do
+  #  if [ $a -eq 0 ]; then kubectl label node $n gpdb-worker=master; fi; 
   #  if [ $a -eq 1 ]; then kubectl label node $n gpdb-worker=segment; fi; 
   #  a=$((a+1)) 
 #done
@@ -54,10 +96,10 @@ kubectl apply -k .
 - Deploy Minio (Server) with TLS:
 
 - Setup TLS cert for Minio:
-openssl genrsa -out tls.key 2048
-#openssl genrsa -out private.key 2048
-openssl req -new -x509 -nodes -days 730 -key tls.key -out tls.crt -config other/resources/minio/openssl.conf
-#openssl req -new -x509 -nodes -days 730 -key private.key -out public.crt -config other/resources/minio/openssl.conf
+#openssl genrsa -out tls.key 2048
+openssl genrsa -out private.key 2048
+#openssl req -new -x509 -nodes -days 730 -key tls.key -out tls.crt -config other/resources/minio/openssl.conf
+openssl req -new -x509 -nodes -days 730 -key private.key -out public.crt -config other/resources/minio/openssl.conf
 
 (LEGACY APPROACH:)
 helm repo add minio-legacy https://helm.min.io/

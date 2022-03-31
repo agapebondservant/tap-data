@@ -8,7 +8,7 @@ spec:
   vendor: eduk8s.io
   difficulty: beginner
   duration: 120m
-  url: https://github.com/agapebondservant/data-e2e-demo
+  url: https://github.com/agapebondservant/tap-data
   content:
     image: oawofolu/tanzu-data-tap:latest
   session:

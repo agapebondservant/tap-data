@@ -1,0 +1,41 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: resource-claims-postgres
+  labels:
+    resourceclaims.services.apps.tanzu.vmware.com/controller: "true"
+rules:
+  - apiGroups: ["sql.tanzu.vmware.com"]
+    resources: ["postgres"]
+    verbs: ["get", "list", "watch", "update"]
+---
+apiVersion: carto.run/v1alpha1
+kind: Workload
+metadata:
+  name: pet-clinic
+  labels:
+    apps.tanzu.vmware.com/workload-type: web
+    app.kubernetes.io/part-of: pet-clinic
+spec:
+  build:
+    env:
+      - name: BP_MAVEN_POM_FILE
+        value: skip-pom.xml
+  env:
+    - name: SPRING_PROFILES_ACTIVE
+      value: postgres
+  params:
+    - name: live-update
+      value: "true"
+  serviceClaims:
+    - name: db
+      ref:
+        apiVersion: sql.tanzu.vmware.com/v1
+        kind: Postgres
+        name: pginstance-1
+  source:
+    git:
+      ref:
+        branch: main
+      url: https://github.com/spring-projects/spring-petclinic

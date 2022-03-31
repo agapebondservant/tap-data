@@ -88,3 +88,5 @@ config:
       value: ${DATA_E2E_PGADMIN_PASSWORD}
     - name: DATA_E2E_POSTGRES_VERSION
       value: ${DATA_E2E_POSTGRES_VERSION}
+    - name: DATA_E2E_GRAFANA_PASSWORD
+      value: ${DATA_E2E_GRAFANA_PASSWORD}

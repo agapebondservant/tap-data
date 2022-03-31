@@ -1,4 +1,28 @@
 
+#### Integrating with TAP
+For **TAP** users, the Tanzu Postgres controller makes it easy to take advantage of Kubernetes' **Service Bindings** for seamlessly binding applications
+(called **Workloads**) to database instances (called **Services**).
+
+View the manifest for the integration here:
+```editor:open-file
+file: ~/other/resources/postgres-tap.yaml
+```
+
+Create the **Service Binding** by applying the manifest to the cluster:
+```
+clear && kubectl apply -f ~/other/resources/postgres-tap.yaml
+```
+
+View the newly deployed data in **pgAdmin**:
+```dashboard:open-url
+url: http://pgadmin.{{ ingress_domain }}
+```
+
+<font color="red">NOTE:</font> Reuse the credentials provided below if needed:
+```execute
+printf "Under General tab:\n  Server: pginstance-1.{{session_namespace}}\nUnder Connection tab:\n  Host name: pginstance-1.{{session_namespace}}.svc.cluster.local\n  Maintenance Database: pginstance-1\n  Username: pgadmin\n  Password: $(kubectl get secret pginstance-1-db-secret -n {{session_namespace}} -o jsonpath='{.data.password}' | base64 --decode)\n"
+```
+
 #### Monitoring Postgres Data (ctd)
 Tanzu Postgres provides a set of scrapeable Prometheus endpoints whose metrics can be collected and forwarded to any OpenMetrics backend.
 
