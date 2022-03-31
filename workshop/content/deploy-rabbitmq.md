@@ -1,6 +1,6 @@
 
 ### Deploying Tanzu RabbitMQ
-
+![Tanzu RabbitMQ High-Level Architecture](images/rabbit_architecture.png)
 **Tanzu RabbitMQ** is a _full-featured_ enterprise-grade message broker.
 
 Let's deploy the Tanzu RabbitMQ Cluster **operator**:

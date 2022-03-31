@@ -10,7 +10,7 @@ file: ~/other/resources/postgres/postgres-tap.yaml
 
 Create the **Service Binding** by applying the manifest to the cluster:
 ```execute
-clear && kubectl apply -f ~/other/resources/tap/rbac.yaml && kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "registry-credentials"},{"name": "tap-registry"}],"secrets":[{"name": "registry-credentials"}]}' && kubectl apply -f ~/other/resources/postgres-tap.yaml
+clear && kubectl apply -f ~/other/resources/tap/rbac.yaml && kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "registry-credentials"},{"name": "tap-registry"}],"secrets":[{"name": "registry-credentials"}]}' && kubectl apply -f ~/other/resources/postgres/postgres-tap.yaml
 ```
 
 View the newly deployed data in **pgAdmin**:
