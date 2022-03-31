@@ -13,3 +13,6 @@ spec:
       - rabbitmq_shovel
       - rabbitmq_federation
       - rabbitmq_stream
+      - rabbitmq_management
+      - rabbitmq_prometheus
+      - rabbitmq_peer_discovery_k8s
