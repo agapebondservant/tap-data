@@ -4,13 +4,19 @@ For **TAP** users, the Tanzu Postgres controller makes it easy to take advantage
 (called **Workloads**) to database instances (called **Services**).
 
 View the manifest for the integration here:
-```editor:open-file
+```editor:select-matching-text
 file: ~/other/resources/postgres/postgres-tap.yaml
+text: "serviceClaims"
+after: 5
 ```
+
+Notice the highlighted section which defines the **Service Claim** for the Service Binding. The **Service Claim** represents a request 
+to access a specific **Provisioned Service**. The requested service must match the criteria specified by the claim. Once matched, a **Service Binding**
+will be created for the service.
 
 Create the **Service Binding** by applying the manifest to the cluster:
 ```execute
-clear && kubectl apply -f ~/other/resources/tap/rbac.yaml && kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "registry-credentials"},{"name": "tap-registry"}],"secrets":[{"name": "registry-credentials"}]}' && kubectl apply -f ~/other/resources/postgres/postgres-tap.yaml
+clear && kubectl annotate ns {{session_namespace}} secretgen.carvel.dev/excluded-from-wildcard-matching- && kubectl apply -f ~/other/resources/tap/rbac.yaml && tanzu init && tanzu secret registry add tap-registry --username {{DATA_E2E_REGISTRY_USERNAME}} --password {{DATA_E2E_REGISTRY_PASSWORD}} --server {{DATA_E2E_GIT_TAP_REGISTRY_SERVER}} --export-to-all-namespaces --yes -n {{session_namespace}} && kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "registry-credentials"},{"name": "tap-registry"}],"secrets":[{"name": "registry-credentials"}]}' && kubectl apply -f ~/other/resources/postgres/postgres-tap.yaml
 ```
 
 View the newly deployed data in **pgAdmin**:
