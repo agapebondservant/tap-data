@@ -8,7 +8,6 @@ spec:
     overrides:
       gemfireProperties:
         start-dev-rest-api: "true"
-        distributed-system-id: "1"
 ---
 apiVersion: v1
 kind: Service
