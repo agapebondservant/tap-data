@@ -10,7 +10,9 @@ Similarly, we need to configure any secondary site (or sites) to listen for conn
 a **GatewayReceiver** on the secondary site(s).
 
 Let's create the site with the **GatewayReceiver** first. (A best practice is to start up consumers before producers, so that emitted events from the producer 
-would not be missed.) Here is the manifest that would be used to configure the **GatewayReceiver**:
+would not be missed.)
+
+Here is the manifest that would be used to configure the **GatewayReceiver**:
 ```editor:select-matching-text
 file: ~/other/resources/gemfire/gemfire-cluster-with-gateway-receiver.yaml
 text: "start-dev-rest-api"
@@ -19,7 +21,7 @@ after: 3
 
 Deploy the new site:
 ```execute
-kubectl apply -f ~/other/resources/gemfire/gemfire-cluster-with-gateway-receiver.yaml
+sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/gemfire/gemfire-cluster-with-gateway-receiver.yaml && kubectl apply -f ~/other/resources/gemfire/gemfire-cluster-with-gateway-receiver.yaml
 ```
 
 Create the **GatewayReceiver**:
@@ -40,7 +42,7 @@ after: 3
 ```
 
 ```execute
-kubectl apply -f ~/other/resources/gemfire/gemfire-cluster-with-gateway-sender.yaml
+sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/gemfire/gemfire-cluster-with-gateway-sender.yaml && kubectl apply -f ~/other/resources/gemfire/gemfire-cluster-with-gateway-sender.yaml
 ```
 
 Configure the **GatewaySender**:
