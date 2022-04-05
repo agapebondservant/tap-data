@@ -7,13 +7,16 @@ spec:
   serialization:
     pdx:
       readSerialized: true
+  locators:
+    overrides:
+      gemfireProperties:
+        mcast-port: "0"
+        distributed-system-id: "1"
+        remote-locators: "gemfire2-locator-0.gemfire2-locator.YOUR_SESSION_NAMESPACE.svc.cluster.local[10334]"
   servers:
     overrides:
       gemfireProperties:
         start-dev-rest-api: "true"
-        mcast-port: "0"
-        distributed-system-id: "1"
-        remote-locators: "gemfire2-locator-0.gemfire2-locator.YOUR_SESSION_NAMESPACE.svc.cluster.local[10334]"
 ---
 apiVersion: v1
 kind: Service

@@ -26,7 +26,7 @@ sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/ge
 
 Create the **GatewayReceiver**:
 ```execute
-kubectl -n {{ session_namespace }} exec -it gemfire2-locator-0 -- gfsh -e connect -e "create gateway-receiver --start-port=13000 --end-port=14000 --hostname-for-senders=gemfire2-server-0.gemfire2-server.{{ session_namespace }}.svc.cluster.local"
+kubectl -n {{ session_namespace }} exec -it gemfire2-locator-0 -- gfsh -e connect -e "create gateway-receiver --start-port=13000 --end-port=14000 --hostname-for-senders=gemfire2-server.{{ session_namespace }}.svc.cluster.local"
 ```
 
 Create a new region, *customers*, which will match the producing region on the sending side:
