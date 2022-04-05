@@ -16,7 +16,7 @@ will be created for the service.
 
 Create the **Service Binding** by applying the manifest to the cluster:
 ```execute
-clear && cd ~ && kubectl annotate ns {{session_namespace}} secretgen.carvel.dev/excluded-from-wildcard-matching- && kubectl apply -f ~/other/resources/tap/rbac.yaml && tanzu init && tanzu plugin install --local bin/cli apps && tanzu secret registry add tap-registry --username {{DATA_E2E_REGISTRY_USERNAME}} --password {{DATA_E2E_REGISTRY_PASSWORD}} --server {{DATA_E2E_GIT_TAP_REGISTRY_SERVER}} --export-to-all-namespaces --yes -n {{session_namespace}} && kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "registry-credentials"},{"name": "tap-registry"}],"secrets":[{"name": "registry-credentials"}]}' && kubectl apply -f ~/other/resources/postgres/postgres-tap.yaml
+clear && cd ~ && kubectl annotate ns {{session_namespace}} secretgen.carvel.dev/excluded-from-wildcard-matching- && kubectl apply -f ~/other/resources/tap/rbac.yaml && tanzu init && tanzu plugin install --local bin/cli apps && tanzu secret registry add tap-registry --username {{DATA_E2E_REGISTRY_USERNAME}} --password {{DATA_E2E_REGISTRY_PASSWORD}} --server https://index.docker.io/v1/ --export-to-all-namespaces --yes -n {{session_namespace}} && kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "registry-credentials"},{"name": "tap-registry"}],"secrets":[{"name": "tap-registry"}]}' && kubectl apply -f ~/other/resources/postgres/postgres-tap.yaml
 ```
 
 View the newly deployed data in **pgAdmin**:

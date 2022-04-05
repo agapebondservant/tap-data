@@ -3,4 +3,4 @@ kind: GemFireCluster
 metadata:
   name: gemfire1
 spec:
-  image: registry.pivotal.io/tanzu-gemfire-for-kubernetes/gemfire-k8s:1.0.1
+  image: registry.pivotal.io/tanzu-gemfire-for-kubernetes/gemfire-k8s:1.0.3
