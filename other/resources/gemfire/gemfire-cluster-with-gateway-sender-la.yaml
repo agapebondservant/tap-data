@@ -1,0 +1,35 @@
+apiVersion: gemfire.tanzu.vmware.com/v1
+kind: GemFireCluster
+metadata:
+  name: gemfire0
+spec:
+  image: registry.pivotal.io/tanzu-gemfire-for-kubernetes/gemfire-k8s:1.0.3
+  serialization:
+    pdx:
+      readSerialized: true
+  locators:
+    overrides:
+      jvmOptions:
+        - "-Dgemfire.conserve-sockets=false"
+        - "-Dgemfire.jmx-manager-hostname-for-clients=PRIMARY_ISTIO_INGRESS_HOSTNAME"
+      gemfireProperties:
+        mcast-port: "0"
+        distributed-system-id: "1"
+        #remote-locators:
+  servers:
+    overrides:
+      gemfireProperties:
+        start-dev-rest-api: "true"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gemfire0-dev-api
+spec:
+  selector:
+    app: gemfire0-server
+  ports:
+    - name: rest-api
+      port: 7070
+      targetPort: 7070
+  type: LoadBalancer

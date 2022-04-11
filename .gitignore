@@ -25,3 +25,5 @@ other/resources/wavefront/wavefront.yaml
 resources/tap-gui-values.yaml
 other/resources/bin/argocd
 resources/tap-values.yaml
+myfile
+other/resources/istio-1.13.2/samples/

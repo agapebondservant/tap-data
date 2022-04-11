@@ -44,6 +44,9 @@ modules:
     handling-data-operations:
       name: Handling Data Operations
       exit_sign: Complete Workshop
+    deploy-mysql:
+      name: Deploy MySQL
+      exit_sign: Complete Workshop
 config:
     vars:
     - name: DATA_E2E_REGISTRY_USERNAME

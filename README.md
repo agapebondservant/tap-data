@@ -21,6 +21,14 @@ kubectl apply -f resources/podsecuritypolicy.yaml
 
 - Install the Kubernetes Metrics server: kubectl apply -f resources/metrics-server.yaml; watch kubectl get deployment metrics-server -n kube-system
 
+-Install Istio: other/resources/bin/istioctl install --set profile=demo -y; 
+kubectl label pods istio-injection=enabled --selector=<your selector> --namespace=<your namespace>;
+export INGRESS_HOST=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].hostname}');
+export INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="http2")].port}');
+export SECURE_INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="https")].port}');
+export GATEWAY_URL=$INGRESS_HOST:$INGRESS_PORT
+
+
 ### Install TAP
 - TAP pre-reqs: https://docs.vmware.com/en/Tanzu-Application-Platform/1.0/tap/GUID-install-intro.html
 
@@ -265,6 +273,7 @@ Connect to your-svc.your-namespace.svc.cluster.local
 RabbitMQ Dashboard: Dashboard ID 10991
 Erlang-Distribution Dashboard: Dashboard ID 11352
 
+
 - Pre-deploy Greenplum:
 source .env
 resources/setup.sh
@@ -281,3 +290,79 @@ source.gemfire-cq=docker:springcloudstream/gemfire-cq-source-rabbit:2.1.6.RELEAS
 Wavefront Token: d0bc6a3f-580c-4212-8b35-1c6edd1e4ffb
 Wavefront URI: vmware.wavefront.com
 Source: 3a4316f6-6501-4750-587b-939e
+
+- Build secondary cluster:
+  - Create new cluster:
+    tanzu cluster create tanzu-data-tap-secondary --file resources/tanzu-aws-secondary.yaml
+    tanzu cluster kubeconfig get tanzu-data-tap-secondary --admin
+
+  - Create the default storage class (ensure that it is called generic, that the volume binding mode is WaitForFirstCustomer instead of Immediate, and the reclaimPolicy should be Retain):
+    kubectl apply -f resources/storageclass.yaml
+    kubectl patch storageclass default -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
+
+  - Create the network policy 
+    kubectl apply -f resources/networkpolicy.yaml
+
+  - Ensure that pod scurity policy admission controller is enabled, as PSPs will be created by the eduk8s operator to restrict users from running with root privileges:
+    kubectl apply -f resources/podsecuritypolicy.yaml
+
+  - Install Contour: 
+    kubectl apply -f https://projectcontour.io/quickstart/v1.18.2/contour.yaml (NOTE: Change the Loadbalancer's healthcheck from HTTP to TCP in the AWS Console)
+
+  - Install the Kubernetes Metrics server: 
+    kubectl apply -f resources/metrics-server.yaml; watch kubectl get deployment metrics-server -n kube-system
+  
+  - Install cert-manager:
+    kubectl create ns cert-manager
+    kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.5.3/cert-manager.yaml
+    kubectl apply -f resources/cert-manager-issuer.yaml
+  
+  - Install Gemfire operator:
+    source .env
+    kubectl create ns gemfire-system --dry-run -o yaml | kubectl apply -f -
+    kubectl create secret docker-registry image-pull-secret --namespace=gemfire-system --docker-server=registry.pivotal.io --docker-username="$DATA_E2E_PIVOTAL_REGISTRY_USERNAME" --docker-password="$DATA_E2E_PIVOTAL_REGISTRY_PASSWORD" --dry-run -o yaml | kubectl apply -f -
+    helm uninstall  gemfire --namespace gemfire-system; helm install gemfire other/resources/gemfire/gemfire-operator-1.0.3/ --namespace gemfire-system
+
+  - Install Gemfire cluster:
+    kubectl create secret docker-registry app-image-pull-secret --namespace=gemfire-system --docker-server=registry.pivotal.io --docker-username="$DATA_E2E_REGISTRY_USERNAME" --docker-password="$DATA_E2E_REGISTRY_PASSWORD" --dry-run -o yaml | kubectl apply -f -
+    kubectl apply -f other/resources/gemfire/gemfire-cluster-with-gateway-receiver-ny.yaml -n gemfire-system
+    
+  - Install Istio:
+    other/resources/bin/istioctl install --set profile=demo-gemfire --set installPackagePath=other/resources/istio-1.13.2/manifests -y
+    #kubectl label pods istio-injection=enabled --selector=gemfire-cluster=gemfire1 --namespace=gemfire-system
+    #kubectl label namespace gemfire-system istio-injection=enabled
+    export INGRESS_HOST=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+    export INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="http2")].port}')
+    export SECURE_INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="https")].port}')
+    export TCP_INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="tcp")].port}')
+    export GATEWAY_URL=$INGRESS_HOST:$TCP_INGRESS_PORT
+  
+  - Deploy Istio Gateway for Gemfire cluster:
+    kubectl apply -f other/resources/gemfire/gemfire-istio.yaml -n gemfire-system
+    other/resources/bin/istioctl analyze
+  
+  - Install SealedSecrets:
+    kubectl apply -f https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.17.4/controller.yaml
+  
+  - Generate kubeconfig for accessing secondary cluster:
+    t_secret=$(kubectl get sa default -o jsonpath={.secrets[0].name})
+    t_ca_crt_data=$(kubectl get secret ${t_secret} -o jsonpath="{.data.ca\.crt}" | openssl enc -d -base64 -A)
+    t_token=$(kubectl get secret ${t_secret} -o jsonpath="{.data.token}" | openssl enc -d -base64 -A)
+    t_context=$(kubectl config current-context)
+    t_cluster=$(kubectl config view -o jsonpath="{.contexts[?(@.name==\"$t_context\")].context.cluster}")
+    t_server=$(kubectl config view -o jsonpath="{.clusters[?(@.name==\"$t_cluster\")].cluster.server}")
+    t_user=$(kubectl config view -o jsonpath="{.contexts[?(@.name==\"$t_context\")].context.user}")
+    t_client_certificate_data=$(kubectl config view --flatten -o jsonpath="{.users[?(@.name==\"$t_user\")].user.client-certificate-data}" | openssl enc -d -base64 -A)
+    t_client_key_data=$(kubectl config view --flatten -o jsonpath="{.users[?(@.name==\"$t_user\")].user.client-key-data}" | openssl enc -d -base64 -A)
+    t_ca_crt="$(mktemp)"; echo "$t_ca_crt_data" > $t_ca_crt
+    t_client_key="$(mktemp)"; echo "$t_client_key_data" > $t_client_key
+    t_client_certificate="$(mktemp)"; echo "$t_client_certificate_data" > $t_client_certificate
+    kubectl config set-credentials secondary-user --client-certificate="$t_client_certificate" --client-key="$t_client_key" --embed-certs=true --kubeconfig myfile
+    kubectl config set-cluster secondary-cluster --server="$t_server" --certificate-authority="$t_ca_crt" --embed-certs=true --kubeconfig myfile
+    kubectl config set-context secondary-ctx --cluster="secondary-cluster" --user="secondary-user" --kubeconfig myfile
+
+    kubectl create secret generic kconfig --from-file=myfile --dry-run=client -o yaml > kconfigsecret.yaml
+    (Must install kubeseal:) kubeseal --scope cluster-wide -o yaml <kconfigsecret.yaml> resources/kconfigsealedsecret.yaml
+  
+- Uninstall istio:
+    other/resources/bin/istioctl x uninstall --purge -y
