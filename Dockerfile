@@ -61,8 +61,9 @@ RUN curl -sL -o get-pip.py https://bootstrap.pypa.io/get-pip.py && \
 # Install krew
     /home/eduk8s/other/resources/krew/install_krew.sh && \
     mv /home/eduk8s/.krew/bin/* /opt/eduk8s/bin && \
-# Install kubectl cli, helm cli, k9s, yq, flux, argocd, tanzu
+# Install kubectl cli, helm cli, k9s, yq, flux, argocd, tanzu, istioctl
     tar xzf /home/eduk8s/other/resources/bin/argocd.tar.gz && \
+    tar xvzf /home/eduk8s/other/resources/bin/istioctl.tar.gz && \
     mv /home/eduk8s/other/resources/bin/* /opt/eduk8s/bin && \
     mv /home/eduk8s/workshop /opt/workshop
 
