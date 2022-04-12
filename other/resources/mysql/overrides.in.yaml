@@ -4,11 +4,4 @@ operatorImage: ${DATA_E2E_REGISTRY_USERNAME}/tanzu-mysql-operator:${DATA_E2E_MYS
 registry: ${DATA_E2E_REGISTRY_USERNAME} #"registry.tanzu.vmware.com/tanzu-mysql-for-kubernetes/"
 defaultInstanceVersion: 1.3.0
 resources: {}
-#  limits:
-#    cpu: 100m
-#    memory: 128Mi
-#  requests:
-#    cpu: 100m
-#    memory: 128Mi
-
 certManagerClusterIssuerName: ""

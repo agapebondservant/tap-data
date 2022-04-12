@@ -4,6 +4,7 @@ source .env
 envsubst < workshop/modules.in.yaml > workshop/modules.yaml
 envsubst < other/resources/postgres/postgres-backup-location.in.yaml  > other/resources/postgres/postgres-backup-location.yaml
 envsubst < other/resources/postgres/overrides.in.yaml > other/resources/postgres/overrides.yaml
+envsubst < other/resources/mysql/overrides.in.yaml > other/resources/mysql/overrides.yaml
 envsubst < other/resources/greenplum/overrides.in.yaml > other/resources/greenplum/overrides.yaml
 envsubst < other/resources/datadog/data-dog-with-db-config.in.yaml > other/resources/datadog/data-dog-with-db-config.yaml
 envsubst < other/resources/greenplum/minio-site.in.xml > other/resources/greenplum/minio-site.xml
