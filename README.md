@@ -329,9 +329,9 @@ Source: 3a4316f6-6501-4750-587b-939e
     
   - Install Istio:
     (In primary cluster)
-    istio-1.13.2/bin/istioctl install --set profile=demo-tanzu --set installPackagePath=istio-1.13.2/manifests -y
+    other/resources/istio-1.13.2/bin/istioctl install --set profile=demo-tanzu --set installPackagePath=other/resources/istio-1.13.2/manifests -y
     (In secondary cluster)
-    istio-1.13.2/bin/istioctl install --set profile=demo-tanzu --set installPackagePath=istio-1.13.2/manifests -y
+    other/resources/istio-1.13.2/bin/istioctl install --set profile=demo-tanzu --set installPackagePath=other/resources/istio-1.13.2/manifests -y
     #kubectl label pods istio-injection=enabled --selector=gemfire-cluster=gemfire1 --namespace=gemfire-system
     #kubectl label namespace gemfire-system istio-injection=enabled
     #export INGRESS_HOST=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
@@ -375,3 +375,6 @@ Source: 3a4316f6-6501-4750-587b-939e
   
 - Uninstall istio:
     other/resources/bin/istioctl x uninstall --purge -y
+
+- Deploy phpMyAdmin:
+- 

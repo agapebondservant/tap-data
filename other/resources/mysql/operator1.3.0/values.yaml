@@ -1,0 +1,14 @@
+---
+imagePullSecretName: tanzu-image-registry
+operatorImage: registry.tanzu.vmware.com/tanzu-mysql-for-kubernetes/tanzu-mysql-operator:1.3.0
+registry: "registry.tanzu.vmware.com/tanzu-mysql-for-kubernetes/"
+defaultInstanceVersion: 1.3.0
+resources: {}
+#  limits:
+#    cpu: 100m
+#    memory: 128Mi
+#  requests:
+#    cpu: 100m
+#    memory: 128Mi
+
+certManagerClusterIssuerName: ""
