@@ -38,7 +38,7 @@ spec:
       port: 8050
       protocol: http
       host: "$(ingress_protocol):petclinic-claims-dashboard.$(session_namespace).svc.cluster.local"
-    - name: mySQL1
+    - name: mysql1
       port: 5432
       protocol: http
       host: "$(ingress_protocol):pginstance-1.$(session_namespace).svc.cluster.local"

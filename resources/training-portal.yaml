@@ -40,11 +40,11 @@ spec:
     capacity: 1
     expires: 120m
     orphaned: 5m
-  - name: data-mysql-deepdive
+  - name: data-gemfire-deepdive
     capacity: 1
     expires: 120m
     orphaned: 5m
-  - name: data-gemfire-deepdive
+  - name: data-mysql-deepdive
     capacity: 1
     expires: 120m
     orphaned: 5m
