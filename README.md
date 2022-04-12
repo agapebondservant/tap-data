@@ -328,23 +328,27 @@ Source: 3a4316f6-6501-4750-587b-939e
     kubectl apply -f other/resources/gemfire/gemfire-cluster-with-gateway-receiver-ny.yaml -n gemfire-system
     
   - Install Istio:
-    other/resources/bin/istioctl install --set profile=demo-gemfire --set installPackagePath=other/resources/istio-1.13.2/manifests -y
+    (In primary cluster)
+    istio-1.13.2/bin/istioctl install --set profile=demo-tanzu --set installPackagePath=istio-1.13.2/manifests -y
+    (In secondary cluster)
+    istio-1.13.2/bin/istioctl install --set profile=demo-tanzu --set installPackagePath=istio-1.13.2/manifests -y
     #kubectl label pods istio-injection=enabled --selector=gemfire-cluster=gemfire1 --namespace=gemfire-system
     #kubectl label namespace gemfire-system istio-injection=enabled
-    export INGRESS_HOST=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
-    export INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="http2")].port}')
-    export SECURE_INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="https")].port}')
-    export TCP_INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="tcp")].port}')
-    export GATEWAY_URL=$INGRESS_HOST:$TCP_INGRESS_PORT
+    #export INGRESS_HOST=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+    #export INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="http2")].port}')
+    #export SECURE_INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="https")].port}')
+    #export TCP_INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="tcp")].port}')
+    #export GATEWAY_URL=$INGRESS_HOST:$TCP_INGRESS_PORT
   
   - Deploy Istio Gateway for Gemfire cluster:
-    kubectl apply -f other/resources/gemfire/gemfire-istio.yaml -n gemfire-system
-    other/resources/bin/istioctl analyze
+    #kubectl apply -f other/resources/gemfire/gemfire-istio.yaml -n gemfire-system
+    #other/resources/bin/istioctl analyze
   
   - Install SealedSecrets:
     kubectl apply -f https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.17.4/controller.yaml
   
-  - Generate kubeconfig for accessing secondary cluster:
+  - Generate kubeconfig for accessing secondary cluster: 
+    (Apply to secondary cluster:)
     t_secret=$(kubectl get sa default -o jsonpath={.secrets[0].name})
     t_ca_crt_data=$(kubectl get secret ${t_secret} -o jsonpath="{.data.ca\.crt}" | openssl enc -d -base64 -A)
     t_token=$(kubectl get secret ${t_secret} -o jsonpath="{.data.token}" | openssl enc -d -base64 -A)
@@ -357,12 +361,17 @@ Source: 3a4316f6-6501-4750-587b-939e
     t_ca_crt="$(mktemp)"; echo "$t_ca_crt_data" > $t_ca_crt
     t_client_key="$(mktemp)"; echo "$t_client_key_data" > $t_client_key
     t_client_certificate="$(mktemp)"; echo "$t_client_certificate_data" > $t_client_certificate
+  
     kubectl config set-credentials secondary-user --client-certificate="$t_client_certificate" --client-key="$t_client_key" --embed-certs=true --kubeconfig myfile
     kubectl config set-cluster secondary-cluster --server="$t_server" --certificate-authority="$t_ca_crt" --embed-certs=true --kubeconfig myfile
     kubectl config set-context secondary-ctx --cluster="secondary-cluster" --user="secondary-user" --kubeconfig myfile
 
     kubectl create secret generic kconfig --from-file=myfile --dry-run=client -o yaml > kconfigsecret.yaml
-    (Must install kubeseal:) kubeseal --scope cluster-wide -o yaml <kconfigsecret.yaml> resources/kconfigsealedsecret.yaml
+    kubeseal --scope cluster-wide -o yaml <kconfigsecret.yaml> resources/kconfigsealedsecret.yaml 
+    #(Must install kubeseal:)
+
+    (Apply to primary cluster:)
+    kubectl apply -f resources/kconfigsealedsecret.yaml
   
 - Uninstall istio:
     other/resources/bin/istioctl x uninstall --purge -y
