@@ -81,7 +81,7 @@ file: ~/other/resources/gemfire/gemfire-istio-la.yaml
 
 Deploy the West site with the Istio Gateway:
 ```execute
-sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/gemfire/gemfire-istio-ny.yaml && kubectl apply -f ~/other/resources/gemfire/gemfire-istio-ny.yaml && export ISTIO_INGRESS_HOST_WEST=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].hostname}') &&  sed -i "s/PRIMARY_ISTIO_INGRESS_HOSTNAME/${ISTIO_INGRESS_HOST_WEST}/g" ~/other/resources/gemfire/gemfire-cluster-with-gateway-sender-la.yaml && kubectl apply -f ~/other/resources/gemfire/gemfire-cluster-with-gateway-sender-la.yaml
+sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/gemfire/gemfire-istio-la.yaml && kubectl apply -f ~/other/resources/gemfire/gemfire-istio-la.yaml && export ISTIO_INGRESS_HOST_WEST=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].hostname}') &&  sed -i "s/PRIMARY_ISTIO_INGRESS_HOSTNAME/${ISTIO_INGRESS_HOST_WEST}/g" ~/other/resources/gemfire/gemfire-cluster-with-gateway-sender-la.yaml && kubectl apply -f ~/other/resources/gemfire/gemfire-cluster-with-gateway-sender-la.yaml
 ```
 
 Next, we will create a Gemfire Cluster in our secondary East site:
@@ -101,7 +101,7 @@ text: "remote-locators: {{ISTIO_INGRESS_HOST_WEST}}[10334]"
 
 Deploy the East site:
 ```execute
-(kubectl get secret kconfig -n default -o jsonpath="{.data.myfile}" | base64 --decode) > mykubeconfig && kubectl create ns {{session_namespace}} --dry-run=client | kubectl apply --kubeconfig mykubeconfig -f -;  kubectl config use-context secondary-ctx --kubeconfig=mykubeconfig && sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/gemfire/gemfire-istio-ny.yaml && kubectl apply -f ~/other/resources/gemfire/gemfire-istio-ny.yaml  --namespace={{session_namespace}} --kubeconfig=mykubeconfig && export ISTIO_INGRESS_HOST_EAST=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].hostname}' --kubeconfig=mykubeconfig) &&  sed -i "s/SECONDARY_ISTIO_INGRESS_HOSTNAME/{{ISTIO_INGRESS_HOST_EAST}}/g" ~/other/resources/gemfire/gemfire-cluster-with-gateway-receiver-ny.yaml && kubectl apply -f ~/other/resources/gemfire/gemfire-cluster-with-gateway-receiver-ny.yaml --namespace={{session_namespace}} --kubeconfig=mykubeconfig && kubectl config use-context eduk8s
+(kubectl get secret kconfig -n default -o jsonpath="{.data.myfile}" | base64 --decode) > mykubeconfig && kubectl config use-context secondary-ctx --kubeconfig=mykubeconfig; kubectl create ns {{session_namespace}} --kubeconfig mykubeconfig;  sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/gemfire/gemfire-istio-ny.yaml && kubectl apply -f ~/other/resources/gemfire/gemfire-istio-ny.yaml  --namespace={{session_namespace}} --kubeconfig=mykubeconfig && export ISTIO_INGRESS_HOST_EAST=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].hostname}' --kubeconfig=mykubeconfig) &&  sed -i "s/SECONDARY_ISTIO_INGRESS_HOSTNAME/$ISTIO_INGRESS_HOST_EAST/g" ~/other/resources/gemfire/gemfire-cluster-with-gateway-receiver-ny.yaml && kubectl apply -f ~/other/resources/gemfire/gemfire-cluster-with-gateway-receiver-ny.yaml --namespace={{session_namespace}} --kubeconfig=mykubeconfig && kubectl config use-context eduk8s
 ```
 
 Create the **GatewayReceiver**:
