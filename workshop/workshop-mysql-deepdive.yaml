@@ -1,4 +1,4 @@
-name: Tanzu Postgres Deep Dive
+name: Tanzu MySQL Deep Dive
 
 modules:
     activate:
