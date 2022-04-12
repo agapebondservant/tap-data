@@ -93,10 +93,8 @@ text: "remote-locators"
 Notice the line with the **remote-locators** field. This will provide the locators for the West region, which the East site will query to find out about 
 connected Gateway Sender, Async Event Queues etc. Update the **remote-locators** field with the locator info for the West site, using the newly generated 
 Istio Gateway:
-```editor:append-lines-after-match
-file: ~/other/resources/gemfire/gemfire-cluster-with-gateway-receiver-ny.yaml
-match: "remote-locators"
-text: "remote-locators: {{ISTIO_INGRESS_HOST_WEST}}[10334]"
+```execute
+sed -i "s/#remote-locators:/remote-locators: $ISTIO_INGRESS_HOST_WEST[10334]/g" ~/other/resources/gemfire/gemfire-cluster-with-gateway-receiver-ny.yaml
 ```
 
 Deploy the East site:
@@ -115,10 +113,8 @@ kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 --kubeconfig myku
 ```
 
 Update the West Site with the **remote-locator** info for the East site:
-```editor:append-lines-after-match
-file: ~/other/resources/gemfire/gemfire-cluster-with-gateway-receiver-ny.yaml
-match: "remote-locators"
-text: "remote-locators: {{ISTIO_INGRESS_HOST_EAST}}[10334]"
+```execute
+sed -i "s/#remote-locators:/remote-locators: $ISTIO_INGRESS_HOST_EAST[10334]/g" ~/other/resources/gemfire/gemfire-cluster-with-gateway-sender-la.yaml
 ```
 
 Configure the **GatewaySender** in the **West** site:
@@ -126,7 +122,7 @@ Configure the **GatewaySender** in the **West** site:
 kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 -- gfsh -e connect -e "create gateway-sender --id=sender1 --parallel=true --remote-distributed-system-id=2"
 ```
 
-Create a new region, *customers*, which will stream events to the GatewaySender's queue:
+Create a new region, *posts*, which will stream events to the GatewaySender's queue:
 ```execute
 kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 -- gfsh -e connect -e "create region --name=posts --type=PARTITION --gateway-sender-id=sender1"
 ```
