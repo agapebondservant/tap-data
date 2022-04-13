@@ -93,7 +93,7 @@ url: http://phpadmin-{{session_namespace}}.tanzudatatap.ml/
 
 In keeping with best practices, create a new user to access the MySQL Server instance, instead of using the root user. Login to the MySQL bash console:
 ```execute
-kubectl exec -it mysqlinstance-1-0 -c mysql
+kubectl exec -it mysqlinstance-1-0 -c mysql -- bash
 ```
 
 Create a new user **demo** with password **newpass**:

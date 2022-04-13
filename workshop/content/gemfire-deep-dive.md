@@ -109,7 +109,7 @@ kubectl config use-context secondary-ctx --kubeconfig=mykubeconfig && kubectl -n
 
 Create a new region, *posts*, which will match the producing region on the sending side:
 ```execute
-kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 --kubeconfig mykubeconfig -- gfsh -e connect -e "create region --name=posts --type=PARTITION"
+kubectl config use-context secondary-ctx --kubeconfig=mykubeconfig && kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 --kubeconfig mykubeconfig -- gfsh -e connect -e "create region --name=posts --type=PARTITION; kubectl config use-context eduk8s"
 ```
 
 Update the West Site with the **remote-locator** info for the East site:
