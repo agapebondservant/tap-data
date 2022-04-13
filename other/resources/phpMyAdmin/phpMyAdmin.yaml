@@ -61,7 +61,7 @@ spec:
     - conditions:
         - prefix: /
       services:
-        - name: phpmyadmin
+        - name: phpmyadmin-service
           port: 80
   virtualhost:
     fqdn: phpadmin-YOUR_SESSION_NAMESPACE.tanzudatatap.ml

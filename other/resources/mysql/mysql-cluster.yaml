@@ -1,11 +1,9 @@
 ---
-apiVersion: mysql.with.sql.tanzu.vmware.com/v1
+apiVersion: with.sql.tanzu.vmware.com/v1
 kind: MySQL
 metadata:
   name: mysqlinstance-1
 spec:
-  #storageSize: 1Gi
-  #imagePullSecretName: image-pull-secret
   storageClassName: generic
   highAvailability:
     enabled: true

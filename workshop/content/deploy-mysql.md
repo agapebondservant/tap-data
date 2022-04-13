@@ -1,8 +1,5 @@
 ![High-Level Architecture of Tanzu MySQL operator - HA](images/MySQL_ha.png)
 
-<font color="red">NOTE:</font> Here is a single-instance version of the Tanzu MySQL architecture (Tanzu MySQL supports both):
-![High-Level Architecture of Tanzu MySQL operator - Single Instance](images/MySQL_single.jpeg)
-
 {% if ENV_WORKSHOP_TOPIC == 'data-e2e' %}
 Let's view our **Petclinic app**. First, we launch it:
 ```execute
@@ -47,17 +44,7 @@ while delegating their underlying implementation logic to the operator's control
 Here is a list of the **Custom Resource Definitions** that were deployed by the operator:
 
 ```execute
-clear && kubectl api-resources --api-group=mysql.with.tanzu.vmware.com
-```
-
-Some of these **CRDs** will be useful when declaring a **cluster**; for example, show the list of supported **mysqlversions**:
-```execute-2
-:mysqlversions
-```
-
-Return to the pod view:
-```execute-2
-:pod
+clear && kubectl api-resources --api-group=with.sql.tanzu.vmware.com
 ```
 
 Next, let's deploy a highly available Tanzu MySQL **cluster**. Here is the manifest:
@@ -70,8 +57,8 @@ Let's deploy it:
 kubectl apply -f ~/other/resources/mysql/mysql-cluster.yaml -n {{ session_namespace }}
 ```
 
-This configuration will deploy a MySQL cluster with 1 **primary node**, 1 **mirror node** as a standby node for failover, 
-and 1 **monitor node** for tracking the state of the cluster for failover purposes.
+This configuration will deploy a MySQL cluster with 1 **primary** node,
+2 **secondary** nodes for failover, and 2 **proxy** nodes for routing requests to the primary node.
 View the complete configuration associated with the newly deployed MySQL cluster:
 ```execute
 kubectl get mysql mysqlinstance-1 -o yaml
@@ -96,7 +83,7 @@ Connect to the new MySQL instance via **phpMyAdmin**, a popular web-based MySQL 
 <font color='red'>NOTE: Wait for all 3 pods to show up in the lower console view before running.</font>
 First, set up **phpMyAdmin** to connect to the MySQL instance:
 ```execute
-export MYSQL_ROOT_PASSWORD=$(kubectl exec -it mysqlinstance-1-0 --container=mysql -- cat $MYSQL_ROOT_PASSWORD_FILE) && sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/phpMyAdmin/phpMyAdmin.yaml && sed -i "s/YOUR_ROOT_PASSWORD/${MYSQL_ROOT_PASSWORD}/g" ~/other/resources/phpMyAdmin/phpMyAdmin.yaml && kubectl apply -f ~/other/resources/phpMyAdmin/phpMyAdmin.yaml
+tmpfile=$(mktemp) && kubectl cp mysqlinstance-1-0:$(kubectl exec mysqlinstance-1-0 --container=mysql -- env | grep MYSQL_ROOT_PASSWORD_FILE | sed s/MYSQL_ROOT_PASSWORD_FILE=//) $tmpfile && export MYSQL_ROOT_PASSWORD=$(cat $tmpfile) && sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/phpMyAdmin/phpMyAdmin.yaml && sed -i "s/YOUR_ROOT_PASSWORD/$(echo $MYSQL_ROOT_PASSWORD | base64 )/g" ~/other/resources/phpMyAdmin/phpMyAdmin.yaml && kubectl apply -f ~/other/resources/phpMyAdmin/phpMyAdmin.yaml
 ```
 
 Launch **phpMyAdmin**:
@@ -104,14 +91,24 @@ Launch **phpMyAdmin**:
 url: http://phpadmin-{{session_namespace}}.tanzudatatap.ml/
 ```
 
-Use the credentials emitted below:
+In keeping with best practices, create a new user to access the MySQL Server instance, instead of using the root user. Login to the MySQL bash console:
 ```execute
-printf "Server: mysqlinstance-1.{{session_namespace}}\nUnder Connection tab:\n  Host name: mysqlinstance-1.{{session_namespace}}.svc.cluster.local\n  Maintenance Database: mysql\n  Username: root\n  Password: ${MYSQL_ROOT_PASSWORD}\n"
+kubectl exec -it mysqlinstance-1-0 -c mysql
 ```
 
-Once connected, execute the following query:
+Create a new user **demo** with password **newpass**:
+```execute
+mysql -B -s --user=root --password=$(cat $MYSQL_ROOT_PASSWORD_FILE) --execute "CREATE USER 'demo'@'%' IDENTIFIED BY 'newpass'; GRANT ALL PRIVILEGES ON *.* TO 'demo'@'%'; FLUSH PRIVILEGES;"; exit
+```
+
+Use the credentials emitted below to login to **phpMyAdmin**:
+```execute
+printf "Server: mysqlinstance-1.{{session_namespace}}\nUnder Connection tab:\n  Host name: mysqlinstance-1.{{session_namespace}}.svc.cluster.local\n  Maintenance Database: mysql\n  Username: demo\n  Password: newpass\n"
+```
+
+Once connected, copy the following query to the query box in **phpMyAdmin**, then click on "Go" to execute:
 ```copy
-echo "SELECT * FROM performance_schema.replication_group_members\G;"
+SELECT * FROM performance_schema.replication_group_members;
 ```
 
 Tanzu MySQL uses **InnoDB Cluster** for high availability. In turn, **InnoDB Cluster** uses **Group Replication** for failover and promotions/demotions. 
@@ -120,9 +117,15 @@ A highly-available Tanzu MySQL cluster consists of 5 nodes: the **primary/read-w
 and 2 **proxy** nodes which use **MySQL Router** to route requests to the primary node.
 
 Let's demonstrate it by killing the primary node by <b>selecting the primary node in the lower console and hitting <font color="red">Ctrl-K</font>.</b>
-Observe the activity in the cluster.
+Observe the activity in the cluster by running the query below in **phpMyAdmin** to view the new primary and secondary nodes:
+```copy
+SELECT * FROM performance_schema.replication_group_members;
+```
 
 #### Backups and Restores
+Say we want to scale down our highly available MySQL cluster to a single-node cluster.
+We can achieve this by generating a **backup** of our existing cluster, and then restoring the backup to a new single-node instance.
+
 Tanzu MySQL includes **Percona XtraBackup** as its backup-restore solution for MySQL backups, using an S3-compatible store. Here, we will use **Minio** for backup storage.
 
 First, get the Minio login credentials:
