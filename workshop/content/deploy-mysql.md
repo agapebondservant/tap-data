@@ -123,10 +123,15 @@ SELECT * FROM performance_schema.replication_group_members;
 ```
 
 #### Backups and Restores
-Say we want to scale down our highly available MySQL cluster to a single-node cluster.
-We can achieve this by generating a **backup** of our existing cluster, and then restoring the backup to a new single-node instance.
+Tanzu MySQL includes **Percona XtraBackup** as its backup-restore solution for MySQL backups, using an S3-compatible store.
+(**Percona XtraBackup** is the leading backup-restore solution for Percona-backed MySQL databases.
+It supports **hot backups** - a non-blocking operation which allows the database to remain online while backups are in progress. This is supported 
+for MyISAM and XtraDB tables, not just InnoDB tables.
+It also provides features such as highly compressed backups for efficient network bandwidth/storage utilization and faster restores (the latter resulting 
+in increased uptime/improved RTO),
+built-in backup verification, and support for full or incremental and bacula backups.
 
-Tanzu MySQL includes **Percona XtraBackup** as its backup-restore solution for MySQL backups, using an S3-compatible store. Here, we will use **Minio** for backup storage.
+Here, we will use **Minio** for backup storage.
 
 First, get the Minio login credentials:
 ```execute
@@ -143,7 +148,7 @@ View the newly created bucket (login with the _Username_ and _Password_ printed 
 url: https://minio.tanzudatatap.ml/
 ```
 
-Next, let's view the manifest that we would use to configure the backup location **pgBackRest**:
+Next, let's view the manifest that we would use to configure the backup location:
 ```editor:open-file
 file: ~/other/resources/mysql/mysql-backup-location.yaml
 ```
@@ -155,7 +160,7 @@ kubectl  apply -f ~/other/resources/mysql/mysql-backup-location.yaml  -n {{ sess
 
 Let's take a look at the backup configuration that was just deployed:
 ```execute
-kubectl get MySQLbackuplocation pg-simple-backuplocation -o jsonpath={.spec} -n {{ session_namespace }} | jq
+kubectl get mysqlbackuplocation my-simple-backuplocation -o jsonpath={.spec} -n {{ session_namespace }} | jq
 ```
 
 Next, trigger an on-demand backup by deploying a new **MySQLBackup** definition. View the manifest:
@@ -163,41 +168,69 @@ Next, trigger an on-demand backup by deploying a new **MySQLBackup** definition.
 file: ~/other/resources/mysql/mysql-backup.yaml
 ```
 
-Deploy the backup definition. <font color="red">TODO - wait for the 3 MySQL instance nodes to be restored first.</font>
+Deploy the backup definition:
 ```execute
 kubectl apply -f ~/other/resources/mysql/mysql-backup.yaml -n {{ session_namespace }}
 ```
 
-View the generated backup files on Minio: <font color="red">TODO - working with DB team</font>
+View the generated backup files on Minio:
 ```dashboard:open-url
 url: https://minio.tanzudatatap.ml/
 ```
 
 View the backup progress here:
 ```execute
-kubectl get mysqlbackup pg-simple-backup -n {{ session_namespace }}
+kubectl get mysqlbackup my-backup-sample -n {{ session_namespace }}
 ```
 
-Information about backups can also be gotten directly from the **pgbackrest** cli: <font color="red">TODO</font>
+In addition to on-demand backups, Tanzu MySQL supports scheduled backup jobs. Here's a manifest that will set up a daily backup job for our MySQL instance to be backed up to our previously defined location:
+```editor:open-file
+file: ~/other/resources/mysql/mysql-backup-schedule.yaml
+```
+
+Deploy the scheduled backup job:
 ```execute
-kubectl exec -it pginstance-1-1 -- bash -c 'pgbackrest info --stanza=${BACKUP_STANZA_NAME}'
+kubectl apply -f ~/other/resources/mysql/mysql-backup-schedule.yaml -n {{ session_namespace }}
 ```
 
-View other commands provided by **pgBackRest**:
+Verify the status of the scheduled job:
 ```execute
-kubectl exec -it pginstance-1-1 -- bash -c 'pgbackrest help'
+kubectl get mysqlbackupschedule my-simple-backupschedule -o jsonpath={.spec} -n {{ session_namespace }}
 ```
 
-<font color="red">TODO:</font> Restore the last backup.
+Also notice that a new set of **MySQLBackup** instances were generated:
+```execute
+kubectl get mysqlbackup -n {{ session_namespace }}
+```
+
+View the backup files in Minio: <font color="red">NOTE: The **.xb** backup files will be stored under a _YYYY > MM > DD_ folder substructure by default.
+```dashboard:open-url
+url: https://minio.tanzudatatap.ml/
+```
+
+Now, let's perform a restore. In this case, we will downscale the HA instance to a new single-node DB. View the manifest:
+```editor:open-file
+file: ~/other/resources/mysql/mysql-backup-schedule.yaml
+```
+
+Trigger the restore:
+```execute
+kubectl apply -f ~/other/resources/mysql/mysql-restore.yaml -n {{ session_namespace }}
+```
+
+Verify the status of the restore:
+```execute
+kubectl get mysqlrestore my-restore-sample -n {{ session_namespace }}
+```
 
 #### Monitoring MySQL Data
-![Tanzu MySQL Operator Monitoring](images/MySQL_metrics.png)
+![Tanzu MySQL Operator Monitoring](images/mysql_metrics.png)
 Tanzu MySQL includes a **MySQL Exporter** which collects and exposes Prometheus metrics via a _/metrics_ endpoint.
 
 Show a sampling of the emitted metrics:
 
 ```execute
-clear; kubectl port-forward pginstance-1-0 9187:9187 > /dev/null & TMP_PG_PROC=$!; sleep 2; curl -k https://localhost:9187/metrics
+clear; kubectl port-forward mysqlinstance-1-0 9104:9104 > /dev/null & TMP_PG_PROC=$!; sleep 2; curl -k https://localhost:9104/metrics
 ```
 
 Kill the port-forward to proceed:
@@ -210,12 +243,12 @@ The Prometheus operator provides a **PodMonitor** which will handle scraping and
 
 Set up the **PodMonitor**:
 ```editor:open-file
-file: ~/other/resources/MySQL/MySQL-pod-monitor.yaml
+file: ~/other/resources/mysql/mysql-pod-monitor.yaml
 ```
 
 Deploy the **PodMonitor**:
 ```execute
-kubectl apply -f ~/other/resources/MySQL/MySQL-pod-monitor.yaml
+kubectl apply -f ~/other/resources/mysql/mysql-pod-monitor.yaml
 ```
 
 Next, navigate to the Prometheus UI, select Status -> Targets and click "Collapse All" - _podMonitor_ metrics 
@@ -226,6 +259,6 @@ url: http://prometheus.tanzudatatap.ml
 ```
 
 <font color="red">NOTE:</font> To view specific metrics collected by Prometheus, go the the Prometheus UI Home screen by 
-clicking on "Prometheus" in the menu bar, and enter **pg** in the Search bar. A list of metrics should be populated in the field.
+clicking on "Prometheus" in the menu bar, and enter **mysql** in the Search bar. A list of metrics should be populated in the field.
 
 #### Rotating Credentials

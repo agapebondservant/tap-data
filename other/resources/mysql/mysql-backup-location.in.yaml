@@ -1,0 +1,24 @@
+---
+apiVersion: with.sql.tanzu.vmware.com/v1
+kind: MySQLBackupLocation
+metadata:
+  name: my-simple-backuplocation
+spec:
+  storage:
+    s3:
+      bucket: "mysql-backups"
+      bucketPath: "1/"
+      region: ${DATA_E2E_MINIO_PG_REGION}
+      endpoint: ${DATA_E2E_MINIO_URL}
+      forcePathStyle: true
+      enableSSL: false
+      secret:
+        name: my-backuplocation-creds-sample
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: my-backuplocation-creds-sample
+stringData:
+  accessKeyId: ${DATA_E2E_MINIO_ACCESS_KEY}
+  secretAccessKey: ${DATA_E2E_MINIO_SECRET_KEY}

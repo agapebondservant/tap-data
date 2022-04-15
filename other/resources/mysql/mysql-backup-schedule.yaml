@@ -1,0 +1,13 @@
+---
+apiVersion: with.sql.tanzu.vmware.com/v1
+kind: MySQLBackupSchedule
+metadata:
+  name: my-simple-backupschedule
+spec:
+  backupTemplate:
+    spec:
+      location:
+        name: my-simple-backuplocation
+      instance:
+        name: mysqlinstance-1
+  schedule: "@daily" #"0 23 * * 5"

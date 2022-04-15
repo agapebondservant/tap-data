@@ -1,0 +1,16 @@
+---
+apiVersion: with.sql.tanzu.vmware.com/v1
+kind: MySQLRestore
+metadata:
+  name: my-restore-sample
+spec:
+  backup:
+    name: my-backup-sample
+  instanceTemplate:
+    metadata:
+      name: mysqlinstance-restored-1
+    spec:
+      #storageSize: 1Gi
+      #imagePullSecretName: tanzu-mysql-image-registry
+      highAvailability:
+        enabled: false

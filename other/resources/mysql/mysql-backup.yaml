@@ -1,0 +1,10 @@
+---
+apiVersion: with.sql.tanzu.vmware.com/v1
+kind: MySQLBackup
+metadata:
+  name: my-backup-sample
+spec:
+  location:
+    name: my-simple-backuplocation
+  instance:
+    name: mysqlinstance-1
