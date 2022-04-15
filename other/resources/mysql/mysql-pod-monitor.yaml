@@ -3,14 +3,14 @@ apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
   name: tanzu-mysql-instances
-  namespace: prometheus
+  namespace: monitoring-tools
 spec:
   namespaceSelector:
     any: true
   selector:
     matchLabels:
-    app.kubernetes.io/component: database
-    app.kubernetes.io/name: mysql
+      app.kubernetes.io/component: database
+      app.kubernetes.io/name: mysql
   podTargetLabels:
     - app.kubernetes.io/instance
   podMetricsEndpoints:

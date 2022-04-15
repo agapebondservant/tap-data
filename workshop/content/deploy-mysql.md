@@ -106,7 +106,7 @@ Use the credentials emitted below to login to **phpMyAdmin**:
 printf "Server: mysqlinstance-1.{{session_namespace}}\nUnder Connection tab:\n  Host name: mysqlinstance-1.{{session_namespace}}.svc.cluster.local\n  Maintenance Database: mysql\n  Username: demo\n  Password: newpass\n"
 ```
 
-Once connected, copy the following query to the query box in **phpMyAdmin**, then click on "Go" to execute:
+Once connected, copy the following query to the query box in **phpMyAdmin** (under the SQL tab), then click on "Go" to execute:
 ```copy
 SELECT * FROM performance_schema.replication_group_members;
 ```
@@ -116,7 +116,7 @@ A highly-available Tanzu MySQL cluster consists of 5 nodes: the **primary/read-w
 2 **secondary/read-only/failover** nodes which perform synchronous replication with the primary node, 
 and 2 **proxy** nodes which use **MySQL Router** to route requests to the primary node.
 
-Let's demonstrate it by killing the primary node by <b>selecting the primary node in the lower console and hitting <font color="red">Ctrl-K</font>.</b>
+Let's demonstrate HA by killing the primary node by <b>selecting the primary node in the lower console and hitting <font color="red">Ctrl-K</font>.</b>
 Observe the activity in the cluster by running the query below in **phpMyAdmin** to view the new primary and secondary nodes:
 ```copy
 SELECT * FROM performance_schema.replication_group_members;
@@ -203,7 +203,7 @@ Also notice that a new set of **MySQLBackup** instances were generated:
 kubectl get mysqlbackup -n {{ session_namespace }}
 ```
 
-View the backup files in Minio: <font color="red">NOTE: The **.xb** backup files will be stored under a _YYYY > MM > DD_ folder substructure by default.
+View the backup files in Minio: <font color="red">NOTE: The **.xb** backup files will be stored under a _YYYY > MM > DD_ folder substructure by default.</font>
 ```dashboard:open-url
 url: https://minio.tanzudatatap.ml/
 ```
