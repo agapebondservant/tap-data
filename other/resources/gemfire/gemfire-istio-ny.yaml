@@ -14,7 +14,7 @@ spec:
       port: 1099
       targetPort: 1099
       protocol: TCP
-  type: NodePort
+  type: ClusterIP
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway

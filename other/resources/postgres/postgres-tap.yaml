@@ -34,4 +34,5 @@ spec:
     git:
       ref:
         branch: main
-      url: https://github.com/spring-projects/spring-petclinic
+        tag: tap-1.1
+      url: https://github.com/agapebondservant/spring-petclinic.git

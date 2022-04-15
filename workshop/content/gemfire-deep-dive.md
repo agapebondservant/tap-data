@@ -82,7 +82,7 @@ file: ~/other/resources/gemfire/gemfire-istio-la.yaml
 
 Deploy the West site with the Istio Gateway:
 ```execute
-sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/gemfire/gemfire-istio-la.yaml && kubectl apply -f ~/other/resources/gemfire/gemfire-istio-la.yaml && export ISTIO_INGRESS_HOST_WEST=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].hostname}') &&  sed -i "s/PRIMARY_ISTIO_INGRESS_HOSTNAME/${ISTIO_INGRESS_HOST_WEST}/g" ~/other/resources/gemfire/gemfire-cluster-with-gateway-sender-la.yaml && kubectl apply -f ~/other/resources/gemfire/gemfire-cluster-with-gateway-sender-la.yaml
+sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/gemfire/gemfire-istio-la.yaml && kubectl apply -f ~/other/resources/gemfire/gemfire-istio-la.yaml -n {{ session_namespace }} && export ISTIO_INGRESS_HOST_WEST=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].hostname}') &&  sed -i "s/PRIMARY_ISTIO_INGRESS_HOSTNAME/${ISTIO_INGRESS_HOST_WEST}/g" ~/other/resources/gemfire/gemfire-cluster-with-gateway-sender-la.yaml && kubectl apply -f ~/other/resources/gemfire/gemfire-cluster-with-gateway-sender-la.yaml
 ```
 
 Next, we will create a Gemfire Cluster in our secondary East site:
