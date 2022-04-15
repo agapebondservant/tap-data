@@ -14,6 +14,7 @@ Notice the highlighted section which defines the **Service Claim** for the Servi
 to access a specific **Provisioned Service**. The requested service must match the criteria specified by the claim. Once matched, a **Service Binding**
 will be created for the service.
 
+{% if ENV_WORKSHOP_TOPIC == 'temp' %}
 Create the **Resource Claim** which will be referenced by the **Service Binding**:
 ```execute
 clear && tanzu init && tanzu plugin install --local bin/cli services && tanzu service claim create db --resource-name pginstance-1 --resource-namespace {{ session_namespace }} --resource-kind Postgres --resource-api-version sql.tanzu.vmware.com/v1
@@ -25,7 +26,10 @@ file: ~/other/resources/postgres/postgres-tap-resourceclaimpolicy.yaml
 ```
 
 Create the **ResourceClaimPolicy**:
-
+```execute
+kubectl apply -f ~/other/resources/postgres/postgres-tap-resourceclaimpolicy.yaml
+```
+{% endif %}
 
 Create the **Service Binding** by applying the manifest to the cluster:
 ```execute
@@ -39,7 +43,7 @@ url: http://pgadmin.{{ ingress_domain }}
 
 <font color="red">NOTE:</font> Reuse the credentials provided below if needed:
 ```execute
-printf "Under General tab:\n  Server: pginstance-1.{{session_namespace}}\nUnder Connection tab:\n  Host name: pginstance-1.{{session_namespace}}.svc.cluster.local\n  Maintenance Database: pginstance-1\n  Username: pgadmin\n  Password: $(kubectl get secret pginstance-1-db-secret -n {{session_namespace}} -o jsonpath='{.data.password}' | base64 --decode)\n"
+printf "Under General tab:\n  Server: pginstance-1.{{session_namespace}}\nUnder Connection tab:\n  Host name: pginstance-1.{{session_namespace}}.svc.cluster.local\n  Maintenance Database: pginstance-1\n  Username: $(kubectl get secret pginstance-1-app-user-db-secret -n {{session_namespace}} -o jsonpath='{.data.username}' | base64 --decode)\n  Password: $(kubectl get secret pginstance-1-app-user-db-secret -n {{session_namespace}} -o jsonpath='{.data.password}' | base64 --decode)\n"
 ```
 
 #### Monitoring Postgres Data (ctd)

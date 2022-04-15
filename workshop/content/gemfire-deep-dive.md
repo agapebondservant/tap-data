@@ -39,6 +39,7 @@ text: "start-dev-rest-api"
 after: 3
 ```
 
+Update the sending cluster:
 ```execute
 sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/gemfire/gemfire-cluster-with-gateway-sender.yaml && kubectl apply -f ~/other/resources/gemfire/gemfire-cluster-with-gateway-sender.yaml
 ```
@@ -97,9 +98,9 @@ Istio Gateway:
 sed -i "s/#remote-locators:/remote-locators: $ISTIO_INGRESS_HOST_WEST[10334]/g" ~/other/resources/gemfire/gemfire-cluster-with-gateway-receiver-ny.yaml
 ```
 
-Deploy the East site:
+Deploy the East site (<font color="red">NOTE: Click **Ctrl-C** after the locator and server nodes show up as Ready:</font>)
 ```execute
-(kubectl get secret kconfig -n default -o jsonpath="{.data.myfile}" | base64 --decode) > mykubeconfig && kubectl config use-context secondary-ctx --kubeconfig=mykubeconfig; kubectl create ns {{session_namespace}} --kubeconfig mykubeconfig;  sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/gemfire/gemfire-istio-ny.yaml && kubectl apply -f ~/other/resources/gemfire/gemfire-istio-ny.yaml  --namespace={{session_namespace}} --kubeconfig=mykubeconfig && export ISTIO_INGRESS_HOST_EAST=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].hostname}' --kubeconfig=mykubeconfig) &&  sed -i "s/SECONDARY_ISTIO_INGRESS_HOSTNAME/$ISTIO_INGRESS_HOST_EAST/g" ~/other/resources/gemfire/gemfire-cluster-with-gateway-receiver-ny.yaml && kubectl apply -f ~/other/resources/gemfire/gemfire-cluster-with-gateway-receiver-ny.yaml --namespace={{session_namespace}} --kubeconfig=mykubeconfig; kubectl config use-context eduk8s
+(kubectl get secret kconfig -n default -o jsonpath="{.data.myfile}" | base64 --decode) > mykubeconfig && kubectl config use-context secondary-ctx --kubeconfig=mykubeconfig; kubectl create ns {{session_namespace}} --kubeconfig mykubeconfig;  sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/gemfire/gemfire-istio-ny.yaml && kubectl apply -f ~/other/resources/gemfire/gemfire-istio-ny.yaml  --namespace={{session_namespace}} --kubeconfig=mykubeconfig && export ISTIO_INGRESS_HOST_EAST=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].hostname}' --kubeconfig=mykubeconfig);  kubectl create secret docker-registry image-pull-secret --namespace={{ session_namespace }} --docker-server=registry.pivotal.io --docker-username='{{ DATA_E2E_PIVOTAL_REGISTRY_USERNAME }}' --docker-password='{{ DATA_E2E_PIVOTAL_REGISTRY_PASSWORD }}' --dry-run -o yaml | kubectl apply --kubeconfig=mykubeconfig -f - && sed -i "s/SECONDARY_ISTIO_INGRESS_HOSTNAME/$ISTIO_INGRESS_HOST_EAST/g" ~/other/resources/gemfire/gemfire-cluster-with-gateway-receiver-ny.yaml && kubectl apply -f ~/other/resources/gemfire/gemfire-cluster-with-gateway-receiver-ny.yaml --namespace={{session_namespace}} --kubeconfig=mykubeconfig; watch kubectl get pods -n {{session_namespace}} --kubeconfig=mykubeconfig; kubectl config use-context eduk8s
 ```
 
 Create the **GatewayReceiver**:
@@ -109,7 +110,7 @@ kubectl config use-context secondary-ctx --kubeconfig=mykubeconfig && kubectl -n
 
 Create a new region, *posts*, which will match the producing region on the sending side:
 ```execute
-kubectl config use-context secondary-ctx --kubeconfig=mykubeconfig && kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 --kubeconfig mykubeconfig -- gfsh -e connect -e "create region --name=posts --type=PARTITION; kubectl config use-context eduk8s"
+kubectl config use-context secondary-ctx --kubeconfig=mykubeconfig && kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 --kubeconfig mykubeconfig -- gfsh -e connect -e "create region --name=posts --type=PARTITION"; kubectl config use-context eduk8s
 ```
 
 Update the West Site with the **remote-locator** info for the East site:
