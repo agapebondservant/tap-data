@@ -33,6 +33,5 @@ spec:
   source:
     git:
       ref:
-        branch: main
-        tag: tap-1.1
+        branch: accelerator
       url: https://github.com/agapebondservant/spring-petclinic.git
