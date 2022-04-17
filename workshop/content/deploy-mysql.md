@@ -135,7 +135,7 @@ Here, we will use **Minio** for backup storage.
 
 First, get the Minio login credentials:
 ```execute
-clear &&  mc config host add --insecure data-fileingest-minio https://{{DATA_E2E_MINIO_URL}} {{DATA_E2E_MINIO_ACCESS_KEY}} {{DATA_E2E_MINIO_SECRET_KEY}} && printf "Username: $(kubectl get secret minio -o jsonpath="{.data.accesskey}" -n minio| base64 --decode)\nPassword: $(kubectl get secret minio -o jsonpath="{.data.secretkey}" -n minio| base64 --decode)\n"
+clear &&  mc config host add --insecure data-fileingest-minio https://{{DATA_E2E_MINIO_TLS_URL}} {{DATA_E2E_MINIO_TLS_ACCESS_KEY}} {{DATA_E2E_MINIO_TLS_SECRET_KEY}} && printf "Username: $(kubectl get secret minio -o jsonpath="{.data.accesskey}" -n minio-tls| base64 --decode)\nPassword: $(kubectl get secret minio -o jsonpath="{.data.secretkey}" -n minio-tls| base64 --decode)\n"
 ```
 
 Let's create a new bucket for our **mysqldata** backups:
@@ -145,7 +145,7 @@ mc mb --insecure -p data-fileingest-minio/mysql-backups
 
 View the newly created bucket (login with the _Username_ and _Password_ printed earlier):
 ```dashboard:open-url
-url: https://minio.tanzudatatap.ml/
+url: https://minio.minio-demo.ml:9000/
 ```
 
 Next, let's view the manifest that we would use to configure the backup location:
@@ -175,7 +175,7 @@ kubectl apply -f ~/other/resources/mysql/mysql-backup.yaml -n {{ session_namespa
 
 View the generated backup files on Minio:
 ```dashboard:open-url
-url: https://minio.tanzudatatap.ml/
+url: https://minio.minio-demo.ml:9000/
 ```
 
 View the backup progress here:
@@ -205,7 +205,7 @@ kubectl get mysqlbackup -n {{ session_namespace }}
 
 View the backup files in Minio: <font color="red">NOTE: The **.xb** backup files will be stored under a _YYYY > MM > DD_ folder substructure by default.</font>
 ```dashboard:open-url
-url: https://minio.tanzudatatap.ml/
+url: https://minio.minio-demo.ml:9000/
 ```
 
 Now, let's perform a restore. In this case, we will downscale the HA instance to a new single-node DB. View the manifest:
