@@ -80,7 +80,7 @@ export tmp_db_db=$(kubectl get secrets pginstance-1-db-secret -o jsonpath='{.dat
 #### Demonstrating HA
 
 Connect to the new MySQL instance via **phpMyAdmin**, a popular web-based MySQL client.
-<font color='red'>NOTE: Wait for all 3 pods to show up in the lower console view before running.</font>
+<font color='red'>NOTE: Wait for all 5 pods to show up in the lower console view before running.</font>
 First, set up **phpMyAdmin** to connect to the MySQL instance:
 ```execute
 tmpfile=$(mktemp) && kubectl cp mysqlinstance-1-0:$(kubectl exec mysqlinstance-1-0 --container=mysql -- env | grep MYSQL_ROOT_PASSWORD_FILE | sed s/MYSQL_ROOT_PASSWORD_FILE=//) $tmpfile && export MYSQL_ROOT_PASSWORD=$(cat $tmpfile) && sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/phpMyAdmin/phpMyAdmin.yaml && sed -i "s/YOUR_ROOT_PASSWORD/$(echo $MYSQL_ROOT_PASSWORD | base64 )/g" ~/other/resources/phpMyAdmin/phpMyAdmin.yaml && kubectl apply -f ~/other/resources/phpMyAdmin/phpMyAdmin.yaml
