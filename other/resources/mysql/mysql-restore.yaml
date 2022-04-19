@@ -10,7 +10,7 @@ spec:
     metadata:
       name: mysqlinstance-restored-1
     spec:
-      #storageSize: 1Gi
-      #imagePullSecretName: tanzu-mysql-image-registry
+      storageSize: 1Gi
+      imagePullSecretName: image-pull-secret
       highAvailability:
         enabled: false

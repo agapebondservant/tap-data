@@ -223,6 +223,11 @@ Verify the status of the restore:
 watch kubectl get mysqlrestore my-restore-sample -n {{ session_namespace }}
 ```
 
+You can also view the logs generated from the restore process <font color="red">NOTE: Hit **Ctrl-C** to escape:</font>
+```execute
+kubectl logs -ljob-name=restore-job-my-restore-sample -f
+```
+
 #### Monitoring MySQL Data
 ![Tanzu MySQL Operator Monitoring](images/mysql_metrics.png)
 Tanzu MySQL includes a **MySQL Exporter** which collects and exposes Prometheus metrics via a _/metrics_ endpoint.
