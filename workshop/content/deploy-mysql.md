@@ -140,7 +140,7 @@ clear &&  mc config host add --insecure data-fileingest-minio https://{{DATA_E2E
 
 Let's create a new bucket for our **mysqldata** backups:
 ```execute
-mc mb --insecure -p data-fileingest-minio/mysql-backups
+mc mb --insecure -p data-fileingest-minio/mysql-backups && mc policy --insecure set public data-fileingest-minio/mysql-backups
 ```
 
 View the newly created bucket (login with the _Username_ and _Password_ printed earlier):
@@ -173,14 +173,14 @@ Deploy the backup definition:
 kubectl apply -f ~/other/resources/mysql/mysql-backup.yaml -n {{ session_namespace }}
 ```
 
+View the backup progress here: <font color="red">NOTE</font>: Hit **Ctrl-C** when the backup process shows as Completed.
+```execute
+watch kubectl get mysqlbackup my-backup-sample -n {{ session_namespace }}
+```
+
 View the generated backup files on Minio:
 ```dashboard:open-url
 url: https://minio.minio-demo.ml:9000/
-```
-
-View the backup progress here:
-```execute
-kubectl get mysqlbackup my-backup-sample -n {{ session_namespace }}
 ```
 
 In addition to on-demand backups, Tanzu MySQL supports scheduled backup jobs. Here's a manifest that will set up a daily backup job for our MySQL instance to be backed up to our previously defined location:
