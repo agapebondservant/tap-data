@@ -10,4 +10,4 @@ spec:
         name: my-simple-backuplocation
       instance:
         name: mysqlinstance-1
-  schedule: "@daily" #"0 23 * * 5"
+  schedule: "*/5 * * * *" #@daily

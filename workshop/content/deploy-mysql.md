@@ -135,7 +135,7 @@ Here, we will use **Minio** for backup storage.
 
 First, get the Minio login credentials:
 ```execute
-clear &&  mc config host add --insecure data-fileingest-mysql http://{{DATA_E2E_MINIO_PLAIN_URL}} {{DATA_E2E_MINIO_PLAIN_ACCESS_KEY}} {{DATA_E2E_MINIO_PLAIN_SECRET_KEY}} && printf "Username: $(kubectl get secret minio -o jsonpath="{.data.accesskey}" -n minio-plain| base64 --decode)\nPassword: $(kubectl get secret minio -o jsonpath="{.data.secretkey}" -n minio-plain| base64 --decode)\n"
+clear &&  mc config host add --insecure data-fileingest-mysql {{DATA_E2E_MINIO_PLAIN_URL}} {{DATA_E2E_MINIO_PLAIN_ACCESS_KEY}} {{DATA_E2E_MINIO_PLAIN_SECRET_KEY}} && printf "Username: $(kubectl get secret minio -o jsonpath="{.data.accesskey}" -n minio-plain| base64 --decode)\nPassword: $(kubectl get secret minio -o jsonpath="{.data.secretkey}" -n minio-plain| base64 --decode)\n"
 ```
 
 Let's create a new bucket for our **mysqldata** backups:
@@ -193,9 +193,9 @@ Deploy the scheduled backup job:
 kubectl apply -f ~/other/resources/mysql/mysql-backup-schedule.yaml -n {{ session_namespace }}
 ```
 
-Verify the status of the scheduled job:
+Verify the details of the scheduled job:
 ```execute
-kubectl get mysqlbackupschedule my-simple-backupschedule -o jsonpath={.spec} -n {{ session_namespace }}
+kubectl get mysqlbackupschedule my-simple-backupschedule -o jsonpath={.spec} -n {{ session_namespace }} | jq
 ```
 
 Also notice that a new set of **MySQLBackup** instances were generated:
@@ -210,7 +210,7 @@ url: http://minio.minio-demo.ml:9000/
 
 Now, let's perform a restore. In this case, we will downscale the HA instance to a new single-node DB. View the manifest:
 ```editor:open-file
-file: ~/other/resources/mysql/mysql-backup-schedule.yaml
+file: ~/other/resources/mysql/mysql-restore.yaml
 ```
 
 Trigger the restore:
@@ -220,7 +220,7 @@ kubectl apply -f ~/other/resources/mysql/mysql-restore.yaml -n {{ session_namesp
 
 Verify the status of the restore:
 ```execute
-kubectl get mysqlrestore my-restore-sample -n {{ session_namespace }}
+watch kubectl get mysqlrestore my-restore-sample -n {{ session_namespace }}
 ```
 
 #### Monitoring MySQL Data
