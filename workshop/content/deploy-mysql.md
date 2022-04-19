@@ -140,7 +140,7 @@ clear &&  mc config host add --insecure data-fileingest-mysql {{DATA_E2E_MINIO_P
 
 Let's create a new bucket for our **mysqldata** backups:
 ```execute
-mc mb --insecure -p data-fileingest-mysql/mysql-backups && mc policy --insecure set public data-fileingest-mysql/mysql-backups
+mc rb --force --insecure data-fileingest-mysql/mysql-backups; mc mb --insecure -p data-fileingest-mysql/mysql-backups && mc policy --insecure set public data-fileingest-mysql/mysql-backups
 ```
 
 View the newly created bucket (login with the _Username_ and _Password_ printed earlier):
@@ -198,12 +198,9 @@ Verify the details of the scheduled job:
 kubectl get mysqlbackupschedule my-simple-backupschedule -o jsonpath={.spec} -n {{ session_namespace }} | jq
 ```
 
-Also notice that a new set of **MySQLBackup** instances were generated:
-```execute
-kubectl get mysqlbackup -n {{ session_namespace }}
-```
+Soon, a set of scheduled jobs will be deployed (shown in the lower console window).
 
-View the backup files in Minio: <font color="red">NOTE: The **.xb** backup files will be stored under a _YYYY > MM > DD_ folder substructure by default.</font>
+Next, view the backup files in Minio: <font color="red">NOTE: The **.xb** backup files will be stored under a _YYYY > MM > DD_ folder substructure by default.</font>
 ```dashboard:open-url
 url: http://minio.minio-demo.ml:9000/
 ```
