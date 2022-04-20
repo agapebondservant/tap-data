@@ -186,6 +186,15 @@ git -C /usr/local/Homebrew/Library/Taps/homebrew/homebrew-cask fetch --unshallow
 brew install minio/stable/mc
 mc config host add tanzu-data-tap-minio http://minio.tanzudatatap.ml/ $MINIO_ACCESS_KEY $MINIO_SECRET_KEY
 
+- Deploy Minio Chart without TLS:
+helm repo add minio-legacy https://helm.min.io/
+kubectl create ns minio-plain
+helm install --set resources.requests.memory=1.5Gi,tls.enabled=false --namespace minio-plain minio minio-legacy/minio --set service.type=LoadBalancer --set service.port=9000
+export MINIO_PLAIN_ACCESS_KEY=$(kubectl get secret minio -o jsonpath="{.data.accesskey}" -n minio-plain| base64 --decode)
+export MINIO_PLAIN_SECRET_KEY=$(kubectl get secret minio -o jsonpath="{.data.secretkey}" -n minio-plain| base64 --decode)
+export MINIO_PLAIN_POD_NAME=$(kubectl get pods --namespace minio-plain -l "release=minio" -o jsonpath="{.items[0].metadata.name}")
+export MINIO_PLAIN_SERVER_URL=minio.minio-demo.ml
+
 - Add required artifacts to Minio:
 (Greenplum-Gemfire connector:)
 
@@ -202,7 +211,10 @@ helm repo update
 #helm install prometheus bitnami/kube-prometheus --namespace monitoring-tools
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm install prometheus prometheus-community/kube-prometheus-stack --create-namespace --namespace=monitoring-tools \
---set prometheus.service.port=8000 --set prometheus.service.type=ClusterIP --wait
+--set prometheus.service.port=8000 --set prometheus.service.type=ClusterIP \
+--set grafana.enabled=false,alertmanager.enabled=false,nodeExporter.enabled=false \
+--set prometheus.prometheusSpec.podMonitorSelectorNilUsesHelmValues=false \
+--wait
 kubectl apply -f resources/prometheus-httpproxy.yaml
 
 - Grafana:
