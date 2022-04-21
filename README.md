@@ -1,15 +1,28 @@
 ### Deploying Data E2E Workshop (tested on TKG on AWS)
-NOTE:
-* Currently requires **cluster-admin** privileges to set up. 
-* Currently sets up the Learning Center's user with **cluster-admin** privileges. For this reason, 
-it is recommended not to use a permanent Kubernetes cluster, and instead to use a 
-temporary Kubernetes cluster that is created on demand and destroyed right after a session (see [here](https://docs.vmware.com/en/Tanzu-Application-Platform/1.0/tap/GUID-learning-center-about.html#use-cases-1 "Docs"))
 
-#### Kubernetes Cluster Pre-reqs
+NOTE:
+* Currently requires **cluster-admin** privileges to set up.
+* Currently sets up the Learning Center's user with **cluster-admin** privileges. For this reason,
+  it is recommended not to use a permanent Kubernetes cluster, and instead to use a
+  temporary Kubernetes cluster that is created on demand and destroyed right after a session (see [here](https://docs.vmware.com/en/Tanzu-Application-Platform/1.0/tap/GUID-learning-center-about.html#use-cases-1 "Docs"))
+
+#### Contents
+1. [Kubernetes Cluster Prep](#pre-reqs)
+2. [Install Minio](#minio)
+3. [Install Prometheus and Grafana](#prometheusgrafana)
+4. [Install Datadog](#datadog)
+5. [Install ArgoCD](#argocd)
+6. [Pre-deploy Greenplum and Spring Cloud Data Flow](#predeploys)
+7. [Build secondary cluster (for multi-site demo)](#multisite)
+8. [Install TAP](#tap-install)
+9. [Deploy Tanzu Data Workshops](#buildanddeploy)
+10. [Other: How-tos/General Info (not needed for setup)](#other)
+
+#### Kubernetes Cluster Prep<a name="pre-reqs">
 * Create .env file in root directory (use .env-sample as a template - do NOT check into Git)
 
 * Populate the .env file where possible (NOTE: only a subset of the variables can be populated at the moment.
-New entries will be poplated as the install proceeds)
+New entries will be populated as the install proceeds)
 
 * Create a Management Cluster (Optional - required only if management cluster does not exist) 
 ```
@@ -52,6 +65,17 @@ kubectl apply -f https://projectcontour.io/quickstart/v1.18.2/contour.yaml
 kubectl apply -f resources/metrics-server.yaml; watch kubectl get deployment metrics-server -n kube-system
 ```
 
+* Deploy cluster-scoped cert-manager:
+```
+kubectl create ns cert-manager
+kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.5.3/cert-manager.yaml
+```
+
+* Deploy CERT-MANAGER-ISSUER  (self-signed), CERTIFICATE-SIGNING-REQUEST, CERT-MANAGER-ISSUER (CA):
+```
+kubectl apply -f resources/cert-manager-issuer.yaml)
+```
+
 * Install Istio: 
 ```
 other/resources/bin/istioctl install --set profile=demo -y; 
@@ -62,100 +86,9 @@ export SECURE_INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressga
 export GATEWAY_URL=$INGRESS_HOST:$INGRESS_PORT
 ```
 
+* If using applications with WebSocket connections, increase idle timeout on ELB in AWS Management Console to 1 hour (default is 30 seconds)
 
-### Install TAP
-(NOTE: TAP pre-reqs: https://docs.vmware.com/en/Tanzu-Application-Platform/1.0/tap/GUID-install-intro.html)
-
-#### Install TAP command line tooling
-```
-mkdir $HOME/tanzu
-export TANZU_CLI_NO_INIT=true
-cd $HOME/tanzu
-sudo install cli/core/0.11.1/tanzu-core-linux_amd64 /usr/local/bin/tanzu
-tanzu plugin install --local cli all
-tanzu plugin list
-```
-##### imgpkg
-```
-wget -O- https://carvel.dev/install.sh > install.sh
-sudo bash install.sh
-imgpkg version
-```
-#### Relocate images to local registry
-```
-source .env
-docker login registry-1.docker.io
-docker login registry.tanzu.vmware.com
-export INSTALL_REGISTRY_USERNAME=$DATA_E2E_REGISTRY_USERNAME
-export INSTALL_REGISTRY_PASSWORD=$DATA_E2E_REGISTRY_PASSWORD
-export TAP_VERSION=1.0.2
-export INSTALL_REGISTRY_HOSTNAME=index.docker.io
-imgpkg copy -b registry.tanzu.vmware.com/tanzu-application-platform/tap-packages:1.0.2 --to-repo index.docker.io/oawofolu/tap-packages
-kubectl create ns tap-install
-tanzu secret registry add tap-registry \
---username ${INSTALL_REGISTRY_USERNAME} --password ${INSTALL_REGISTRY_PASSWORD} \
---server ${INSTALL_REGISTRY_HOSTNAME} \
---export-to-all-namespaces --yes --namespace tap-install
-tanzu package repository add tanzu-tap-repository \
---url ${INSTALL_REGISTRY_HOSTNAME}/oawofolu/tap-packages:$TAP_VERSION \
---namespace tap-install
-tanzu package repository get tanzu-tap-repository --namespace tap-install
-tanzu package available list --namespace tap-install
-tanzu package available list tap.tanzu.vmware.com --namespace tap-install
-tanzu package available get tap.tanzu.vmware.com/$TAP_VERSION --values-schema --namespace tap-install
-source .env
-envsubst < resources/tap-values.in.yaml > resources/tap-values.yaml
-tanzu package install tap -p tap.tanzu.vmware.com -v $TAP_VERSION --values-file resources/tap-values.yaml -n tap-install
-```
-
-To check on a package's install status: 
-```
-tanzu package installed get tap<or name pf package> -n tap-install
-```
-
-To check that all expected packages were installed successfully: 
-```
-tanzu package installed list -A -n tap-install
-```
-
-- Install tanzu package for learning center:
-```
-tanzu package available list learningcenter.tanzu.vmware.com --namespace tap-install # To view available packages for learningcenter
-tanzu package install learning-center --package-name learningcenter.tanzu.vmware.com --version 0.1.1 -f resources/learning-center-config.yaml -n tap-install
-kubectl get all -n learningcenter
-tanzu package available list workshops.learningcenter.tanzu.vmware.com --namespace tap-install
-```
-
-* If using applications with websocket connections, increase idle timeout on ELB in AWS Management Console to 1 hour (default is 30 seconds)
-
-* Deploy cluster-scoped cert-manager:
-```
-kubectl create ns cert-manager
-kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.5.3/cert-manager.yaml
-```
-
-* Deploy CERT-MANAGER-ISSUER  (self-signed), CERTIFICATE-SIGNING-REQUEST, CERT-MANAGER-ISSUER (CA): 
-```
-kubectl apply -f resources/cert-manager-issuer.yaml)
-```
-
-* Build workshop image:
-(see resources/deploy-workshop.sh)
-
-#Only perform the following if there are 7+ nodes in= the k8s cluster
-#- Label a subset of the nodes (for which anti-affinity/affinity rules will apply):
-#a=0
-#for n in $(kubectl get nodes --selector='!node-role.kubernetes.io/master' --output=jsonpath={.items..metadata.name}); do
-  #  if [ $a -eq 0 ]; then kubectl label node $n gpdb-worker=master; fi; 
-  #  if [ $a -eq 1 ]; then kubectl label node $n gpdb-worker=segment; fi; 
-  #  a=$((a+1)) 
-#done
-
-* Build Workshop image and deploy workshop:
-```
-resources/deploy-workshop.sh
-```
-
+#### Install Minio<a name="minio">
 * Deploy Minio (Server) with TLS:
 
 Setup TLS cert for Minio:
@@ -181,7 +114,7 @@ export MINIO_SERVER_URL=minio.tanzudatatap.ml
 kubectl apply -f resources/minio-http-proxy.yaml
 ```
 
-(TROUBLESHOOTING RECOMMENDED APPROACH:)
+(TROUBLESHOOTING RECOMMENDED APPROACH: NOT used by this workshop)
 ```
 kubectl create namespace minio-operator || true
 kubectl apply -f resources/minio-tls-cert.yaml -n minio-operator
@@ -250,7 +183,7 @@ brew install minio/stable/mc
 mc config host add tanzu-data-tap-minio http://minio.tanzudatatap.ml/ $MINIO_ACCESS_KEY $MINIO_SECRET_KEY
 ```
 
-Deploy Minio Chart without TLS:
+Deploy a second Minio Chart without TLS:
 ```
 helm repo add minio-legacy https://helm.min.io/
 kubectl create ns minio-plain
@@ -268,6 +201,7 @@ mc cp other/resources/gemfire/gemfire-greenplum-3.4.1.jar data-e2e-minio/artifac
 mc policy set download data-e2e-minio/artifacts/gemfire-greenplum-3.4.1.jar
 ```
 
+#### Install Prometheus and Grafana <a name="prometheusgrafana">
 * Install Prometheus and Grafana:
 Prometheus:
 ```
@@ -301,6 +235,7 @@ kubectl apply -f resources/prometheus-proxy/proxyhelm/
 kubectl apply -f resources/prometheus-proxy/proxyhelm/prometheus-proxy-http-proxy.yaml
 ```
 
+#### Install Datadog <a name="datadog">
 * Install Datadog:
 ```
 helm repo add datadog https://helm.datadoghq.com
@@ -308,9 +243,187 @@ helm repo update
 helm install datadog -f other/resources/datadog/data-dog.yaml \
 - --set datadog.site='datadoghq.com' --set datadog.apiKey='${DATA_E2E_DATADOG_API_KEY}' datadog/datadog
 ```
+  
+#### Install ArgoCD <a name="argocd">
+* Install ArgoCD:
+```
+kubectl create namespace argocd
+kubectl apply -n argocd -f resources/argocd.yaml
+```
 
-* Install Application Accelerator:
-https://docs.vmware.com/en/Tanzu-Application-Platform/1.0/tap/GUID-cert-mgr-contour-fcd-install-cert-mgr.html
+#### Pre-deploy Greenplum and Spring Cloud Data Flow<a name="predeploys">
+* Pre-deploy Greenplum:
+```
+source .env
+resources/setup.sh
+```
+* Pre-deploy Spring Cloud Data Flow:
+```
+resources/setup-scdf.sh
+```
+Register gemfire starter apps:
+sink.gemfire=docker:springcloudstream/gemfire-sink-rabbit:2.1.6.RELEASE
+source.gemfire=docker:springcloudstream/gemfire-source-rabbit:2.1.6.RELEASE
+source.gemfire-cq=docker:springcloudstream/gemfire-cq-source-rabbit:2.1.6.RELEASE
+
+#### Build secondary cluster (for multi-site demo)<a name="multisite">
+* Create new cluster:
+```
+tanzu cluster create tanzu-data-tap-secondary --file resources/tanzu-aws-secondary.yaml
+tanzu cluster kubeconfig get tanzu-data-tap-secondary --admin
+```
+** NOTE: The following instructions should be applied to the new cluster created above.**
+* Create the default storage class (ensure that it is called generic, that the volume binding mode is WaitForFirstCustomer instead of Immediate, and the reclaimPolicy should be Retain):
+```    
+kubectl apply -f resources/storageclass.yaml
+kubectl patch storageclass default -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
+```
+
+* Create the network policy 
+```
+kubectl apply -f resources/networkpolicy.yaml
+```
+
+* Ensure that pod scurity policy admission controller is enabled, as PSPs will be created by the eduk8s operator to restrict users from running with root privileges:
+```    
+kubectl apply -f resources/podsecuritypolicy.yaml
+```
+
+* Install Contour: (NOTE: Change the Loadbalancer's healthcheck from HTTP to TCP in the AWS Console)
+```
+kubectl apply -f https://projectcontour.io/quickstart/v1.18.2/contour.yaml
+```
+
+* Install the Kubernetes Metrics server: 
+```
+kubectl apply -f resources/metrics-server.yaml; watch kubectl get deployment metrics-server -n kube-system
+```
+  
+* Install cert-manager:
+```
+kubectl create ns cert-manager
+kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.5.3/cert-manager.yaml
+kubectl apply -f resources/cert-manager-issuer.yaml
+```
+  
+* Install Gemfire operator:
+```
+  source .env
+  kubectl create ns gemfire-system --dry-run -o yaml | kubectl apply -f -
+  kubectl create secret docker-registry image-pull-secret --namespace=gemfire-system --docker-server=registry.pivotal.io --docker-username="$DATA_E2E_PIVOTAL_REGISTRY_USERNAME" --docker-password="$DATA_E2E_PIVOTAL_REGISTRY_PASSWORD" --dry-run -o yaml | kubectl apply -f -
+  helm uninstall  gemfire --namespace gemfire-system; helm install gemfire other/resources/gemfire/gemfire-operator-1.0.3/ --namespace gemfire-system
+```
+
+* Install Gemfire cluster:
+```
+kubectl create secret docker-registry app-image-pull-secret --namespace=gemfire-system --docker-server=registry.pivotal.io --docker-username="$DATA_E2E_REGISTRY_USERNAME" --docker-password="$DATA_E2E_REGISTRY_PASSWORD" --dry-run -o yaml | kubectl apply -f -
+kubectl apply -f other/resources/gemfire/gemfire-cluster-with-gateway-receiver-ny.yaml -n gemfire-system
+```   
+* Install Istio:
+(In primary cluster)
+```
+other/resources/istio-1.13.2/bin/istioctl install --set profile=demo-tanzu --set installPackagePath=other/resources/istio-1.13.2/manifests -y
+```
+(In secondary cluster)
+```
+other/resources/istio-1.13.2/bin/istioctl install --set profile=demo-tanzu --set installPackagePath=other/resources/istio-1.13.2/manifests -y
+```
+* Install SealedSecrets:
+```
+kubectl apply -f https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.17.4/controller.yaml
+```
+  
+* Generate kubeconfig for accessing secondary cluster: (Must install kubeseal: https://github.com/bitnami-labs/sealed-secrets)
+(On secondary cluster:)
+```
+t_secret=$(kubectl get sa default -o jsonpath={.secrets[0].name})
+t_ca_crt_data=$(kubectl get secret ${t_secret} -o jsonpath="{.data.ca\.crt}" | openssl enc -d -base64 -A)
+t_token=$(kubectl get secret ${t_secret} -o jsonpath="{.data.token}" | openssl enc -d -base64 -A)
+t_context=$(kubectl config current-context)
+t_cluster=$(kubectl config view -o jsonpath="{.contexts[?(@.name==\"$t_context\")].context.cluster}")
+t_server=$(kubectl config view -o jsonpath="{.clusters[?(@.name==\"$t_cluster\")].cluster.server}")
+t_user=$(kubectl config view -o jsonpath="{.contexts[?(@.name==\"$t_context\")].context.user}")
+t_client_certificate_data=$(kubectl config view --flatten -o jsonpath="{.users[?(@.name==\"$t_user\")].user.client-certificate-data}" | openssl enc -d -base64 -A)
+t_client_key_data=$(kubectl config view --flatten -o jsonpath="{.users[?(@.name==\"$t_user\")].user.client-key-data}" | openssl enc -d -base64 -A)
+t_ca_crt="$(mktemp)"; echo "$t_ca_crt_data" > $t_ca_crt
+t_client_key="$(mktemp)"; echo "$t_client_key_data" > $t_client_key
+t_client_certificate="$(mktemp)"; echo "$t_client_certificate_data" > $t_client_certificate
+ 
+kubectl config set-credentials secondary-user --client-certificate="$t_client_certificate" --client-key="$t_client_key" --embed-certs=true --kubeconfig myfile
+kubectl config set-cluster secondary-cluster --server="$t_server" --certificate-authority="$t_ca_crt" --embed-certs=true --kubeconfig myfile
+kubectl config set-context secondary-ctx --cluster="secondary-cluster" --user="secondary-user" --kubeconfig myfile
+
+kubectl create secret generic kconfig --from-file=myfile --dry-run=client -o yaml > kconfigsecret.yaml
+kubeseal --scope cluster-wide -o yaml <kconfigsecret.yaml> resources/kconfigsealedsecret.yaml
+```
+
+(On primary cluster:)
+```
+kubectl apply -f resources/kconfigsealedsecret.yaml
+```
+
+### Install TAP<a name="tap-install">
+(NOTE: TAP pre-reqs: https://docs.vmware.com/en/Tanzu-Application-Platform/1.0/tap/GUID-install-intro.html)
+
+#### Install TAP command line tooling
+```
+mkdir $HOME/tanzu
+export TANZU_CLI_NO_INIT=true
+cd $HOME/tanzu
+sudo install cli/core/0.11.1/tanzu-core-linux_amd64 /usr/local/bin/tanzu
+tanzu plugin install --local cli all
+tanzu plugin list
+```
+##### Install imgpkg
+```
+wget -O- https://carvel.dev/install.sh > install.sh
+sudo bash install.sh
+imgpkg version
+```
+#### Relocate images to local registry
+```
+source .env
+docker login registry-1.docker.io
+docker login registry.tanzu.vmware.com
+export INSTALL_REGISTRY_USERNAME=$DATA_E2E_REGISTRY_USERNAME
+export INSTALL_REGISTRY_PASSWORD=$DATA_E2E_REGISTRY_PASSWORD
+export TAP_VERSION=1.0.2
+export INSTALL_REGISTRY_HOSTNAME=index.docker.io
+imgpkg copy -b registry.tanzu.vmware.com/tanzu-application-platform/tap-packages:1.0.2 --to-repo index.docker.io/oawofolu/tap-packages
+kubectl create ns tap-install
+tanzu secret registry add tap-registry \
+--username ${INSTALL_REGISTRY_USERNAME} --password ${INSTALL_REGISTRY_PASSWORD} \
+--server ${INSTALL_REGISTRY_HOSTNAME} \
+--export-to-all-namespaces --yes --namespace tap-install
+tanzu package repository add tanzu-tap-repository \
+--url ${INSTALL_REGISTRY_HOSTNAME}/oawofolu/tap-packages:$TAP_VERSION \
+--namespace tap-install
+tanzu package repository get tanzu-tap-repository --namespace tap-install
+tanzu package available list --namespace tap-install
+tanzu package available list tap.tanzu.vmware.com --namespace tap-install
+tanzu package available get tap.tanzu.vmware.com/$TAP_VERSION --values-schema --namespace tap-install
+source .env
+envsubst < resources/tap-values.in.yaml > resources/tap-values.yaml
+tanzu package install tap -p tap.tanzu.vmware.com -v $TAP_VERSION --values-file resources/tap-values.yaml -n tap-install
+```
+
+To check on a package's install status:
+```
+tanzu package installed get tap<or name pf package> -n tap-install
+```
+
+To check that all expected packages were installed successfully:
+```
+tanzu package installed list -A -n tap-install
+```
+
+* Install Learning Center:
+```
+tanzu package available list learningcenter.tanzu.vmware.com --namespace tap-install # To view available packages for learningcenter
+tanzu package install learning-center --package-name learningcenter.tanzu.vmware.com --version 0.1.1 -f resources/learning-center-config.yaml -n tap-install
+kubectl get all -n learningcenter
+tanzu package available list workshops.learningcenter.tanzu.vmware.com --namespace tap-install
+```
 
 * Install FluxCD controller:
 ```
@@ -344,18 +457,37 @@ tanzu package install tap-gui \
   -f resources/tap-gui-values.yaml
 ```
 
-Verify installation: 
+Verify installation:
 ```
 tanzu package installed get tap-gui -n tap-install
 ```
-  
-* Install ArgoCD:
-```
-kubectl create namespace argocd
-kubectl apply -n argocd -f resources/argocd.yaml
-```
 
-* Install pgAdmin:
+#### Deploy Tanzu Data Workshops<a name="buildanddeploy">
+* Build Workshop image:
+  (see resources/deploy-workshop.sh)
+
+[comment]: <> (Only perform the following if there are 7+ nodes in= the k8s cluster)
+[comment]: <> (Label a subset of the nodes \(for which anti-affinity/affinity rules will apply\):)
+[comment]: <> (a=0)
+[comment]: <> (for n in $\(kubectl get nodes --selector='!node-role.kubernetes.io/master' --output=jsonpath={.items..metadata.name}\); do)
+[comment]: <> (  if [ $a -eq 0 ]; then kubectl label node $n gpdb-worker=master; fi; )
+[comment]: <> (  if [ $a -eq 1 ]; then kubectl label node $n gpdb-worker=segment; fi; )
+[comment]: <> (  a=$\(\(a+1\)\) )
+[comment]: <> (done)
+
+* Build Workshop image and deploy workshop to Kubernetes cluster:
+```
+resources/deploy-workshop.sh
+```
+  
+#### Other: How-tos/General Info (not needed for setup)<a name="other">
+* For Grafana:
+<br/>
+RabbitMQ Dashboard: Dashboard ID 10991 
+<br/>
+Erlang-Distribution Dashboard: Dashboard ID 11352
+
+* To install pgAdmin:
 ```
 kubectl create ns pgadmin
 helm repo add runix https://helm.runix.net/
@@ -367,124 +499,7 @@ export PGADMIN_POD_NAME=$(kubectl get pods --namespace pgadmin -l "app.kubernete
 ```
 To connect to pgAdmin: Connect to your-svc.your-namespace.svc.cluster.local
 
-
-* Pre-deploy Greenplum:
-```
-source .env
-resources/setup.sh
-```
-* Pre-deploy Spring Cloud Data Flow:
-```
-resources/setup-scdf.sh
-```
-Register gemfire starter apps:
-sink.gemfire=docker:springcloudstream/gemfire-sink-rabbit:2.1.6.RELEASE
-source.gemfire=docker:springcloudstream/gemfire-source-rabbit:2.1.6.RELEASE
-source.gemfire-cq=docker:springcloudstream/gemfire-cq-source-rabbit:2.1.6.RELEASE
-
-* Build secondary cluster:
-Create new cluster:
-```
-tanzu cluster create tanzu-data-tap-secondary --file resources/tanzu-aws-secondary.yaml
-tanzu cluster kubeconfig get tanzu-data-tap-secondary --admin
-```
-** NOTE: The following instructions should be applied to the new cluster created above.**
-Create the default storage class (ensure that it is called generic, that the volume binding mode is WaitForFirstCustomer instead of Immediate, and the reclaimPolicy should be Retain):
-```    
-kubectl apply -f resources/storageclass.yaml
-kubectl patch storageclass default -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
-```
-
-Create the network policy 
-```
-kubectl apply -f resources/networkpolicy.yaml
-```
-
-Ensure that pod scurity policy admission controller is enabled, as PSPs will be created by the eduk8s operator to restrict users from running with root privileges:
-```    
-kubectl apply -f resources/podsecuritypolicy.yaml
-```
-
-Install Contour: (NOTE: Change the Loadbalancer's healthcheck from HTTP to TCP in the AWS Console)
-```
-kubectl apply -f https://projectcontour.io/quickstart/v1.18.2/contour.yaml
-```
-
-Install the Kubernetes Metrics server: 
-```
-kubectl apply -f resources/metrics-server.yaml; watch kubectl get deployment metrics-server -n kube-system
-```
-  
-Install cert-manager:
-```
-kubectl create ns cert-manager
-kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.5.3/cert-manager.yaml
-kubectl apply -f resources/cert-manager-issuer.yaml
-```
-  
-Install Gemfire operator:
-```
-  source .env
-  kubectl create ns gemfire-system --dry-run -o yaml | kubectl apply -f -
-  kubectl create secret docker-registry image-pull-secret --namespace=gemfire-system --docker-server=registry.pivotal.io --docker-username="$DATA_E2E_PIVOTAL_REGISTRY_USERNAME" --docker-password="$DATA_E2E_PIVOTAL_REGISTRY_PASSWORD" --dry-run -o yaml | kubectl apply -f -
-  helm uninstall  gemfire --namespace gemfire-system; helm install gemfire other/resources/gemfire/gemfire-operator-1.0.3/ --namespace gemfire-system
-```
-
-Install Gemfire cluster:
-```
-kubectl create secret docker-registry app-image-pull-secret --namespace=gemfire-system --docker-server=registry.pivotal.io --docker-username="$DATA_E2E_REGISTRY_USERNAME" --docker-password="$DATA_E2E_REGISTRY_PASSWORD" --dry-run -o yaml | kubectl apply -f -
-kubectl apply -f other/resources/gemfire/gemfire-cluster-with-gateway-receiver-ny.yaml -n gemfire-system
-```   
-Install Istio:
-(In primary cluster)
-```
-other/resources/istio-1.13.2/bin/istioctl install --set profile=demo-tanzu --set installPackagePath=other/resources/istio-1.13.2/manifests -y
-```
-(In secondary cluster)
-```
-other/resources/istio-1.13.2/bin/istioctl install --set profile=demo-tanzu --set installPackagePath=other/resources/istio-1.13.2/manifests -y
-```
-Install SealedSecrets:
-```
-kubectl apply -f https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.17.4/controller.yaml
-```
-  
-Generate kubeconfig for accessing secondary cluster: (Must install kubeseal: https://github.com/bitnami-labs/sealed-secrets)
-(Apply to secondary cluster:)
-```
-t_secret=$(kubectl get sa default -o jsonpath={.secrets[0].name})
-t_ca_crt_data=$(kubectl get secret ${t_secret} -o jsonpath="{.data.ca\.crt}" | openssl enc -d -base64 -A)
-t_token=$(kubectl get secret ${t_secret} -o jsonpath="{.data.token}" | openssl enc -d -base64 -A)
-t_context=$(kubectl config current-context)
-t_cluster=$(kubectl config view -o jsonpath="{.contexts[?(@.name==\"$t_context\")].context.cluster}")
-t_server=$(kubectl config view -o jsonpath="{.clusters[?(@.name==\"$t_cluster\")].cluster.server}")
-t_user=$(kubectl config view -o jsonpath="{.contexts[?(@.name==\"$t_context\")].context.user}")
-t_client_certificate_data=$(kubectl config view --flatten -o jsonpath="{.users[?(@.name==\"$t_user\")].user.client-certificate-data}" | openssl enc -d -base64 -A)
-t_client_key_data=$(kubectl config view --flatten -o jsonpath="{.users[?(@.name==\"$t_user\")].user.client-key-data}" | openssl enc -d -base64 -A)
-t_ca_crt="$(mktemp)"; echo "$t_ca_crt_data" > $t_ca_crt
-t_client_key="$(mktemp)"; echo "$t_client_key_data" > $t_client_key
-t_client_certificate="$(mktemp)"; echo "$t_client_certificate_data" > $t_client_certificate
- 
-kubectl config set-credentials secondary-user --client-certificate="$t_client_certificate" --client-key="$t_client_key" --embed-certs=true --kubeconfig myfile
-kubectl config set-cluster secondary-cluster --server="$t_server" --certificate-authority="$t_ca_crt" --embed-certs=true --kubeconfig myfile
-kubectl config set-context secondary-ctx --cluster="secondary-cluster" --user="secondary-user" --kubeconfig myfile
-
-kubectl create secret generic kconfig --from-file=myfile --dry-run=client -o yaml > kconfigsecret.yaml
-kubeseal --scope cluster-wide -o yaml <kconfigsecret.yaml> resources/kconfigsealedsecret.yaml
-```
-
-(Apply to primary cluster:)
-```
-kubectl apply -f resources/kconfigsealedsecret.yaml
-```
-  
-#### Other
-
-* For Grafana:
-RabbitMQ Dashboard: Dashboard ID 10991 
-Erlang-Distribution Dashboard: Dashboard ID 11352
-
-* Uninstall istio:
+* To uninstall istio:
 ```
 other/resources/bin/istioctl x uninstall --purge -y
 ```
