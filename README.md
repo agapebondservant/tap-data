@@ -480,11 +480,6 @@ kubectl apply -f resources/kconfigsealedsecret.yaml
   
 #### Other
 
-* Integrate Wavefront:
-Wavefront Token: d0bc6a3f-580c-4212-8b35-1c6edd1e4ffb
-Wavefront URI: vmware.wavefront.com
-Source: 3a4316f6-6501-4750-587b-939e
-
 * For Grafana:
 RabbitMQ Dashboard: Dashboard ID 10991 
 Erlang-Distribution Dashboard: Dashboard ID 11352
