@@ -111,10 +111,10 @@ Once connected, copy the following query to the query box in **phpMyAdmin** (und
 SELECT * FROM performance_schema.replication_group_members;
 ```
 
-Tanzu MySQL uses **InnoDB Cluster** for high availability. In turn, **InnoDB Cluster** uses **Group Replication** for failover and promotions/demotions. 
-A highly-available Tanzu MySQL cluster consists of 5 nodes: the **primary/read-write** node which handles query requests,
+Tanzu MySQL uses **InnoDB Cluster** for high availability. A highly-available Tanzu MySQL cluster consists of 5 nodes: 
+the **primary/read-write** node which handles query requests, 
 2 **secondary/read-only/failover** nodes which perform synchronous replication with the primary node, 
-and 2 **proxy** nodes which use **MySQL Router** to route requests to the primary node.
+and 2 **proxy nodes** which use MySQL Router to route requests to the primary node.
 
 Let's demonstrate HA by killing the primary node by <b>selecting the primary node in the lower console and hitting <font color="red">Ctrl-K</font>.</b>
 Observe the activity in the cluster by running the query below in **phpMyAdmin** to view the new primary and secondary nodes:
