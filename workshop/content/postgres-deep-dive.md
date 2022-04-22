@@ -36,6 +36,16 @@ Create the **Service Binding** by applying the manifest to the cluster:
 clear && cd ~ && kubectl annotate ns {{session_namespace}} secretgen.carvel.dev/excluded-from-wildcard-matching- && kubectl apply -f ~/other/resources/tap/rbac.yaml && tanzu init && tanzu plugin install --local bin/cli apps && tanzu plugin install --local bin/cli services && tanzu secret registry add tap-registry --username {{DATA_E2E_REGISTRY_USERNAME}} --password {{DATA_E2E_REGISTRY_PASSWORD}} --server https://index.docker.io/v1/ --export-to-all-namespaces --yes -n {{session_namespace}} && kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "registry-credentials"},{"name": "tap-registry"}],"secrets":[{"name": "tap-registry"}]}' && kubectl apply -f ~/other/resources/postgres/postgres-tap.yaml
 ```
 
+Tail the logs of the newly deployed **Workload** <font color="red">NOTE: Hit **Ctrl-C** to exit once the deployment completes</font>:
+```execute
+tanzu apps workload tail pet-clinic --since 64h
+```
+
+View the app details <font color="red">NOTE: Wait until at least one **pet-clinic** pod shows up as Ready in the lower console:</font>
+```execute
+tanzu apps workload get pet-clinic
+```
+
 View the newly deployed data in **pgAdmin**:
 ```dashboard:open-url
 url: http://pgadmin.{{ ingress_domain }}

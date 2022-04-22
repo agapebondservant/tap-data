@@ -172,6 +172,17 @@ url: http://prometheus.tanzudatatap.ml
 <font color="red">NOTE:</font> To view specific metrics collected by Prometheus, go the the Prometheus UI Home screen by 
 clicking on "Prometheus" in the menu bar, and enter **pg** in the Search bar. A list of metrics should be populated in the field.
 
+Also, **Tanzu Postgres** supports out-of-the-box integration with **Wavefront** (Tanzu Observability). On **Kubernetes**, 
+this is enabled via the **Wavefront Collector**, which is an agent that runs on each node to collect and forward metrics to Wavefront. 
+By simply installing the **Wavefront Collector** in our Kubernetes cluster, we should be able to access to a set of pre-defined metrics, 
+dashboards and alerts for **Tanzu Postgres**.
+
+View the Wavefront dashboard here:
+```dashboard:open-url
+name: Wavefront
+url: https://vmware.wavefront.com/u/9cBZt51YkS?t=vmware
+```
+
 #### Backups and Restores
 Tanzu Postgres includes **pgbackrest** as its backup-restore solution for **pgdata** backups, using an S3-compatible store. Here, we will use **Minio** for backup storage.
 

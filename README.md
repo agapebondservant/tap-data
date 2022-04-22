@@ -110,7 +110,8 @@ helm install --set resources.requests.memory=1.5Gi,tls.enabled=true,tls.certSecr
 export MINIO_ACCESS_KEY=$(kubectl get secret minio -o jsonpath="{.data.accesskey}" -n minio| base64 --decode)
 export MINIO_SECRET_KEY=$(kubectl get secret minio -o jsonpath="{.data.secretkey}" -n minio| base64 --decode)
 export MINIO_POD_NAME=$(kubectl get pods --namespace minio -l "release=minio" -o jsonpath="{.items[0].metadata.name}")
-export MINIO_SERVER_URL=minio.tanzudatatap.ml
+source .env
+export MINIO_SERVER_URL=$DATA_E2E_MINIO_URL
 kubectl apply -f resources/minio-http-proxy.yaml
 ```
 
@@ -173,14 +174,14 @@ on Linux:
 wget https://dl.min.io/client/mc/release/linux-amd64/mc
 chmod +x mc
 cp mc /usr/local/bin
-mc config host add tanzu-data-tap-minio http://minio.tanzudatatap.ml/ $MINIO_ACCESS_KEY $MINIO_SECRET_KEY
+mc config host add tanzu-data-tap-minio http://${DATA_E2E_MINIO_URL}/ $MINIO_ACCESS_KEY $MINIO_SECRET_KEY
 ```
 on Mac:
 ```
 git -C /usr/local/Homebrew/Library/Taps/homebrew/homebrew-core fetch --unshallow
 git -C /usr/local/Homebrew/Library/Taps/homebrew/homebrew-cask fetch --unshallow
 brew install minio/stable/mc
-mc config host add tanzu-data-tap-minio http://minio.tanzudatatap.ml/ $MINIO_ACCESS_KEY $MINIO_SECRET_KEY
+mc config host add tanzu-data-tap-minio http://${DATA_E2E_MINIO_URL}/ $MINIO_ACCESS_KEY $MINIO_SECRET_KEY
 ```
 
 Deploy a second Minio Chart without TLS:
@@ -191,7 +192,7 @@ helm install --set resources.requests.memory=1.5Gi,tls.enabled=false --namespace
 export MINIO_PLAIN_ACCESS_KEY=$(kubectl get secret minio -o jsonpath="{.data.accesskey}" -n minio-plain| base64 --decode)
 export MINIO_PLAIN_SECRET_KEY=$(kubectl get secret minio -o jsonpath="{.data.secretkey}" -n minio-plain| base64 --decode)
 export MINIO_PLAIN_POD_NAME=$(kubectl get pods --namespace minio-plain -l "release=minio" -o jsonpath="{.items[0].metadata.name}")
-export MINIO_PLAIN_SERVER_URL=minio.minio-demo.ml
+export MINIO_PLAIN_SERVER_URL=${DATA_E2E_MINIO_PLAIN_URL}
 ```
 
 Add required artifacts to Minio (Greenplum-Gemfire connector):
@@ -389,14 +390,14 @@ export INSTALL_REGISTRY_USERNAME=$DATA_E2E_REGISTRY_USERNAME
 export INSTALL_REGISTRY_PASSWORD=$DATA_E2E_REGISTRY_PASSWORD
 export TAP_VERSION=1.0.2
 export INSTALL_REGISTRY_HOSTNAME=index.docker.io
-imgpkg copy -b registry.tanzu.vmware.com/tanzu-application-platform/tap-packages:1.0.2 --to-repo index.docker.io/oawofolu/tap-packages
+imgpkg copy -b registry.tanzu.vmware.com/tanzu-application-platform/tap-packages:1.0.2 --to-repo index.docker.io/${DATA_E2E_REGISTRY_USERNAME}/tap-packages
 kubectl create ns tap-install
 tanzu secret registry add tap-registry \
 --username ${INSTALL_REGISTRY_USERNAME} --password ${INSTALL_REGISTRY_PASSWORD} \
 --server ${INSTALL_REGISTRY_HOSTNAME} \
 --export-to-all-namespaces --yes --namespace tap-install
 tanzu package repository add tanzu-tap-repository \
---url ${INSTALL_REGISTRY_HOSTNAME}/oawofolu/tap-packages:$TAP_VERSION \
+--url ${INSTALL_REGISTRY_HOSTNAME}/${DATA_E2E_REGISTRY_USERNAME}/tap-packages:$TAP_VERSION \
 --namespace tap-install
 tanzu package repository get tanzu-tap-repository --namespace tap-install
 tanzu package available list --namespace tap-install
@@ -415,6 +416,12 @@ tanzu package installed get tap<or name pf package> -n tap-install
 To check that all expected packages were installed successfully:
 ```
 tanzu package installed list -A -n tap-install
+```
+
+To upgrade to TAP 1.1.1:
+```
+tanzu package installed update tap -p tap.tanzu.vmware.com -v 1.1.1-build.1  --values-file resources/tap-values.yaml -n tap-install
+tanzu package repository get tanzu-tap-repository --namespace tap-install
 ```
 
 * Install Learning Center:
@@ -460,6 +467,12 @@ tanzu package install tap-gui \
 Verify installation:
 ```
 tanzu package installed get tap-gui -n tap-install
+```
+
+Publish Accelerators:
+```
+tanzu plugin install --local <path-to-tanzu-cli> all
+tanzu acc create mlflow --git-repository https://github.com/agapebondservant/mlflow-accelerator.git --git-branch main
 ```
 
 #### Deploy Tanzu Data Workshops<a name="buildanddeploy">
