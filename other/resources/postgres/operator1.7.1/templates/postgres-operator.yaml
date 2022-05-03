@@ -17,6 +17,8 @@ spec:
     spec:
       serviceAccountName: postgres-operator-service-account
       securityContext:
+        runAsGroup: 1000
+        runAsUser: 1000
         runAsNonRoot: true
         seccompProfile:
           type: RuntimeDefault

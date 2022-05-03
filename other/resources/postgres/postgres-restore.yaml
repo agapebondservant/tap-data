@@ -1,0 +1,10 @@
+---
+apiVersion: sql.tanzu.vmware.com/v1
+kind: PostgresRestore
+metadata:
+  name: pg-simple-restore
+spec:
+  sourceBackup:
+    name: pg-simple-backup
+  targetInstance:
+    name: pginstance-1

@@ -1,0 +1,279 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  creationTimestamp: null
+  name: postgres-operator-cluster-role
+  labels:
+    app: postgres-operator
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - events
+    verbs:
+      - create
+      - patch
+  - apiGroups:
+      - ""
+    resources:
+      - persistentvolumeclaims
+    verbs:
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - pods
+    verbs:
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - pods/exec
+    verbs:
+      - create
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    verbs:
+      - create
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - serviceaccounts
+    verbs:
+      - create
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - services
+    verbs:
+      - create
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - apps
+    resources:
+      - statefulsets
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - apps
+    resources:
+      - statefulsets/status
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - batch
+    resources:
+      - cronjobs
+    verbs:
+      - create
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - cert-manager.io
+    resources:
+      - certificates
+    verbs:
+      - create
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - rbac.authorization.k8s.io
+    resources:
+      - rolebindings
+      - roles
+    verbs:
+      - create
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - rolebindings.rbac.authorization.k8s.io
+    resources:
+      - rolebindings
+    verbs:
+      - create
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - roles.rbac.authorization.k8s.io
+    resources:
+      - roles
+    verbs:
+      - create
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - sql.tanzu.vmware.com
+    resources:
+      - postgres
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - sql.tanzu.vmware.com
+    resources:
+      - postgres/status
+    verbs:
+      - create
+      - get
+      - patch
+      - update
+  - apiGroups:
+      - sql.tanzu.vmware.com
+    resources:
+      - postgresbackuplocations
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - sql.tanzu.vmware.com
+    resources:
+      - postgresbackuplocations/status
+    verbs:
+      - get
+      - patch
+      - update
+  - apiGroups:
+      - sql.tanzu.vmware.com
+    resources:
+      - postgresbackups
+    verbs:
+      - create
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - sql.tanzu.vmware.com
+    resources:
+      - postgresbackups/status
+    verbs:
+      - get
+      - update
+  - apiGroups:
+      - sql.tanzu.vmware.com
+    resources:
+      - postgresbackupschedules
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - sql.tanzu.vmware.com
+    resources:
+      - postgresbackupschedules/status
+    verbs:
+      - get
+      - patch
+      - update
+  - apiGroups:
+      - sql.tanzu.vmware.com
+    resources:
+      - postgresrestores
+    verbs:
+      - get
+      - list
+      - update
+      - watch
+  - apiGroups:
+      - sql.tanzu.vmware.com
+    resources:
+      - postgresrestores/status
+    verbs:
+      - get
+      - list
+      - update
+      - watch
+  - apiGroups:
+      - sql.tanzu.vmware.com
+    resources:
+      - postgresversions
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - sql.tanzu.vmware.com
+    resources:
+      - postgresversions/finalizers
+    verbs:
+      - update
+  - apiGroups:
+      - sql.tanzu.vmware.com
+    resources:
+      - postgresversions/status
+    verbs:
+      - get
+      - patch
+      - update

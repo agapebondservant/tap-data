@@ -1,0 +1,127 @@
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  creationTimestamp: null
+  name: postgres-operator-mutating-webhook-configuration
+  annotations:
+    cert-manager.io/inject-ca-from: '{{ .Release.Namespace }}/postgres-operator-serving-cert'
+  labels:
+    app: postgres-operator
+webhooks:
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: postgres-operator-webhook-service
+        namespace: '{{ .Release.Namespace }}'
+        path: /mutate-sql-tanzu-vmware-com-v1-postgres
+      caBundle: ""
+    failurePolicy: Fail
+    name: mpostgres.kb.io
+    rules:
+      - apiGroups:
+          - sql.tanzu.vmware.com
+        apiVersions:
+          - v1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - postgres
+    sideEffects: NoneOnDryRun
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: postgres-operator-webhook-service
+        namespace: '{{ .Release.Namespace }}'
+        path: /mutate-sql-tanzu-vmware-com-v1-postgresrestore
+      caBundle: ""
+    failurePolicy: Fail
+    name: mpostgresrestore.kb.io
+    rules:
+      - apiGroups:
+          - sql.tanzu.vmware.com
+        apiVersions:
+          - v1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - postgresrestores
+    sideEffects: None
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  creationTimestamp: null
+  name: postgres-operator-validating-webhook-configuration
+  annotations:
+    cert-manager.io/inject-ca-from: '{{ .Release.Namespace }}/postgres-operator-serving-cert'
+  labels:
+    app: postgres-operator
+webhooks:
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: postgres-operator-webhook-service
+        namespace: '{{ .Release.Namespace }}'
+        path: /validate-sql-tanzu-vmware-com-v1-postgresbackup
+      caBundle: ""
+    failurePolicy: Fail
+    name: vpostgresbackup.kb.io
+    rules:
+      - apiGroups:
+          - sql.tanzu.vmware.com
+        apiVersions:
+          - v1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - postgresbackups
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: postgres-operator-webhook-service
+        namespace: '{{ .Release.Namespace }}'
+        path: /validate-sql-tanzu-vmware-com-v1-postgresrestore
+      caBundle: ""
+    failurePolicy: Fail
+    name: vpostgresrestore.kb.io
+    rules:
+      - apiGroups:
+          - sql.tanzu.vmware.com
+        apiVersions:
+          - v1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - postgresrestores
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: postgres-operator-webhook-service
+        namespace: '{{ .Release.Namespace }}'
+        path: /validate-sql-tanzu-vmware-com-v1-postgres
+      caBundle: ""
+    failurePolicy: Fail
+    name: vpostgres.kb.io
+    rules:
+      - apiGroups:
+          - sql.tanzu.vmware.com
+        apiVersions:
+          - v1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - postgres
+    sideEffects: None

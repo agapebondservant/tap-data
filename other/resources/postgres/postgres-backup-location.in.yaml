@@ -4,6 +4,7 @@ kind: PostgresBackupLocation
 metadata:
   name: pg-simple-backuplocation
 spec:
+  # Can configure retention policy
   storage:
     s3:
       bucket: "pg-backups"

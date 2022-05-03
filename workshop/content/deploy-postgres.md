@@ -206,6 +206,19 @@ Next, let's view the manifest that we would use to configure the backup location
 file: ~/other/resources/postgres/postgres-backup-location.yaml
 ```
 
+**PostgresBackupLocations** support the ability to configure both full and differential **retention** policies:
+```editor:append-lines-after-match
+file: ~/other/resources/postgres/postgres-backup-location.yaml
+match: Can configure retention policy
+text: |
+      #retentionPolicy:
+        #fullRetention:
+          #type: count
+          #number: 9999999
+        #diffRetention:
+          #number: 9999999
+```
+
 Deploy the configuration for the backup location:
 ```execute
 kubectl  apply -f ~/other/resources/postgres/postgres-backup-location.yaml  -n {{ session_namespace }}
@@ -246,7 +259,40 @@ View other commands provided by **pgBackRest**:
 kubectl exec -it pginstance-1-1 -- bash -c 'pgbackrest help'
 ```
 
-<font color="red">TODO:</font> Restore the last backup.
+Next, let's perform a restore. We create a new target namespace to restore to:
+```execute
+kubectl delete ns pg-restore-{{ session-namespace }} ||| true; kubectl create ns pg-restore-{{ session-namespace }}
+```
+
+View the manifest to be applied to the new namespace to restore `pg-simple-backup`:
+```editor:open-file
+file: ~/other/resources/postgres/postgres-backup-location.yaml
+```
+
+Apply the **PostgresBackupLocation** and associated **Secret** to the new namespace, so that existing backups will be synced with the new namespace:
+```execute
+kubectl apply -f ~/other/resources/postgres/postgres-backup-location.yaml -n pg-restore-{{ session_namespace }}
+```
+
+View the synchronized backups: <font color="red">NOTE: Hit **Ctrl-C** to exit.</font>
+```execute
+watch kubectl get postgresbackup -n pg-restore-{{ session_namespace }} -l sql.tanzu.vmware.com/recovered-from-backuplocation=true 
+```
+
+View the manifest which will be used to configure the restore:
+```editor:open-file
+file: ~/other/resources/postgres/postgres-restore.yaml
+```
+
+Apply the restore:
+```execute
+kubectl apply -f ~/other/resources/postgres/postgres-restore.yaml -n pg-restore-{{ session_namespace }}
+```
+
+Validate the status of the restore:
+```execute
+kubectl get postgresrestore.sql.tanzu.vmware.com/pg-simple-restore -n pg-restore-{{ session_namespace }}
+```
 
 #### Demonstrating multi cluster deployments
 The **Operator pattern** of Tanzu Postgres allows for the deployment of multiple Postgres clusters from a centralized controller.
