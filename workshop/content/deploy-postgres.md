@@ -249,9 +249,9 @@ View the generated backup files on Minio: <font color="red">TODO - working with 
 url: https://minio.tanzudatatap.ml/
 ```
 
-View the backup progress here:
+View the backup progress here: <font color="red">NOTE: Hit **Ctrl-C** to exit.</font>
 ```execute
-kubectl get postgresbackup pg-simple-backup -n {{ session_namespace }}
+watch kubectl get postgresbackup pg-simple-backup -n {{ session_namespace }}
 ```
 
 Information about backups can also be gotten directly from the **pgbackrest** cli: <font color="red">TODO</font>
@@ -289,7 +289,7 @@ View the synchronized backups: <font color="red">NOTE: Hit **Ctrl-C** to exit.</
 watch kubectl get postgresbackup -n pg-restore-{{ session_namespace }} -l sql.tanzu.vmware.com/recovered-from-backuplocation=true 
 ```
 
-View the manifest which will be used to configure the restore:
+View the manifest which will be used to configure the restore: <font color="red">NOTE: Copy the name of the backup to restore from the previous console output.</font>
 ```editor:open-file
 file: ~/other/resources/postgres/postgres-restore.yaml
 ```
@@ -299,14 +299,14 @@ Apply the restore: <font color="red">NOTE: Wait until the new **pginstance-1** d
 kubectl apply -f ~/other/resources/postgres/postgres-restore.yaml -n pg-restore-{{ session_namespace }}
 ```
 
-Validate the status of the restore: <font color="red">NOTE: Once he Restore is validated as Succeeded, hit **Ctrl-C** to exit:</font>
+Validate the status of the restore: <font color="red">NOTE: Once the Restore is validated as Succeeded, hit **Ctrl-C** to exit:</font>
 ```execute
 watch kubectl get postgresrestore.sql.tanzu.vmware.com/pg-simple-restore -n pg-restore-{{ session_namespace }}
 ```
 
 <font color="red">MOTE:</font> Switch back to the original namespace:
 ```execute-2
-:namespace
+2
 ```
 
 #### Demonstrating multi cluster deployments
