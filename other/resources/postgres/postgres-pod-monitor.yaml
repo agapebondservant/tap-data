@@ -3,8 +3,6 @@ kind: PodMonitor
 metadata:
   name: tanzu-postgres-instances
   namespace: monitoring-tools
-  labels:
-    release: prometheus
 spec:
   namespaceSelector:
     any: true

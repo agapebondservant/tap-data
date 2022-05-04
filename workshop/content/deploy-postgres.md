@@ -177,7 +177,12 @@ this is enabled via the **Wavefront Collector**, which is an agent that runs on 
 By simply installing the **Wavefront Collector** in our Kubernetes cluster, we should be able to access to a set of pre-defined metrics, 
 dashboards and alerts for **Tanzu Postgres**.
 
-View the Wavefront dashboard here:
+Deploy the **Wavefront Collector** which will handle collecting and forwarding metrics to Wavefrony:
+```execute
+helm repo add wavefront https://wavefronthq.github.io/helm/ && kubectl create namespace wavefront --dry-run -o yaml | kubectl apply -f - ; (helm uninstall wavefront -n wavefront ; helm install wavefront wavefront/wavefront --set wavefront.url=https://vmware.wavefront.com --set wavefront.token={{ DATA_E2E_WAVEFRONT_ACCESS_TOKEN }} --set clusterName=tanzu-data-samples-cluster --set collector.discovery.annotationPrefix=wavefront.com -n wavefront)
+```
+
+View the Wavefront dashboard here (select **tanzu-data-samples-cluster**):
 ```dashboard:open-url
 name: Wavefront
 url: https://vmware.wavefront.com/u/9cBZt51YkS?t=vmware
@@ -193,7 +198,7 @@ clear &&  mc config host add --insecure data-fileingest-minio https://{{DATA_E2E
 
 Let's create a new bucket for our **pgdata** backups:
 ```execute
-mc mb --insecure -p data-fileingest-minio/pg-backups
+mc rb --force --insecure data-fileingest-minio/pg-backups; mc mb --insecure -p data-fileingest-minio/pg-backups
 ```
 
 View the newly created bucket (login with the _Username_ and _Password_ printed earlier):
@@ -261,7 +266,7 @@ kubectl exec -it pginstance-1-1 -- bash -c 'pgbackrest help'
 
 Next, let's perform a restore. We create a new target namespace to restore to:
 ```execute
-kubectl delete ns pg-restore-{{ session-namespace }} ||| true; kubectl create ns pg-restore-{{ session-namespace }}
+kubectl delete ns pg-restore-{{ session_namespace }} || true; kubectl create ns pg-restore-{{ session_namespace }}
 ```
 
 Switch to the new namespace in the lower console:
@@ -294,9 +299,14 @@ Apply the restore: <font color="red">NOTE: Wait until the new **pginstance-1** d
 kubectl apply -f ~/other/resources/postgres/postgres-restore.yaml -n pg-restore-{{ session_namespace }}
 ```
 
-Validate the status of the restore:
+Validate the status of the restore: <font color="red">NOTE: Once he Restore is validated as Succeeded, hit **Ctrl-C** to exit:</font>
 ```execute
-kubectl get postgresrestore.sql.tanzu.vmware.com/pg-simple-restore -n pg-restore-{{ session_namespace }}
+watch kubectl get postgresrestore.sql.tanzu.vmware.com/pg-simple-restore -n pg-restore-{{ session_namespace }}
+```
+
+<font color="red">MOTE:</font> Switch back to the original namespace:
+```execute-2
+:namespace
 ```
 
 #### Demonstrating multi cluster deployments
