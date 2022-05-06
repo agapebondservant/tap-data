@@ -177,7 +177,7 @@ this is enabled via the **Wavefront Collector**, which is an agent that runs on 
 By simply installing the **Wavefront Collector** in our Kubernetes cluster, we should be able to access to a set of pre-defined metrics, 
 dashboards and alerts for **Tanzu Postgres**.
 
-Deploy the **Wavefront Collector** which will handle collecting and forwarding metrics to Wavefrony:
+Deploy the **Wavefront Collector** which will handle collecting and forwarding metrics to Wavefront:
 ```execute
 helm repo add wavefront https://wavefronthq.github.io/helm/ && kubectl create namespace wavefront --dry-run -o yaml | kubectl apply -f - ; (helm uninstall wavefront -n wavefront ; helm install wavefront wavefront/wavefront --set wavefront.url=https://vmware.wavefront.com --set wavefront.token={{ DATA_E2E_WAVEFRONT_ACCESS_TOKEN }} --set clusterName=tanzu-data-samples-cluster --set collector.discovery.annotationPrefix=wavefront.com -n wavefront)
 ```
@@ -284,12 +284,17 @@ Apply the **PostgresBackupLocation** and associated **Secret** to the new namesp
 kubectl apply -f ~/other/resources/postgres/postgres-backup-location.yaml -n pg-restore-{{ session_namespace }}
 ```
 
-View the synchronized backups: <font color="red">NOTE: Hit **Ctrl-C** to exit.</font>
+View the synchronized backups: <font color="red">NOTE: Once the status shows "Succeeded", hit **Ctrl-C** to exit.</font>
 ```execute
 watch kubectl get postgresbackup -n pg-restore-{{ session_namespace }} -l sql.tanzu.vmware.com/recovered-from-backuplocation=true 
 ```
 
-View the manifest which will be used to configure the restore: <font color="red">NOTE: Copy the name of the backup to restore from the previous console output.</font>
+View the manifest which will be used to configure the restore: first, update the manifest with the name of the synchronized backup from above:
+```execute
+export PG_SYNC_RESTORE_NM=$(kubectl get postgresbackup -n pg-restore-{{ session_namespace }} -l sql.tanzu.vmware.com/recovered-from-backuplocation=true -o jsonpath="{.items[0].metadata.name}") && sed -i "s/pg-simple-backup/$PG_SYNC_RESTORE_NM/g" ~/other/resources/postgres/postgres-restore.yaml
+```
+
+View the manifest:
 ```editor:open-file
 file: ~/other/resources/postgres/postgres-restore.yaml
 ```
