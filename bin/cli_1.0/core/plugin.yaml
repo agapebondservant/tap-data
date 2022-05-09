@@ -1,0 +1,12 @@
+name: core
+description: The core Tanzu CLI
+version: ""
+buildSHA: ""
+digest: ""
+group: ""
+docURL: ""
+completionType: 0
+installationpath: ""
+discovery: ""
+scope: ""
+status: ""

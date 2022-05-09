@@ -26,6 +26,8 @@ other/resources/wavefront/wavefront.yaml
 other/resources/mysql/mysql-backup-location.yaml
 resources/tap-gui-values.yaml
 other/resources/bin/argocd
+other/resources/bin/tanzu
+other/resources/bin/tanzu_1.0
 resources/tap-values.yaml
 myfile
 istio-1.13.2/

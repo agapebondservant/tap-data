@@ -1,0 +1,6 @@
+name: services
+description: Discover Service Types and manage Service Instances (ALPHA)
+version: v0.1.2
+buildSHA: 5e6e964
+group: Build
+completionType: 0
