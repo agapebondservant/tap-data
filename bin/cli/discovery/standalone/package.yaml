@@ -1,0 +1,16 @@
+apiVersion: cli.tanzu.vmware.com/v1alpha1
+kind: CLIPlugin
+metadata:
+  creationTimestamp: null
+  name: package
+spec:
+  artifacts:
+    v0.11.2:
+    - arch: amd64
+      digest: d141bf1f88e55b4ba0db35c35ddd6d411894835f4ff7c8a0613a4cfae41febfd
+      os: linux
+      type: local
+      uri: linux/amd64/cli/package/v0.11.2/tanzu-package-linux_amd64
+  description: Tanzu package management
+  optional: false
+  recommendedVersion: v0.11.2

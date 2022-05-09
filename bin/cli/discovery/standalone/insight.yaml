@@ -1,0 +1,16 @@
+apiVersion: cli.tanzu.vmware.com/v1alpha1
+kind: CLIPlugin
+metadata:
+  creationTimestamp: null
+  name: insight
+spec:
+  artifacts:
+    v1.1.2:
+    - arch: amd64
+      digest: c1a05b81c10b7f1c09efb76e21ad9923e4626a34812af86fe000f2cc279a50a8
+      os: linux
+      type: local
+      uri: linux/amd64/cli/insight/v1.1.2/tanzu-insight-linux_amd64
+  description: post & query image, package, source, and vulnerability data
+  optional: false
+  recommendedVersion: v1.1.2

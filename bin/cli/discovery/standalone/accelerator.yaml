@@ -1,0 +1,26 @@
+apiVersion: cli.tanzu.vmware.com/v1alpha1
+kind: CLIPlugin
+metadata:
+  creationTimestamp: null
+  name: accelerator
+spec:
+  artifacts:
+    v1.1.1:
+    - arch: amd64
+      digest: e4bd581882fe3cbc28fc7f6b2ebf8a6f750781b80c00c50c0e17cc079fc89eb4
+      os: darwin
+      type: local
+      uri: darwin/amd64/cli/accelerator/v1.1.1/tanzu-accelerator-darwin_amd64
+    - arch: amd64
+      digest: a343dc4780f8e427adb0c6e9f1d3d723200031ee586b0c19cba25bbbb9df5a93
+      os: linux
+      type: local
+      uri: linux/amd64/cli/accelerator/v1.1.1/tanzu-accelerator-linux_amd64
+    - arch: amd64
+      digest: 67c0854d5c0b9d68642da6872507b0af4531b069eae0aa7eedd880bdda5c9462
+      os: windows
+      type: local
+      uri: windows/amd64/cli/accelerator/v1.1.1/tanzu-accelerator-windows_amd64.exe
+  description: Manage accelerators in a Kubernetes cluster
+  optional: false
+  recommendedVersion: v1.1.1
