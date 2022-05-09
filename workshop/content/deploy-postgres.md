@@ -289,7 +289,7 @@ View the synchronized backups: <font color="red">NOTE: Once the status shows "Su
 watch kubectl get postgresbackup -n pg-restore-{{ session_namespace }} -l sql.tanzu.vmware.com/recovered-from-backuplocation=true 
 ```
 
-View the manifest which will be used to configure the restore: first, update the manifest with the name of the synchronized backup from above:
+Apply the manifest which will be used to configure the restore. First, update the manifest with the name of the synchronized backup from above:
 ```execute
 export PG_SYNC_RESTORE_NM=$(kubectl get postgresbackup -n pg-restore-{{ session_namespace }} -l sql.tanzu.vmware.com/recovered-from-backuplocation=true -o jsonpath="{.items[0].metadata.name}") && sed -i "s/pg-simple-backup/$PG_SYNC_RESTORE_NM/g" ~/other/resources/postgres/postgres-restore.yaml
 ```
@@ -330,7 +330,7 @@ To demonstrate the multi-cluster deployment capability of the **Tanzu Postgres**
 
 Let's set up ArgoCD:
 ```execute
-git clone https://oawofolu:{{DATA_E2E_GIT_FLUXDEMO_TOKEN}}@gitlab.com/oawofolu/postgres-repo.git && cd postgres-repo && git rm app/pginstance2.yaml > /dev/null 2>&1; git config --global user.email 'eduk8s@example.com'; git config --global user.name 'Educates'; git commit -a -m 'New commit' && git push; cd $HOME && kubectl config set-context --current --namespace=argocd && ./argocd app delete postgres-${session_namespace} -y >/dev/null 2>&1; ./argocd login --core && sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/postgres/postgres-argocd-app.yaml && kubectl apply -f ~/other/resources/postgres/postgres-argocd-app.yaml
+git clone https://oawofolu:{{DATA_E2E_GIT_FLUXDEMO_TOKEN}}@gitlab.com/oawofolu/postgres-repo.git && cd postgres-repo && git rm app/pginstance2.yaml > /dev/null 2>&1; git config --global user.email 'eduk8s@example.com'; git config --global user.name 'Educates'; git commit -a -m 'New commit' && git push; cd $HOME; kubectl delete ns argocd || true; kubectl create ns argocd; kubectl apply -f ~/other/resources/argocd/argocd.yaml -n argocd; kubectl config set-context --current --namespace=argocd && ./argocd app delete postgres-${session_namespace} -y >/dev/null 2>&1; ./argocd login --core && sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/postgres/postgres-argocd-app.yaml && kubectl apply -f ~/other/resources/postgres/postgres-argocd-app.yaml
 ```
 
 Next, we will add a manifest representing a new cluster, **pginstance-2**, to our ArgoCD-tracked repository. Copy the content of this file:
