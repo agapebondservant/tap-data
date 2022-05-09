@@ -18,6 +18,7 @@ metadata:
     apps.tanzu.vmware.com/workload-type: web
     app.kubernetes.io/part-of: pet-clinic
 spec:
+  image: ${DATA_E2E_TAP_PETCLINIC_IMG}
   env:
     - name: SPRING_PROFILES_ACTIVE
       value: postgres
@@ -30,8 +31,8 @@ spec:
         apiVersion: sql.tanzu.vmware.com/v1
         kind: Postgres
         name: pginstance-1
-  source:
-    git:
-      ref:
-        branch: accelerator
-      url: https://github.com/agapebondservant/spring-petclinic.git
+  #source:
+  #  git:
+  #    ref:
+  #      branch: accelerator
+  #  url: https://github.com/agapebondservant/spring-petclinic.git

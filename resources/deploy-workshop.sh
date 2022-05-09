@@ -3,6 +3,7 @@
 source .env
 envsubst < workshop/modules.in.yaml > workshop/modules.yaml
 envsubst < other/resources/postgres/postgres-backup-location.in.yaml  > other/resources/postgres/postgres-backup-location.yaml
+envsubst < other/resources/postgres/postgres-tap.in.yaml  > other/resources/postgres/postgres-tap.yaml
 envsubst < other/resources/mysql/mysql-backup-location.in.yaml  > other/resources/mysql/mysql-backup-location.yaml
 envsubst < other/resources/postgres/overrides.in.yaml > other/resources/postgres/overrides.yaml
 envsubst < other/resources/mysql/overrides.in.yaml > other/resources/mysql/overrides.yaml
