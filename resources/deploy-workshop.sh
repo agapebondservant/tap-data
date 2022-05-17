@@ -1,16 +1,11 @@
 
 # populate interpolated variables
 source .env
-envsubst < workshop/modules.in.yaml > workshop/modules.yaml
-envsubst < other/resources/postgres/postgres-backup-location.in.yaml  > other/resources/postgres/postgres-backup-location.yaml
-envsubst < other/resources/postgres/postgres-tap.in.yaml  > other/resources/postgres/postgres-tap.yaml
-envsubst < other/resources/mysql/mysql-backup-location.in.yaml  > other/resources/mysql/mysql-backup-location.yaml
-envsubst < other/resources/postgres/overrides.in.yaml > other/resources/postgres/overrides.yaml
-envsubst < other/resources/mysql/overrides.in.yaml > other/resources/mysql/overrides.yaml
-envsubst < other/resources/greenplum/overrides.in.yaml > other/resources/greenplum/overrides.yaml
-envsubst < other/resources/datadog/data-dog-with-db-config.in.yaml > other/resources/datadog/data-dog-with-db-config.yaml
-envsubst < other/resources/greenplum/minio-site.in.xml > other/resources/greenplum/minio-site.xml
-envsubst < other/resources/wavefront/wavefront.in.yaml > other/resources/wavefront/wavefront.yaml
+for orig in `find . -name "*.in.*" -type f`; do
+  target=$(echo $orig | sed 's/\.in//')
+  envsubst < $orig > $target
+  grep -qxF $target .gitiginore || echo $target >> .gitignore
+done
 
 # pre-initialize required services
 resources/setup.sh

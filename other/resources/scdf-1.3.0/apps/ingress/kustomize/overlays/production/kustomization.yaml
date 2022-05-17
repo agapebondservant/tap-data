@@ -1,4 +1,0 @@
-bases:
-  - ../../base
-patches:
-  - ingress-patch.yaml

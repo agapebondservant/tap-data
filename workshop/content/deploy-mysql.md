@@ -10,7 +10,7 @@ Check on the status by viewing the logs (**L** on K9s). Click **Esc**  when comp
 
 Next, we view it:
 ```dashboard:open-url
-url: {{ ingress_protocol }}://petclinic-{{ session_namespace }}.tanzudatatap.ml
+url: {{ ingress_protocol }}://petclinic-{{ session_namespace }}.{{ DATA_E2E_BASE_URL }}
 ```
 
 Let's go ahead and add a few new pet owners, then restart the app. We notice that if we restart the app, we lose all of our entries:
@@ -21,7 +21,7 @@ kubectl rollout restart deploy/petclinic-app && kubectl rollout status -w deploy
 Let's view it again - notice the owners are gone:
 ```dashboard:reload-dashboard
 name: Petclinic
-url: {{ ingress_protocol }}://petclinic-{{ session_namespace }}.tanzudatatap.ml
+url: {{ ingress_protocol }}://petclinic-{{ session_namespace }}.{{ DATA_E2E_BASE_URL }}
 ```
 
 To resolve this, we will need to provision a persistent data store.
@@ -88,7 +88,7 @@ tmpfile=$(mktemp) && kubectl cp mysqlinstance-1-0:$(kubectl exec mysqlinstance-1
 
 Launch **phpMyAdmin**:
 ```dashboard:open-url
-url: http://phpadmin-{{session_namespace}}.tanzudatatap.ml/
+url: http://phpadmin-{{session_namespace}}.{{ DATA_E2E_BASE_URL }}/
 ```
 
 In keeping with best practices, create a new user to access the MySQL Server instance, instead of using the root user. Login to the MySQL bash console:
@@ -257,7 +257,7 @@ Next, navigate to the Prometheus UI, select Status -> Targets and click "Collaps
 should be shown (<font color="red">NOTE:</font> Wait for a few seconds if the metrics do not show up right away):
 ```dashboard:open-url
 name: Prometheus
-url: http://prometheus.tanzudatatap.ml
+url: http://prometheus.{{ DATA_E2E_BASE_URL }}
 ```
 
 <font color="red">NOTE:</font> To view specific metrics collected by Prometheus, go the the Prometheus UI Home screen by 

@@ -1,9 +1,0 @@
-commonLabels:
-  app.kubernetes.io/name: spring-cloud-skipper-server
-resources:
-  - roles.yaml
-  - role-binding.yaml
-  - service-account.yaml
-  - service.yaml
-  - deployment.yaml
-#namespace: YOUR_SCDF_NAMESPACE

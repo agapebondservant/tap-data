@@ -1,0 +1,1 @@
+ingressDomain: ${DATA_E2E_BASE_URL}

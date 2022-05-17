@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: petclinic-app
+  name: petclinic-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: petclinic-app
+  template:
+    metadata:
+      labels:
+        app: petclinic-app
+    spec:
+      containers:
+      - image: oawofolu/spring-petclinic:1.0
+        name: spring-petclinic
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: petclinic-app
+  name: petclinic-app
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: petclinic-app
+  type: ClusterIP
+---
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: petclinic-YOUR_SESSION_NAMESPACE-httpproxy
+spec:
+  routes:
+  - conditions:
+    - prefix: /
+    services:
+    - name: petclinic-app
+      port: 8080
+  virtualhost:
+    fqdn: petclinic-YOUR_SESSION_NAMESPACE.${DATA_E2E_BASE_URL}

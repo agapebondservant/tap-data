@@ -1,0 +1,17 @@
+
+apiVersion: "greenplum.pivotal.io/v1beta1"
+kind: "GreenplumPXFService"
+metadata:
+  name: data-e2e-greenplum-pxf
+spec:
+  replicas: 2
+  cpu: "0.5"
+  memory: "1Gi"
+  workerSelector: {
+  }
+  pxfConf:
+    s3Source:
+      secret: data-e2e-greenplum-pxf-configs
+      endpoint: minio.${DATA_E2E_BASE_URL}
+      bucket: pxf-config
+      protocol: http

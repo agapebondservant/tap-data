@@ -1,0 +1,16 @@
+apiVersion: learningcenter.tanzu.vmware.com/v1beta1
+kind: SystemProfile
+metadata:
+  name: default-system-profile
+spec:
+  #! provide the list of secrets which will be used by the service account to pull images from a private registry
+  environment:
+    secrets:
+      pull:
+      - eduk8s-demo-creds
+  #! for DockerHub images, sets up an image pull-through cache to work around image pull limits
+  dockerd:
+    mirror:
+      remote: https://registry-1.docker.io
+      username: ${DATA_E2E_REGISTRY_USERNAME}
+      password: ${DATA_E2E_REGISTRY_PASSWORD}

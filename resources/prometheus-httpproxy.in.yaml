@@ -1,0 +1,14 @@
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: prometheus-httpproxy
+  namespace: monitoring-tools
+spec:
+  routes:
+  - conditions:
+    - prefix: /
+    services:
+    - name: prometheus-kube-prometheus-prometheus
+      port: 8000
+  virtualhost:
+    fqdn: prometheus.${DATA_E2E_BASE_URL}

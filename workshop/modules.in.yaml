@@ -113,3 +113,5 @@ config:
       value: ${DATA_E2E_MINIO_PLAIN_SECRET_KEY}
     - name: DATA_E2E_TAP_PETCLINIC_IMG
       value: ${DATA_E2E_TAP_PETCLINIC_IMG}
+    - name: DATA_E2E_BASE_URL
+      value: ${DATA_E2E_BASE_URL}

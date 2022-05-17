@@ -18,7 +18,7 @@ Let's view the RabbitMQ console for the broker that will be leveraged by our pip
 
 ```dashboard:reload-dashboard
 name: RabbitMQ
-url: {{ ingress_protocol }}://rabbitmain.tanzudatatap.ml
+url: {{ ingress_protocol }}://rabbitmain.{{ DATA_E2E_BASE_URL }}
 ```
 
 Use the following credentials to login to the RabbitMQ Management console:

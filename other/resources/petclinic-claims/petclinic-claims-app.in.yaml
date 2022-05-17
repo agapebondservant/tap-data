@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: petclinic-claims-dashboard
+  name: petclinic-claims-dashboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: petclinic-claims-dashboard
+  template:
+    metadata:
+      labels:
+        app: petclinic-claims-dashboard
+    spec:
+      containers:
+      - image: oawofolu/petclinic-claims-dashboard:latest
+        name: petclinic-claims-dashboard
+        imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: petclinic-claims-dashboard
+  name: petclinic-claims-dashboard
+spec:
+  ports:
+  - port: 9160
+    protocol: TCP
+    targetPort: 8050
+  selector:
+    app: petclinic-claims-dashboard
+  type: ClusterIP
+---
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+ name: petclinic-claims-dashboard-YOUR_SESSION_NAMESPACE-httpproxy
+spec:
+ routes:
+ - conditions:
+   - prefix: /
+   services:
+   - name: petclinic-claims-dashboard
+     port: 9160
+ virtualhost:
+   fqdn: petclinic-claims-dashboard-YOUR_SESSION_NAMESPACE.${DATA_E2E_BASE_URL}

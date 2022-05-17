@@ -1,9 +1,0 @@
-spring:
-  cloud:
-    skipper:
-      server:
-        platform:
-          kubernetes:
-            accounts:
-              default:
-                environmentVariables: 'SPRING_CLOUD_CONFIG_ENABLED=false,SPRING_RABBITMQ_HOST=${RABBITMQ_SERVICE_HOST},SPRING_RABBITMQ_PORT=${RABBITMQ_SERVICE_PORT_AMQP},SPRING_RABBITMQ_USERNAME=user,SPRING_RABBITMQ_PASSWORD=${broker-password}'
