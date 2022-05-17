@@ -15,7 +15,6 @@ spec:
         - name: database
           secret:
             secretName: postgresql
-            #! secretName: pginstance-1-db-secret
             items:
             - key: postgresql-password
               path: database-password 

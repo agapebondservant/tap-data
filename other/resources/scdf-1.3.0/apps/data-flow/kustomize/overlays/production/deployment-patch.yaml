@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scdf-server
+spec:
+  template:
+    spec:
+      containers:
+      - name: scdf-server
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: database
+        volumeMounts:
+          - name: dockerconfig
+            mountPath: /workspace/runtime/secrets/dockerconfig
+            readOnly: true
+          #!- name: wavefront-api
+          #!  mountPath: /workspace/runtime/secrets/wavefront-api
+          #!  readOnly: true
+        resources:
+          limits:
+            cpu: 1.0
+            memory: 1024Mi
+          requests:
+            cpu: 500m
+            memory: 1024Mi
+      imagePullSecrets:
+      - name: scdf-image-regcred
+      volumes:
+        - name: dockerconfig
+          secret:
+            secretName: scdf-image-regcred
+        #!- name: wavefront-api
+        #!  secret:
+        #!    secretName: wavefront-api

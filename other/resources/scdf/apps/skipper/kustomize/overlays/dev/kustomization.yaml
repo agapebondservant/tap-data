@@ -1,8 +1,8 @@
 images:
 - name: springcloud/spring-cloud-skipper-server # used for Kustomize matching
-  newName: registry.pivotal.io/p-scdf-for-kubernetes/spring-cloud-skipper-server
-  newTag: 2.7.0_scdf-k8s-1.3.0
-  digest: sha256:4d4fd0ba0bcfd866ae48275121a77674358f724d61286a9c84f33b7afdba709d
+  newName: index.docker.io/oawofolu/spring-cloud-skipper-server
+  newTag: 2.8.4_scdf-k8s-1.4.3
+  digest: sha256:b2c8989c19662cfcf3a912910533a4755d8060a1ec51f8575dd0bdff62189fe0
 configMapGenerator:
 - name: skipper
   files:

@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: skipper
+spec:
+  template:
+    spec:
+      containers:
+      - name: skipper
+        volumeMounts:
+          - name: broker
+            mountPath: /workspace/runtime/secrets/broker
+            readOnly: true
+      volumes:
+        - name: broker
+          secret:
+            #! secretName: rabbitmq
+            secretName: rabbitcluster1-default-user
+            items:
+            - key: password #!rabbitmq-password
+              path: broker-password 

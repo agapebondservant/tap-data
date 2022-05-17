@@ -8,6 +8,6 @@ spec:
     - prefix: /
     services:
     - name: scdf-server
-      port: 9000
+      port: 80
   virtualhost:
-    fqdn: scdf-${session_namespace}.tanzudatatap.ml
+    fqdn: scdf.tanzudatatap.ml

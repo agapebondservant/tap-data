@@ -6,6 +6,7 @@ spring:
           kubernetes:
             accounts:
               default:
+                imagePullSecret: scdf-image-regcred
                 limits:
                   memory: 1024Mi
                   cpu: 400m

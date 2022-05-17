@@ -1,0 +1,75 @@
+server:
+  port: 8080
+spring:
+  cloud:
+    dataflow:
+      metrics.dashboard:
+        url: 'http://grafana.tanzudatatap.ml'
+      grafana-info:
+        url: 'http://grafana.tanzudatatap.ml'
+      applicationProperties:
+        stream:
+          management:
+            metrics:
+              export:
+                prometheus:
+                  enabled: true
+                  #!rsocket:
+                  #!  enabled: true
+                  #!  host: prometheus-proxy
+                  #!  port: 7001
+        task:
+          management:
+            metrics:
+              export:
+                prometheus:
+                  enabled: true
+                  #!rsocket:
+                  #!  enabled: true
+                  #!  host: prometheus-proxy
+                  #!  port: 7001
+      container:
+        registry-configurations:
+          tanzu-net:
+            registry-host: registry.pivotal.io/p-scdf-for-kubernetes
+            authorization-type: dockeroauth2
+            extra:
+              "registryAuthUri": https://registry.pivotal.io/p-scdf-for-kubernetes/service/token?service=harbor-registry&scope=repository:{repository}:pull
+      server:
+        uri: http://${SCDF_SERVER_SERVICE_HOST}:${SCDF_SERVER_SERVICE_PORT}
+      features:
+        schedules-enabled: true
+      task:
+        composedtaskrunner:
+          uri: docker://registry.pivotal.io/p-scdf-for-kubernetes/spring-cloud-dataflow-composed-task-runner@sha256:330171a6b7ad591a36704aeab9434b5d86bc9754946d222169c76587e02c7b19
+        platform:
+          kubernetes:
+            accounts:
+              default:
+                imagePullSecret: scdf-image-regcred
+                limits:
+                  memory: 1024Mi
+                  cpu: 400m
+                requests:
+                  memory: 1024Mi
+                  cpu: 200m
+      security:
+        authorization:
+          permit-all-paths: "/management/health,/management/info,/authenticate,/security/info,/assets/**,/dashboard/logout-success-oauth.html,/favicon.ico"
+    skipper:
+      client:
+        serverUri: http://${SKIPPER_SERVICE_HOST}:${SKIPPER_SERVICE_PORT}/api
+#!management:
+#!  metrics:
+#!    web:
+#!      server:
+#!        request:
+#!          autotime:
+#!            enabled: true
+#!        metric-name: spring.cloud.dataflow.http.server.requests
+#!    export:
+#!      wavefront:
+#!        enabled: true
+#!        api-token: ${wavefront-api}
+#!        uri: https://vmware.wavefront.com
+#!        source: ${DATA_E2E_WAVEFRONT_SOURCE}

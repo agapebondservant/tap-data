@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scdf-server
+spec:
+  template:
+    spec:
+      containers:
+      - name: scdf-server
+        volumeMounts:
+          - name: database
+            mountPath: /workspace/runtime/secrets/database
+            readOnly: true
+      volumes:
+        - name: database
+          secret:
+            secretName: mysql
+            items:
+            - key: mysql-password
+              path: database-password 

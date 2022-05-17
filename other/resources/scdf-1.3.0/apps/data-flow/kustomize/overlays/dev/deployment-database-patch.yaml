@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scdf-server
+spec:
+  template:
+    spec:
+      containers:
+      - name: scdf-server
+        volumeMounts:
+          - name: database
+            mountPath: /workspace/runtime/secrets/database
+            readOnly: true
+      volumes:
+        - name: database
+          secret:
+            secretName: postgresql
+            #! secretName: pginstance-1-db-secret
+            items:
+            - key: postgresql-password
+              path: database-password 

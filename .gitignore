@@ -32,3 +32,5 @@ other/resources/bin/tanzu_1.0
 resources/tap-values.yaml
 myfile
 istio-1.13.2/
+other/resources/scdf/apps/data-flow/images
+other/resources/scdf/apps/skipper/images/

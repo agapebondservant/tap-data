@@ -10,28 +10,5 @@ management:
 spring:
   cloud:
     dataflow:
-      grafana-info:
-        url: 'http://grafana.tanzudatatap.ml'
-      applicationProperties:
-        stream:
-          management:
-            metrics:
-              export:
-                prometheus:
-                  enabled: true
-                  #!rsocket:
-                  #!  enabled: true
-                  #!  host: prometheus-proxy
-                  #!  port: 7001
-        task:
-          management:
-            metrics:
-              export:
-                prometheus:
-                  enabled: true
-                  #!rsocket:
-                  #!  enabled: true
-                  #!  host: prometheus-proxy
-                  #!  port: 7001
       metrics.dashboard:
-        url: 'http://grafana.tanzudatatap.ml'
+        url: 'http://localhost:3000'

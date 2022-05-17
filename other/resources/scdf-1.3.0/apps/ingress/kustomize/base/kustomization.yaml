@@ -1,0 +1,4 @@
+commonLabels:
+  app.kubernetes.io/name: scdf-ingress
+resources:
+  - ingress.yaml

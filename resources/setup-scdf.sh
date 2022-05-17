@@ -1,17 +1,19 @@
 #!/bin/bash
 
-#Install Spring Cloud Data Flow to default namespace
-export SCDF_BASE_DATAFLOW_KUSTOMIZE_FL=other/resources/scdf/apps/data-flow/kustomize/base/kustomization.yaml
-export SCDF_BASE_SKIPPER_KUSTOMIZE_FL=other/resources/scdf/apps/skipper/kustomize/base/kustomization.yaml
-cp ${SCDF_BASE_DATAFLOW_KUSTOMIZE_FL} ${SCDF_BASE_DATAFLOW_KUSTOMIZE_FL}.other
-cp ${SCDF_BASE_SKIPPER_KUSTOMIZE_FL} ${SCDF_BASE_SKIPPER_KUSTOMIZE_FL}.other
-sed -i '' -e "s/namespace/#namespace/g" ${SCDF_BASE_DATAFLOW_KUSTOMIZE_FL}
-sed -i '' -e "s/namespace/#namespace/g" ${SCDF_BASE_SKIPPER_KUSTOMIZE_FL}
-kubectl create secret docker-registry scdf-image-regcred --namespace=default --docker-server=registry.pivotal.io --docker-username="$DATA_E2E_PIVOTAL_REGISTRY_USERNAME"  --docker-password="$DATA_E2E_PIVOTAL_REGISTRY_PASSWORD" --dry-run -o yaml | kubectl apply -f - 
-other/resources/scdf/bin/uninstall-dev.sh || true
-other/resources/scdf/bin/install-dev.sh #--monitoring prometheus
-kubectl apply -f other/resources/scdf/scdf-http-proxy-default.yaml
-cp ${SCDF_BASE_DATAFLOW_KUSTOMIZE_FL}.other ${SCDF_BASE_DATAFLOW_KUSTOMIZE_FL}
-cp ${SCDF_BASE_SKIPPER_KUSTOMIZE_FL}.other ${SCDF_BASE_SKIPPER_KUSTOMIZE_FL}
-kubectl apply -f other/resources/rabbitmq/rabbitmq-scdf.yaml 
+source .env
+echo $DATA_E2E_REGISTRY_PASSWORD | docker login --username=$DATA_E2E_REGISTRY_USERNAME --password-stdin
+
+# Relocate images to container registry
+other/resources/scdf/bin/relocate-image.sh --app data-flow --repository $DATA_E2E_GIT_TAP_REGISTRY_REPO/spring-cloud-dataflow-server
+other/resources/scdf/bin/relocate-image.sh --app composed-task-runner --repository $DATA_E2E_GIT_TAP_REGISTRY_REPO/spring-cloud-dataflow-composed-task-runner
+other/resources/scdf/bin/relocate-image.sh --app skipper --repository $DATA_E2E_GIT_TAP_REGISTRY_REPO/spring-cloud-skipper-server
+
+# Create SCDF imagepullsecret
+kubectl create secret docker-registry scdf-image-regcred --namespace=default --docker-server=$DATA_E2E_GIT_TAP_REGISTRY_SERVER --docker-username="$DATA_E2E_REGISTRY_USERNAME" --docker-password="$DATA_E2E_REGISTRY_PASSWORD" --dry-run -o yaml | kubectl apply -f -
+
+# Install SCDF
+other/resources/scdf/bin/install-dev.sh --database postgresql --broker rabbitmq --monitoring none
+
+# Deploy HttpProxy for SCDF Server
+kubectl apply -f other/resources/scdf/scdf-http-proxy.yaml
 

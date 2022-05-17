@@ -1,0 +1,14 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: skipper
+spec:
+  template:
+    spec:
+      containers:
+      - name: skipper
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: database,broker
+      imagePullSecrets:
+      - name: scdf-image-regcred

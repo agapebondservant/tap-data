@@ -14,8 +14,7 @@ spec:
       volumes:
         - name: broker
           secret:
-            #! secretName: rabbitmq
-            secretName: rabbitcluster1-default-user
+            secretName: rabbitmq
             items:
-            - key: password #!rabbitmq-password
+            - key: rabbitmq-password
               path: broker-password 
