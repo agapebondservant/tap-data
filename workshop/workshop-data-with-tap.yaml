@@ -1,0 +1,6 @@
+name: Tanzu Postgres Deep Dive
+
+modules:
+    activate:
+    - postgres-deep-dive
+    - deploy-postgres

@@ -16,9 +16,10 @@ NOTE:
 7. [Build secondary cluster (for multi-site demo)](#multisite)
 8. [Install TAP](#tap-install)
 9. [Deploy Tanzu Data Workshops](#buildanddeploy)
-10. [Other: How-tos/General Info (not needed for setup)](#other)
+10. [Deploy Single Workshop to Pre-Existing LearningCenter Portal] (#buildsingle)
+11. [Other: How-tos/General Info (not needed for setup)](#other)
 
-#### Kubernetes Cluster Prep<a name="pre-reqs">
+#### Kubernetes Cluster Prep<a name="pre-reqs"/>
 * Create .env file in root directory (use .env-sample as a template - do NOT check into Git)
 
 * Populate the .env file where possible (NOTE: only a subset of the variables can be populated at the moment.
@@ -88,7 +89,7 @@ export GATEWAY_URL=$INGRESS_HOST:$INGRESS_PORT
 
 * If using applications with WebSocket connections, increase idle timeout on ELB in AWS Management Console to 1 hour (default is 30 seconds)
 
-#### Install Minio<a name="minio">
+#### Install Minio<a name="minio"/>
 * Deploy Minio (Server) with TLS:
 
 Setup TLS cert for Minio:
@@ -202,7 +203,7 @@ mc cp other/resources/gemfire/gemfire-greenplum-3.4.1.jar data-e2e-minio/artifac
 mc policy set download data-e2e-minio/artifacts/gemfire-greenplum-3.4.1.jar
 ```
 
-#### Install Prometheus and Grafana <a name="prometheusgrafana">
+#### Install Prometheus and Grafana <a name="prometheusgrafana"/>
 * Install Prometheus and Grafana:
 Prometheus:
 ```
@@ -236,8 +237,8 @@ kubectl apply -f resources/prometheus-proxy/proxyhelm/
 kubectl apply -f resources/prometheus-proxy/proxyhelm/prometheus-proxy-http-proxy.yaml
 ```
 
-#### Install Datadog <a name="datadog">
-* Install Datadog:
+#### Install Datadog <a name="datadog"/>
+* Install Datadog: (only required for these workshops: <b>Postgres Deep Dive</b>)
 ```
 helm repo add datadog https://helm.datadoghq.com
 helm repo update
@@ -245,20 +246,20 @@ helm install datadog -f other/resources/datadog/data-dog.yaml \
 - --set datadog.site='datadoghq.com' --set datadog.apiKey='${DATA_E2E_DATADOG_API_KEY}' datadog/datadog
 ```
   
-#### Install ArgoCD <a name="argocd">
+#### Install ArgoCD <a name="argocd"/>
 * Install ArgoCD:
 ```
 kubectl create namespace argocd
 kubectl apply -n argocd -f resources/argocd.yaml
 ```
 
-#### Pre-deploy Greenplum and Spring Cloud Data Flow<a name="predeploys">
-* Pre-deploy Greenplum:
+#### Pre-deploy Greenplum and Spring Cloud Data Flow<a name="predeploys"/>
+* Pre-deploy Greenplum: (only required for these workshops: <b>Greenplum Workshops</b>)
 ```
 source .env
 resources/setup.sh
 ```
-* Pre-deploy Spring Cloud Data Flow:
+* Pre-deploy Spring Cloud Data Flow: (only required for these workshops: <b>RabbitMQ Workshops, Gemfire Workshops, Greenplum Workshops, ML/AI workshops</b>)
 ```
 resources/setup-scdf.sh
 ```
@@ -267,7 +268,7 @@ sink.gemfire=docker:springcloudstream/gemfire-sink-rabbit:2.1.6.RELEASE
 source.gemfire=docker:springcloudstream/gemfire-source-rabbit:2.1.6.RELEASE
 source.gemfire-cq=docker:springcloudstream/gemfire-cq-source-rabbit:2.1.6.RELEASE
 
-#### Build secondary cluster (for multi-site demo)<a name="multisite">
+#### Build secondary cluster (only required for multi-site demo)<a name="multisite"/>
 * Create new cluster:
 ```
 tanzu cluster create tanzu-data-tap-secondary --file resources/tanzu-aws-secondary.yaml
@@ -363,7 +364,7 @@ kubeseal --scope cluster-wide -o yaml <kconfigsecret.yaml> resources/kconfigseal
 kubectl apply -f resources/kconfigsealedsecret.yaml
 ```
 
-### Install TAP<a name="tap-install">
+### Install TAP<a name="tap-install"/>
 (NOTE: TAP pre-reqs: https://docs.vmware.com/en/Tanzu-Application-Platform/1.0/tap/GUID-install-intro.html)
 
 #### Install TAP command line tooling
@@ -475,7 +476,7 @@ tanzu plugin install --local <path-to-tanzu-cli> all
 tanzu acc create mlflow --git-repository https://github.com/agapebondservant/mlflow-accelerator.git --git-branch main
 ```
 
-#### Deploy Tanzu Data Workshops<a name="buildanddeploy">
+#### Deploy Tanzu Data Workshops<a name="buildanddeploy"/>
 * Build Workshop image:
   (see resources/deploy-workshop.sh)
 
@@ -492,8 +493,42 @@ tanzu acc create mlflow --git-repository https://github.com/agapebondservant/mlf
 ```
 resources/deploy-workshop.sh
 ```
+
+#### Deploy Single Workshop to Pre-Existing LearningCenter Portal<a name="buildsingle"/>
+* Make sure all relevant pre-requisites are set up in your cluster: <a href="#pre-reqs">Setup required pre-installations</a>
+* Make sure TAP is installed (including LearningCenter): <a href="#tap-install">Setup required pre-installations</a>
+* Follow the instructions to add the desired workshop to your Learning Center as shown:
+
+  | Workshop Name            | Link                                      |
+  |--------------------------|-------------------------------------------|
+  | Tanzu Data with TAP      | <a href="#workshopa">View Instructions</a>|
+
+
+##### Deploy "Tanzu Data With TAP"<a name="workshopa"/>
+Setup pre-reqs for installing Postgres with Tanzu cli:
+```
+source .env
+echo $DATA_E2E_REGISTRY_PASSWORD | docker login registry-1.docker.io --username=$DATA_E2E_REGISTRY_USERNAME --password-stdin
+echo $DATA_E2E_PIVOTAL_REGISTRY_PASSWORD | docker login registry.tanzu.vmware.com --username=$DATA_E2E_PIVOTAL_REGISTRY_USERNAME --password-stdin
+export TDS_VERSION=1.0.0
+imgpkg copy -b registry.tanzu.vmware.com/packages-for-vmware-tanzu-data-services/tds-packages:$TDS_VERSION --to-repo $DATA_E2E_REGISTRY_USERNAME/tds-packages
+```
+
+Add the following to your `training-portal.yaml` (under **spec.workshops**):
+```
+- name: data-with-tap
+    capacity: 10 #Change the capacity to the number of expected participants
+    expires: 120m
+    orphaned: 5m
+```
+
+Run the following:
+```
+kubectl apply -f resources/system-profile.yaml
+kubectl apply -f resources/workshop-data-with-tap.yaml
+```
   
-#### Other: How-tos/General Info (not needed for setup)<a name="other">
+#### Other: How-tos/General Info (not needed for setup)<a name="other"/>
 * For Grafana:
 <br/>
 RabbitMQ Dashboard: Dashboard ID 10991 

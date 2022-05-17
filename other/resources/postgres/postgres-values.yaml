@@ -1,0 +1,9 @@
+dockerRegistrySecretName: regsecret
+certManagerClusterIssuerName: postgres-operator-ca-certificate-cluster-issuer
+resources:
+  limits:
+    cpu: 500m
+    memory: 300Mi
+  requests:
+    cpu: 500m
+    memory: 300Mi

@@ -30,6 +30,7 @@ To resolve this, we will need to provision a persistent data store.
 
 **Tanzu Postgres** is a _full-featured_ object-relational data store.
 
+{% if ENV_WORKSHOP_TOPIC != 'data-with-tap' %}
 Let's deploy the Tanzu Postgres **operator**:
 
 ```execute
@@ -40,6 +41,7 @@ The operator deploys a set of **Custom Resource Definitions** which encapsulate 
 The main advantage of the Operator pattern comes from its declarative approach. 
 Users can focus on defining domain objects,
 while delegating their underlying implementation logic to the operator's controller, which manages their state via reconciliation loops.
+{% endif  %}
 
 Here is a list of the **Custom Resource Definitions** that were deployed by the operator:
 

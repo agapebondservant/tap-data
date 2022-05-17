@@ -8,6 +8,8 @@ modules:
     postgres-deep-dive:
       name: Postgres Deep Dive
       exit_sign: Complete Workshop
+    data-with-tap:
+      name: Tanzu Data with TAP
     deploy-rabbitmq:
         name: Deploy RabbitMQ
         exit_sign: A Look at Cloud Native Data Pipelines
