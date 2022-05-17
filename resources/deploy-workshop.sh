@@ -4,7 +4,7 @@ source .env
 for orig in `find . -name "*.in.*" -type f`; do
   target=$(echo $orig | sed 's/\.in//')
   envsubst < $orig > $target
-  grep -qxF $target .gitiginore || echo $target >> .gitignore
+  grep -qxF $target .gitignore || echo $target >> .gitignore
 done
 
 # pre-initialize required services
