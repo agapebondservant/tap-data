@@ -545,6 +545,7 @@ Add the following to your `training-portal.yaml` (under **spec.workshops**):
 Run the following:
 ```
 resources/rebuild-docker-image.sh <path-to-your-env-file>
+kubectl delete --all learningcenter-training
 kubectl apply -f resources/system-profile.yaml
 kubectl apply -f resources/workshop-data-with-tap-external.yaml
 kubectl apply -f <path-to-your-training-portal.yaml>

@@ -117,3 +117,5 @@ config:
       value: ${DATA_E2E_TAP_PETCLINIC_IMG}
     - name: DATA_E2E_BASE_URL
       value: ${DATA_E2E_BASE_URL}
+    - name: DATA_E2E_TDS_PACKAGE_VERSION
+      value: ${DATA_E2E_TDS_PACKAGE_VERSION}
