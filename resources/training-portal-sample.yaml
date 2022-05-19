@@ -1,0 +1,16 @@
+apiVersion: learningcenter.tanzu.vmware.com/v1beta1
+kind: TrainingPortal
+metadata:
+  name: lab-k8s-fundamentals
+spec:
+  workshops:
+    - name: lab-k8s-fundamentals
+      capacity: 3
+      reserved: 1
+      expires: 1h
+      orphaned: 5m
+    - name: data-with-tap
+      capacity: 10
+      reserved: 1
+      expires: 120m
+      orphaned: 5m

@@ -41,7 +41,6 @@ The operator deploys a set of **Custom Resource Definitions** which encapsulate 
 The main advantage of the Operator pattern comes from its declarative approach. 
 Users can focus on defining domain objects,
 while delegating their underlying implementation logic to the operator's controller, which manages their state via reconciliation loops.
-{% endif  %}
 
 Here is a list of the **Custom Resource Definitions** that were deployed by the operator:
 
@@ -75,6 +74,7 @@ View the complete configuration associated with the newly deployed Postgres clus
 ```execute
 kubectl get postgres pginstance-1 -o yaml
 ```
+{% endif %}
 
 {% if ENV_WORKSHOP_TOPIC == 'data-e2e' %}
 After that, we can redeploy our app:

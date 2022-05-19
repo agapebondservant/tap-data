@@ -1,5 +1,93 @@
+{% if ENV_WORKSHOP_TOPIC == 'data-with-tap' %}
+#### Installing Postgres via the Tanzu cli
+![High-Level Architecture of Tanzu Postgres operator](images/postgres_ha.png)
+The primary approach for installing the **Tanzu Postgres** operator is by using **Helm**. However, **TAP** customers have the benefit of 
+installing **Tanzu Postgres** using the **Tanzu cli**. In addition to the standard **Helm** packaging, **Tanzu Postgres** provides 
+packaging for the operator that uses **Carvel's** **imgpkg** format, which is deployed via **Carvel's** **kapp-controller**.
+This approach allows TAP operators to use the same unified toolchain for managing **Tanzu Postgres** that is used for other TAP packages.
 
-#### Integrating with TAP
+First, confirm that the **Tanzu Data Services** package is available in the target registry that will be used for the install:
+```execute
+echo {{ DATA_E2E_REGISTRY_PASSWORD }} | docker login registry-1.docker.io --username={{ DATA_E2E_REGISTRY_USERNAME }} --password-stdin; if docker manifest inspect {{ DATA_E2E_REGISTRY_USERNAME }}/tds-packages:{{DATA_E2E_TDS_PACKAGE_VERSION}} > /dev/null ; then echo "{{ DATA_E2E_REGISTRY_USERNAME }}/tds-packages:{{DATA_E2E_TDS_PACKAGE_VERSION}} was found"; else echo "{{ DATA_E2E_REGISTRY_USERNAME }}/tds-packages:{{DATA_E2E_TDS_PACKAGE_VERSION}} was not found"; fi
+```
+
+Next, export the registry secret that will be used to access the target registry:
+```execute
+cd ~ && tanzu init && tanzu plugin install --local bin/cli secret && tanzu secret registry add pg-registry-secret --username {{ DATA_E2E_REGISTRY_USERNAME }} --password {{ DATA_E2E_REGISTRY_PASSWORD }} --server {{ DATA_E2E_REGISTRY_USERNAME }} --export-to-all-namespaces --yes --namespace {{session_namespace}}
+```
+
+Verify that there is now an exported secret for the target registry:
+```execute
+tanzu secret registry list --namespace {{session_namespace}}
+```
+
+With that, now we can add a new **Package Repository** to our TAP install:
+```execute
+tanzu package repository add tanzu-data-services-repository --url {{ DATA_E2E_REGISTRY_USERNAME }}/tds-packages:{{DATA_E2E_TDS_PACKAGE_VERSION}} --namespace {{session_namespace}}
+```
+
+Verify that the new package repository was added:
+```execute
+tanzu package available list --namespace {{session_namespace}}
+```
+
+View the `values-schema` which enumerates the operator's default properties: 
+```execute
+export PG_TANZU_PKG_VERSION=$(tanzu package available list -o json --namespace {{session_namespace}}| jq '.[] | select(.name=="postgres-operator.sql.tanzu.vmware.com")["latest-version"]' | tr -d '"'); tanzu package available get postgres-operator.sql.tanzu.vmware.com/$PG_TANZU_PKG_VERSION --values-schema --namespace {{session_namespace}}
+```
+
+The operator's default properties may be overriden using a `values.yaml` manifest file:
+```editor:open-file
+file: ~/other/resources/postgres/postgres-values.yaml
+```
+
+Now install the operator:
+```execute
+tanzu package install postgres-operator --package-name postgres-operator.sql.tanzu.vmware.com --version $PG_TANZU_PKG_VERSION -f ~/other/resources/postgres/postgres-values.yaml --namespace {{session_namespace}}
+```
+
+The operator deploys a set of **Custom Resource Definitions** which encapsulate various advanced, DB-specific concepts as managed Kubernetes resources.
+The main advantage of the Operator pattern comes from its declarative approach.
+Users can focus on defining domain objects,
+while delegating their underlying implementation logic to the operator's controller, which manages their state via reconciliation loops.
+
+Here is a list of the **Custom Resource Definitions** that were deployed by the operator:
+
+```execute
+clear && kubectl api-resources --api-group=sql.tanzu.vmware.com
+```
+
+Some of these **CRDs** will be useful when declaring a **cluster**; for example, show the list of supported **postgresversions**:
+```execute-2
+:postgresversions
+```
+
+Return to the pod view:
+```execute-2
+:pod
+```
+
+#### Deploying a Postgres cluster
+
+Next, let's deploy a highly available Tanzu Postgres **cluster**. Here is the manifest:
+```editor:open-file
+file: ~/other/resources/postgres/postgres-cluster.yaml
+```
+
+Let's deploy it:
+```execute
+kubectl apply -f ~/other/resources/postgres/postgres-cluster.yaml -n {{ session_namespace }}
+```
+
+This configuration will deploy a Postgres cluster with 1 **primary node**, 1 **mirror node** as a standby node for failover,
+and 1 **monitor node** for tracking the state of the cluster for failover purposes.
+View the complete configuration associated with the newly deployed Postgres cluster:
+```execute
+kubectl get postgres pginstance-1 -o yaml
+```
+{% endif %}
+
+#### Integrating Workloads with Service Bindings
 For **TAP** users, the Tanzu Postgres controller makes it easy to take advantage of Kubernetes' **Service Bindings** for seamlessly binding applications
 (called **Workloads**) to database instances (called **Services**).
 
@@ -10,7 +98,7 @@ text: "serviceClaims"
 after: 5
 ```
 
-Notice the highlighted section which defines the **Resource Claim** for the Service Binding. The **Resource Claim** represents a request 
+Notice the highlighted section which defines the **Resource Claim** for the Service Binding. The **Resource Claim** represents a request
 to access a specific **Provisioned Service**. The requested service must match the criteria specified by the claim. Once matched, a **Service Binding**
 will be created for the service.
 
@@ -28,54 +116,6 @@ file: ~/other/resources/postgres/postgres-tap-resourceclaimpolicy.yaml
 Create the **ResourceClaimPolicy**:
 ```execute
 kubectl apply -f ~/other/resources/postgres/postgres-tap-resourceclaimpolicy.yaml
-```
-{% endif %}
-
-{% if ENV_WORKSHOP_TOPIC == 'data-with-tap' %}
-#### Installing Postgres via the Tanzu cli
-The primary approach for installing the **Tanzu Postgres** operator is by using **Helm**. However, **TAP** customers have the benefit of 
-installing **Tanzu Postgres** using the **Tanzu cli**. In addition to the standard **Helm** packaging, **Tanzu Postgres** provides 
-packaging for the operator that uses **Carvel's** **imgpkg** format, which is deployed via **Carvel's** **kapp-controller**.
-This approach allows TAP operators to use the same unified toolchain for managing **Tanzu Postgres** that is used for other TAP packages.
-
-First, confirm that the **Tanzu Data Services** package is available in the target registry that will be used for the install:
-```
-echo {{ DATA_E2E_REGISTRY_PASSWORD }} | docker login registry-1.docker.io --username={{ DATA_E2E_REGISTRY_USERNAME }} --password-stdin; if docker manifest inspect {{ DATA_E2E_REGISTRY_USERNAME }}/tds-packages:{{DATA_E2E_TDS_PACKAGE_VERSION}} > /dev/null ; then echo "{{ DATA_E2E_REGISTRY_USERNAME }}/tds-packages:{{DATA_E2E_TDS_PACKAGE_VERSION}} was found"; else echo "{{ DATA_E2E_REGISTRY_USERNAME }}/tds-packages:{{DATA_E2E_TDS_PACKAGE_VERSION}} was not found"; fi
-```
-
-Next, export the registry secret that will be used to access the target registry:
-```
-tanzu secret registry add pg-registry-secret --username {{ DATA_E2E_REGISTRY_USERNAME }} --password {{ DATA_E2E_REGISTRY_PASSWORD }} --server {{ DATA_E2E_REGISTRY_USERNAME }} --export-to-all-namespaces --yes --namespace {{session_namespace}}
-```
-
-Verify that there is now an exported secret for the target registry:
-```
-tanzu secret registry list --namespace {{session_namespace}}
-```
-
-With that, now we can add a new **Package Repository** to our TAP install:
-```
-tanzu package repository add tanzu-data-services-repository --url {{ DATA_E2E_REGISTRY_USERNAME }}/tds-packages:{{DATA_E2E_TDS_PACKAGE_VERSION}} --namespace {{session_namespace}}
-```
-
-Verify that the new package repository was added:
-```
-tanzu package available list --namespace {{session_namespace}}
-```
-
-View the `values-schema` which enumerates the operator's default properties: 
-```
-export PG_TANZU_PKG_VERSION=$(tanzu package available list -o json | jq '.[] | select(.name=="postgres-operator.sql.tanzu.vmware.com")["latest-version"]'); tanzu package available get postgres-operator.sql.tanzu.vmware.com/$PG_TANZU_PKG_VERSION --values-schema
-```
-
-The operator's default properties may be overriden using a `values.yaml` manifest file:
-```editor:open-file
-file: ~/other/resources/postgres/postgres-values.yaml
-```
-
-Now install the operator:
-```
-tanzu package install postgres-operator postgres postgres-operator.sql.tanzu.vmware.com --version $PG_TANZU_PKG_VERSION -f ~/other/resources/postgres/postgres-values.yaml --namespace {{session_namespace}}
 ```
 {% endif %}
 

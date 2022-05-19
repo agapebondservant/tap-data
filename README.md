@@ -27,13 +27,27 @@ New entries will be populated as the install proceeds)
 
 * Create a Management Cluster (Optional - required only if management cluster does not exist) 
 ```
-tanzu management-cluster permissions aws set && tanzu management-cluster create new-data-cluster  --file resources/tanzu-aws.yaml -v 6
+tanzu management-cluster permissions aws set && tanzu management-cluster create <your-management-cluster-name>  --file  -v 6
 ```
 (NOTE: Follow instructions for deploying a Tanzu Management cluster here: https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-index.html)
 
 * Create new cluster for Educates platform: 
 ```
-tanzu cluster create tanzu-data-tap-cluster --file resources/tanzu-aws.yaml; watch tanzu cluster get tanzu-data-tap-cluster; tanzu cluster kubeconfig get tanzu-data-tap-cluster --admin
+tanzu login 
+tanzu cluster create <your-cluster-name> --file resources/tanzu-aws.yaml
+watch tanzu cluster get <your-cluster-name>
+tanzu cluster kubeconfig get <your-cluster-name> --admin
+kubectl config use-context <your-cluster-name>-admin@<your-cluster-name>
+```
+
+* Update manifests as appropriate:
+```
+source .env
+for orig in `find . -name "*.in.*" -type f`; do
+  target=$(echo $orig | sed 's/\.in//')
+  envsubst < $orig > $target
+  grep -qxF $target .gitignore || echo $target >> .gitignore
+done
 ```
 
 * Create the default storage class (ensure that it is called generic, that the volume binding mode is WaitForFirstCustomer instead of Immediate, and the reclaimPolicy should be Retain) 
@@ -74,11 +88,15 @@ kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.5
 
 * Deploy CERT-MANAGER-ISSUER  (self-signed), CERTIFICATE-SIGNING-REQUEST, CERT-MANAGER-ISSUER (CA):
 ```
-kubectl apply -f resources/cert-manager-issuer.yaml)
+kubectl apply -f resources/cert-manager-issuer.yaml
 ```
 
-* Install Istio: 
+* Install SealedSecrets:
 ```
+kubectl apply -f https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.17.4/controller.yaml
+```
+
+* Install Istio: (used by Multi-site workshops, Gemfire workshops)
 other/resources/bin/istioctl install --set profile=demo -y; 
 #kubectl label pods istio-injection=enabled --selector=<your selector> --namespace=<your namespace>;
 export INGRESS_HOST=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].hostname}');
@@ -330,10 +348,6 @@ other/resources/istio-1.13.2/bin/istioctl install --set profile=demo-tanzu --set
 ```
 other/resources/istio-1.13.2/bin/istioctl install --set profile=demo-tanzu --set installPackagePath=other/resources/istio-1.13.2/manifests -y
 ```
-* Install SealedSecrets:
-```
-kubectl apply -f https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.17.4/controller.yaml
-```
   
 * Generate kubeconfig for accessing secondary cluster: (Must install kubeseal: https://github.com/bitnami-labs/sealed-secrets)
 (On secondary cluster:)
@@ -389,7 +403,7 @@ docker login registry-1.docker.io
 docker login registry.tanzu.vmware.com
 export INSTALL_REGISTRY_USERNAME=$DATA_E2E_REGISTRY_USERNAME
 export INSTALL_REGISTRY_PASSWORD=$DATA_E2E_REGISTRY_PASSWORD
-export TAP_VERSION=1.0.2
+export TAP_VERSION=1.1.0
 export INSTALL_REGISTRY_HOSTNAME=index.docker.io
 imgpkg copy -b registry.tanzu.vmware.com/tanzu-application-platform/tap-packages:${TAP_VERSION} --to-repo index.docker.io/${DATA_E2E_REGISTRY_USERNAME}/tap-packages
 kubectl create ns tap-install
@@ -404,8 +418,6 @@ tanzu package repository get tanzu-tap-repository --namespace tap-install
 tanzu package available list --namespace tap-install
 tanzu package available list tap.tanzu.vmware.com --namespace tap-install
 tanzu package available get tap.tanzu.vmware.com/$TAP_VERSION --values-schema --namespace tap-install
-source .env
-envsubst < resources/tap-values.in.yaml > resources/tap-values.yaml
 tanzu package install tap -p tap.tanzu.vmware.com -v $TAP_VERSION --values-file resources/tap-values.yaml -n tap-install
 ```
 
@@ -431,6 +443,13 @@ tanzu package available list learningcenter.tanzu.vmware.com --namespace tap-ins
 tanzu package install learning-center --package-name learningcenter.tanzu.vmware.com --version 0.1.1 -f resources/learning-center-config.yaml -n tap-install
 kubectl get all -n learningcenter
 tanzu package available list workshops.learningcenter.tanzu.vmware.com --namespace tap-install
+```
+
+* (Optional) Deploy the sample Learning Center Workshop:
+```
+kubectl apply -f resources/workshop-sample.yaml
+kubectl apply -f resources/training-portal-sample.yaml
+watch kubectl get learningcenter-training
 ```
 
 * Install FluxCD controller:
@@ -461,7 +480,7 @@ source .env
 envsubst < resources/tap-gui-values.in.yaml > resources/tap-gui-values.yaml
 tanzu package install tap-gui \
   --package-name tap-gui.tanzu.vmware.com \
-  --version 1.0.2 -n tap-install \
+  --version 1.1.0 -n tap-install \
   -f resources/tap-gui-values.yaml
 ```
 
@@ -507,7 +526,7 @@ resources/deploy-workshop.sh
 ##### Deploy "Tanzu Data With TAP"<a name="workshopa"/>
 Setup pre-reqs for installing Postgres with Tanzu cli:
 ```
-source .env
+source <path-to-your-env-file>
 echo $DATA_E2E_REGISTRY_PASSWORD | docker login registry-1.docker.io --username=$DATA_E2E_REGISTRY_USERNAME --password-stdin
 echo $DATA_E2E_PIVOTAL_REGISTRY_PASSWORD | docker login registry.tanzu.vmware.com --username=$DATA_E2E_PIVOTAL_REGISTRY_USERNAME --password-stdin
 export TDS_VERSION=1.0.0
@@ -518,14 +537,18 @@ Add the following to your `training-portal.yaml` (under **spec.workshops**):
 ```
 - name: data-with-tap
     capacity: 10 #Change the capacity to the number of expected participants
+    reserved: 1
     expires: 120m
     orphaned: 5m
 ```
 
 Run the following:
 ```
+resources/rebuild-docker-image.sh <path-to-your-env-file>
 kubectl apply -f resources/system-profile.yaml
-kubectl apply -f resources/workshop-data-with-tap.yaml
+kubectl apply -f resources/workshop-data-with-tap-external.yaml
+kubectl apply -f <path-to-your-training-portal.yaml>
+watch kubectl get learningcenter-training
 ```
   
 #### Other: How-tos/General Info (not needed for setup)<a name="other"/>
