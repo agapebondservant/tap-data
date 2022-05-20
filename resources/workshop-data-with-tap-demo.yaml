@@ -3,8 +3,8 @@ kind: Workshop
 metadata:
   name: data-with-tap-demo
 spec:
-  title: Tanzu Data with TAP
-  description: (Presenter Mode) Demonstration of features of Tanzu Postgres
+  title: Tanzu Data with TAP (Presenter Mode)
+  description: Demonstration of features of Tanzu Postgres
   vendor: eduk8s.io
   difficulty: beginner
   duration: 120m

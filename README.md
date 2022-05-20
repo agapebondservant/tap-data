@@ -552,10 +552,7 @@ kubectl apply -f resources/workshop-data-with-tap-external.yaml
 kubectl apply -f <path-to-your-training-portal.yaml>
 watch kubectl get learningcenter-training
 (For Presenter Mode:)
-kubectl delete workshoprequests data-with-tap-demo
 kubectl apply -f resources/workshop-data-with-tap-demo.yaml
-kubectl apply -f resources/workshopsessions/workshoprequest-data-with-tap-demo.yaml
-kubectl apply -f resources/workshopsessions/workshopsession-data-with-tap-demo.yaml
 ```
   
 #### Other: How-tos/General Info (not needed for setup)<a name="other"/>
