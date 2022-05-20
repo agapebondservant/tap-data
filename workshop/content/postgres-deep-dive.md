@@ -73,7 +73,7 @@ Return to the pod view:
 :pod
 ```
 
-{% if ENV_WORKSHOP_TOPIC == 'data-with-tap' %}
+{% if ENV_WORKSHOP_TOPIC == 'data-with-tap' or ENV_WORKSHOP_TOPIC == 'data-with-tap-demo' %}
 #### Deploying a Postgres cluster
 
 Next, let's deploy a highly available Tanzu Postgres **cluster**. Here is the manifest:
@@ -153,6 +153,9 @@ printf "Under General tab:\n  Server: pginstance-1.{{session_namespace}}\nUnder 
 ##### Use Tanzu CLI to integrate Service Bindings
 <font color="red">TODO</font>
 {% endif %}
+
+##### Service Catalog with TAP GUI
+<font color="red">TODO</font>
 
 ##### Service Discovery with Tanzu CLI
 <font color="red">TODO</font>
