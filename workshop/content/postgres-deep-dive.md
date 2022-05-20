@@ -1,6 +1,6 @@
-{% if ENV_WORKSHOP_TOPIC == 'data-with-tap' %}
-#### Installing Postgres via the Tanzu cli
 ![High-Level Architecture of Tanzu Postgres operator](images/postgres_ha.png)
+{% if ENV_WORKSHOP_TOPIC == 'data-with-tap-demo' %}
+#### Installing Postgres via the Tanzu cli
 The primary approach for installing the **Tanzu Postgres** operator is by using **Helm**. However, **TAP** customers have the benefit of 
 installing **Tanzu Postgres** using the **Tanzu cli**. In addition to the standard **Helm** packaging, **Tanzu Postgres** provides 
 packaging for the operator that uses **Carvel's** **imgpkg** format, which is deployed via **Carvel's** **kapp-controller**.
@@ -41,10 +41,16 @@ The operator's default properties may be overriden using a `values.yaml` manifes
 file: ~/other/resources/postgres/postgres-values.yaml
 ```
 
+Delete any old instances of the operator:
+```execute
+kubectl create secret docker-registry image-pull-secret --namespace=default --docker-username='{{ DATA_E2E_REGISTRY_USERNAME }}' --docker-password='{{ DATA_E2E_REGISTRY_PASSWORD }}' --dry-run -o yaml | kubectl apply -f - && kubectl create secret docker-registry image-pull-secret --namespace={{ session_namespace }} --docker-username='{{ DATA_E2E_REGISTRY_USERNAME }}' --docker-password='{{ DATA_E2E_REGISTRY_PASSWORD }}' --dry-run -o yaml | kubectl apply -f - && helm uninstall postgres --namespace default; helm uninstall postgres --namespace {{ session_namespace }}; for i in $(kubectl get clusterrole | grep postgres); do kubectl delete clusterrole ${i} > /dev/null 2>&1; done; for i in $(kubectl get clusterrolebinding | grep postgres); do kubectl delete clusterrolebinding ${i} > /dev/null 2>&1; done; for i in $(kubectl get certificate -n cert-manager | grep postgres); do kubectl delete certificate -n cert-manager ${i} > /dev/null 2>&1; done; for i in $(kubectl get clusterissuer | grep postgres); do kubectl delete clusterissuer ${i} > /dev/null 2>&1; done; for i in $(kubectl get mutatingwebhookconfiguration | grep postgres); do kubectl delete mutatingwebhookconfiguration ${i} > /dev/null 2>&1; done; for i in $(kubectl get validatingwebhookconfiguration | grep postgres); do kubectl delete validatingwebhookconfiguration ${i} > /dev/null 2>&1; done; for i in $(kubectl get crd | grep postgres); do kubectl delete crd ${i} > /dev/null 2>&1; done; 
+```
+
 Now install the operator:
 ```execute
 tanzu package install postgres-operator --package-name postgres-operator.sql.tanzu.vmware.com --version $PG_TANZU_PKG_VERSION -f ~/other/resources/postgres/postgres-values.yaml --namespace {{session_namespace}}
 ```
+{% endif %}
 
 The operator deploys a set of **Custom Resource Definitions** which encapsulate various advanced, DB-specific concepts as managed Kubernetes resources.
 The main advantage of the Operator pattern comes from its declarative approach.
@@ -67,6 +73,7 @@ Return to the pod view:
 :pod
 ```
 
+{% if ENV_WORKSHOP_TOPIC == 'data-with-tap' %}
 #### Deploying a Postgres cluster
 
 Next, let's deploy a highly available Tanzu Postgres **cluster**. Here is the manifest:
@@ -85,7 +92,6 @@ View the complete configuration associated with the newly deployed Postgres clus
 ```execute
 kubectl get postgres pginstance-1 -o yaml
 ```
-{% endif %}
 
 #### Integrating Workloads with Service Bindings
 For **TAP** users, the Tanzu Postgres controller makes it easy to take advantage of Kubernetes' **Service Bindings** for seamlessly binding applications
@@ -143,6 +149,7 @@ url: http://pgadmin.{{ ingress_domain }}
 ```execute
 printf "Under General tab:\n  Server: pginstance-1.{{session_namespace}}\nUnder Connection tab:\n  Host name: pginstance-1.{{session_namespace}}.svc.cluster.local\n  Maintenance Database: pginstance-1\n  Username: $(kubectl get secret pginstance-1-app-user-db-secret -n {{session_namespace}} -o jsonpath='{.data.username}' | base64 --decode)\n  Password: $(kubectl get secret pginstance-1-app-user-db-secret -n {{session_namespace}} -o jsonpath='{.data.password}' | base64 --decode)\n"
 ```
+{% endif %}
 
 #### Monitoring Postgres Data (ctd)
 Tanzu Postgres provides a set of scrapeable Prometheus endpoints whose metrics can be collected and forwarded to any OpenMetrics backend.

@@ -1,0 +1,12 @@
+apiVersion: learningcenter.tanzu.vmware.com/v1beta1
+kind: WorkshopEnvironment
+metadata:
+  name: data-with-tap-demo
+spec:
+  workshop:
+    name: data-with-tap-demo
+  request:
+    enabled: true
+    token: data-with-tap-demo
+  session:
+    username: eduk8s

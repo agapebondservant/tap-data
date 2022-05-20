@@ -1,54 +1,38 @@
 modules:
     demo-overview:
         name: Demo Overview
-        exit_sign: Deploy Data Services
     deploy-postgres:
         name: Deploy Postgres
-        exit_sign: Deploy RabbitMQ
     postgres-deep-dive:
-      name: Postgres Deep Dive
-      exit_sign: Complete Workshop
+        name: Postgres Deep Dive
     data-with-tap:
-      name: Tanzu Data with TAP
+        name: Tanzu Data with TAP
     deploy-rabbitmq:
         name: Deploy RabbitMQ
-        exit_sign: A Look at Cloud Native Data Pipelines
     rabbitmq-deep-dive:
         name: RabbitMQ Deep Dive
-        exit_sign: Complete Workshop
     rabbitmq-commercial-features:
-      name: RabbitMQ Commercial Features
-      exit_sign: A Look at Cloud Native Data Pipelines
+        name: RabbitMQ Commercial Features
     cloud-native-datapipelines:
         name: Implementing Data Pipelines
-        exit_sign: Next
     create-file-ingest-pipeline:
         name: Create File Ingestion Pipeline
-        exit_sign: Complete Workshop
     deploy-greenplum:
         name: Deploy Data Warehouse
-        exit_sign: Deploy IMDG
     deploy-imdg:
         name: Deploy IMDG
-        exit_sign: Create Data Pipeline
     gemfire-deep-dive:
         name: Gemfire Deep Dive
-        exit_sign: Create Data Pipeline
     deploying-spring-cloud-gateway:
         name: Deploy Spring Cloud Gateway
-        exit_sign: Create Data Pipeline
     create-datapipeline:
         name: Create Data Pipeline
-        exit_sign: Implement Data Analytics
     implement-data-analytics:
       name: Implement Data Analytics
-      exit_sign: Handling Data Operations
     handling-data-operations:
       name: Handling Data Operations
-      exit_sign: Complete Workshop
     deploy-mysql:
       name: Deploy MySQL
-      exit_sign: Complete Workshop
 config:
     vars:
     - name: DATA_E2E_REGISTRY_USERNAME

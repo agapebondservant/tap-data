@@ -1,0 +1,8 @@
+apiVersion: learningcenter.tanzu.vmware.com/v1beta1
+kind: WorkshopRequest
+metadata:
+  name: data-with-tap-demo
+spec:
+  environment:
+    name: data-with-tap-demo
+    token: data-with-tap-demo
