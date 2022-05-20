@@ -57,7 +57,7 @@ The main advantage of the Operator pattern comes from its declarative approach.
 Users can focus on defining domain objects,
 while delegating their underlying implementation logic to the operator's controller, which manages their state via reconciliation loops.
 
-Here is a list of the **Custom Resource Definitions** that were deployed by the operator:
+Here is a list of the **Custom Resource Definitions** that were deployed by the operator: <font color="red">NOTE: Wait until the **postgres-operator** pod shows up in the lower console:</font>
 
 ```execute
 clear && kubectl api-resources --api-group=sql.tanzu.vmware.com
@@ -149,13 +149,19 @@ url: http://pgadmin.{{ ingress_domain }}
 ```execute
 printf "Under General tab:\n  Server: pginstance-1.{{session_namespace}}\nUnder Connection tab:\n  Host name: pginstance-1.{{session_namespace}}.svc.cluster.local\n  Maintenance Database: pginstance-1\n  Username: $(kubectl get secret pginstance-1-app-user-db-secret -n {{session_namespace}} -o jsonpath='{.data.username}' | base64 --decode)\n  Password: $(kubectl get secret pginstance-1-app-user-db-secret -n {{session_namespace}} -o jsonpath='{.data.password}' | base64 --decode)\n"
 ```
+
+##### Use Tanzu CLI to integrate Service Bindings
+<font color="red">TODO</font>
 {% endif %}
 
-#### Monitoring Postgres Data (ctd)
-Tanzu Postgres provides a set of scrapeable Prometheus endpoints whose metrics can be collected and forwarded to any OpenMetrics backend.
+##### Service Discovery with Tanzu CLI
+<font color="red">TODO</font>
+
+##### Multi-Cluster Operations with Service Toolkit
+<font color="red">TODO: ROADMAP ITEM (not yet GA)</font>
 
 {% if ENV_WORKSHOP_TOPIC == 'temp' %}
-##### <i>With Datadog:</i>
+##### Monitoring With Datadog:
 Set up the Datadog agent for Kubernetes with Prometheus Autodiscovery enabled:
 ```editor:open-file
 file: ~/other/resources/datadog/data-dog.yaml
@@ -186,7 +192,7 @@ url: https://app.datadoghq.com/screen/integration/235/postgres---overview?_gl=1*
 ```
 {% endif %}
 
-##### <i>With Wavefront:</i>
+##### Monitoring With Wavefront:
 <font color="red">TODO</font>
 
 #### Secret Management with Vault
