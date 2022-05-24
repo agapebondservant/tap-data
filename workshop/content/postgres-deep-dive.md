@@ -287,5 +287,5 @@ url: https://app.datadoghq.com/screen/integration/235/postgres---overview?_gl=1*
 ##### Monitoring With Wavefront:
 <font color="red">TODO</font>
 
-#### Secret Management with Vault
+##### Secret Management with Vault
 <font color="red">TODO</font>
