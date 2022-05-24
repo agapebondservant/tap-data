@@ -238,6 +238,7 @@ kubectl apply -f ~/other/resources/postgres/postgres-tap-resourceclaimpolicy.yam
 
 ##### Multi-Cluster Operations with Services Toolkit
 <font color="red">ROADMAP ITEM (not yet GA)</font>
+{% endif %}
 
 {% if ENV_WORKSHOP_TOPIC == 'temp' %}
 ##### Monitoring With Datadog:
