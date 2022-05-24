@@ -11,7 +11,7 @@ spec:
   url: https://github.com/agapebondservant/tap-data
   content:
     image: oawofolu/tanzu-data-tap-workshop:latest
-    files: github.com/agapebondservant/tap-data
+    files: github.com/agapebondservant/tap-data?ref=main
   session:
     env:
     - name: ENABLE_JUPYTERLAB

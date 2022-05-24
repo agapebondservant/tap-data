@@ -115,7 +115,7 @@ kubectl explain postgres.status.binding.name
 of a **Service Offering**, which uses **Cluster Resource* CRs to define the metadata that describes the **Service Resource** and its topology.
 
 Here is a **Cluster Resource** that can be used to advertise Postgres resources:
-```open-file
+```editor:open-file
 file: ~/other/resources/postgres/postgres-cluster-resource.yaml
 ```
 
@@ -221,7 +221,7 @@ kubectl get secret pginstance-1-app-user-db-secret -oyaml
 
 By default, the **Resource Claim** can only be claimed by Workload resources in the same namespace. 
 Expose the **Resource Claim** to other namespaces for consumption by deploying a new **ResourceClaimPolicy** - shown here:
-```open-file
+```editor:open-file
 file: ~/other/resources/postgres/postgres-tap-resourceclaimpolicy.yaml
 ```
 
