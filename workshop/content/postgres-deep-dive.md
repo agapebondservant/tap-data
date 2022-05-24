@@ -13,7 +13,7 @@ echo {{ DATA_E2E_REGISTRY_PASSWORD }} | docker login registry-1.docker.io --user
 
 Next, export the registry secret that will be used to access the target registry:
 ```execute
-cd ~ && tanzu init && tanzu plugin install --local bin/cli secret && tanzu secret registry add regsecret --username {{ DATA_E2E_REGISTRY_USERNAME }} --password {{ DATA_E2E_REGISTRY_PASSWORD }} --server {{ DATA_E2E_REGISTRY_USERNAME }} --export-to-all-namespaces --yes --namespace default
+cd ~ && tanzu init && tanzu plugin install --local bin/cli secret && tanzu secret registry delete regsecret --namespace default -y || true; tanzu secret registry add regsecret --username {{ DATA_E2E_REGISTRY_USERNAME }} --password {{ DATA_E2E_REGISTRY_PASSWORD }} --server {{ DATA_E2E_REGISTRY_USERNAME }} --export-to-all-namespaces --yes --namespace default
 ```
 
 Verify that there is now an exported secret for the target registry:
