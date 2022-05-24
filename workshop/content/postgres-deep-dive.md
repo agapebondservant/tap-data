@@ -100,7 +100,7 @@ kubectl get postgres pginstance-1 -o yaml
 ```
 ##### Service Discovery via Service Offering
 **Services Toolkit** includes the notion of a **Service Resource**.
-A **Service Resource** represents any software component that integrates with **Workloads**. As a general principle,
+A **Service Resource** represents any software component that integrates with **Workloads**. Technically,
 there are no restrictions on what a **Service Resource** can represent; it can literally be anything,
 from a database to a DNS record to a message broker to an API credential. However, a **Service Resource** must conform to
 the specification defined by the **Service Binding for Kubernetes** standard, which is that it must expose a Kubernetes-based API
@@ -126,7 +126,7 @@ kubectl apply -f ~/other/resources/postgres/postgres-cluster-resource.yaml
 
 Now, confirm that the Postgres Service can be discovered using the **tanzu** cli via the Services plug-in: <font color="red">NOTE:</font> Should show the Postgres resource.
 ```execute
-tanzu services types list
+cd ~ && tanzu plugin install --local bin/cli services && tanzu services types list
 ```
 
 Also confirm that the previously deployed Postgres instance is discoverable via the Services plug-in: <font color="red">NOTE:</font> Should show the **pginstance-1** Postgres instance.
@@ -179,19 +179,19 @@ The **Service Binding** specification works by volume mounting the secrets deliv
 into the Workload's pod container(s). The secrets are mounted at a dynamically named directory. An environment variable, 
 called SERVICE_BINDING_ROOT, points to the root of the mount directory.
 
-View the contents of the Service Binding directory: first launch a shell session in the Workload's container:
-```execute-2
-s
-```
-
-View the Service Binding directory's content:
+Start a shell session in the workload's container: (<font color="red">NOTE:</font> The directory should contain the subfolder **db**, which is the binding name):
 ```execute
-ls $SERVICE_BINDING_ROOT
+export MY_SERVICE_BINDING_CTR=$(tanzu apps workload get pet-clinic | grep "pet-clinic.*Running" | head -n 1 | cut -d' ' -f1); kubectl exec $MY_SERVICE_BINDING_CTR -it -c workload -- bash
 ```
 
-Exit the container's shell:
-```execute-2
-exit
+Next, view the Service Binding directory's content:
+```execute
+echo "Service Bindng Mount Path: $SERVICE_BINDING_ROOT"; ls -ltr $SERVICE_BINDING_ROOT/db
+```
+
+View specific entries - for example, **type** and **provider** are required by the spec, **username** is optional:
+```execute
+echo Type: $(cat $SERVICE_BINDING_ROOT/db/type); echo Provider: $(cat $SERVICE_BINDING_ROOT/db/provider); echo Username: $(cat $SERVICE_BINDING_ROOT/db/username); exit
 ```
 
 #### Integrating Workloads with Service Bindings using Resource Claims
@@ -206,12 +206,12 @@ directly.
 
 Create the **Resource Claim** which will be referenced by the **Service Binding** <font color="red">NOTE: Use **tanzu cli** here; however, this can also be accomplished via declarative YAML files.</font>
 ```execute
-clear && tanzu init && tanzu plugin install --local bin/cli services && tanzu service claim create db --resource-name pginstance-1 --resource-namespace {{ session_namespace }} --resource-kind Postgres --resource-api-version sql.tanzu.vmware.com/v1
+clear && tanzu init && tanzu plugin install --local bin/cli services && tanzu service claim create db2 --resource-name pginstance-1 --resource-namespace {{ session_namespace }} --resource-kind Postgres --resource-api-version sql.tanzu.vmware.com/v1
 ```
 
 View the details of the **Resource Claim** that was created:
 ```execute
-kubectl get resourceclaim db -oyaml
+kubectl get resourceclaim db2 -oyaml
 ```
 
 Notice that the **Resource Claim** references the Postgres DB secret in its **status.binding.name** field. View more details about the secret:
@@ -228,6 +228,21 @@ file: ~/other/resources/postgres/postgres-tap-resourceclaimpolicy.yaml
 Create the **ResourceClaimPolicy**:
 ```execute
 kubectl apply -f ~/other/resources/postgres/postgres-tap-resourceclaimpolicy.yaml
+```
+
+Now the Postgres DB should be consumable in other namespaces. To demonstrate, create a new namespace:
+```execute
+kubectl create ns test-{{session_namespace}}
+```
+
+Using the **Apps** plugin of **tanzu cli** this time, create a workload in the new namespace, and bind to the ResourceClaim created above:
+```execute
+tanzu apps workload create ext-pet-clinic --namespace test-{{session_namespace}} --image "index.docker.io/oawofolu/pet-clinic-data-samples-w03-s001@sha256:0d0af5b3812afcb19efe8565ebb38068eb62c1e5c0cfa2fc05421b037a3314d5" --service-ref "db2=sql.tanzu.vmware.com/v1:Postgres:pginstance-1" --tail
+```
+
+Get the app details once deployment completes:
+```execute
+tanzu apps workload get ext-pet-clinic --namespace test-{{session_namespace}}
 ```
 
 ##### Services Toolkit RBAC

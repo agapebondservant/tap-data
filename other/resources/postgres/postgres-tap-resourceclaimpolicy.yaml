@@ -5,6 +5,6 @@ metadata:
 spec:
   consumingNamespaces:
     - "*"
-  type:
+  subject:
     group: sql.tanzu.vmware.com/v1
     kind: Postgres
