@@ -248,9 +248,6 @@ tanzu apps workload get ext-pet-clinic --namespace test-{{session_namespace}}
 ##### Services Toolkit RBAC
 <font color="red">TODO</font>
 
-##### Service Catalog with TAP GUI
-<font color="red">TODO</font>
-
 ##### Multi-Cluster Operations with Services Toolkit
 <font color="red">ROADMAP ITEM (not yet GA)</font>
 {% endif %}
