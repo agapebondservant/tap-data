@@ -1,0 +1,13 @@
+apiVersion: services.apps.tanzu.vmware.com/v1alpha1
+kind: ClusterResource
+metadata:
+  name: postgrescluster
+  labels:
+    services.apps.tanzu.vmware.com/api-group: sql.tanzu.vmware.com
+    services.apps.tanzu.vmware.com/api-kind: Postgres
+spec:
+  resourceRef:
+    group: sql.tanzu.vmware.com
+    kind: Postgres
+  shortDescription: "Tanzu Postgres cluster"
+  longDescription: "Postgres is an open source object-relational database."

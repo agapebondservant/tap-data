@@ -1,0 +1,16 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: resource-claims-pg-role
+  labels:
+    resourceclaims.services.apps.tanzu.vmware.com/controller: "true"
+rules:
+  - apiGroups:
+      - sql.tanzu.vmware.com/v1
+    resources:
+      - Postgres
+    verbs:
+      - get
+      - list
+      - watch
+      - update

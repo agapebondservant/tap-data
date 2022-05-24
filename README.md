@@ -553,6 +553,7 @@ kubectl apply -f <path-to-your-training-portal.yaml>
 watch kubectl get learningcenter-training
 (For Presenter Mode:)
 kubectl apply -f resources/workshop-data-with-tap-demo.yaml
+watch kubectl get learningcenter-training
 ```
   
 #### Other: How-tos/General Info (not needed for setup)<a name="other"/>

@@ -1,0 +1,10 @@
+apiVersion: services.apps.tanzu.vmware.com/v1alpha1
+kind: ResourceClaimPolicy
+metadata:
+  name: pg-policy
+spec:
+  consumingNamespaces:
+    - "*"
+  type:
+    group: sql.tanzu.vmware.com/v1
+    kind: Postgres

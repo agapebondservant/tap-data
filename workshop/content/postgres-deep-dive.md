@@ -13,44 +13,51 @@ echo {{ DATA_E2E_REGISTRY_PASSWORD }} | docker login registry-1.docker.io --user
 
 Next, export the registry secret that will be used to access the target registry:
 ```execute
-cd ~ && tanzu init && tanzu plugin install --local bin/cli secret && tanzu secret registry add pg-registry-secret --username {{ DATA_E2E_REGISTRY_USERNAME }} --password {{ DATA_E2E_REGISTRY_PASSWORD }} --server {{ DATA_E2E_REGISTRY_USERNAME }} --export-to-all-namespaces --yes --namespace {{session_namespace}}
+cd ~ && tanzu init && tanzu plugin install --local bin/cli secret && tanzu secret registry add regsecret --username {{ DATA_E2E_REGISTRY_USERNAME }} --password {{ DATA_E2E_REGISTRY_PASSWORD }} --server {{ DATA_E2E_REGISTRY_USERNAME }} --export-to-all-namespaces --yes --namespace default
 ```
 
 Verify that there is now an exported secret for the target registry:
 ```execute
-tanzu secret registry list --namespace {{session_namespace}}
+tanzu secret registry list --namespace default
 ```
 
-With that, now we can add a new **Package Repository** to our TAP install:
+With that, now we can add the **Package Repository** for **Tanzu Postgres** to our TAP install:
 ```execute
-tanzu package repository add tanzu-data-services-repository --url {{ DATA_E2E_REGISTRY_USERNAME }}/tds-packages:{{DATA_E2E_TDS_PACKAGE_VERSION}} --namespace {{session_namespace}}
+tanzu package repository add tanzu-postgres-repository --url {{ DATA_E2E_REGISTRY_USERNAME }}/tds-packages:{{DATA_E2E_TDS_PACKAGE_VERSION}} --namespace default
 ```
 
 Verify that the new package repository was added:
 ```execute
-tanzu package available list --namespace {{session_namespace}}
+tanzu package available list --namespace default
 ```
 
 View the `values-schema` which enumerates the operator's default properties: 
 ```execute
-export PG_TANZU_PKG_VERSION=$(tanzu package available list -o json --namespace {{session_namespace}}| jq '.[] | select(.name=="postgres-operator.sql.tanzu.vmware.com")["latest-version"]' | tr -d '"'); tanzu package available get postgres-operator.sql.tanzu.vmware.com/$PG_TANZU_PKG_VERSION --values-schema --namespace {{session_namespace}}
+export PG_TANZU_PKG_VERSION=$(tanzu package available list -o json --namespace default | jq '.[] | select(.name=="postgres-operator.sql.tanzu.vmware.com")["latest-version"]' | tr -d '"'); tanzu package available get postgres-operator.sql.tanzu.vmware.com/$PG_TANZU_PKG_VERSION --values-schema --namespace default
 ```
 
-The operator's default properties may be overriden using a `values.yaml` manifest file:
-```editor:open-file
+The operator's default properties may be overidden using a `values.yaml` manifest file 
+(<font color="red">NOTE:</font> The value of the Docker registry secret, **dockerRegistrySecretName**, is the secret that was exported earlier):
+```editor:select-matching-text
 file: ~/other/resources/postgres/postgres-values.yaml
+text: "dockerRegistrySecretName"
 ```
 
 Delete any old instances of the operator:
 ```execute
-kubectl create secret docker-registry image-pull-secret --namespace=default --docker-username='{{ DATA_E2E_REGISTRY_USERNAME }}' --docker-password='{{ DATA_E2E_REGISTRY_PASSWORD }}' --dry-run -o yaml | kubectl apply -f - && kubectl create secret docker-registry image-pull-secret --namespace={{ session_namespace }} --docker-username='{{ DATA_E2E_REGISTRY_USERNAME }}' --docker-password='{{ DATA_E2E_REGISTRY_PASSWORD }}' --dry-run -o yaml | kubectl apply -f - && helm uninstall postgres --namespace default; helm uninstall postgres --namespace {{ session_namespace }}; for i in $(kubectl get clusterrole | grep postgres); do kubectl delete clusterrole ${i} > /dev/null 2>&1; done; for i in $(kubectl get clusterrolebinding | grep postgres); do kubectl delete clusterrolebinding ${i} > /dev/null 2>&1; done; for i in $(kubectl get certificate -n cert-manager | grep postgres); do kubectl delete certificate -n cert-manager ${i} > /dev/null 2>&1; done; for i in $(kubectl get clusterissuer | grep postgres); do kubectl delete clusterissuer ${i} > /dev/null 2>&1; done; for i in $(kubectl get mutatingwebhookconfiguration | grep postgres); do kubectl delete mutatingwebhookconfiguration ${i} > /dev/null 2>&1; done; for i in $(kubectl get validatingwebhookconfiguration | grep postgres); do kubectl delete validatingwebhookconfiguration ${i} > /dev/null 2>&1; done; for i in $(kubectl get crd | grep postgres); do kubectl delete crd ${i} > /dev/null 2>&1; done; 
+for i in $(kubectl get clusterrole | grep postgres); do kubectl delete clusterrole ${i} > /dev/null 2>&1; done; for i in $(kubectl get clusterrolebinding | grep postgres); do kubectl delete clusterrolebinding ${i} > /dev/null 2>&1; done; for i in $(kubectl get certificate -n cert-manager | grep postgres); do kubectl delete certificate -n cert-manager ${i} > /dev/null 2>&1; done; for i in $(kubectl get clusterissuer | grep postgres); do kubectl delete clusterissuer ${i} > /dev/null 2>&1; done; for i in $(kubectl get mutatingwebhookconfiguration | grep postgres); do kubectl delete mutatingwebhookconfiguration ${i} > /dev/null 2>&1; done; for i in $(kubectl get validatingwebhookconfiguration | grep postgres); do kubectl delete validatingwebhookconfiguration ${i} > /dev/null 2>&1; done; for i in $(kubectl get crd | grep postgres); do kubectl delete crd ${i} > /dev/null 2>&1; done; 
 ```
 
 Now install the operator:
 ```execute
-tanzu package install postgres-operator --package-name postgres-operator.sql.tanzu.vmware.com --version $PG_TANZU_PKG_VERSION -f ~/other/resources/postgres/postgres-values.yaml --namespace {{session_namespace}}
+tanzu package install postgres-operator --package-name postgres-operator.sql.tanzu.vmware.com --version $PG_TANZU_PKG_VERSION -f ~/other/resources/postgres/postgres-values.yaml --namespace default
 ```
 {% endif %}
+
+View the logs associated with the operator to confirm its successful deployment:
+```execute
+kubectl logs -l app=postgres-operator --namespace default
+```
 
 The operator deploys a set of **Custom Resource Definitions** which encapsulate various advanced, DB-specific concepts as managed Kubernetes resources.
 The main advantage of the Operator pattern comes from its declarative approach.
@@ -58,7 +65,6 @@ Users can focus on defining domain objects,
 while delegating their underlying implementation logic to the operator's controller, which manages their state via reconciliation loops.
 
 Here is a list of the **Custom Resource Definitions** that were deployed by the operator: <font color="red">NOTE: Wait until the **postgres-operator** pod shows up in the lower console:</font>
-
 ```execute
 clear && kubectl api-resources --api-group=sql.tanzu.vmware.com
 ```
@@ -92,10 +98,45 @@ View the complete configuration associated with the newly deployed Postgres clus
 ```execute
 kubectl get postgres pginstance-1 -o yaml
 ```
+##### Service Discovery via Service Offering
+**Services Toolkit** includes the notion of a **Service Resource**.
+A **Service Resource** represents any software component that integrates with **Workloads**. As a general principle,
+there are no restrictions on what a **Service Resource** can represent; it can literally be anything,
+from a database to a DNS record to a message broker to an API credential. However, a **Service Resource** must conform to
+the specification defined by the **Service Binding for Kubernetes** standard, which is that it must expose a Kubernetes-based API
+resource that conforms to the **Provisioned Service** duck type, **status.binding.name**.
+
+Confirm that the **Postgres** CR includes **status.binding.name** in its schema:
+```execute
+kubectl explain postgres.status.binding.name
+```
+
+**Service Resources** must be advertised by Service Operators so that they can be discovered. With **Services Toolkit**, this is done using the concept
+of a **Service Offering**, which uses **Cluster Resource* CRs to define the metadata that describes the **Service Resource** and its topology.
+
+Here is a **Cluster Resource** that can be used to advertise Postgres resources:
+```open-file
+file: ~/other/resources/postgres/postgres-cluster-resource.yaml
+```
+
+Deploy the **Cluster Resource**:
+```execute
+kubectl apply -f ~/other/resources/postgres/postgres-cluster-resource.yaml
+```
+
+Now, confirm that the Postgres Service can be discovered using the **tanzu** cli via the Services plug-in: <font color="red">NOTE:</font> Should show the Postgres resource.
+```execute
+tanzu services types list
+```
+
+Also confirm that the previously deployed Postgres instance is discoverable via the Services plug-in: <font color="red">NOTE:</font> Should show the **pginstance-1** Postgres instance.
+```execute
+tanzu services instances list
+```
 
 #### Integrating Workloads with Service Bindings
 For **TAP** users, the Tanzu Postgres controller makes it easy to take advantage of Kubernetes' **Service Bindings** for seamlessly binding applications
-(called **Workloads**) to database instances (called **Services**).
+(called **Workloads**) to database instances (called **Service Resources**).
 
 View the manifest for the integration here:
 ```editor:select-matching-text
@@ -104,26 +145,9 @@ text: "serviceClaims"
 after: 5
 ```
 
-Notice the highlighted section which defines the **Resource Claim** for the Service Binding. The **Resource Claim** represents a request
-to access a specific **Provisioned Service**. The requested service must match the criteria specified by the claim. Once matched, a **Service Binding**
-will be created for the service.
-
-{% if ENV_WORKSHOP_TOPIC == 'temp' %}
-Create the **Resource Claim** which will be referenced by the **Service Binding**:
-```execute
-clear && tanzu init && tanzu plugin install --local bin/cli services && tanzu service claim create db --resource-name pginstance-1 --resource-namespace {{ session_namespace }} --resource-kind Postgres --resource-api-version sql.tanzu.vmware.com/v1
-```
-
-Expose the **Resource Claim** to other namespaces for consumption by deploying a new **ResourceClaimPolicy** - shown here:
-```open-file
-file: ~/other/resources/postgres/postgres-tap-resourceclaimpolicy.yaml
-```
-
-Create the **ResourceClaimPolicy**:
-```execute
-kubectl apply -f ~/other/resources/postgres/postgres-tap-resourceclaimpolicy.yaml
-```
-{% endif %}
+Notice the highlighted section which defines the **Service Binding**. A **Service Binding** is a Kubernetes standard for sharing 
+a **Service**'s connectivity information with a **Workload**. In **Services Toolkit**, it is also represented as a Custom Resource 
+which conforms to the **Provisioned Service** spec, meaning that it references a **Secret** in its **status.binding.name** field**.
 
 Create the **Service Binding** by applying the manifest to the cluster:
 ```execute
@@ -145,23 +169,75 @@ View the newly deployed data in **pgAdmin**:
 url: http://pgadmin.{{ ingress_domain }}
 ```
 
-<font color="red">NOTE:</font> Reuse the credentials provided below if needed:
+<font color="red">NOTE:</font> Use the credentials provided below:
 ```execute
 printf "Under General tab:\n  Server: pginstance-1.{{session_namespace}}\nUnder Connection tab:\n  Host name: pginstance-1.{{session_namespace}}.svc.cluster.local\n  Maintenance Database: pginstance-1\n  Username: $(kubectl get secret pginstance-1-app-user-db-secret -n {{session_namespace}} -o jsonpath='{.data.username}' | base64 --decode)\n  Password: $(kubectl get secret pginstance-1-app-user-db-secret -n {{session_namespace}} -o jsonpath='{.data.password}' | base64 --decode)\n"
 ```
 
-##### Use Tanzu CLI to integrate Service Bindings
+#### Inspecting Service Binding in the Workload
+The **Service Binding** specification works by volume mounting the secrets delivered by the **Provisioned Service** resource(s) 
+into the Workload's pod container(s). The secrets are mounted at a dynamically named directory. An environment variable, 
+called SERVICE_BINDING_ROOT, points to the root of the mount directory.
+
+View the contents of the Service Binding directory: first launch a shell session in the Workload's container:
+```execute-2
+s
+```
+
+View the Service Binding directory's content:
+```execute
+ls $SERVICE_BINDING_ROOT
+```
+
+Exit the container's shell:
+```execute-2
+exit
+```
+
+#### Integrating Workloads with Service Bindings using Resource Claims
+**Services Toolkit** includes the notion of a **Resource Claim**. A **Resource Claim** represents a request
+to access a specific **Provisioned Service**, and it is a Custom Resource which also conforms to the **Provisioned Service** spec (similar to
+**Service Bindings**). The requested service must match the criteria specified by the claim.
+Once matched, a **Service Binding** will be created for the service. **Resource Claims** are the recommended approach for
+creating **Service Bindings**, as it enforces decoupling between the application and the service being claimed.
+
+Let's deploy a new version of the **Workload**: this time, we will use **Resource Claims** instead of binding to the **Service Resource** 
+directly. 
+
+Create the **Resource Claim** which will be referenced by the **Service Binding** <font color="red">NOTE: Use **tanzu cli** here; however, this can also be accomplished via declarative YAML files.</font>
+```execute
+clear && tanzu init && tanzu plugin install --local bin/cli services && tanzu service claim create db --resource-name pginstance-1 --resource-namespace {{ session_namespace }} --resource-kind Postgres --resource-api-version sql.tanzu.vmware.com/v1
+```
+
+View the details of the **Resource Claim** that was created:
+```execute
+kubectl get resourceclaim db -oyaml
+```
+
+Notice that the **Resource Claim** references the Postgres DB secret in its **status.binding.name** field. View more details about the secret:
+```execute
+kubectl get secret pginstance-1-app-user-db-secret -oyaml
+```
+
+By default, the **Resource Claim** can only be claimed by Workload resources in the same namespace. 
+Expose the **Resource Claim** to other namespaces for consumption by deploying a new **ResourceClaimPolicy** - shown here:
+```open-file
+file: ~/other/resources/postgres/postgres-tap-resourceclaimpolicy.yaml
+```
+
+Create the **ResourceClaimPolicy**:
+```execute
+kubectl apply -f ~/other/resources/postgres/postgres-tap-resourceclaimpolicy.yaml
+```
+
+##### Services Toolkit RBAC
 <font color="red">TODO</font>
-{% endif %}
 
 ##### Service Catalog with TAP GUI
 <font color="red">TODO</font>
 
-##### Service Discovery with Tanzu CLI
-<font color="red">TODO</font>
-
-##### Multi-Cluster Operations with Service Toolkit
-<font color="red">TODO: ROADMAP ITEM (not yet GA)</font>
+##### Multi-Cluster Operations with Services Toolkit
+<font color="red">ROADMAP ITEM (not yet GA)</font>
 
 {% if ENV_WORKSHOP_TOPIC == 'temp' %}
 ##### Monitoring With Datadog:
