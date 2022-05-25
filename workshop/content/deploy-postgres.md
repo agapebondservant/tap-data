@@ -86,7 +86,6 @@ This time, our data persists even after restarting:
 ```execute
 export tmp_db_db=$(kubectl get secrets pginstance-1-db-secret -o jsonpath='{.data.dbname}' | base64 --decode) && export tmp_db_user=$(kubectl get secrets pginstance-1-db-secret -o jsonpath='{.data.username}' | base64 --decode) && export tmp_db_pass=$(kubectl get secrets pginstance-1-db-secret -o jsonpath='{.data.password}' | base64 --decode) && kubectl delete deployment petclinic-app --ignore-not-found=true --namespace={{ session_namespace }} && kubectl delete svc petclinic-app --ignore-not-found=true --namespace={{ session_namespace }} && sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/petclinic/petclinic-app-postgres-2.yaml && sed -i "s/YOUR_DATASOURCE_URL/jdbc:postgresql:\/\/pginstance-1:5432\/${tmp_db_db}/g" ~/other/resources/petclinic/petclinic-app-postgres-2.yaml && sed -i "s/YOUR_DATASOURCE_USERNAME/${tmp_db_user}/g" ~/other/resources/petclinic/petclinic-app-postgres-2.yaml && sed -i "s/YOUR_DATASOURCE_PASSWORD/${tmp_db_pass}/g" ~/other/resources/petclinic/petclinic-app-postgres-2.yaml && kubectl apply -f ~/other/resources/petclinic/petclinic-app-postgres-2.yaml
 ```
-
 {% endif  %}
 
 {% if ENV_WORKSHOP_TOPIC == 'data-file-ingestion' %}
@@ -130,11 +129,25 @@ Tanzu Postgres uses **pg_auto_fail** for automated failover.
 The **monitor** node tracks the state of the cluster and handles activities such as initiations, promotions/demotions, 
 streaming replication (synchronous and asynchronous - synchronous by default).
 
-Let's demonstrate it by killing the primary node by <b>selecting the primary node in the lower console and hitting <font color="red">Ctrl-K</font>.</b>
+{% if ENV_WORKSHOP_TOPIC == 'data-with-tap' or ENV_WORKSHOP_TOPIC == 'data-with-tap-demo' %}
+First, let's add some data to our system. Navigate to the Petclinic app deployed earlier and add some pet related info:
+```dashboard:open-url
+url: http://pet-clinic.{{ session_namespace }}.{{ ingress_domain }}
+```
+{% endif %}
+
+Let's demonstrate HA by killing the primary node by <b>selecting the primary node in the lower console and hitting <font color="red">Ctrl-K</font>.</b>
 Observe the activity in the cluster:
 ```execute
 kubectl exec -it pginstance-1-1 -- bash -c 'pg_autoctl show state'
 ```
+
+{% if ENV_WORKSHOP_TOPIC == 'data-with-tap' or ENV_WORKSHOP_TOPIC == 'data-with-tap-demo' %}
+Confirm that the data added has not been lost:
+```dashboard:open-url
+url: http://pet-clinic.{{ session_namespace }}.{{ ingress_domain }}
+```
+{% endif %}
 
 #### Monitoring Postgres Data
 ![Tanzu Postgres Operator Monitoring](images/postgres_metrics.png)
@@ -246,7 +259,7 @@ Deploy the backup definition. <font color="red">TODO - wait for the 3 Postgres i
 kubectl apply -f ~/other/resources/postgres/postgres-backup.yaml -n {{ session_namespace }}
 ```
 
-View the generated backup files on Minio: <font color="red">TODO - working with DB team</font>
+View the generated backup files on Minio:
 ```dashboard:open-url
 url: https://minio.{{ DATA_E2E_BASE_URL }}/
 ```
@@ -256,7 +269,7 @@ View the backup progress here: <font color="red">NOTE: Hit **Ctrl-C** to exit.</
 watch kubectl get postgresbackup pg-simple-backup -n {{ session_namespace }}
 ```
 
-Information about backups can also be gotten directly from the **pgbackrest** cli: <font color="red">TODO</font>
+Information about backups can also be gotten directly from the **pgbackrest** cli:
 ```execute
 kubectl exec -it pginstance-1-1 -- bash -c 'pgbackrest info --stanza=${BACKUP_STANZA_NAME}'
 ```
@@ -311,7 +324,7 @@ Validate the status of the restore: <font color="red">NOTE: Once the Restore is 
 watch kubectl get postgresrestore.sql.tanzu.vmware.com/pg-simple-restore -n pg-restore-{{ session_namespace }}
 ```
 
-<font color="red">MOTE:</font> Switch back to the original namespace:
+<font color="red">NOTE:</font> Switch back to the original namespace:
 ```execute-2
 2
 ```

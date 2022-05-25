@@ -37,7 +37,7 @@ export PG_TANZU_PKG_VERSION=$(tanzu package available list -o json --namespace d
 ```
 
 The operator's default properties may be overidden using a `values.yaml` manifest file 
-(<font color="red">NOTE:</font> The value of the Docker registry secret, **dockerRegistrySecretName**, is the secret that was exported earlier):
+(<font color="red">NOTE: The value of the Docker registry secret, **dockerRegistrySecretName**, is the secret that was exported earlier</font>):
 ```editor:select-matching-text
 file: ~/other/resources/postgres/postgres-values.yaml
 text: "dockerRegistrySecretName"
@@ -124,13 +124,13 @@ Deploy the **Cluster Resource**:
 kubectl apply -f ~/other/resources/postgres/postgres-cluster-resource.yaml
 ```
 
-Now, confirm that the Postgres Service can be discovered using the **tanzu** cli via the Services plug-in: <font color="red">NOTE:</font> Should show the Postgres resource.
+Now, confirm that the Postgres Service can be discovered using the **tanzu** cli via the Services plug-in: <font color="red">NOTE: Should show the Postgres resource.</font>
 ```execute
 cd ~ && tanzu plugin install --local bin/cli services && tanzu services types list
 ```
 
 Also confirm that the previously deployed Postgres instance is discoverable via the Services plug-in: 
-<font color="red">NOTE: Wait</font> for all 3 Postgres cluster pods to show up in the lower console. Should show the **pginstance-1** Postgres instance.
+<font color="red">NOTE: Wait for all 3 Postgres cluster pods to show up in the lower console. Should show the **pginstance-1** Postgres instance.</font>
 ```execute
 tanzu services instances list
 ```
@@ -171,7 +171,7 @@ View the newly deployed data in **pgAdmin** (use "chart@example.local/SuperSecre
 url: http://pgadmin.{{ ingress_domain }}
 ```
 
-<font color="red">NOTE:</font> Create a connection to the database by clicking on Servers -> Register -> Server and enter the following:
+<font color="red">NOTE: Create a connection to the database by clicking on Servers -> Register -> Server and enter the following:</font>
 ```execute
 printf "Under General tab:\n  Server: pginstance-1.{{session_namespace}}\nUnder Connection tab:\n  Host name: pginstance-1.{{session_namespace}}.svc.cluster.local\n  Maintenance Database: pginstance-1\n  Username: $(kubectl get secret pginstance-1-app-user-db-secret -n {{session_namespace}} -o jsonpath='{.data.username}' | base64 --decode)\n  Password: $(kubectl get secret pginstance-1-app-user-db-secret -n {{session_namespace}} -o jsonpath='{.data.password}' | base64 --decode)\n"
 ```
@@ -181,7 +181,7 @@ The **Service Binding** specification works by volume mounting the secrets deliv
 into the Workload's pod container(s). The secrets are mounted at a dynamically named directory. An environment variable, 
 called SERVICE_BINDING_ROOT, points to the root of the mount directory.
 
-Start a shell session in the workload's container: (<font color="red">NOTE:</font> The directory should contain the subfolder **db**, which is the binding name):
+Start a shell session in the workload's container: (<font color="red">NOTE: The directory should contain the subfolder **db**, which is the binding name</font>):
 ```execute
 clear && export MY_SERVICE_BINDING_CTR=$(tanzu apps workload get pet-clinic | grep -e "pet-clinic.*Running\s\+0" | tail -n 1 | cut -d' ' -f1); kubectl exec $MY_SERVICE_BINDING_CTR -it -c workload -- bash
 ```
@@ -237,9 +237,9 @@ Now the Postgres DB should be consumable in other namespaces. To demonstrate, cr
 kubectl create ns test-{{session_namespace}} --dry-run=client -oyaml | kubectl apply -f -
 ```
 
-Apply RBAC permissions and export the registry secret to the new namespace:
+Prepare to deploy a new Workload (including setting up RBAC permissions and exporting the registry secret to the new namespace):
 ```execute
-kubectl apply -f ~/other/resources/tap/rbac.yaml -n test-{{session_namespace}}; tanzu secret registry add regsecret --username {{ DATA_E2E_REGISTRY_USERNAME }} --password {{ DATA_E2E_REGISTRY_PASSWORD }} --server {{ DATA_E2E_REGISTRY_USERNAME }} --export-to-all-namespaces --yes --namespace test-{{session_namespace}}; kubectl annotate ns test-{{session_namespace}} secretgen.carvel.dev/excluded-from-wildcard-matching- ; kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "tap-registry"}],"secrets":[{"name": "tap-registry"}]}' -n test-{{session_namespace}}
+kubectl apply -f ~/other/resources/tap/rbac.yaml -n test-{{session_namespace}}; tanzu secret registry add regsecret --username {{ DATA_E2E_REGISTRY_USERNAME }} --password {{ DATA_E2E_REGISTRY_PASSWORD }} --server {{ DATA_E2E_REGISTRY_USERNAME }} --export-to-all-namespaces --yes --namespace test-{{session_namespace}}; kubectl annotate ns test-{{session_namespace}} secretgen.carvel.dev/excluded-from-wildcard-matching- ; kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "tap-registry"}],"secrets":[{"name": "tap-registry"}]}' -n test-{{session_namespace}}; kubectl delete workload ext-pet-clinic --namespace test-{{session_namespace}} --ignore-not-found=true;
 ```
 
 Using the **Apps** plugin of **tanzu cli** this time, create a workload in the new namespace, and bind to the ResourceClaim created above:
