@@ -183,7 +183,7 @@ called SERVICE_BINDING_ROOT, points to the root of the mount directory.
 
 Start a shell session in the workload's container: (<font color="red">NOTE:</font> The directory should contain the subfolder **db**, which is the binding name):
 ```execute
-clear && export MY_SERVICE_BINDING_CTR=$(tanzu apps workload get pet-clinic | grep -e "pet-clinic.*Running\s\+0" | head -n 1 | cut -d' ' -f1); kubectl exec $MY_SERVICE_BINDING_CTR -it -c workload -- bash
+clear && export MY_SERVICE_BINDING_CTR=$(tanzu apps workload get pet-clinic | grep -e "pet-clinic.*Running\s\+0" | tail -n 1 | cut -d' ' -f1); kubectl exec $MY_SERVICE_BINDING_CTR -it -c workload -- bash
 ```
 
 Next, view the Service Binding directory's content:
@@ -234,12 +234,12 @@ kubectl apply -f ~/other/resources/postgres/postgres-tap-resourceclaimpolicy.yam
 
 Now the Postgres DB should be consumable in other namespaces. To demonstrate, create a new namespace:
 ```execute
-kubectl create ns test-{{session_namespace}}
+kubectl create ns test-{{session_namespace}} --dry-run=client -oyaml | kubectl apply -f -
 ```
 
 Apply RBAC permissions and export the registry secret to the new namespace:
 ```execute
-kubectl apply -f ~/other/resources/tap/rbac.yaml -n test-{{session_namespace}}; tanzu secret registry add regsecret --username {{ DATA_E2E_REGISTRY_USERNAME }} --password {{ DATA_E2E_REGISTRY_PASSWORD }} --server {{ DATA_E2E_REGISTRY_USERNAME }} --export-to-all-namespaces --yes --namespace test-{{session_namespace}}
+kubectl apply -f ~/other/resources/tap/rbac.yaml -n test-{{session_namespace}}; tanzu secret registry add regsecret --username {{ DATA_E2E_REGISTRY_USERNAME }} --password {{ DATA_E2E_REGISTRY_PASSWORD }} --server {{ DATA_E2E_REGISTRY_USERNAME }} --export-to-all-namespaces --yes --namespace test-{{session_namespace}}; kubectl annotate ns test-{{session_namespace}} secretgen.carvel.dev/excluded-from-wildcard-matching- ; kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "tap-registry"}],"secrets":[{"name": "tap-registry"}]}' -n test-{{session_namespace}}
 ```
 
 Using the **Apps** plugin of **tanzu cli** this time, create a workload in the new namespace, and bind to the ResourceClaim created above:
