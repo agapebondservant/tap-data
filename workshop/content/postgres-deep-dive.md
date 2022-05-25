@@ -150,7 +150,7 @@ Notice the highlighted section which defines the **Service Binding**. A **Servic
 a **Service**'s connectivity information with a **Workload**. In **Services Toolkit**, it is also represented as a Custom Resource 
 which conforms to the **Provisioned Service** spec, meaning that it references a **Secret** in its **status.binding.name** field**.
 
-Create the **Service Binding** by applying the manifest to the cluster:
+Create the **Workload** by applying the manifest to the cluster:
 ```execute
 clear && cd ~ && kubectl annotate ns {{session_namespace}} secretgen.carvel.dev/excluded-from-wildcard-matching- && kubectl apply -f ~/other/resources/tap/rbac.yaml && tanzu init && tanzu plugin install --local bin/cli apps && tanzu plugin install --local bin/cli services && tanzu secret registry add tap-registry --username {{DATA_E2E_REGISTRY_USERNAME}} --password {{DATA_E2E_REGISTRY_PASSWORD}} --server https://index.docker.io/v1/ --export-to-all-namespaces --yes -n {{session_namespace}} && kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "registry-credentials"},{"name": "tap-registry"}],"secrets":[{"name": "tap-registry"}]}' && kubectl apply -f ~/other/resources/postgres/postgres-tap.yaml
 ```
