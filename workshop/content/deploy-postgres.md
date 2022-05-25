@@ -356,7 +356,7 @@ Eventually, the pods for the new cluster should start showing up below. Enter **
 Meanwhile, ensure that you are able to access your databases. **pgAdmin** is a popular graphical interface for many database adminstration tasks.
 Launch **pgAdmin** here (use "chart@example.local/SuperSecret" as login credentials:)
 ```dashboard:open-url
-url: http://pgadmin.{{ ingress_domain }}
+url: http://{{session_namespace}}-pgadmin.{{ ingress_domain }}
 ```
 
 Next, create a connection to the database. Click on "Add New Server" and enter the following:

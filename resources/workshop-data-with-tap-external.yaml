@@ -43,6 +43,9 @@ spec:
       port: 5432
       protocol: http
       host: "$(ingress_protocol):pginstance-1.$(session_namespace).svc.cluster.local"
+    - name: pgadmin
+      port: 80
+      host: "$(ingress_protocol):pgadmin-pgadmin4.$(session_namespace).svc.cluster.local"
     dashboards:
     - name: Jupyter
       url: "$(ingress_protocol)://$(session_namespace)-jupyter.$(ingress_domain)/"

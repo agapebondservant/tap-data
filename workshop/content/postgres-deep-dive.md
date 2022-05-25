@@ -129,7 +129,8 @@ Now, confirm that the Postgres Service can be discovered using the **tanzu** cli
 cd ~ && tanzu plugin install --local bin/cli services && tanzu services types list
 ```
 
-Also confirm that the previously deployed Postgres instance is discoverable via the Services plug-in: <font color="red">NOTE:</font> Should show the **pginstance-1** Postgres instance.
+Also confirm that the previously deployed Postgres instance is discoverable via the Services plug-in: 
+<font color="red">NOTE: Wait</font> for all 3 Postgres cluster pods to show up in the lower console. Should show the **pginstance-1** Postgres instance.
 ```execute
 tanzu services instances list
 ```
@@ -154,22 +155,23 @@ Create the **Service Binding** by applying the manifest to the cluster:
 clear && cd ~ && kubectl annotate ns {{session_namespace}} secretgen.carvel.dev/excluded-from-wildcard-matching- && kubectl apply -f ~/other/resources/tap/rbac.yaml && tanzu init && tanzu plugin install --local bin/cli apps && tanzu plugin install --local bin/cli services && tanzu secret registry add tap-registry --username {{DATA_E2E_REGISTRY_USERNAME}} --password {{DATA_E2E_REGISTRY_PASSWORD}} --server https://index.docker.io/v1/ --export-to-all-namespaces --yes -n {{session_namespace}} && kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "registry-credentials"},{"name": "tap-registry"}],"secrets":[{"name": "tap-registry"}]}' && kubectl apply -f ~/other/resources/postgres/postgres-tap.yaml
 ```
 
-Tail the logs of the newly deployed **Workload** <font color="red">NOTE: Hit **Ctrl-C** to exit once the deployment completes</font>:
+Tail the logs of the newly deployed **Workload**. 
+<font color="red">NOTE: It may take a few seconds for the logs to show up. Hit **Ctrl-C** to exit once the deployment completes</font>:
 ```execute
 tanzu apps workload tail pet-clinic --since 64h
 ```
 
-View the app details <font color="red">NOTE: Wait until at least one **pet-clinic** pod shows up as Ready in the lower console:</font>
+View the app details. <font color="red">NOTE: Wait until at least one **pet-clinic** pod shows up as Ready in the lower console:</font>
 ```execute
 tanzu apps workload get pet-clinic
 ```
 
-View the newly deployed data in **pgAdmin**:
+View the newly deployed data in **pgAdmin** (use "chart@example.local/SuperSecret" as login credentials:)
 ```dashboard:open-url
-url: http://pgadmin.{{ ingress_domain }}
+url: http://{{session_namespace}}-pgadmin.{{ ingress_domain }}
 ```
 
-<font color="red">NOTE:</font> Use the credentials provided below:
+<font color="red">NOTE:</font> Create a connection to the database by clicking on Servers -> Register -> Server and enter the following:
 ```execute
 printf "Under General tab:\n  Server: pginstance-1.{{session_namespace}}\nUnder Connection tab:\n  Host name: pginstance-1.{{session_namespace}}.svc.cluster.local\n  Maintenance Database: pginstance-1\n  Username: $(kubectl get secret pginstance-1-app-user-db-secret -n {{session_namespace}} -o jsonpath='{.data.username}' | base64 --decode)\n  Password: $(kubectl get secret pginstance-1-app-user-db-secret -n {{session_namespace}} -o jsonpath='{.data.password}' | base64 --decode)\n"
 ```
@@ -181,7 +183,7 @@ called SERVICE_BINDING_ROOT, points to the root of the mount directory.
 
 Start a shell session in the workload's container: (<font color="red">NOTE:</font> The directory should contain the subfolder **db**, which is the binding name):
 ```execute
-export MY_SERVICE_BINDING_CTR=$(tanzu apps workload get pet-clinic | grep "pet-clinic.*Running" | head -n 1 | cut -d' ' -f1); kubectl exec $MY_SERVICE_BINDING_CTR -it -c workload -- bash
+clear && export MY_SERVICE_BINDING_CTR=$(tanzu apps workload get pet-clinic | grep "pet-clinic.*Running" | head -n 1 | cut -d' ' -f1); kubectl exec $MY_SERVICE_BINDING_CTR -it -c workload -- bash
 ```
 
 Next, view the Service Binding directory's content:
@@ -235,24 +237,35 @@ Now the Postgres DB should be consumable in other namespaces. To demonstrate, cr
 kubectl create ns test-{{session_namespace}}
 ```
 
+Apply RBAC permissions and export the registry secret to the new namespace:
+```execute
+kubectl apply -f ~/other/resources/tap/rbac.yaml -n test-{{session_namespace}}; tanzu secret registry add regsecret --username {{ DATA_E2E_REGISTRY_USERNAME }} --password {{ DATA_E2E_REGISTRY_PASSWORD }} --server {{ DATA_E2E_REGISTRY_USERNAME }} --export-to-all-namespaces --yes --namespace test-{{session_namespace}}
+```
+
 Using the **Apps** plugin of **tanzu cli** this time, create a workload in the new namespace, and bind to the ResourceClaim created above:
 ```execute
-tanzu apps workload create ext-pet-clinic --namespace test-{{session_namespace}} --image "index.docker.io/oawofolu/pet-clinic-data-samples-w03-s001@sha256:0d0af5b3812afcb19efe8565ebb38068eb62c1e5c0cfa2fc05421b037a3314d5" --service-ref "db2=sql.tanzu.vmware.com/v1:Postgres:pginstance-1" --tail
+tanzu apps workload create ext-pet-clinic --namespace test-{{session_namespace}} --image "index.docker.io/oawofolu/pet-clinic-data-samples-w03-s001@sha256:0d0af5b3812afcb19efe8565ebb38068eb62c1e5c0cfa2fc05421b037a3314d5" --service-ref "db2=sql.tanzu.vmware.com/v1:Postgres:pginstance-1" --type web --label app.kubernetes.io/part-of=ext-pet-clinic --yes --tail
+```
+
+Tail the logs of the newly deployed **Workload**.
+<font color="red">NOTE: It may take a few seconds for the logs to show up. Hit **Ctrl-C** to exit once the deployment completes</font>:
+```execute
+tanzu apps workload tail ext-pet-clinic --namespace test-{{session_namespace}} --since 64h
 ```
 
 Get the app details once deployment completes:
 ```execute
 tanzu apps workload get ext-pet-clinic --namespace test-{{session_namespace}}
 ```
+{% endif %}
 
+{% if ENV_WORKSHOP_TOPIC == 'temp' %}
 ##### Services Toolkit RBAC
 <font color="red">TODO</font>
 
 ##### Multi-Cluster Operations with Services Toolkit
 <font color="red">ROADMAP ITEM (not yet GA)</font>
-{% endif %}
 
-{% if ENV_WORKSHOP_TOPIC == 'temp' %}
 ##### Monitoring With Datadog:
 Set up the Datadog agent for Kubernetes with Prometheus Autodiscovery enabled:
 ```editor:open-file
@@ -282,10 +295,11 @@ View the Postgres dashboard (<font color="red">TODO: Complete integration so tha
 ```dashboard:open-url
 url: https://app.datadoghq.com/screen/integration/235/postgres---overview?_gl=1*oqjti6*_gcl_aw*R0NMLjE2NDUyMTkzNTEuQ2owS0NRaUFwTDJRQmhDOEFSSXNBR01tLUtINlZnZ0dZelhOSTdadV8zNlBLMENHbFpjQS1TX2FmOG40ck1zSEVrTXVFa2RpZFB5RnI4UWFBanozRUFMd193Y0I.*_ga*MTI3MDQ4ODI1OC4xNjQ1MTQwNDky*_ga_KN80RDFSQK*MTY0NTgzMDU0OC43LjEuMTY0NTgzMDU1My4w&_ga=2.224920799.418082025.1645749670-1270488258.1645140492&_gac=1.128815230.1645219351.Cj0KCQiApL2QBhC8ARIsAGMm-KH6VggGYzXNI7Zu_36PK0CGlZcA-S_af8n4rMsHEkMuEkdidPyFr8QaAjz3EALw_wcB
 ```
-{% endif %}
 
 ##### Monitoring With Wavefront:
 <font color="red">TODO</font>
 
 ##### Secret Management with Vault
 <font color="red">TODO</font>
+{% endif %}
+
