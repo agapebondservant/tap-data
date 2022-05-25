@@ -221,7 +221,7 @@ View the newly created bucket (login with the _Username_ and _Password_ printed 
 url: https://minio.{{ DATA_E2E_BASE_URL }}/
 ```
 
-Next, let's view the manifest that we would use to configure the backup location **pgBackRest**:
+Next, let's view the manifest that we would use to configure the backup location **pgBackRest** <font color="red">If desired, update the **bucketPath** to any unique location of your choosing.</font>:
 ```editor:open-file
 file: ~/other/resources/postgres/postgres-backup-location.yaml
 ```
