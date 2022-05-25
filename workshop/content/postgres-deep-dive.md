@@ -246,7 +246,9 @@ Using the **Apps** plugin of **tanzu cli** this time, create a workload in the n
 ```execute
 tanzu apps workload create ext-pet-clinic --namespace test-{{session_namespace}} --image "index.docker.io/oawofolu/pet-clinic-data-samples-w03-s001@sha256:0d0af5b3812afcb19efe8565ebb38068eb62c1e5c0cfa2fc05421b037a3314d5" --service-ref "db2=sql.tanzu.vmware.com/v1:Postgres:pginstance-1" --type web --label app.kubernetes.io/part-of=ext-pet-clinic --yes --tail
 ```
+{% endif %}
 
+{% if ENV_WORKSHOP_TOPIC == 'temp' %}
 Tail the logs of the newly deployed **Workload**.
 <font color="red">NOTE: It may take over a minute for the logs to show up. Hit **Ctrl-C** to exit once the deployment completes</font>:
 ```execute
@@ -257,9 +259,7 @@ Get the app details once deployment completes:
 ```execute
 tanzu apps workload get ext-pet-clinic --namespace test-{{session_namespace}}
 ```
-{% endif %}
 
-{% if ENV_WORKSHOP_TOPIC == 'temp' %}
 ##### Services Toolkit RBAC
 <font color="red">TODO</font>
 
