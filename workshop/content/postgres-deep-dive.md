@@ -152,7 +152,7 @@ which conforms to the **Provisioned Service** spec, meaning that it references a
 
 Create the **Workload** by applying the manifest to the cluster:
 ```execute
-clear && cd ~ && kubectl annotate ns {{session_namespace}} secretgen.carvel.dev/excluded-from-wildcard-matching- && kubectl apply -f ~/other/resources/tap/rbac.yaml && tanzu init && tanzu plugin install --local bin/cli apps && tanzu plugin install --local bin/cli services && tanzu secret registry add tap-registry --username {{DATA_E2E_REGISTRY_USERNAME}} --password {{DATA_E2E_REGISTRY_PASSWORD}} --server https://index.docker.io/v1/ --export-to-all-namespaces --yes -n {{session_namespace}} && kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "registry-credentials"},{"name": "tap-registry"}],"secrets":[{"name": "tap-registry"}]}' && kubectl apply -f ~/other/resources/postgres/postgres-tap.yaml
+clear && cd ~ && kubectl annotate ns {{session_namespace}} secretgen.carvel.dev/excluded-from-wildcard-matching- && kubectl apply -f ~/other/resources/tap/rbac.yaml && tanzu init && tanzu plugin install --local bin/cli apps && tanzu plugin install --local bin/cli services && tanzu secret registry add regsecret --username {{DATA_E2E_REGISTRY_USERNAME}} --password {{DATA_E2E_REGISTRY_PASSWORD}} --server https://index.docker.io/v1/ --export-to-all-namespaces --yes -n {{session_namespace}} && kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "registry-credentials"},{"name": "regsecret"}],"secrets":[{"name": "regsecret"}]}' && kubectl apply -f ~/other/resources/postgres/postgres-tap.yaml
 ```
 
 Tail the logs of the newly deployed **Workload**. 
@@ -239,7 +239,7 @@ kubectl create ns test-{{session_namespace}} --dry-run=client -oyaml | kubectl a
 
 Prepare to deploy a new Workload (including setting up RBAC permissions and exporting the registry secret to the new namespace):
 ```execute
-kubectl apply -f ~/other/resources/tap/rbac.yaml -n test-{{session_namespace}}; tanzu secret registry add regsecret --username {{ DATA_E2E_REGISTRY_USERNAME }} --password {{ DATA_E2E_REGISTRY_PASSWORD }} --server {{ DATA_E2E_REGISTRY_USERNAME }} --export-to-all-namespaces --yes --namespace test-{{session_namespace}}; kubectl annotate ns test-{{session_namespace}} secretgen.carvel.dev/excluded-from-wildcard-matching- ; kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "tap-registry"}],"secrets":[{"name": "tap-registry"}]}' -n test-{{session_namespace}}; kubectl delete workload ext-pet-clinic --namespace test-{{session_namespace}} --ignore-not-found=true;
+kubectl apply -f ~/other/resources/tap/rbac.yaml -n test-{{session_namespace}}; tanzu secret registry add regsecret --username {{ DATA_E2E_REGISTRY_USERNAME }} --password {{ DATA_E2E_REGISTRY_PASSWORD }} --server {{ DATA_E2E_REGISTRY_USERNAME }} --export-to-all-namespaces --yes --namespace test-{{session_namespace}}; kubectl annotate ns test-{{session_namespace}} secretgen.carvel.dev/excluded-from-wildcard-matching- ; kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "regsecret"}],"secrets":[{"name": "regsecret"}]}' -n test-{{session_namespace}}; kubectl delete workload ext-pet-clinic --namespace test-{{session_namespace}} --ignore-not-found=true;
 ```
 
 Using the **Apps** plugin of **tanzu cli** this time, create a workload in the new namespace, and bind to the ResourceClaim created above:
@@ -248,7 +248,7 @@ tanzu apps workload create ext-pet-clinic --namespace test-{{session_namespace}}
 ```
 
 Tail the logs of the newly deployed **Workload**.
-<font color="red">NOTE: It may take a few seconds for the logs to show up. Hit **Ctrl-C** to exit once the deployment completes</font>:
+<font color="red">NOTE: It may take over a minute for the logs to show up. Hit **Ctrl-C** to exit once the deployment completes</font>:
 ```execute
 tanzu apps workload tail ext-pet-clinic --namespace test-{{session_namespace}} --since 64h
 ```
