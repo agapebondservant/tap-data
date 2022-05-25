@@ -168,7 +168,7 @@ tanzu apps workload get pet-clinic
 
 View the newly deployed data in **pgAdmin** (use "chart@example.local/SuperSecret" as login credentials:)
 ```dashboard:open-url
-url: http://{{session_namespace}}-pgadmin.{{ ingress_domain }}
+url: http://pgadmin.{{ ingress_domain }}
 ```
 
 <font color="red">NOTE:</font> Create a connection to the database by clicking on Servers -> Register -> Server and enter the following:
@@ -183,7 +183,7 @@ called SERVICE_BINDING_ROOT, points to the root of the mount directory.
 
 Start a shell session in the workload's container: (<font color="red">NOTE:</font> The directory should contain the subfolder **db**, which is the binding name):
 ```execute
-clear && export MY_SERVICE_BINDING_CTR=$(tanzu apps workload get pet-clinic | grep "pet-clinic.*Running" | head -n 1 | cut -d' ' -f1); kubectl exec $MY_SERVICE_BINDING_CTR -it -c workload -- bash
+clear && export MY_SERVICE_BINDING_CTR=$(tanzu apps workload get pet-clinic | grep -e "pet-clinic.*Running\s\+0" | head -n 1 | cut -d' ' -f1); kubectl exec $MY_SERVICE_BINDING_CTR -it -c workload -- bash
 ```
 
 Next, view the Service Binding directory's content:
