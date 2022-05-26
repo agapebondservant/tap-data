@@ -10,7 +10,6 @@ spec:
       expires: 2h
       orphaned: 5m
     - name: data-with-tap-demo
-      capacity: 3
-      reserved: 1
+      capacity: 1
       expires: 2h
       orphaned: 5m
