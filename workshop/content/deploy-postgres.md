@@ -375,7 +375,7 @@ url: https://gitlab.com/oawofolu/postgres-repo.git
 
 Go into the **app** folder, then paste the previously copied content in a new file with the name shown below. Click to copy the file name:
 ```copy
-echo "pginstance2-{{session_namespace}}.yaml"
+pginstance2-{{session_namespace}}.yaml
 ```
 
 Copy-paste the content and commit. You should see a new ArgoCD application:
