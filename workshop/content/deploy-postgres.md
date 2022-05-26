@@ -184,6 +184,12 @@ name: Prometheus
 url: http://prometheus.{{ DATA_E2E_BASE_URL }}
 ```
 
+<font color="red">NOTE:</font> The endpoints should match the pod IPs shown here:
+```execute
+kubectl get pods -o wide
+```
+
+
 <font color="red">NOTE:</font> To view specific metrics collected by Prometheus, go the the Prometheus UI Home screen by 
 clicking on "Prometheus" in the menu bar, and enter **pg** in the Search bar. A list of metrics should be populated in the field.
 
@@ -192,10 +198,12 @@ this is enabled via the **Wavefront Collector**, which is an agent that runs on 
 By simply installing the **Wavefront Collector** in our Kubernetes cluster, we should be able to access to a set of pre-defined metrics, 
 dashboards and alerts for **Tanzu Postgres**.
 
+{% if ENV_WORKSHOP_TOPIC == 'data-with-tap-demo' %}
 Deploy the **Wavefront Collector** which will handle collecting and forwarding metrics to Wavefront:
 ```execute
 helm repo add wavefront https://wavefronthq.github.io/helm/ && kubectl create namespace wavefront --dry-run -o yaml | kubectl apply -f - ; (helm uninstall wavefront -n wavefront ; helm install wavefront wavefront/wavefront --set wavefront.url=https://vmware.wavefront.com --set wavefront.token={{ DATA_E2E_WAVEFRONT_ACCESS_TOKEN }} --set clusterName=tanzu-data-samples-cluster --set collector.discovery.annotationPrefix=wavefront.com -n wavefront)
 ```
+{% endif %}
 
 View the Wavefront dashboard here (select **tanzu-data-samples-cluster**):
 ```dashboard:open-url
@@ -343,9 +351,16 @@ rather than being a pipeline-driven process (common with more traditional, imper
 
 To demonstrate the multi-cluster deployment capability of the **Tanzu Postgres** operator using GitOps, we will use **ArgoCD**.
 
+{% if ENV_WORKSHOP_TOPIC == 'data-with-tap-demo' %}
 Let's set up ArgoCD:
 ```execute
-git clone https://oawofolu:{{DATA_E2E_GIT_FLUXDEMO_TOKEN}}@gitlab.com/oawofolu/postgres-repo.git && cd postgres-repo && git rm app/pginstance2.yaml > /dev/null 2>&1; git config --global user.email 'eduk8s@example.com'; git config --global user.name 'Educates'; git commit -a -m 'New commit' && git push; cd $HOME; kubectl delete ns argocd || true; kubectl create ns argocd; kubectl apply -f ~/other/resources/argocd/argocd.yaml -n argocd; kubectl config set-context --current --namespace=argocd && ./argocd app delete postgres-${session_namespace} -y >/dev/null 2>&1; ./argocd login --core && sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/postgres/postgres-argocd-app.yaml && kubectl apply -f ~/other/resources/postgres/postgres-argocd-app.yaml
+git clone https://oawofolu:{{DATA_E2E_GIT_FLUXDEMO_TOKEN}}@gitlab.com/oawofolu/postgres-repo.git && cd postgres-repo && git rm app/pginstance2.yaml > /dev/null 2>&1; git config --global user.email 'eduk8s@example.com'; git config --global user.name 'Educates'; git commit -a -m 'New commit' && git push; cd $HOME; kubectl delete ns argocd || true; kubectl create ns argocd; kubectl apply -f ~/other/resources/argocd/argocd.yaml -n argocd;
+```
+{% endif %}
+
+Set up an ArgoCD project:
+```execute
+cd $HOME; kubectl config set-context --current --namespace=argocd && ./argocd app delete postgres-${session_namespace} -y >/dev/null 2>&1; ./argocd login --core && sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/postgres/postgres-argocd-app.yaml && kubectl apply -f ~/other/resources/postgres/postgres-argocd-app.yaml
 ```
 
 Next, we will add a manifest representing a new cluster, **pginstance-2**, to our ArgoCD-tracked repository. Copy the content of this file:
@@ -358,13 +373,17 @@ Go to **GitLab**:
 url: https://gitlab.com/oawofolu/postgres-repo.git
 ```
 
-Go into the **app** folder, then paste the previously copied content in a new file called **pginstance2.yaml** and commit.
-You should see a new ArgoCD application:
+Go into the **app** folder, then paste the previously copied content in a new file with the name shown below. Click to copy the file name:
+```copy
+echo "pginstance2-{{session_namespace}}.yaml"
+```
+
+Copy-paste the content and commit. You should see a new ArgoCD application:
 ```execute
 watch ./argocd app get postgres-{{session_namespace}}
 ```
 
-Eventually, the pods for the new cluster should start showing up below. Enter **Ctrl-C** to exit the *watch* statement.
+Eventually, the pods for the new cluster should start showing up in the lower console. Enter **Ctrl-C** to exit the *watch* statement.
 
 Meanwhile, ensure that you are able to access your databases. **pgAdmin** is a popular graphical interface for many database adminstration tasks.
 Launch **pgAdmin** here (use "chart@example.local/SuperSecret" as login credentials:)
@@ -380,7 +399,7 @@ printf "Under General tab:\n  Server: pginstance-1.{{session_namespace}}\nUnder 
 (When done, select the server "Servers" and click "Remove Server".)
 
 
-<font color="red"><b>NOTE: Restore default context before proceeding.</b></font>
+<font color="red"><b>NOTE: Restore default context before proceeding:</b></font>
 ```execute
 kubectl config set-context --current --namespace={{session_namespace}}
 ```
