@@ -19,7 +19,7 @@ spec:
     - name: WORKSHOP_FILE
       value: workshop-data-with-tap.yaml
     - name: WORKSHOP_TOPIC
-      value: data-with-tap
+      value: data-with-tap-demo
     ingresses:
     - name: jupyter
       port: 8888
