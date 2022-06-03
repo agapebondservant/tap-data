@@ -5,7 +5,7 @@ metadata:
 spec:
   workshops:
   - name: data-e2e-demo
-    capacity: 1
+    capacity: 3
     expires: 120m
     orphaned: 5m
   #!- name: data-file-ingestion
@@ -29,7 +29,7 @@ spec:
   #!  expires: 120m
   #!  orphaned: 5m
   - name: data-rabbitmq-commercial-features
-    capacity: 1
+    capacity: 3
     expires: 120m
     orphaned: 5m
   #!- name: data-nosql
@@ -37,16 +37,21 @@ spec:
   #!  expires: 120m
   #!  orphaned: 5m
   - name: data-postgres-deepdive
-    capacity: 1
+    capacity: 3
     expires: 120m
     orphaned: 5m
   - name: data-gemfire-deepdive
-    capacity: 1
+    capacity: 3
     expires: 120m
     orphaned: 5m
   - name: data-mysql-deepdive
-    capacity: 1
+    capacity: 3
     expires: 120m
+    orphaned: 5m
+  - name: data-with-tap
+    capacity: 3
+    reserved: 1
+    expires: 2h
     orphaned: 5m
   #!- name: data-vmservice
   #!  capacity: 1

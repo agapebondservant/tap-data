@@ -4,7 +4,7 @@ metadata:
   name: data-with-tap
 spec:
   title: Tanzu Data with TAP
-  description: Demonstration of features of Tanzu Postgres
+  description: Demonstration of features of Tanzu Postgres which integrate with Tanzu Application Platform
   vendor: eduk8s.io
   difficulty: beginner
   duration: 120m
