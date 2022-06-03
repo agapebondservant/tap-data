@@ -11,6 +11,7 @@ spec:
   url: https://github.com/agapebondservant/data-e2e-demo
   content:
     image: oawofolu/tanzu-data-tap:latest
+    files: github.com/agapebondservant/tap-data?ref=main
   session:
     env:
     - name: ENABLE_JUPYTERLAB

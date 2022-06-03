@@ -276,11 +276,11 @@ kubectl apply -n argocd -f resources/argocd.yaml
 * Pre-deploy Greenplum: (only required for these workshops: <b>Greenplum Workshops</b>)
 ```
 source .env
-resources/setup.sh
+resources/scripts/setup.sh
 ```
 * Pre-deploy Spring Cloud Data Flow: (only required for these workshops: <b>RabbitMQ Workshops, Gemfire Workshops, Greenplum Workshops, ML/AI workshops</b>)
 ```
-resources/setup-scdf.sh
+resources/scripts/setup-scdf.sh
 ```
 Register gemfire starter apps:
 sink.gemfire=docker:springcloudstream/gemfire-sink-rabbit:2.1.6.RELEASE
@@ -498,7 +498,7 @@ tanzu acc create mlflow --git-repository https://github.com/agapebondservant/mlf
 
 #### Deploy Tanzu Data Workshops<a name="buildanddeploy"/>
 * Build Workshop image:
-  (see resources/deploy-workshop.sh)
+  (see resources/scripts/deploy-workshop.sh)
 
 [comment]: <> (Only perform the following if there are 7+ nodes in= the k8s cluster)
 [comment]: <> (Label a subset of the nodes \(for which anti-affinity/affinity rules will apply\):)
@@ -511,7 +511,7 @@ tanzu acc create mlflow --git-repository https://github.com/agapebondservant/mlf
 
 * Build Workshop image and deploy workshop to Kubernetes cluster:
 ```
-resources/deploy-workshop.sh
+resources/scripts/deploy-workshop.sh
 ```
 
 #### Deploy Single Workshop to Pre-Existing LearningCenter Portal<a name="buildsingle"/>
@@ -545,14 +545,14 @@ Add the following to your `training-portal.yaml` (under **spec.workshops**):
 
 Run the following:
 ```
-resources/rebuild-docker-image.sh <path-to-your-env-file>
+resources/scripts/deploy-workshop.sh <path-to-your-env-file>
 kubectl delete --all learningcenter-training
-kubectl apply -f resources/system-profile.yaml
-kubectl apply -f resources/workshop-data-with-tap-external.yaml
+kubectl apply -f resources/hands-on/system-profile.yaml
+kubectl apply -f resources/hands-on/workshop-data-with-tap-external.yaml
 kubectl apply -f <path-to-your-training-portal.yaml>
 watch kubectl get learningcenter-training
 (For Presenter Mode:)
-kubectl apply -f resources/workshop-data-with-tap-demo.yaml
+kubectl apply -f resources/hands-on/workshop-data-with-tap-demo.yaml
 watch kubectl get learningcenter-training
 ```
   
