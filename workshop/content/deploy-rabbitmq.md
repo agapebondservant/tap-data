@@ -3,10 +3,59 @@
 ![Tanzu RabbitMQ High-Level Architecture](images/rabbit_architecture.png)
 **Tanzu RabbitMQ** is a _full-featured_ enterprise-grade message broker.
 
-Let's deploy the Tanzu RabbitMQ Cluster **operator**:
+First, let's update our **default** service account user with the RBAC permissions it needs to deploy the operator - here are the RBAC permissions:
+```editor:open-file
+file: ~/other/resources/rabbitmq/rabbitmq-operator-rbac.yaml
+```
 
+Let's deploy it:
 ```execute
-clear && kubectl create ns rabbitmq-system --dry-run -o yaml | kubectl apply -f - &&  kubectl create secret docker-registry image-pull-secret --namespace=rabbitmq-system --docker-username='{{ DATA_E2E_REGISTRY_USERNAME }}' --docker-password='{{ DATA_E2E_REGISTRY_PASSWORD }}' --dry-run -o yaml | kubectl apply -f - && kubectl apply -f "https://github.com/rabbitmq/cluster-operator/releases/latest/download/cluster-operator.yml" --namespace=rabbitmq-system
+clear && kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-operator-rbac.yaml -n {{ session_namespace }} && kubectl create clusterrolebinding tanzu-rabbitmq-crd-install-binding --clusterrole=tanzu-rabbitmq-crd-install --serviceaccount={{ session_namespace }}:default -n {{ session_namespace }} --dry-run -o yaml | kubectl apply -f - 
+```
+
+We will also need to create a Secret for pulling from the **Tanzu RabbitMQ** package's container registry,
+export the Secret to all namespaces (using a **SecretExport**), and create a secret placeholder for importing it (called a **Placeholder Secret**):
+```editor:open-file
+file: ~/other/resources/rabbitmq/rabbitmq-operator-secretexport.yaml
+```
+
+Create the **SecretExport** and **Placeholder Secret**:
+```execute
+kubectl create secret docker-registry image-pull-secret --namespace=rabbitmq-system --docker-username='{{ DATA_E2E_REGISTRY_USERNAME }}' --docker-password='{{ DATA_E2E_REGISTRY_PASSWORD }}' --dry-run -o yaml | kubectl apply -f - && kubectl create ns rabbitmq-system --dry-run -o yaml | kubectl apply -f - &&  sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/rabbitmq/rabbitmq-operator-secretexport.yaml && kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-operator-secretexport.yaml
+```
+
+Now we can deploy the Tanzu RabbitMQ **Operators**.
+<font color="red">NOTE: this will include the **Cluster Operator**, **Message Topology Operator** and the **Standby Replication** operator.</font>
+
+First, deploy the **Package Repository** which will make the **Tanzu RabbitMQ** package available to the cluster:
+```editor:open-file
+file: ~/other/resources/rabbitmq/rabbitmq-operator-packagerepository.yaml
+```
+
+Let's deploy the **Package Repository**:
+```execute
+kapp deploy -a tanzu-rabbitmq-repo -f ~/other/resources/rabbitmq/rabbitmq-operator-packagerepository.yaml -y
+```
+
+Verify that the **Tanzu RabbitMQ** repository is now available.
+<font color="red">NOTE: Hit **Ctrl-C** to exit once the deployment is complete:</font>
+```execute
+watch kubectl get packages
+```
+
+Next, we'll deploy the **Package Install** which will actually install the **Tanzu RabbitMQ** package made available earlier.
+```editor:open-file
+file: ~/other/resources/rabbitmq/rabbitmq-operator-packageinstall.yaml
+```
+
+Let's install the **Tanzu RabbitMQ** operator by deploying the **Package Install**:
+```execute
+kapp deploy -a tanzu-rabbitmq-repo -f ~/other/resources/rabbitmq/rabbitmq-operator-packageinstall.yaml -y
+```
+
+Verify that the install was successful. <font color="red">NOTE: Hit **Ctrl-C** to exit once the install is complete:</font>
+```execute
+watch kubectl get packageinstalls
 ```
 
 The **krew** plugin provides a native approach for managing RabbitMQ clusters. View a list of supported commands:
@@ -108,9 +157,14 @@ name: RabbitMQ
 url: {{ ingress_protocol }}://rabbit{{ session_namespace }}.{{ ingress_domain }}
 ```
 
-Upgrade the cluster to the Tanzu RabbitMQ distribution by updating the OCI image and perform a rolling upgrade. In the vim editor that comes up, edit the **image** field by changing it to **oawofolu/vmware-tanzu-rabbitmq:1.2.0**:
+Upgrade the cluster to the Tanzu RabbitMQ distribution by updating the OCI image and perform a rolling upgrade. In the vim editor that comes up, edit the **image** field:
 ```execute
 kubectl edit rabbitmqcluster rabbitcluster1 -n {{ session_namespace }}
+```
+
+Change the container image to point to the specified path below:
+```copy
+oawofolu/vmware-tanzu-rabbitmq:{{DATA_E2E_RABBIT_OPERATOR_VERSION}}
 ```
 
 <font color="red">(<b>Discuss rolling upgrade</b>)</font>

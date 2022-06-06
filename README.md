@@ -407,6 +407,7 @@ export INSTALL_REGISTRY_PASSWORD=$DATA_E2E_REGISTRY_PASSWORD
 export TAP_VERSION=1.1.0
 export INSTALL_REGISTRY_HOSTNAME=index.docker.io
 imgpkg copy -b registry.tanzu.vmware.com/tanzu-application-platform/tap-packages:${TAP_VERSION} --to-repo index.docker.io/${DATA_E2E_REGISTRY_USERNAME}/tap-packages
+
 kubectl create ns tap-install
 tanzu secret registry add tap-registry \
 --username ${INSTALL_REGISTRY_USERNAME} --password ${INSTALL_REGISTRY_PASSWORD} \

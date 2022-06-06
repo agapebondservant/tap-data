@@ -1,0 +1,8 @@
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageRepository
+metadata:
+  name: tanzu-rabbitmq-repo
+spec:
+  fetch:
+    imgpkgBundle:
+      image: oawofolu/tanzu-rabbitmq-package-repo:${DATA_E2E_RABBIT_OPERATOR_VERSION}

@@ -24,10 +24,10 @@ spec:
   #!  capacity: 1
   #!  expires: 120m
   #!  orphaned: 5m
-  #!- name: data-rabbitmq-deepdive
-  #!  capacity: 1
-  #!  expires: 120m
-  #!  orphaned: 5m
+  - name: data-rabbitmq-deepdive
+    capacity: 3
+    expires: 120m
+    orphaned: 5m
   - name: data-rabbitmq-commercial-features
     capacity: 3
     expires: 120m
