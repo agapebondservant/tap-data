@@ -25,6 +25,11 @@ NOTE:
 * Populate the .env file where possible (NOTE: only a subset of the variables can be populated at the moment.
 New entries will be populated as the install proceeds)
 
+* Populate a ConfigMap based on the .env file
+```
+sed 's/export //g' .env > .env-properties && kubectl create configmap data-e2e-env --from-env-file=.env-properties && rm .env-properties
+```
+
 * Create a Management Cluster (Optional - required only if management cluster does not exist) 
 ```
 tanzu management-cluster permissions aws set && tanzu management-cluster create <your-management-cluster-name>  --file  -v 6
