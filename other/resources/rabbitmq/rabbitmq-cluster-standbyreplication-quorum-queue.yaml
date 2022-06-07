@@ -1,0 +1,23 @@
+apiVersion: rabbitmq.com/v1beta1
+kind: Vhost
+metadata:
+    name: test
+spec:
+    name: "test"
+    tags: ["standby_replication"]
+    rabbitmqClusterReference:
+        name: rabbitcluster-upstream1
+---
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: demo.odd.queue
+spec:
+  name: demo.odd.queue
+  vhost: test
+  autoDelete: false
+  durable: true
+  type: quorum
+  rabbitmqClusterReference:
+    name: rabbitcluster-upstream1
+---

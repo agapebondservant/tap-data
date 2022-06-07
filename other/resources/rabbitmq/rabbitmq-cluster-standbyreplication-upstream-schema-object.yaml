@@ -1,0 +1,11 @@
+apiVersion: rabbitmq.com/v1beta1
+kind: SchemaReplication
+metadata:
+  name: rabbitcluster-upstream1
+  namespace: YOUR_SESSION_NAMESPACE
+spec:
+  endpoints: "rabbitcluster-upstream1:5672"
+  upstreamSecret:
+    name: rabbitcluster-upstream1-secret
+  rabbitmqClusterReference:
+    name: rabbitcluster-upstream1

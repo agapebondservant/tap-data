@@ -120,3 +120,6 @@ bin/cli_1.5/
 /Users/oawofolu/PIVOTAL/data/educates/tap/resources/hands-on/system-profile.yaml
 /Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/rabbitmq/rabbitmq-operator-packagerepository.yaml
 /Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/rabbitmq/rabbitmq-operator-packageinstall.yaml
+other/resources/rabbitmq/rabbitmq-operator-packageinstall.yaml
+other/resources/rabbitmq/rabbitmq-operator-packagerepository.yaml
+resources/hands-on/system-profile.yaml

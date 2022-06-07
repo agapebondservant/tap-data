@@ -1,0 +1,14 @@
+---
+apiVersion: rabbitmq.tanzu.vmware.com/v1beta1
+kind: StandbyReplication
+metadata:
+  name: rabbitcluster-upstream1-configuration
+spec:
+  operatingMode: "upstream"
+  upstreamModeConfiguration:
+    replicationPolicies:
+      - name: test-policy
+        pattern: "^.*"
+        vhost: "test"
+  rabbitmqClusterReference:
+    name: rabbitcluster-upstream1

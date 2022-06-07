@@ -1,0 +1,19 @@
+apiVersion: rabbitmq.com/v1beta1
+kind: RabbitmqCluster
+metadata:
+  name: rabbitcluster-upstream1
+spec:
+  image: rabbitmq:3.10-management
+  service:
+    type: LoadBalancer
+rabbitmq:
+  additionalPlugins:
+    - rabbitmq_stream
+    - rabbitmq_schema_definition_sync
+    - rabbitmq_schema_definition_sync_prometheus
+    - rabbitmq_standby_replication
+  additionalConfig: |
+    schema_definition_sync.operating_mode = upstream
+    standby.replication.operating_mode = upstream
+    standby.replication.retention.size_limit.messages = 5000000000
+    # standby.replication.retention.time_limit.messages = 12h

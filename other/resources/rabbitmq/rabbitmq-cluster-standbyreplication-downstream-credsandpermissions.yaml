@@ -1,0 +1,37 @@
+---
+# credentials for the schema-replication user
+apiVersion: v1
+kind: Secret
+metadata:
+  name: rabbitcluster-upstream1-secret
+type: Opaque
+stringData:
+  username: test-user
+  password: test-password
+---
+# schema-replication user
+apiVersion: rabbitmq.com/v1beta1
+kind: User
+metadata:
+  name: rabbitmq-replicator-downstream
+spec:
+  rabbitmqClusterReference:
+    name:  rabbitcluster-downstream1
+  importCredentialsSecret:
+    name: rabbitcluster-upstream1-secret
+---
+#permissions for the schema-replication user
+apiVersion: rabbitmq.com/v1beta1
+kind: Permission
+metadata:
+  name: rabbitmq-replicator-downstream.test.all
+spec:
+  vhost: "test"
+  userReference:
+    name: rabbitmq-replicator-downstream
+  permissions:
+    write: ".*"
+    configure: ".*"
+    read: ".*"
+  rabbitmqClusterReference:
+    name: rabbitcluster-downstream1

@@ -1,0 +1,13 @@
+---
+apiVersion: rabbitmq.tanzu.vmware.com/v1beta1
+kind: StandbyReplication
+metadata:
+  name: rabbitcluster-downstream1-configuration
+spec:
+  operatingMode: "downstream"
+  downstreamModeConfiguration:
+    endpoints: "rabbitcluster-upstream1:5552"
+    upstreamSecret:
+      name: upstream-secret # an existing Kubernetes secret; required value
+    rabbitmqClusterReference:
+      name: rabbitcluster-upstream1-secret
