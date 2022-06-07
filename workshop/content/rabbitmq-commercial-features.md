@@ -124,6 +124,5 @@ kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-standbyreplication-
 
 #### Inter-node Data Compression
 
-#### Vault Integration
 
 Sometimes, the ideal use case is to leverage RabbitMQ transparently as the messaging transport layer, without having to be aware of its inner workings or semantics. For that, we can leverage  **Spring Cloud Data Flow**.
