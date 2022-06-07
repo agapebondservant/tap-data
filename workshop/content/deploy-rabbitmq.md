@@ -34,13 +34,12 @@ file: ~/other/resources/rabbitmq/rabbitmq-operator-packagerepository.yaml
 
 Let's deploy the **Package Repository**:
 ```execute
-kapp deploy -a tanzu-rabbitmq-repo -f ~/other/resources/rabbitmq/rabbitmq-operator-packagerepository.yaml -y
+kapp deploy -a tanzu-rabbitmq-repo -f ~/other/resources/rabbitmq/rabbitmq-operator-packagerepository.yaml -y -nrabbitmq-system
 ```
 
 Verify that the **Tanzu RabbitMQ** repository is now available.
-<font color="red">NOTE: Hit **Ctrl-C** to exit once the deployment is complete:</font>
 ```execute
-watch kubectl get packages
+kubectl get packagerepository tanzu-rabbitmq-repo -nrabbitmq-system
 ```
 
 Next, we'll deploy the **Package Install** which will actually install the **Tanzu RabbitMQ** package made available earlier.
@@ -50,12 +49,12 @@ file: ~/other/resources/rabbitmq/rabbitmq-operator-packageinstall.yaml
 
 Let's install the **Tanzu RabbitMQ** operator by deploying the **Package Install**:
 ```execute
-kapp deploy -a tanzu-rabbitmq-repo -f ~/other/resources/rabbitmq/rabbitmq-operator-packageinstall.yaml -y
+kapp deploy -a tanzu-rabbitmq -f ~/other/resources/rabbitmq/rabbitmq-operator-packageinstall.yaml -y -nrabbitmq-system
 ```
 
-Verify that the install was successful. <font color="red">NOTE: Hit **Ctrl-C** to exit once the install is complete:</font>
+Verify that the install was successful. <font color="red">NOTE: Hit **Ctrl-C** to exit once it shows "Reconcile succeeded":</font>
 ```execute
-watch kubectl get packageinstalls
+kubectl get packageinstalls -nrabbitmq-system
 ```
 
 The **krew** plugin provides a native approach for managing RabbitMQ clusters. View a list of supported commands:
