@@ -16,7 +16,7 @@ NOTE:
 7. [Build secondary cluster (for multi-site demo)](#multisite)
 8. [Install TAP](#tap-install)
 9. [Deploy Tanzu Data Workshops](#buildanddeploy)
-10. [Deploy Single Workshop to Pre-Existing LearningCenter Portal] (#buildsingle)
+10. [Deploy Single Workshop to Pre-Existing LearningCenter Portal](#buildsingle)
 11. [Other: How-tos/General Info (not needed for setup)](#other)
 
 #### Kubernetes Cluster Prep<a name="pre-reqs"/>
