@@ -10,7 +10,7 @@ file: ~/other/resources/rabbitmq/rabbitmq-operator-rbac.yaml
 
 Let's deploy it:
 ```execute
-clear && kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-operator-rbac.yaml -n rabbitmq-system && kubectl create clusterrolebinding tanzu-rabbitmq-crd-install-binding --clusterrole=tanzu-rabbitmq-crd-install --serviceaccount=rabbitmq-system:default -n rabbitmq-system --dry-run -o yaml | kubectl apply -n rabbitmq-system -f - 
+clear && kubectl create ns rabbitmq-system --dry-run -o yaml | kubectl apply -f - && kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-operator-rbac.yaml -n rabbitmq-system && kubectl create clusterrolebinding tanzu-rabbitmq-crd-install-binding --clusterrole=tanzu-rabbitmq-crd-install --serviceaccount=rabbitmq-system:default -n rabbitmq-system --dry-run -o yaml | kubectl apply -n rabbitmq-system -f - 
 ```
 
 We will also need to create a Secret for pulling from the **Tanzu RabbitMQ** package's container registry,
@@ -21,7 +21,7 @@ file: ~/other/resources/rabbitmq/rabbitmq-operator-secretexport.yaml
 
 Create the **SecretExport** and **Placeholder Secret**:
 ```execute
-kubectl create secret docker-registry image-pull-secret --namespace=rabbitmq-system --docker-username='{{ DATA_E2E_REGISTRY_USERNAME }}' --docker-password='{{ DATA_E2E_REGISTRY_PASSWORD }}' --dry-run -o yaml | kubectl apply -f - && kubectl create ns rabbitmq-system --dry-run -o yaml | kubectl apply -f - &&  sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/rabbitmq/rabbitmq-operator-secretexport.yaml && kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-operator-secretexport.yaml
+kubectl create secret docker-registry image-pull-secret --namespace=rabbitmq-system --docker-username='{{ DATA_E2E_REGISTRY_USERNAME }}' --docker-password='{{ DATA_E2E_REGISTRY_PASSWORD }}' --dry-run -o yaml | kubectl apply -f - && sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/rabbitmq/rabbitmq-operator-secretexport.yaml && kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-operator-secretexport.yaml
 ```
 
 Now we can deploy the Tanzu RabbitMQ **Operators**.
