@@ -38,8 +38,9 @@ kapp deploy -a tanzu-rabbitmq-repo -f ~/other/resources/rabbitmq/rabbitmq-operat
 ```
 
 Verify that the **Tanzu RabbitMQ** repository is now available.
+<font color="red">NOTE: Hit **Ctrl-C** to exit once it shows "Reconcile succeeded":</font>
 ```execute
-kubectl get packagerepository tanzu-rabbitmq-repo -nrabbitmq-system
+watch kubectl get packagerepository tanzu-rabbitmq-repo -nrabbitmq-system
 ```
 
 Next, we'll deploy the **Package Install** which will actually install the **Tanzu RabbitMQ** package made available earlier.
