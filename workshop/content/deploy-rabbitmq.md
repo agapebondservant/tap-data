@@ -34,7 +34,7 @@ file: ~/other/resources/rabbitmq/rabbitmq-operator-packagerepository.yaml
 
 Let's deploy the **Package Repository**:
 ```execute
-kapp delete -a tanzu-rabbitmq-repo -y; kapp deploy -a tanzu-rabbitmq-repo -f ~/other/resources/rabbitmq/rabbitmq-operator-packagerepository.yaml -y -nrabbitmq-system
+kapp delete -a tanzu-rabbitmq-repo -y -nrabbitmq-system; kapp deploy -a tanzu-rabbitmq-repo -f ~/other/resources/rabbitmq/rabbitmq-operator-packagerepository.yaml -y -nrabbitmq-system
 ```
 
 Verify that the **Tanzu RabbitMQ** repository is now available.
@@ -50,7 +50,7 @@ file: ~/other/resources/rabbitmq/rabbitmq-operator-packageinstall.yaml
 
 Let's install the **Tanzu RabbitMQ** operator by deploying the **Package Install**:
 ```execute
-kapp delete -a tanzu-rabbitmq -y; kapp deploy -a tanzu-rabbitmq -f ~/other/resources/rabbitmq/rabbitmq-operator-packageinstall.yaml -y -nrabbitmq-system
+kapp delete -a tanzu-rabbitmq -y -nrabbitmq-system; kapp deploy -a tanzu-rabbitmq -f ~/other/resources/rabbitmq/rabbitmq-operator-packageinstall.yaml -y -nrabbitmq-system
 ```
 
 Verify that the install was successful. <font color="red">NOTE: Hit **Ctrl-C** to exit once it shows "Reconcile succeeded":</font>
