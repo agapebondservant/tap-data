@@ -10,7 +10,7 @@ file: ~/other/resources/rabbitmq/rabbitmq-operator-rbac.yaml
 
 Let's deploy it:
 ```execute
-clear && kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-operator-rbac.yaml -n {{ session_namespace }} && kubectl create clusterrolebinding tanzu-rabbitmq-crd-install-binding --clusterrole=tanzu-rabbitmq-crd-install --serviceaccount={{ session_namespace }}:default -n {{ session_namespace }} --dry-run -o yaml | kubectl apply -f - 
+clear && kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-operator-rbac.yaml -n rabbitmq-system && kubectl create clusterrolebinding tanzu-rabbitmq-crd-install-binding --clusterrole=tanzu-rabbitmq-crd-install --serviceaccount=rabbitmq-system:default -n rabbitmq-system --dry-run -o yaml | kubectl apply -n rabbitmq-system -f - 
 ```
 
 We will also need to create a Secret for pulling from the **Tanzu RabbitMQ** package's container registry,
