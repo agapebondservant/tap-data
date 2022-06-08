@@ -2,6 +2,12 @@
 
 Now we will cover the following:
 
+#### Deploying via the Operator UI
+With **Tanzu RabbitMQ**, brokers/clusters can be deployed by using the **Tanzu Operator UI**:
+```dashboard:open-url
+url: http://operator-ui.{{ ingress_domain }}
+```
+
 #### Standby Replication Operator
 
 **Tanzu RabbitMQ** provides a streamlined approach for replication across sites with its **Standby Replication** plugins.

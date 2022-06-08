@@ -74,6 +74,12 @@ View the complete configuration associated with the newly deployed Postgres clus
 ```execute
 kubectl get postgres pginstance-1 -o yaml
 ```
+
+Clusters can also be deployed by using the **Tanzu Operator UI**:
+```dashboard:open-url
+url: http://operator-ui.{{ ingress_domain }}
+```
+
 {% endif %}
 
 {% if ENV_WORKSHOP_TOPIC == 'data-e2e' %}
