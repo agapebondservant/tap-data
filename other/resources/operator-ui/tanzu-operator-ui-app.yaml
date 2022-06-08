@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tanzu-operator-ui-app
+  labels:
+    app: tanzu-operator-ui-app
+spec:
+  selector:
+    matchLabels:
+      app: tanzu-operator-ui-app
+  template:
+    metadata:
+      labels:
+        app: tanzu-operator-ui-app
+    spec:
+      containers:
+      - name: ui
+        image: ubuntu:latest
+        imagePullPolicy: Always
+        command: ['sh', '-c', '/ui/tanzusql-ui-linux -kubeconfig=/kconfig/.config -open-browser=false -address=0.0.0.0:8080']
+        ports:
+          - containerPort: 8080
+        volumeMounts:
+          - mountPath: /ui
+            name: ui-volume
+          - mountPath: /kconfig
+            name: config-volume
+      volumes:
+        - name: ui-volume
+          emptyDir: { }
+        - name: config-volume
+          configMap:
+            name: kconfig
+      initContainers:
+      - name: init-myservice
+        image: alpine/git
+        imagePullPolicy: Always
+        volumeMounts:
+          - mountPath: /ui
+            name: ui-volume
+        args:
+          - clone
+          - '--single-branch'
+          - '--'
+          - 'https://github.com/agapebondservant/tanzu-operator-ui.git'
+          - '/ui'
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: tanzu-operator-ui-app
+  name: tanzu-operator-ui-svc
+spec:
+  ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: tanzu-operator-ui-app
+  type: ClusterIP

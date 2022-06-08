@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: rabbitmq-operator-tsqlui-annotation-overlay-secret
+  namespace: rabbitmq-system
+stringData:
+  add-ns-label.yml: |
+    #@ load("@ytt:overlay", "overlay")
+    #@overlay/match by=overlay.subset({"kind":"CustomResourceDefinition"})
+    #@overlay/match by=overlay.subset({"metadata": {"name": "rabbitmqclusters.rabbitmq.com"}})
+    ---
+    metadata:
+      #@overlay/match missing_ok=True
+      annotations:
+        #@overlay/match missing_ok=True
+        sql.tanzu.vmware.com/ui: |
+          {"form":{"sections":[{"name":"Instance Resources","properties":[{"jsonPath":"spec.persistence.storage","displayName":"Storage Size","kind":"Quantity","options":{"magnitude":"G","unit":"B"}},{"kind":"Grid","layout":{"columns":["Requests","Limits"],"rows":[{"name":"CPU","properties":[{"jsonPath":"spec.resources.requests.cpu","kind":"Quantity","options":{"unit":"cores"}},{"jsonPath":"spec.resources.limits.cpu","kind":"Quantity","options":{"unit":"cores"}}]},{"name":"Memory","properties":[{"jsonPath":"spec.resources.requests.memory","kind":"Quantity","options":{"magnitude":"Gi","unit":"B"}},{"jsonPath":"spec.resources.limits.memory","kind":"Quantity","options":{"magnitude":"Gi","unit":"B"}}]}]}}]},{"name":"Kubernetes Configuration","properties":[{"jsonPath":"spec.persistence.storageClassName","displayName":"Storage Class Name","kind":"Text"},{"jsonPath":"spec.service.type","displayName":"Service Type","kind":"Enum"},{"jsonPath":"spec.image","displayName":"Image","kind":"Text"},{"jsonPath":"spec.imagePullSecrets[0].name","displayName":"Image Pull Secret","kind":"Text"}]},{"name":"Data Service Configuration","properties":[{"jsonPath":"spec.skipPostDeploySteps","displayName":"Skip Post Deploy","kind":"Boolean"}]}]},"table":{"columns":[{"name":"All Replicas Ready","kind":"PrinterColumn","jsonPath":"status.conditions[?(@.type == 'AllReplicasReady')].status","type":"string"},{"name":"Reconcile Success","kind":"PrinterColumn","jsonPath":"status.conditions[?(@.type == 'ReconcileSuccess')].status","type":"string"},{"name":"Replicas","kind":"PrinterColumn","jsonPath":"spec.replicas","type":"number"},{"name":"Disk Utilization","kind":"DiskUsage","dataServicePodSelector":"app.kubernetes.io/component=rabbitmq","instanceNamePodLabel":"app.kubernetes.io/name"}]}}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: postgres-operator-tsqlui-annotation-overlay-secret
+  namespace: default
+stringData:
+  add-ns-label.yml: |
+    #@ load("@ytt:overlay", "overlay")
+    #@overlay/match by=overlay.subset({"kind":"CustomResourceDefinition"})
+    #@overlay/match by=overlay.subset({"metadata": {"name": "postgres.sql.tanzu.vmware.com"}})
+    ---
+    metadata:
+      #@overlay/match missing_ok=True
+      annotations:
+        #@overlay/match missing_ok=True
+        sql.tanzu.vmware.com/ui: |
+          {"form":{"sections":[{"name":"Instance Resources","properties":[{"jsonPath":"spec.storageSize","displayName":"Storage Size","kind":"Quantity","options":{"magnitude":"G","unit":"B"}},{"jsonPath":"spec.cpu","displayName":"CPU","kind":"Quantity","options":{"unit":"cores"}},{"jsonPath":"spec.memory","displayName":"Memory","kind":"Quantity","options":{"magnitude":"Gi","unit":"B"}}]},{"name":"Kubernetes Configuration","properties":[{"jsonPath":"spec.storageClassName","displayName":"Storage Class Name","kind":"Text"},{"jsonPath":"spec.serviceType","displayName":"Service Type","kind":"Enum"},{"jsonPath":"spec.seccompProfile.type","displayName":"Seccomp Profile Type","kind":"Text"}]},{"name":"Data Service Configuration","properties":[{"jsonPath":"spec.pgConfig.dbname","displayName":"Database Name","kind":"Text"},{"jsonPath":"spec.pgConfig.username","displayName":"Admin Username","kind":"Text"},{"jsonPath":"spec.pgConfig.appUser","displayName":"App Username","kind":"Text"},{"jsonPath":"spec.postgresVersion.name","displayName":"Postgres Version","kind":"Text"},{"jsonPath":"spec.highAvailability.enabled","displayName":"High Availability","kind":"Boolean"},{"jsonPath":"spec.logLevel","displayName":"Log Level","kind":"Enum"}]}]},"table":{"columns":[{"name":"Status","kind":"PrinterColumn","jsonPath":"status.currentState","type":"string"},{"name":"DB Version","kind":"PrinterColumn","jsonPath":"status.dbVersion","type":"string"},{"name":"High Availability","kind":"PrinterColumn","jsonPath":"spec.highAvailability.enabled","type":"boolean"},{"name":"Disk Utilization","kind":"DiskUsage","dataServicePodSelector":"app=postgres","instanceNamePodLabel":"postgres-instance"}]}}

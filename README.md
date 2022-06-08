@@ -12,12 +12,13 @@ NOTE:
 3. [Install Prometheus and Grafana](#prometheusgrafana)
 4. [Install Datadog](#datadog)
 5. [Install ArgoCD](#argocd)
-6. [Pre-deploy Greenplum and Spring Cloud Data Flow](#predeploys)
-7. [Build secondary cluster (for multi-site demo)](#multisite)
-8. [Install TAP](#tap-install)
-9. [Deploy Tanzu Data Workshops](#buildanddeploy)
-10. [Deploy Single Workshop to Pre-Existing LearningCenter Portal](#buildsingle)
-11. [Other: How-tos/General Info (not needed for setup)](#other)
+6. [Install OperatorUI](#operatorui)
+7. [Pre-deploy Greenplum and Spring Cloud Data Flow](#predeploys)
+8. [Build secondary cluster (for multi-site demo)](#multisite)
+9. [Install TAP](#tap-install)
+10. [Deploy Tanzu Data Workshops](#buildanddeploy)
+11. [Deploy Single Workshop to Pre-Existing LearningCenter Portal](#buildsingle)
+12. [Other: How-tos/General Info (not needed for setup)](#other)
 
 #### Kubernetes Cluster Prep<a name="pre-reqs"/>
 * Create .env file in root directory (use .env-sample as a template - do NOT check into Git)
@@ -275,6 +276,20 @@ helm install datadog -f other/resources/datadog/data-dog.yaml \
 ```
 kubectl create namespace argocd
 kubectl apply -n argocd -f resources/argocd.yaml
+```
+
+#### Install Operator UI <a name="operatorui"/>
+* Install Operator UI: (must have pre-installed Tanzu Data operators)
+```
+kubectl create namespace operator-ui
+kubectl create configmap kconfig --from-file </path/to/multicluster/kubeconfig> --namespace operator-ui
+other/resources/operator-ui/annotate.sh
+kubectl apply -f other/resources/operator-ui/overlays.yaml
+kubectl apply -f other/resources/operator-ui/tanzu-operator-ui-app.yaml --namespace operator-ui
+kubectl annotate pkgi <RABBITMQ_PKGI_NAME> ext.packaging.carvel.dev/ytt-paths-from-secret-name.0=rabbitmq-operator-tsqlui-annotation-overlay-secret -n<RABBITMQ_PKGI_NAMESPACE> --overwrite
+kubectl annotate pkgi <POSTGRES_PKGI_NAME> ext.packaging.carvel.dev/ytt-paths-from-secret-name.0=postgres-operator-tsqlui-annotation-overlay-secret -n<POSTGRES_PKGI_NAMESPACE> --overwrite
+kubectl apply -f other/resources/operator-ui/tanzu-operator-ui-httpproxy.yaml --namespace operator-ui #only if using ProjectContour for Ingress
+kubectl get all -noperator-ui
 ```
 
 #### Pre-deploy Greenplum and Spring Cloud Data Flow<a name="predeploys"/>
