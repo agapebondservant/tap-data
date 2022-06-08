@@ -3,7 +3,12 @@
 Now we will cover the following:
 
 #### Deploying via the Operator UI
-With **Tanzu RabbitMQ**, brokers/clusters can be deployed by using the **Tanzu Operator UI**:
+With **Tanzu RabbitMQ**, brokers/clusters can be deployed by using the **Tanzu Operator UI**. First, refresh the UI settings to ensure that it is in sync with the latest Operator changes:
+```execute
+~/other/resources/operator-ui/annotate.sh; kubectl annotate pkgi tanzu-rabbitmq ext.packaging.carvel.dev/ytt-paths-from-secret-name.0=rabbitmq-operator-tsqlui-annotation-overlay-secret -nrabbitmq-system --overwrite
+```
+
+Now access the Operator UI:
 ```dashboard:open-url
 url: http://operator-ui.{{ ingress_domain }}
 ```
