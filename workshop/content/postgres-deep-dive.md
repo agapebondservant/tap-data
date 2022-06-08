@@ -50,7 +50,7 @@ tanzu package installed delete postgres-operator -ndefault -y
 
 Now install the operator:
 ```execute
-tanzu package install postgres-operator --package-name postgres-operator.sql.tanzu.vmware.com --version $PG_TANZU_PKG_VERSION -f ~/other/resources/postgres/postgres-values.yaml --namespace default
+tanzu package install postgres-operator --package-name postgres-operator.sql.tanzu.vmware.com --version $PG_TANZU_PKG_VERSION -f ~/other/resources/postgres/postgres-values.yaml --namespace default; ~/other/resources/operator-ui/annotate.sh; kubectl annotate pkgi postgres-operator ext.packaging.carvel.dev/ytt-paths-from-secret-name.0=postgres-operator-tsqlui-annotation-overlay-secret -ndefault --overwrite
 ```
 {% endif %}
 
