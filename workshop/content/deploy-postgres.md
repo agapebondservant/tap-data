@@ -396,6 +396,7 @@ watch ./argocd app get postgres-{{session_namespace}}
 
 Eventually, the pods for the new cluster should start showing up in the lower console. Enter **Ctrl-C** to exit the *watch* statement.
 
+#### Connecting to the Database
 Meanwhile, ensure that you are able to access your databases. **pgAdmin** is a popular graphical interface for many database adminstration tasks.
 Launch **pgAdmin** here (use "chart@example.local/SuperSecret" as login credentials:)
 ```dashboard:open-url
@@ -409,8 +410,86 @@ printf "Under General tab:\n  Server: pginstance-1.{{session_namespace}}\nUnder 
 
 (When done, select the server "Servers" and click "Remove Server".)
 
+##### SecretExport and SecretImport
+Sometimes, a connection needs to be made to a database located in a different namespace, or even a different cluster.
+Traditionally, this would be handled by manually copying secrets to all the namespaces that need it, which can be a cumbersome process at scale.
+For this, we will use Carvel's **SecretGen** component. 
+
+Let's demonstrate it by installing **pgAdmin** in a new namespace.
 
 <font color="red"><b>NOTE: Restore default context before proceeding:</b></font>
 ```execute
 kubectl config set-context --current --namespace={{session_namespace}}
 ```
+
+Deploy a new instance of pgAdmin using the manifest below:
+```execute
+helm repo add runix https://helm.runix.net/; helm repo update; helm uninstall pgadmin runix/pgadmin4 --namespace pgadmin-{{ session_namespace }} || true; kubectl delete ns pgadmin-{{ session_namespace }} || true; kubectl create ns pgadmin-{{ session_namespace }}; helm install pgadmin runix/pgadmin4 --set persistence.storageClass=generic --namespace pgadmin-{{ session_namespace }};export PGADMIN_NS_POD_NAME=$(kubectl get pods --namespace {{ session_namespace }} -l "app.kubernetes.io/name=pgadmin4,app.kubernetes.io/instance=pgadmin" -o jsonpath="{.items[0].metadata.name}"); kubectl expose pod $PGADMIN_NS_POD_NAME --name pgadmin-{{ session_namespace }} --port 80 --namespace pgadmin-{{ session_namespace }}
+```
+
+Ensure the new deployment was successful: <font color='red'>Click Ctrl^C when the deployment is ready.</font>
+```execute
+watch kubectl get all  --namespace pgadmin-{{ session_namespace }}
+```
+
+Confirm that the secret for the pginstance-1 cluster cannot be accessed from the new namespace:
+```execute
+kubectl get secret --namespace pgadmin-{{ session_namespace }}
+```
+
+The secret needs to be imported from the source. We will use Carvel's **SecretExport** to export the secret from the upstream namespace,
+and **SecretImport** to import it into our new namespace. View the manifest:
+```editor:open-file
+file: ~/other/resources/postgres/pgadmin-secretimportexport.yaml
+```
+
+Let's deploy the **SecretExport** and **SecretImport**:
+```execute
+kubectl apply -f ~/other/resources/postgres/pgadmin-secretimportexport.yaml
+```
+
+The secret should now be available:
+```execute
+kubectl get secret --namespace pgadmin-{{ session_namespace }}
+```
+
+##### Service Bindings
+For many kinds of users (ex. developers), it would be ideal to provide connectivity to the database 
+by having the credentials delivered to them, instead of having to locate the credentials themselves.
+The same thing applies to the applications which consume the credentials. 
+There should be separation of code and config, meaning that credentials should be
+<b>transparently injected into the app by the provider</b>, and the code should be able to consume credentials in a provider-agnostic way.
+
+**Tanzu Postgres** supports **Service Bindings**, which provide a provider-agnostic, standardized approach for setting up connectivity 
+between services and applications. 
+
+View the manifest that will be used to configure the Service Binding from our new pgAdmin instance to the pginstance-1 DB instance:
+```editor:open-file
+file: ~/other/resources/postgres/pgadmin-sb.yaml
+```
+
+Deploy the ServiceBinding:
+```execute
+kubectl apply -f ~/other/resources/postgres/pgadmin-sb.yaml --namespace pgadmin-{{ session_namespace }}
+```
+
+The **Service Binding** specification works by volume mounting the secrets delivered by the **Provisioned Service** resource(s)
+into the Workload's pod container(s). The secrets are mounted at a dynamically named directory. An environment variable,
+called SERVICE_BINDING_ROOT, points to the root of the mount directory.
+
+Start a shell session in the workload's container:
+```execute
+clear && export PGADMIN_NS_POD_NAME=$(kubectl get pods --namespace {{ session_namespace }} -l "app.kubernetes.io/name=pgadmin4,app.kubernetes.io/instance=pgadmin" -o jsonpath="{.items[0].metadata.name}"); kubectl exec $PGADMIN_NS_POD_NAME -it -- sh
+```
+
+Next, view the Service Binding directory's content:
+```execute
+echo "Service Bindng Mount Path: $SERVICE_BINDING_ROOT"; ls -ltr $SERVICE_BINDING_ROOT/pginstance-1
+```
+
+View specific entries - for example, **type** and **provider** are required by the spec, **username** is optional:
+```execute
+echo Type: $(cat $SERVICE_BINDING_ROOT/db/type); echo Provider: $(cat $SERVICE_BINDING_ROOT/db/provider); echo Username: $(cat $SERVICE_BINDING_ROOT/db/username); exit
+```
+
+

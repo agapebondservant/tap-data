@@ -1,0 +1,1508 @@
+---
+# Source: jupyterhub/templates/hub/networkpolicy.yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  labels:
+    app.kubernetes.io/name: jupyterhub
+    helm.sh/chart: jupyterhub-1.3.10
+    app.kubernetes.io/instance: mlflow-jupyterhub
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: hub
+  name: mlflow-jupyterhub-hub
+  namespace: "default"
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: jupyterhub
+      app.kubernetes.io/instance: mlflow-jupyterhub
+      app.kubernetes.io/component: hub
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    # Pods with label "hub.jupyter.org/network-access-hub" --> Hub
+    - ports:
+        - port: 8081
+      from:
+        - podSelector:
+            matchLabels:
+              hub.jupyter.org/network-access-hub: "true"
+          namespaceSelector:
+            matchLabels: {}
+        - namespaceSelector:
+            matchLabels:
+              hub.jupyter.org/network-access-hub: "true"
+  egress:
+    # Hub --> Proxy API
+    - ports:
+        - port: 8001
+      to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: jupyterhub
+              app.kubernetes.io/instance: mlflow-jupyterhub
+              app.kubernetes.io/component: proxy
+    # Hub --> Single User
+    - ports:
+        - port: 8888
+      to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: jupyterhub
+              app.kubernetes.io/instance: mlflow-jupyterhub
+              app.kubernetes.io/component: singleuser
+    ## DNS access
+    - ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+    ## PostgreSQL access
+    - ports:
+        - protocol: UDP
+          port: 5432
+        - protocol: TCP
+          port: 5432
+    ## Hub --> Any IP:PORT
+    ##
+    - to:
+---
+# Source: jupyterhub/templates/proxy/networkpolicy.yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  labels:
+    app.kubernetes.io/name: jupyterhub
+    helm.sh/chart: jupyterhub-1.3.10
+    app.kubernetes.io/instance: mlflow-jupyterhub
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: proxy
+  name: mlflow-jupyterhub-proxy
+  namespace: "default"
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: jupyterhub
+      app.kubernetes.io/instance: mlflow-jupyterhub
+      app.kubernetes.io/component: proxy
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    ## Any IP --> Proxy
+    ##
+    - ports:
+        - port: 8000
+    
+    # Pods with label "hub.jupyter.org/network-access-proxy-api" --> Proxy API
+    - ports:
+        - port: 8001
+      from:
+        - podSelector:
+            matchLabels:
+              hub.jupyter.org/network-access-proxy-api: "true"
+          namespaceSelector:
+            matchLabels: {}
+        - namespaceSelector:
+            matchLabels:
+              hub.jupyter.org/network-access-proxy-api: "true"
+  egress:
+    # Proxy --> Hub
+    - ports:
+        - port: 8081
+      to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: jupyterhub
+              app.kubernetes.io/instance: mlflow-jupyterhub
+              app.kubernetes.io/component: hub
+    # Proxy --> Single User
+    - ports:
+        - port: 8888
+      to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: jupyterhub
+              app.kubernetes.io/instance: mlflow-jupyterhub
+              app.kubernetes.io/component: singleuser
+    ## DNS access
+    - ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+---
+# Source: jupyterhub/templates/singleuser/networkpolicy.yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  labels:
+    app.kubernetes.io/name: jupyterhub
+    helm.sh/chart: jupyterhub-1.3.10
+    app.kubernetes.io/instance: mlflow-jupyterhub
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: singleuser
+  name: mlflow-jupyterhub-singleuser
+  namespace: "default"
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: jupyterhub
+      app.kubernetes.io/instance: mlflow-jupyterhub
+      app.kubernetes.io/component: singleuser
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    # Pods with label "hub.jupyter.org/network-access-singleuser" --> Single User
+    - ports:
+        - port: 8888
+      from:
+        - podSelector:
+            matchLabels:
+              hub.jupyter.org/network-access-singleuser: "true"
+          namespaceSelector:
+            matchLabels: {}
+        - namespaceSelector:
+            matchLabels:
+              hub.jupyter.org/network-access-singleuser: "true"
+  egress:
+    # Single User --> Hub
+    - ports:
+        - port: 8081
+      to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: jupyterhub
+              app.kubernetes.io/instance: mlflow-jupyterhub
+              app.kubernetes.io/component: hub
+    ## Limit access to the Cloud Metadata API
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+            except:
+              - 169.254.169.254/32
+    ## DNS access
+    - ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+    ## PostgreSQL access
+    - ports:
+        - protocol: UDP
+          port: 5432
+        - protocol: TCP
+          port: 5432
+---
+# Source: jupyterhub/templates/hub/service-account.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: mlflow-jupyterhub-hub
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: jupyterhub
+    helm.sh/chart: jupyterhub-1.3.10
+    app.kubernetes.io/instance: mlflow-jupyterhub
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: hub
+  annotations:
+automountServiceAccountToken: true
+---
+# Source: jupyterhub/templates/singleuser/service-account.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: mlflow-jupyterhub-singleuser
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: jupyterhub
+    helm.sh/chart: jupyterhub-1.3.10
+    app.kubernetes.io/instance: mlflow-jupyterhub
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: singleuser
+  annotations:
+automountServiceAccountToken: true
+---
+# Source: jupyterhub/charts/postgresql/templates/secrets.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mlflow-jupyterhub-postgresql
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: postgresql
+    helm.sh/chart: postgresql-11.6.6
+    app.kubernetes.io/instance: mlflow-jupyterhub
+    app.kubernetes.io/managed-by: Helm
+type: Opaque
+data:
+  postgres-password: "N3dzYXVTZmkwUA=="
+  password: "UzBXZ1V3THpNbA=="
+  # We don't auto-generate LDAP password when it's not provided as we do for other passwords
+---
+# Source: jupyterhub/templates/hub/secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mlflow-jupyterhub-hub
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: jupyterhub
+    helm.sh/chart: jupyterhub-1.3.10
+    app.kubernetes.io/instance: mlflow-jupyterhub
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: hub
+type: Opaque
+data:
+  values.yaml: "Q2hhcnQ6CiAgTmFtZToganVweXRlcmh1YgogIFZlcnNpb246IDEuMy4xMApSZWxlYXNlOgogIE5hbWU6IG1sZmxvdy1qdXB5dGVyaHViCiAgTmFtZXNwYWNlOiBkZWZhdWx0CiAgU2VydmljZTogSGVsbQpodWI6CiAgY29uZmlnOgogICAgSnVweXRlckh1YjoKICAgICAgYWRtaW5fYWNjZXNzOiB0cnVlCiAgICAgIGF1dGhlbnRpY2F0b3JfY2xhc3M6IGR1bW15CiAgICAgIGNvb2tpZV9zZWNyZXRfZmlsZTogL3RtcC9qdXB5dGVyaHViX2Nvb2tpZV9zZWNyZXQKICAgICAgRHVtbXlBdXRoZW50aWNhdG9yOgogICAgICAgIHBhc3N3b3JkOiAiZWIycVhKV2xwQiIKICAgICAgQXV0aGVudGljYXRvcjoKICAgICAgICBhZG1pbl91c2VyczoKICAgICAgICAgIC0gdXNlcgogIGNvb2tpZVNlY3JldDoKICBjb25jdXJyZW50U3Bhd25MaW1pdDogNjQKICBjb25zZWN1dGl2ZUZhaWx1cmVMaW1pdDogNQogIGFjdGl2ZVNlcnZlckxpbWl0OgogIGRiOgogICAgdHlwZTogcG9zdGdyZXMKICAgIHVybDogcG9zdGdyZXNxbDovL2JuX2p1cHl0ZXJodWJAbWxmbG93LWp1cHl0ZXJodWItcG9zdGdyZXNxbDo1NDMyL2JpdG5hbWlfanVweXRlcmh1YgogIHNlcnZpY2VzOiB7fQogIGFsbG93TmFtZWRTZXJ2ZXJzOiBmYWxzZQogIG5hbWVkU2VydmVyTGltaXRQZXJVc2VyOgogIHJlZGlyZWN0VG9TZXJ2ZXI6CiAgc2h1dGRvd25PbkxvZ291dDoKc2luZ2xldXNlcjoKICBwb2ROYW1lVGVtcGxhdGU6IG1sZmxvdy1qdXB5dGVyaHViLWp1cHl0ZXIte3VzZXJuYW1lfQogIG5ldHdvcmtUb29sczoKICAgIGltYWdlOgogICAgICBuYW1lOiBnY3IuaW8vc3lzLTJiMDEwOWl0L2RlbW8vYml0bmFtaS90YWMtc2hlbGwKICAgICAgdGFnOiA3LWNlbnRvcy03LXI0NzEKICAgICAgcHVsbFBvbGljeTogSWZOb3RQcmVzZW50CiAgICAgIHB1bGxTZWNyZXRzOgogICAgICAgIAogIGNsb3VkTWV0YWRhdGE6CiAgICBibG9ja1dpdGhJcHRhYmxlczogZmFsc2UKICBldmVudHM6IHRydWUKICBleHRyYUFubm90YXRpb25zOgogIGV4dHJhTGFiZWxzOgogICAgaHViLmp1cHl0ZXIub3JnL25ldHdvcmstYWNjZXNzLWh1YjogInRydWUiCiAgICBhcHAua3ViZXJuZXRlcy5pby9jb21wb25lbnQ6IHNpbmdsZXVzZXIKICAgIGFwcC5rdWJlcm5ldGVzLmlvL25hbWU6IGp1cHl0ZXJodWIKICAgIGhlbG0uc2gvY2hhcnQ6IGp1cHl0ZXJodWItMS4zLjEwCiAgICBhcHAua3ViZXJuZXRlcy5pby9pbnN0YW5jZTogbWxmbG93LWp1cHl0ZXJodWIKICAgIGFwcC5rdWJlcm5ldGVzLmlvL21hbmFnZWQtYnk6IEhlbG0KICB1aWQ6IDEwMDEKICBmc0dpZDogMTAwMQogIHNlcnZpY2VBY2NvdW50TmFtZTogbWxmbG93LWp1cHl0ZXJodWItc2luZ2xldXNlcgogIHN0b3JhZ2U6CiAgICB0eXBlOiBkeW5hbWljCiAgICBleHRyYUxhYmVsczoKICAgICAgYXBwLmt1YmVybmV0ZXMuaW8vY29tcG9uZW50OiBzaW5nbGV1c2VyCiAgICAgIGFwcC5rdWJlcm5ldGVzLmlvL25hbWU6IGp1cHl0ZXJodWIKICAgICAgaGVsbS5zaC9jaGFydDoganVweXRlcmh1Yi0xLjMuMTAKICAgICAgYXBwLmt1YmVybmV0ZXMuaW8vaW5zdGFuY2U6IG1sZmxvdy1qdXB5dGVyaHViCiAgICAgIGFwcC5rdWJlcm5ldGVzLmlvL21hbmFnZWQtYnk6IEhlbG0KICAgIGNhcGFjaXR5OiAxMEdpCiAgICBob21lTW91bnRQYXRoOiAvb3B0L2JpdG5hbWkvanVweXRlcmh1Yi1zaW5nbGV1c2VyCiAgICBkeW5hbWljOgogICAgICAKICAgICAgcHZjTmFtZVRlbXBsYXRlOiBtbGZsb3ctanVweXRlcmh1Yi1jbGFpbS17dXNlcm5hbWV9e3NlcnZlcm5hbWV9CiAgICAgIHZvbHVtZU5hbWVUZW1wbGF0ZTogbWxmbG93LWp1cHl0ZXJodWItdm9sdW1lLXt1c2VybmFtZX17c2VydmVybmFtZX0KICAgICAgc3RvcmFnZUFjY2Vzc01vZGVzOgogICAgICAgIC0gUmVhZFdyaXRlT25jZQogIGltYWdlOgogICAgbmFtZTogZ2NyLmlvL3N5cy0yYjAxMDlpdC9kZW1vL2JpdG5hbWkvanVweXRlci1iYXNlLW5vdGVib29rCiAgICB0YWc6IDEuNS4wLWNlbnRvcy03LXIxOTMKICAgIHB1bGxQb2xpY3k6IElmTm90UHJlc2VudAogICAgcHVsbFNlY3JldHM6CiAgICAgICAgCiAgc3RhcnRUaW1lb3V0OiAzMDAKICBjcHU6CiAgICBsaW1pdDogCiAgICBndWFyYW50ZWU6IAogIG1lbW9yeToKICAgIGxpbWl0OiAKICAgIGd1YXJhbnRlZTogCiAgY21kOiBqdXB5dGVyaHViLXNpbmdsZXVzZXIKICBkZWZhdWx0VXJsOgpjdWxsOgogIGVuYWJsZWQ6IHRydWUKICB1c2VyczogZmFsc2UKICByZW1vdmVOYW1lZFNlcnZlcnM6IGZhbHNlCiAgdGltZW91dDogMzYwMAogIGV2ZXJ5OiA2MDAKICBjb25jdXJyZW5jeTogMTAKICBtYXhBZ2U6IDAK"
+  proxy-token: "eTlONFM2YnE4bFB1bTVqMDFQdTdTZ2tOTm1hUzc4Unc="
+---
+# Source: jupyterhub/templates/hub/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/name: jupyterhub
+    helm.sh/chart: jupyterhub-1.3.10
+    app.kubernetes.io/instance: mlflow-jupyterhub
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: hub
+  name: mlflow-jupyterhub-hub
+  namespace: "default"
+data:
+  ## Taken from upstream JupyterHub chart
+  ## Source: https://jupyterhub.github.io/helm-chart/jupyterhub-0.11.1.tgz
+  jupyterhub_config.py: |
+    import os
+    import re
+    import sys
+
+    from binascii import a2b_hex
+
+    from tornado.httpclient import AsyncHTTPClient
+    from kubernetes import client
+    from jupyterhub.utils import url_path_join
+
+    # Make sure that modules placed in the same directory as the jupyterhub config are added to the pythonpath
+    configuration_directory = os.path.dirname(os.path.realpath(__file__))
+    sys.path.insert(0, configuration_directory)
+
+    from z2jh import get_config, set_config_if_not_none
+
+    def camelCaseify(s):
+        """convert snake_case to camelCase
+
+        For the common case where some_value is set from someValue
+        so we don't have to specify the name twice.
+        """
+        return re.sub(r"_([a-z])", lambda m: m.group(1).upper(), s)
+
+    # Configure JupyterHub to use the curl backend for making HTTP requests,
+    # rather than the pure-python implementations. The default one starts
+    # being too slow to make a large number of requests to the proxy API
+    # at the rate required.
+    AsyncHTTPClient.configure("tornado.curl_httpclient.CurlAsyncHTTPClient")
+
+    c.JupyterHub.spawner_class = "kubespawner.KubeSpawner"
+
+    # Connect to a proxy running in a different pod. Note that *_SERVICE_*
+    # environment variables are set by Kubernetes for Services
+    # Adapted by Bitnami to allow other service names
+    c.ConfigurableHTTPProxy.api_url = (
+        f"http://mlflow-jupyterhub-proxy-api:{os.environ['PROXY_API_SERVICE_PORT']}"
+    )
+    c.ConfigurableHTTPProxy.should_start = False
+
+    # Do not shut down user pods when hub is restarted
+    c.JupyterHub.cleanup_servers = False
+
+    # Check that the proxy has routes appropriately setup
+    c.JupyterHub.last_activity_interval = 60
+
+    # Don't wait at all before redirecting a spawning user to the progress page
+    c.JupyterHub.tornado_settings = {
+        "slow_spawn_timeout": 0,
+    }
+
+    # configure the hub db connection
+    db_type = get_config("hub.db.type")
+    if db_type == "sqlite-pvc":
+        c.JupyterHub.db_url = "sqlite:///jupyterhub.sqlite"
+    elif db_type == "sqlite-memory":
+        c.JupyterHub.db_url = "sqlite://"
+    else:
+        set_config_if_not_none(c.JupyterHub, "db_url", "hub.db.url")
+
+    # c.JupyterHub configuration from Helm chart's configmap
+    for trait, cfg_key in (
+        ("concurrent_spawn_limit", None),
+        ("active_server_limit", None),
+        ("base_url", None),
+        # ('cookie_secret', None),  # requires a Hex -> Byte transformation
+        ("allow_named_servers", None),
+        ("named_server_limit_per_user", None),
+        ("authenticate_prometheus", None),
+        ("redirect_to_server", None),
+        ("shutdown_on_logout", None),
+        ("template_paths", None),
+        ("template_vars", None),
+    ):
+        if cfg_key is None:
+            cfg_key = camelCaseify(trait)
+        set_config_if_not_none(c.JupyterHub, trait, "hub." + cfg_key)
+
+    # a required Hex -> Byte transformation
+    cookie_secret_hex = get_config("hub.cookieSecret")
+    if cookie_secret_hex:
+        c.JupyterHub.cookie_secret = a2b_hex(cookie_secret_hex)
+
+    # hub_bind_url configures what the JupyterHub process within the hub pod's
+    # container should listen to.
+    hub_container_port = 8081
+    c.JupyterHub.hub_bind_url = f"http://:{hub_container_port}"
+
+    # hub_connect_url is the URL for connecting to the hub for use by external
+    # JupyterHub services such as the proxy. Note that *_SERVICE_* environment
+    # variables are set by Kubernetes for Services.
+    c.JupyterHub.hub_connect_url = f"http://mlflow-jupyterhub-hub:{os.environ['HUB_SERVICE_PORT']}"
+
+    c.KubeSpawner.port = 8888
+    c.KubeSpawner.notebook_dir = "/opt/bitnami/jupyterhub-singleuser"
+
+    # implement common labels
+    # this duplicates the jupyterhub.commonLabels helper
+    common_labels = c.KubeSpawner.common_labels = {}
+    common_labels["app"] = get_config(
+        "nameOverride",
+        default=get_config("Chart.Name", "jupyterhub"),
+    )
+    common_labels["heritage"] = "jupyterhub"
+    chart_name = get_config("Chart.Name")
+    chart_version = get_config("Chart.Version")
+    if chart_name and chart_version:
+        common_labels["chart"] = "{}-{}".format(
+            chart_name,
+            chart_version.replace("+", "_"),
+        )
+    release = get_config("Release.Name")
+    if release:
+        common_labels["release"] = release
+
+    c.KubeSpawner.namespace = os.environ.get("POD_NAMESPACE", "default")
+
+    # Max number of consecutive failures before the Hub restarts itself
+    # requires jupyterhub 0.9.2
+    set_config_if_not_none(
+        c.Spawner,
+        "consecutive_failure_limit",
+        "hub.consecutiveFailureLimit",
+    )
+
+    for trait, cfg_key in (
+        ("pod_name_template", None),
+        ("start_timeout", None),
+        ("image_pull_policy", "image.pullPolicy"),
+        # ('image_pull_secrets', 'image.pullSecrets'), # Managed manually below
+        ("events_enabled", "events"),
+        ("extra_labels", None),
+        ("extra_annotations", None),
+        ("uid", None),
+        ("fs_gid", None),
+        ("run_privileged", None),
+        ("allow_privilege_escalation", None),
+        ("service_account", "serviceAccountName"),
+        ("storage_extra_labels", "storage.extraLabels"),
+        ("tolerations", "extraTolerations"),
+        ("node_selector", None),
+        ("node_affinity_required", "extraNodeAffinity.required"),
+        ("node_affinity_preferred", "extraNodeAffinity.preferred"),
+        ("pod_affinity_required", "extraPodAffinity.required"),
+        ("pod_affinity_preferred", "extraPodAffinity.preferred"),
+        ("pod_anti_affinity_required", "extraPodAntiAffinity.required"),
+        ("pod_anti_affinity_preferred", "extraPodAntiAffinity.preferred"),
+        ("lifecycle_hooks", None),
+        ("init_containers", None),
+        ("extra_containers", None),
+        ("mem_limit", "memory.limit"),
+        ("mem_guarantee", "memory.guarantee"),
+        ("cpu_limit", "cpu.limit"),
+        ("cpu_guarantee", "cpu.guarantee"),
+        ("extra_resource_limits", "extraResource.limits"),
+        ("extra_resource_guarantees", "extraResource.guarantees"),
+        ("environment", "extraEnv"),
+        ("profile_list", None),
+        ("extra_pod_config", None),
+    ):
+        if cfg_key is None:
+            cfg_key = camelCaseify(trait)
+        set_config_if_not_none(c.KubeSpawner, trait, "singleuser." + cfg_key)
+
+    image = get_config("singleuser.image.name")
+    if image:
+        tag = get_config("singleuser.image.tag")
+        if tag:
+            image = "{}:{}".format(image, tag)
+
+        c.KubeSpawner.image = image
+
+    # Combine imagePullSecret.create (single), imagePullSecrets (list), and
+    # singleuser.image.pullSecrets (list).
+    image_pull_secrets = []
+    if get_config("imagePullSecret.automaticReferenceInjection") and (
+        get_config("imagePullSecret.create") or get_config("imagePullSecret.enabled")
+    ):
+        image_pull_secrets.append("image-pull-secret")
+    if get_config("imagePullSecrets"):
+        image_pull_secrets.extend(get_config("imagePullSecrets"))
+    if get_config("singleuser.image.pullSecrets"):
+        image_pull_secrets.extend(get_config("singleuser.image.pullSecrets"))
+    if image_pull_secrets:
+        c.KubeSpawner.image_pull_secrets = image_pull_secrets
+
+    # scheduling:
+    if get_config("scheduling.userScheduler.enabled"):
+        c.KubeSpawner.scheduler_name = os.environ["HELM_RELEASE_NAME"] + "-user-scheduler"
+    if get_config("scheduling.podPriority.enabled"):
+        c.KubeSpawner.priority_class_name = (
+            os.environ["HELM_RELEASE_NAME"] + "-default-priority"
+        )
+
+    # add node-purpose affinity
+    match_node_purpose = get_config("scheduling.userPods.nodeAffinity.matchNodePurpose")
+    if match_node_purpose:
+        node_selector = dict(
+            matchExpressions=[
+                dict(
+                    key="hub.jupyter.org/node-purpose",
+                    operator="In",
+                    values=["user"],
+                )
+            ],
+        )
+        if match_node_purpose == "prefer":
+            c.KubeSpawner.node_affinity_preferred.append(
+                dict(
+                    weight=100,
+                    preference=node_selector,
+                ),
+            )
+        elif match_node_purpose == "require":
+            c.KubeSpawner.node_affinity_required.append(node_selector)
+        elif match_node_purpose == "ignore":
+            pass
+        else:
+            raise ValueError(
+                "Unrecognized value for matchNodePurpose: %r" % match_node_purpose
+            )
+
+    # add dedicated-node toleration
+    for key in (
+        "hub.jupyter.org/dedicated",
+        # workaround GKE not supporting / in initial node taints
+        "hub.jupyter.org_dedicated",
+    ):
+        c.KubeSpawner.tolerations.append(
+            dict(
+                key=key,
+                operator="Equal",
+                value="user",
+                effect="NoSchedule",
+            )
+        )
+
+    # Configure dynamically provisioning pvc
+    storage_type = get_config("singleuser.storage.type")
+
+    if storage_type == "dynamic":
+        pvc_name_template = get_config("singleuser.storage.dynamic.pvcNameTemplate")
+        c.KubeSpawner.pvc_name_template = pvc_name_template
+        volume_name_template = get_config("singleuser.storage.dynamic.volumeNameTemplate")
+        c.KubeSpawner.storage_pvc_ensure = True
+        set_config_if_not_none(
+            c.KubeSpawner, "storage_class", "singleuser.storage.dynamic.storageClass"
+        )
+        set_config_if_not_none(
+            c.KubeSpawner,
+            "storage_access_modes",
+            "singleuser.storage.dynamic.storageAccessModes",
+        )
+        set_config_if_not_none(
+            c.KubeSpawner, "storage_capacity", "singleuser.storage.capacity"
+        )
+
+        # Add volumes to singleuser pods
+        c.KubeSpawner.volumes = [
+            {
+                "name": volume_name_template,
+                "persistentVolumeClaim": {"claimName": pvc_name_template},
+            }
+        ]
+        c.KubeSpawner.volume_mounts = [
+            {
+                "mountPath": get_config("singleuser.storage.homeMountPath"),
+                "name": volume_name_template,
+            }
+        ]
+    elif storage_type == "static":
+        pvc_claim_name = get_config("singleuser.storage.static.pvcName")
+        c.KubeSpawner.volumes = [
+            {"name": "home", "persistentVolumeClaim": {"claimName": pvc_claim_name}}
+        ]
+
+        c.KubeSpawner.volume_mounts = [
+            {
+                "mountPath": get_config("singleuser.storage.homeMountPath"),
+                "name": "home",
+                "subPath": get_config("singleuser.storage.static.subPath"),
+            }
+        ]
+
+    c.KubeSpawner.volumes.extend(get_config("singleuser.storage.extraVolumes", []))
+    c.KubeSpawner.volume_mounts.extend(
+        get_config("singleuser.storage.extraVolumeMounts", [])
+    )
+
+    c.JupyterHub.services = []
+
+    if get_config("cull.enabled", False):
+        cull_cmd = ["python3", "-m", "jupyterhub_idle_culler"]
+        base_url = c.JupyterHub.get("base_url", "/")
+        cull_cmd.append("--url=http://localhost:8081" + url_path_join(base_url, "hub/api"))
+
+        cull_timeout = get_config("cull.timeout")
+        if cull_timeout:
+            cull_cmd.append("--timeout=%s" % cull_timeout)
+
+        cull_every = get_config("cull.every")
+        if cull_every:
+            cull_cmd.append("--cull-every=%s" % cull_every)
+
+        cull_concurrency = get_config("cull.concurrency")
+        if cull_concurrency:
+            cull_cmd.append("--concurrency=%s" % cull_concurrency)
+
+        if get_config("cull.users"):
+            cull_cmd.append("--cull-users")
+
+        if get_config("cull.removeNamedServers"):
+            cull_cmd.append("--remove-named-servers")
+
+        cull_max_age = get_config("cull.maxAge")
+        if cull_max_age:
+            cull_cmd.append("--max-age=%s" % cull_max_age)
+
+        c.JupyterHub.services.append(
+            {
+                "name": "cull-idle",
+                "admin": True,
+                "command": cull_cmd,
+            }
+        )
+
+    for name, service in get_config("hub.services", {}).items():
+        # jupyterhub.services is a list of dicts, but
+        # in the helm chart it is a dict of dicts for easier merged-config
+        service.setdefault("name", name)
+        # handle camelCase->snake_case of api_token
+        api_token = service.pop("apiToken", None)
+        if api_token:
+            service["api_token"] = api_token
+        c.JupyterHub.services.append(service)
+
+    set_config_if_not_none(c.Spawner, "cmd", "singleuser.cmd")
+    set_config_if_not_none(c.Spawner, "default_url", "singleuser.defaultUrl")
+
+    cloud_metadata = get_config("singleuser.cloudMetadata", {})
+
+    if (
+        cloud_metadata.get("blockWithIptables") == True
+        or cloud_metadata.get("enabled") == False
+    ):
+        # Use iptables to block access to cloud metadata by default
+        network_tools_image_name = get_config("singleuser.networkTools.image.name")
+        network_tools_image_tag = get_config("singleuser.networkTools.image.tag")
+        ip_block_container = client.V1Container(
+            name="block-cloud-metadata",
+            image=f"{network_tools_image_name}:{network_tools_image_tag}",
+            command=[
+                "/bin/bash"
+            ],
+            args=[
+                "-ec",
+                "install_packages iptables && iptables -A OUTPUT -d " + cloud_metadata.get("ip", "169.254.169.254") + " -j DROP"
+            ],
+            security_context=client.V1SecurityContext(
+                privileged=True,
+                run_as_user=0,
+                capabilities=client.V1Capabilities(add=["NET_ADMIN"]),
+            ),
+        )
+
+        c.KubeSpawner.init_containers.append(ip_block_container)
+
+    if get_config("debug.enabled", False):
+        c.JupyterHub.log_level = "DEBUG"
+        c.Spawner.debug = True
+
+    # load hub.config values
+    for section, sub_cfg in get_config("hub.config", {}).items():
+        c[section].update(sub_cfg)
+
+    # execute hub.extraConfig string
+    extra_config = get_config("hub.extraConfig", {})
+    if isinstance(extra_config, str):
+        from textwrap import indent, dedent
+
+        msg = dedent(
+            """
+        hub.extraConfig should be a dict of strings,
+        but found a single string instead.
+
+        extraConfig as a single string is deprecated
+        as of the jupyterhub chart version 0.6.
+
+        The keys can be anything identifying the
+        block of extra configuration.
+
+        Try this instead:
+
+            hub:
+              extraConfig:
+                myConfig: |
+                  {}
+
+        This configuration will still be loaded,
+        but you are encouraged to adopt the nested form
+        which enables easier merging of multiple extra configurations.
+        """
+        )
+        print(msg.format(indent(extra_config, " " * 10).lstrip()), file=sys.stderr)
+        extra_config = {"deprecated string": extra_config}
+
+    for key, config_py in sorted(extra_config.items()):
+        print("Loading extra config: %s" % key)
+        exec(config_py)
+
+  ## Taken from the upstream chart
+  ## Source: https://jupyterhub.github.io/helm-chart/jupyterhub-0.11.1.tgz
+  z2jh.py: |
+    """
+    Utility methods for use in jupyterhub_config.py and dynamic subconfigs.
+
+    Methods here can be imported by extraConfig in values.yaml
+    """
+    from collections import Mapping
+    from functools import lru_cache
+    import os
+
+    import yaml
+
+    # memoize so we only load config once
+    @lru_cache()
+    def _load_config():
+        """Load configuration from disk
+
+        Memoized to only load once
+        """
+        cfg = {}
+        for source in ("config", "secret"):
+            path = f"/etc/jupyterhub/{source}/values.yaml"
+            if os.path.exists(path):
+                print(f"Loading {path}")
+                with open(path) as f:
+                    values = yaml.safe_load(f)
+                cfg = _merge_dictionaries(cfg, values)
+            else:
+                print(f"No config at {path}")
+        return cfg
+
+    def _merge_dictionaries(a, b):
+        """Merge two dictionaries recursively.
+
+        Simplified From https://stackoverflow.com/a/7205107
+        """
+        merged = a.copy()
+        for key in b:
+            if key in a:
+                if isinstance(a[key], Mapping) and isinstance(b[key], Mapping):
+                    merged[key] = _merge_dictionaries(a[key], b[key])
+                else:
+                    merged[key] = b[key]
+            else:
+                merged[key] = b[key]
+        return merged
+
+    def get_config(key, default=None):
+        """
+        Find a config item of a given name & return it
+
+        Parses everything as YAML, so lists and dicts are available too
+
+        get_config("a.b.c") returns config['a']['b']['c']
+        """
+        value = _load_config()
+        # resolve path in yaml
+        for level in key.split("."):
+            if not isinstance(value, dict):
+                # a parent is a scalar or null,
+                # can't resolve full path
+                return default
+            if level not in value:
+                return default
+            else:
+                value = value[level]
+        return value
+
+    def set_config_if_not_none(cparent, name, key):
+        """
+        Find a config item of a given name, set the corresponding Jupyter
+        configuration item if not None
+        """
+        data = get_config(key)
+        if data is not None:
+            setattr(cparent, name, data)
+---
+# Source: jupyterhub/templates/hub/role.yaml
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: mlflow-jupyterhub-hub
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: jupyterhub
+    helm.sh/chart: jupyterhub-1.3.10
+    app.kubernetes.io/instance: mlflow-jupyterhub
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: hub
+rules:
+  - apiGroups: [""]
+    resources: ["pods", "persistentvolumeclaims"]
+    verbs: ["get", "watch", "list", "create", "delete"]
+  - apiGroups: [""]       # "" indicates the core API group
+    resources: ["events"]
+    verbs: ["get", "watch", "list"]
+---
+# Source: jupyterhub/templates/hub/rolebinding.yaml
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: mlflow-jupyterhub-hub
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: jupyterhub
+    helm.sh/chart: jupyterhub-1.3.10
+    app.kubernetes.io/instance: mlflow-jupyterhub
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: hub
+subjects:
+  - kind: ServiceAccount
+    name: mlflow-jupyterhub-hub
+    namespace: default
+roleRef:
+  kind: Role
+  name: mlflow-jupyterhub-hub
+  apiGroup: rbac.authorization.k8s.io
+---
+# Source: jupyterhub/charts/postgresql/templates/primary/svc-headless.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: mlflow-jupyterhub-postgresql-hl
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: postgresql
+    helm.sh/chart: postgresql-11.6.6
+    app.kubernetes.io/instance: mlflow-jupyterhub
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: primary
+    # Use this annotation in addition to the actual publishNotReadyAddresses
+    # field below because the annotation will stop being respected soon but the
+    # field is broken in some versions of Kubernetes:
+    # https://github.com/kubernetes/kubernetes/issues/58662
+    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+spec:
+  type: ClusterIP
+  clusterIP: None
+  # We want all pods in the StatefulSet to have their addresses published for
+  # the sake of the other Postgresql pods even before they're ready, since they
+  # have to be able to talk to each other in order to become ready.
+  publishNotReadyAddresses: true
+  ports:
+    - name: tcp-postgresql
+      port: 5432
+      targetPort: tcp-postgresql
+  selector:
+    app.kubernetes.io/name: postgresql
+    app.kubernetes.io/instance: mlflow-jupyterhub
+    app.kubernetes.io/component: primary
+---
+# Source: jupyterhub/charts/postgresql/templates/primary/svc.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: mlflow-jupyterhub-postgresql
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: postgresql
+    helm.sh/chart: postgresql-11.6.6
+    app.kubernetes.io/instance: mlflow-jupyterhub
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: primary
+  annotations:
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: tcp-postgresql
+      port: 5432
+      targetPort: tcp-postgresql
+      nodePort: null
+  selector:
+    app.kubernetes.io/name: postgresql
+    app.kubernetes.io/instance: mlflow-jupyterhub
+    app.kubernetes.io/component: primary
+---
+# Source: jupyterhub/templates/hub/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: mlflow-jupyterhub-hub
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: jupyterhub
+    helm.sh/chart: jupyterhub-1.3.10
+    app.kubernetes.io/instance: mlflow-jupyterhub
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: hub
+  annotations:
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: http
+      port: 8081
+      targetPort: http
+      protocol: TCP
+      nodePort: null
+  selector:
+    app.kubernetes.io/name: jupyterhub
+    app.kubernetes.io/instance: mlflow-jupyterhub
+    app.kubernetes.io/component: hub
+---
+# Source: jupyterhub/templates/proxy/service-api.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: mlflow-jupyterhub-proxy-api
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: jupyterhub
+    helm.sh/chart: jupyterhub-1.3.10
+    app.kubernetes.io/instance: mlflow-jupyterhub
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: proxy
+  annotations:
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: http
+      port: 8001
+      targetPort: api
+      protocol: TCP
+      nodePort: null
+  selector:
+    app.kubernetes.io/name: jupyterhub
+    app.kubernetes.io/instance: mlflow-jupyterhub
+    app.kubernetes.io/component: proxy
+---
+# Source: jupyterhub/templates/proxy/service-public.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: mlflow-jupyterhub-proxy-public
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: jupyterhub
+    helm.sh/chart: jupyterhub-1.3.10
+    app.kubernetes.io/instance: mlflow-jupyterhub
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: proxy
+  annotations:
+spec:
+  type: LoadBalancer
+  externalTrafficPolicy: "Cluster"
+  sessionAffinity: None
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+      protocol: TCP
+  selector:
+    app.kubernetes.io/name: jupyterhub
+    app.kubernetes.io/instance: mlflow-jupyterhub
+    app.kubernetes.io/component: proxy
+---
+# Source: jupyterhub/templates/image-puller/daemonset.yaml
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: mlflow-jupyterhub-image-puller
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: jupyterhub
+    helm.sh/chart: jupyterhub-1.3.10
+    app.kubernetes.io/instance: mlflow-jupyterhub
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: image-puller
+spec:
+  updateStrategy:
+    rollingUpdate: {}
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: jupyterhub
+      app.kubernetes.io/instance: mlflow-jupyterhub
+      app.kubernetes.io/component: image-puller
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: jupyterhub
+        helm.sh/chart: jupyterhub-1.3.10
+        app.kubernetes.io/instance: mlflow-jupyterhub
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/component: image-puller
+    spec:
+      
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: jupyterhub
+                    app.kubernetes.io/instance: mlflow-jupyterhub
+                    app.kubernetes.io/component: image-puller
+                namespaces:
+                  - "default"
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      securityContext:
+        fsGroup: 1001
+      initContainers:
+        - name: pull-0
+          image: gcr.io/sys-2b0109it/demo/bitnami/jupyter-base-notebook:1.5.0-centos-7-r193
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/sh
+            - -c
+            - echo "Pulling complete"
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1001
+        - name: pull-1
+          image: gcr.io/sys-2b0109it/demo/bitnami/tac-shell:7-centos-7-r471
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/sh
+            - -c
+            - echo "Pulling complete"
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1001
+      containers:
+        - name: pause
+          image: gcr.io/sys-2b0109it/demo/bitnami/tac-shell:7-centos-7-r471
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1001
+          command:
+            - /bin/sh
+            - -c
+            - sleep infinity
+          envFrom:
+          resources:
+            limits: {}
+            requests: {}
+---
+# Source: jupyterhub/templates/hub/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mlflow-jupyterhub-hub
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: jupyterhub
+    helm.sh/chart: jupyterhub-1.3.10
+    app.kubernetes.io/instance: mlflow-jupyterhub
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: hub
+spec:
+  strategy:
+    rollingUpdate: {}
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: jupyterhub
+      app.kubernetes.io/instance: mlflow-jupyterhub
+      app.kubernetes.io/component: hub
+  template:
+    metadata:
+      annotations:
+        checksum/hub-config: 9422e471df3be7937bff88496a9ebfa378a1789a77fbc38b8c6e6ae33f7e2a91
+        checksum/hub-secret: bdb34ab77dc5716a2ec950d9aaaa5d7d85281e992501fde187562a5d9d7ff06b
+      labels:
+        app.kubernetes.io/name: jupyterhub
+        helm.sh/chart: jupyterhub-1.3.10
+        app.kubernetes.io/instance: mlflow-jupyterhub
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/component: hub
+        hub.jupyter.org/network-access-proxy-api: "true"
+        hub.jupyter.org/network-access-proxy-http: "true"
+        hub.jupyter.org/network-access-singleuser: "true"
+    spec:
+      serviceAccountName: mlflow-jupyterhub-hub
+      
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: jupyterhub
+                    app.kubernetes.io/instance: mlflow-jupyterhub
+                    app.kubernetes.io/component: hub
+                namespaces:
+                  - "default"
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      securityContext:
+        fsGroup: 1001
+      initContainers:
+        # NOTE: The value postgresql.image is not available unless postgresql.enabled is not set. We could change this to use bitnami-shell if
+        # it had the binary wait-for-port.
+        # This init container is for avoiding CrashLoopback errors in the Hub container because the PostgreSQL container is not ready
+        - name: wait-for-db
+          image: gcr.io/sys-2b0109it/demo/bitnami/postgresql:14.3.0-centos-7-r21
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              #!/bin/bash
+
+              set -o errexit
+              set -o nounset
+              set -o pipefail
+
+              . /opt/bitnami/scripts/libos.sh
+              . /opt/bitnami/scripts/liblog.sh
+              . /opt/bitnami/scripts/libpostgresql.sh
+
+              check_postgresql_connection() {
+                  echo "SELECT 1" | postgresql_remote_execute "$POSTGRESQL_CLIENT_DATABASE_HOST" "$POSTGRESQL_CLIENT_DATABASE_PORT_NUMBER" "$POSTGRESQL_CLIENT_DATABASE_NAME" "$POSTGRESQL_CLIENT_POSTGRES_USER" "$POSTGRESQL_CLIENT_CREATE_DATABASE_PASSWORD"
+              }
+
+              info "Connecting to the PostgreSQL instance $POSTGRESQL_CLIENT_DATABASE_HOST:$POSTGRESQL_CLIENT_DATABASE_PORT_NUMBER"
+              if ! retry_while "check_postgresql_connection"; then
+                  error "Could not connect to the database server"
+                  return 1
+              else
+                  info "Connected to the PostgreSQL instance"
+              fi
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+          env:
+            - name: POSTGRESQL_CLIENT_DATABASE_HOST
+              value: mlflow-jupyterhub-postgresql
+            - name: POSTGRESQL_CLIENT_DATABASE_NAME
+              value: bitnami_jupyterhub
+            - name: POSTGRESQL_CLIENT_DATABASE_PORT_NUMBER
+              value: "5432"
+            - name: POSTGRESQL_CLIENT_CREATE_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mlflow-jupyterhub-postgresql
+                  key: password
+            - name: POSTGRESQL_CLIENT_POSTGRES_USER
+              value: "bn_jupyterhub"
+      containers:
+        - name: hub
+          image: gcr.io/sys-2b0109it/demo/bitnami/jupyterhub:1.5.0-centos-7-r180
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+          command:
+            - jupyterhub
+          args:
+            - --config
+            - /etc/jupyterhub/jupyterhub_config.py
+            - --upgrade-db
+          ports:
+            - name: http
+              containerPort: 8081
+          env:
+            - name: PYTHONUNBUFFERED
+              value: "1"
+            - name: HELM_RELEASE_NAME
+              value: "mlflow-jupyterhub"
+            - name: PROXY_API_SERVICE_PORT
+              value: "8001"
+            - name: HUB_SERVICE_PORT
+              value: "8081"
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: CONFIGPROXY_AUTH_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: mlflow-jupyterhub-hub
+                  key: proxy-token
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mlflow-jupyterhub-postgresql
+                  key: password
+          envFrom:
+          resources:
+            limits: {}
+            requests: {}
+          startupProbe:
+            failureThreshold: 30
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 3
+            httpGet:
+              path: /hub/health
+              port: http
+          livenessProbe:
+            failureThreshold: 30
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 3
+            httpGet:
+              path: /hub/health
+              port: http
+          readinessProbe:
+            failureThreshold: 30
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 3
+            httpGet:
+              path: /hub/health
+              port: http
+          volumeMounts:
+            - mountPath: /etc/jupyterhub/jupyterhub_config.py
+              subPath: jupyterhub_config.py
+              name: config
+            - mountPath: /etc/jupyterhub/z2jh.py
+              subPath: z2jh.py
+              name: config
+            - mountPath: /etc/jupyterhub/secret/
+              name: secret
+      volumes:
+        - name: config
+          configMap:
+            name: mlflow-jupyterhub-hub
+        - name: secret
+          secret:
+            secretName: mlflow-jupyterhub-hub
+---
+# Source: jupyterhub/templates/proxy/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mlflow-jupyterhub-proxy
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: jupyterhub
+    helm.sh/chart: jupyterhub-1.3.10
+    app.kubernetes.io/instance: mlflow-jupyterhub
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: proxy
+spec:
+  strategy:
+    rollingUpdate: {}
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: jupyterhub
+      app.kubernetes.io/instance: mlflow-jupyterhub
+      app.kubernetes.io/component: proxy
+  template:
+    metadata:
+      annotations:
+        checksum/hub-secret: 2fce79cff2ba75156dc502d8dd0e70bbc8db4d264e3653fb492a7a106a8e4b6d
+      labels:
+        app.kubernetes.io/name: jupyterhub
+        helm.sh/chart: jupyterhub-1.3.10
+        app.kubernetes.io/instance: mlflow-jupyterhub
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/component: proxy
+        hub.jupyter.org/network-access-hub: "true"
+        hub.jupyter.org/network-access-singleuser: "true"
+    spec:
+      
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: jupyterhub
+                    app.kubernetes.io/instance: mlflow-jupyterhub
+                    app.kubernetes.io/component: proxy
+                namespaces:
+                  - "default"
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      securityContext:
+        fsGroup: 1001
+      containers:
+        - name: proxy
+          image: gcr.io/sys-2b0109it/demo/bitnami/configurable-http-proxy:4.5.1-centos-7-r97
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1001
+          args:
+            - configurable-http-proxy
+            - "--ip=::"
+            - "--api-ip=::"
+            - --api-port=8001
+            - --default-target=http://mlflow-jupyterhub-hub:8081
+            - --error-target=http://mlflow-jupyterhub-hub:8081/hub/error
+            - --port=8000
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+            - name: api
+              containerPort: 8001
+              protocol: TCP
+          env:
+            - name: CONFIGPROXY_AUTH_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: mlflow-jupyterhub-hub
+                  key: proxy-token
+          envFrom:
+          resources:
+            limits: {}
+            requests: {}
+          startupProbe:
+            failureThreshold: 30
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 3
+            httpGet:
+              path: /_chp_healthz
+              port: http
+          livenessProbe:
+            failureThreshold: 30
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 3
+            httpGet:
+              path: /_chp_healthz
+              port: http
+          readinessProbe:
+            failureThreshold: 30
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 3
+            httpGet:
+              path: /_chp_healthz
+              port: http
+          volumeMounts:
+---
+# Source: jupyterhub/charts/postgresql/templates/primary/statefulset.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mlflow-jupyterhub-postgresql
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: postgresql
+    helm.sh/chart: postgresql-11.6.6
+    app.kubernetes.io/instance: mlflow-jupyterhub
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: primary
+  annotations:
+spec:
+  replicas: 1
+  serviceName: mlflow-jupyterhub-postgresql-hl
+  updateStrategy:
+    rollingUpdate: {}
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: postgresql
+      app.kubernetes.io/instance: mlflow-jupyterhub
+      app.kubernetes.io/component: primary
+  template:
+    metadata:
+      name: mlflow-jupyterhub-postgresql
+      labels:
+        app.kubernetes.io/name: postgresql
+        helm.sh/chart: postgresql-11.6.6
+        app.kubernetes.io/instance: mlflow-jupyterhub
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/component: primary
+      annotations:
+    spec:
+      serviceAccountName: default
+      
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: postgresql
+                    app.kubernetes.io/instance: mlflow-jupyterhub
+                    app.kubernetes.io/component: primary
+                namespaces:
+                  - "default"
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      securityContext:
+        fsGroup: 1001
+      hostNetwork: false
+      hostIPC: false
+      initContainers:
+      containers:
+        - name: postgresql
+          image: gcr.io/sys-2b0109it/demo/bitnami/postgresql:14.3.0-centos-7-r21
+          imagePullPolicy: "IfNotPresent"
+          securityContext:
+            runAsUser: 1001
+          env:
+            - name: BITNAMI_DEBUG
+              value: "false"
+            - name: POSTGRESQL_PORT_NUMBER
+              value: "5432"
+            - name: POSTGRESQL_VOLUME_DIR
+              value: "/bitnami/postgresql"
+            - name: PGDATA
+              value: "/bitnami/postgresql/data"
+            # Authentication
+            - name: POSTGRES_USER
+              value: "bn_jupyterhub"
+            - name: POSTGRES_POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mlflow-jupyterhub-postgresql
+                  key: postgres-password
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mlflow-jupyterhub-postgresql
+                  key: password
+            - name: POSTGRES_DB
+              value: "bitnami_jupyterhub"
+            # Replication
+            # Initdb
+            # Standby
+            # LDAP
+            - name: POSTGRESQL_ENABLE_LDAP
+              value: "no"
+            # TLS
+            - name: POSTGRESQL_ENABLE_TLS
+              value: "no"
+            # Audit
+            - name: POSTGRESQL_LOG_HOSTNAME
+              value: "false"
+            - name: POSTGRESQL_LOG_CONNECTIONS
+              value: "false"
+            - name: POSTGRESQL_LOG_DISCONNECTIONS
+              value: "false"
+            - name: POSTGRESQL_PGAUDIT_LOG_CATALOG
+              value: "off"
+            # Others
+            - name: POSTGRESQL_CLIENT_MIN_MESSAGES
+              value: "error"
+            - name: POSTGRESQL_SHARED_PRELOAD_LIBRARIES
+              value: "pgaudit"
+          ports:
+            - name: tcp-postgresql
+              containerPort: 5432
+          livenessProbe:
+            failureThreshold: 6
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - exec pg_isready -U "bn_jupyterhub" -d "dbname=bitnami_jupyterhub" -h 127.0.0.1 -p 5432
+          readinessProbe:
+            failureThreshold: 6
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - -e
+                
+                - |
+                  exec pg_isready -U "bn_jupyterhub" -d "dbname=bitnami_jupyterhub" -h 127.0.0.1 -p 5432
+                  [ -f /opt/bitnami/postgresql/tmp/.initialized ] || [ -f /bitnami/postgresql/.initialized ]
+          resources:
+            limits: {}
+            requests:
+              cpu: 250m
+              memory: 256Mi
+          volumeMounts:
+            - name: dshm
+              mountPath: /dev/shm
+            - name: data
+              mountPath: /bitnami/postgresql
+      volumes:
+        - name: dshm
+          emptyDir:
+            medium: Memory
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+          - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: "8Gi"
