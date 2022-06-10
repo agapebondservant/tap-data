@@ -408,6 +408,11 @@ Next, create a connection to the database. Click on "Add New Server" and enter t
 printf "Under General tab:\n  Server: pginstance-1.{{session_namespace}}\nUnder Connection tab:\n  Host name: pginstance-1.{{session_namespace}}.svc.cluster.local\n  Maintenance Database: pginstance-1\n  Username: pgadmin\n  Password: $(kubectl get secret pginstance-1-db-secret -n {{session_namespace}} -o jsonpath='{.data.password}' | base64 --decode)\n"
 ```
 
+Try executing a query in the Query Console - copy the query below:
+```copy
+SELECT * FROM pg_settings where name='max_connections';
+```
+
 (When done, select the server "Servers" and click "Remove Server".)
 
 ##### SecretExport and SecretImport
