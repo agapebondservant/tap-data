@@ -160,6 +160,11 @@ url: http://pet-clinic.{{ session_namespace }}.{{ ingress_domain }}
 ```
 {% endif %}
 
+**Tanzu Postgres** automatically configures a proxy service for routing to the appropriate (primary) node:
+```execute
+kubectl get svc pginstance-1 -oyaml --namespace {{ session_namespace }}
+```
+
 #### Monitoring Postgres Data
 ![Tanzu Postgres Operator Monitoring](images/postgres_metrics.png)
 Tanzu Postgres includes a **Postgres Exporter** which collects and exposes Prometheus metrics via a _/metrics_ endpoint.
@@ -408,7 +413,7 @@ Next, create a connection to the database. Click on "Add New Server" and enter t
 printf "Under General tab:\n  Server: pginstance-1.{{session_namespace}}\nUnder Connection tab:\n  Host name: pginstance-1.{{session_namespace}}.svc.cluster.local\n  Maintenance Database: pginstance-1\n  Username: pgadmin\n  Password: $(kubectl get secret pginstance-1-db-secret -n {{session_namespace}} -o jsonpath='{.data.password}' | base64 --decode)\n"
 ```
 
-Try executing a query in the Query Console - copy the query below:
+Try executing a query in the Query Console (under Tools -> Query Tool) - copy the query below:
 ```copy
 SELECT * FROM pg_settings where name='max_connections';
 ```
@@ -429,7 +434,7 @@ kubectl config set-context --current --namespace={{session_namespace}}
 
 Deploy a new instance of pgAdmin using the manifest below:
 ```execute
-helm repo add runix https://helm.runix.net/; helm repo update; helm uninstall pgadmin runix/pgadmin4 --namespace pgadmin-{{ session_namespace }} || true; kubectl delete ns pgadmin-{{ session_namespace }} || true; kubectl create ns pgadmin-{{ session_namespace }}; helm install pgadmin runix/pgadmin4 --set persistence.storageClass=generic --namespace pgadmin-{{ session_namespace }};export PGADMIN_NS_POD_NAME=$(kubectl get pods --namespace {{ session_namespace }} -l "app.kubernetes.io/name=pgadmin4,app.kubernetes.io/instance=pgadmin" -o jsonpath="{.items[0].metadata.name}"); kubectl expose pod $PGADMIN_NS_POD_NAME --name pgadmin-{{ session_namespace }} --port 80 --namespace pgadmin-{{ session_namespace }}
+helm repo add runix https://helm.runix.net/; helm repo update; helm uninstall pgadmin runix/pgadmin4 --namespace pgadmin-{{ session_namespace }} || true; kubectl delete ns pgadmin-{{ session_namespace }} || true; kubectl create ns pgadmin-{{ session_namespace }}; helm install pgadmin runix/pgadmin4 --set persistence.storageClass=generic --namespace pgadmin-{{ session_namespace }};export PGADMIN_NS_POD_NAME=$(kubectl get pods --namespace pgadmin-{{ session_namespace }} -l "app.kubernetes.io/name=pgadmin4,app.kubernetes.io/instance=pgadmin" -o jsonpath="{.items[0].metadata.name}"); kubectl expose pod $PGADMIN_NS_POD_NAME --name pgadmin-{{ session_namespace }} --port 80 --namespace pgadmin-{{ session_namespace }}
 ```
 
 Ensure the new deployment was successful: <font color='red'>Click Ctrl^C when the deployment is ready.</font>
@@ -450,7 +455,7 @@ file: ~/other/resources/postgres/pgadmin-secretimportexport.yaml
 
 Let's deploy the **SecretExport** and **SecretImport**:
 ```execute
-kubectl apply -f ~/other/resources/postgres/pgadmin-secretimportexport.yaml
+sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/postgres/pgadmin-secretimportexport.yaml;kubectl apply -f ~/other/resources/postgres/pgadmin-secretimportexport.yaml
 ```
 
 The secret should now be available:
@@ -475,7 +480,7 @@ file: ~/other/resources/postgres/pgadmin-sb.yaml
 
 Deploy the ServiceBinding:
 ```execute
-kubectl apply -f ~/other/resources/postgres/pgadmin-sb.yaml --namespace pgadmin-{{ session_namespace }}
+kubectl apply -f ~/other/resources/postgres/pgadmin-sb-rbac.yaml --namespace pgadmin-{{ session_namespace }}; kubectl apply -f ~/other/resources/postgres/pgadmin-sb.yaml --namespace pgadmin-{{ session_namespace }}
 ```
 
 The **Service Binding** specification works by volume mounting the secrets delivered by the **Provisioned Service** resource(s)
@@ -484,7 +489,7 @@ called SERVICE_BINDING_ROOT, points to the root of the mount directory.
 
 Start a shell session in the workload's container:
 ```execute
-clear && export PGADMIN_NS_POD_NAME=$(kubectl get pods --namespace {{ session_namespace }} -l "app.kubernetes.io/name=pgadmin4,app.kubernetes.io/instance=pgadmin" -o jsonpath="{.items[0].metadata.name}"); kubectl exec $PGADMIN_NS_POD_NAME -it -- sh
+clear && kubectl exec deploy/pgadmin-pgadmin4 -it -npgadmin-{{ session_namespace }} -- sh
 ```
 
 Next, view the Service Binding directory's content:
