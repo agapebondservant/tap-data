@@ -434,7 +434,7 @@ kubectl config set-context --current --namespace={{session_namespace}}
 
 Deploy a new instance of pgAdmin using the manifest below:
 ```execute
-helm repo add runix https://helm.runix.net/; helm repo update; helm uninstall pgadmin runix/pgadmin4 --namespace pgadmin-{{ session_namespace }} || true; kubectl delete ns pgadmin-{{ session_namespace }} || true; kubectl create ns pgadmin-{{ session_namespace }}; helm install pgadmin runix/pgadmin4 --set persistence.storageClass=generic --namespace pgadmin-{{ session_namespace }};export PGADMIN_NS_POD_NAME=$(kubectl get pods --namespace pgadmin-{{ session_namespace }} -l "app.kubernetes.io/name=pgadmin4,app.kubernetes.io/instance=pgadmin" -o jsonpath="{.items[0].metadata.name}"); kubectl expose pod $PGADMIN_NS_POD_NAME --name pgadmin-{{ session_namespace }} --port 80 --namespace pgadmin-{{ session_namespace }}
+helm repo add runix https://helm.runix.net/; helm repo update; helm uninstall pgadmin runix/pgadmin4 --namespace pgadmin-{{ session_namespace }} || true; kubectl delete ns pgadmin-{{ session_namespace }} || true; kubectl create ns pgadmin-{{ session_namespace }}; helm install pgadmin runix/pgadmin4 --set persistence.storageClass=generic --set strategy.type=Recreate --namespace pgadmin-{{ session_namespace }};export PGADMIN_NS_POD_NAME=$(kubectl get pods --namespace pgadmin-{{ session_namespace }} -l "app.kubernetes.io/name=pgadmin4,app.kubernetes.io/instance=pgadmin" -o jsonpath="{.items[0].metadata.name}"); kubectl expose pod $PGADMIN_NS_POD_NAME --name pgadmin-{{ session_namespace }} --port 80 --namespace pgadmin-{{ session_namespace }}
 ```
 
 Ensure the new deployment was successful: <font color='red'>Click Ctrl^C when the deployment is ready.</font>
@@ -499,7 +499,7 @@ echo "Service Bindng Mount Path: $SERVICE_BINDING_ROOT"; ls -ltr $SERVICE_BINDIN
 
 View specific entries - for example, **type** and **provider** are required by the spec, **username** is optional:
 ```execute
-echo Type: $(cat $SERVICE_BINDING_ROOT/db/type); echo Provider: $(cat $SERVICE_BINDING_ROOT/db/provider); echo Username: $(cat $SERVICE_BINDING_ROOT/db/username); exit
+echo Type: $(cat $SERVICE_BINDING_ROOT/pginstance-1/type); echo Provider: $(cat $SERVICE_BINDING_ROOT/pginstance-1/provider); echo Username: $(cat $SERVICE_BINDING_ROOT/pginstance-1/username); exit
 ```
 
 

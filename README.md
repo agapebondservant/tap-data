@@ -590,7 +590,7 @@ kubectl create ns pgadmin
 helm repo add runix https://helm.runix.net/
 helm repo update
 helm install pgadmin runix/pgadmin4 --namespace=pgadmin \
---set persistence.storageClass=generic
+--set persistence.storageClass=generic --set strategy.type=Recreate
 kubectl apply -f resources/pgadmin.yaml
 export PGADMIN_POD_NAME=$(kubectl get pods --namespace pgadmin -l "app.kubernetes.io/name=pgadmin4,app.kubernetes.io/instance=pgadmin" -o jsonpath="{.items[0].metadata.name}")
 ```
