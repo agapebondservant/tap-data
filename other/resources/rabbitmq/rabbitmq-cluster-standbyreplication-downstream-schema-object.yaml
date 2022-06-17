@@ -4,8 +4,8 @@ metadata:
   name: rabbitcluster-downstream1
   namespace: YOUR_SESSION_NAMESPACE
 spec:
-  endpoints: "rabbitmq:5672"
+  endpoints: "rabbitcluster-upstream1:5672"
   upstreamSecret:
-    name: rabbitcluster-upstream1-secret
+    name: rabbitcluster-downstream1-secret
   rabbitmqClusterReference:
     name: rabbitcluster-downstream1

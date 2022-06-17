@@ -3,7 +3,7 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: rabbitcluster-upstream1-secret
+  name: rabbitcluster-downstream1-secret
 type: Opaque
 stringData:
   username: test-user
@@ -18,7 +18,7 @@ spec:
   rabbitmqClusterReference:
     name:  rabbitcluster-downstream1
   importCredentialsSecret:
-    name: rabbitcluster-upstream1-secret
+    name: rabbitcluster-downstream1-secret
 ---
 #permissions for the schema-replication user
 apiVersion: rabbitmq.com/v1beta1

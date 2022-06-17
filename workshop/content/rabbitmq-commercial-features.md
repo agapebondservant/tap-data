@@ -17,7 +17,7 @@ url: http://operator-ui.{{ ingress_domain }}
 
 **Tanzu RabbitMQ** provides a streamlined approach for replication across sites with its **Standby Replication** plugins.
 In Kubernetes, these are provided by the Standby Replication Operator. 
-The Standby Replication Operator handles automated **schema** and **message** replication to a hot standby cluster.
+The Standby Replication Operator handles automated **schema** and **queue** replication to a hot standby cluster.
 
 Without **Tanzu RabbitMQ**, standby replication can be achieved by manually importing the schema from the upstream and using 
 one of RabbitMQ's core features for cross-broker/cross-site replication, such as **federation** or **shoveling**. 
@@ -62,7 +62,7 @@ kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-standbyreplication-
 
 Similarly, we create a new downstream cluster which will serve as the hot standby:
 ```editor:open-file
-file: ~/other/resources/rabbitmq/rabbitmq-cluster-standbyreplication-downstreamstream.yaml
+file: ~/other/resources/rabbitmq/rabbitmq-cluster-standbyreplication-downstream.yaml
 text: "additionalPlugins"
 after: 11
 ```
@@ -92,12 +92,12 @@ file: ~/other/resources/rabbitmq/rabbitmq-cluster-standbyreplication-upstream-sc
 
 Deploy the Schema Replication object:
 ```execute
-sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/rabbitmq/rabbitmq-cluster-standbyreplication-upstream-schema-object.yaml -n {{ session_namespace }}
+sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/rabbitmq/rabbitmq-cluster-standbyreplication-upstream-schema-object.yaml && kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-standbyreplication-upstream-schema-object.yaml -n {{ session_namespace }}
 ```
 
 ##### Configuring Standby Message Replication plugin (upstream)
 After configuring the **Schema Replication** plugin, we will now configure the **Standby Message Replication** plugin, 
-which will take care of **message replication** to the standby. In our case, we will reuse the User created for Schema Replication above.
+which will take care of **queue replication** to the standby. In our case, we will reuse the User created for Schema Replication above.
 
 We configure it by setting up a **replication policy** which will be used to replicate from the upstream:
 ```editor:open-file
@@ -121,6 +121,16 @@ file: ~/other/resources/rabbitmq/rabbitmq-cluster-standbyreplication-downstream-
 Deploy the new downstream User with its credentials and permissions:
 ```execute
 kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-standbyreplication-downstream-credsandpermissions.yaml -n {{ session_namespace }}
+```
+
+Similarly, we will configure the **Schema Replication** object for the downstream:
+```editor:open-file
+file: ~/other/resources/rabbitmq/rabbitmq-cluster-standbyreplication-downstream-schema-object.yaml
+```
+
+Deploy the **Schema Replication** object:
+```execute
+kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-standbyreplication-downstream-schema-object.yaml -n {{ session_namespace }}
 ```
 
 Similarly, we will configure the **Standby Message Replication** plugin for the downstream.

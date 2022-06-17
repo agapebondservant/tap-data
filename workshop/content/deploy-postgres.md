@@ -502,4 +502,9 @@ View specific entries - for example, **type** and **provider** are required by t
 echo Type: $(cat $SERVICE_BINDING_ROOT/pginstance-1/type); echo Provider: $(cat $SERVICE_BINDING_ROOT/pginstance-1/provider); echo Username: $(cat $SERVICE_BINDING_ROOT/pginstance-1/username); exit
 ```
 
+<font color="red"><b>NOTE</b> - Delete the new namespace before proceeding:</font>
+```execute
+kubectl get all -n pgadmin-{{ session_namespace }} -o name | xargs kubectl delete -n pgadmin-{{ session_namespace }}; kubectl delete ns pgadmin-{{ session_namespace }} || true
+```
+
 
