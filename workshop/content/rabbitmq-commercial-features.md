@@ -13,6 +13,77 @@ Now access the Operator UI:
 url: http://operator-ui.{{ ingress_domain }}
 ```
 
+#### Inter-node Data Compression
+**Tanzu RabbitMQ** provides out-of-the-box compression for traffic between nodes, as well as client-to-node traffic.
+This feature is enabled by default with **Tanzu RabbitMQ**.
+This can be especially beneficial with high-traffic workloads, or multi-site workloads where bandwidth across sites can be costly.
+With **inter-node data compression**, bandwidth is reduced by orders of magnitude, which can result in significant cost savings.
+
+To demonstrate this, first configure an **uncompressed** cluster (using FOSS RabbitMQ):
+```editor:open-file
+file: ~/other/resources/rabbitmq/rabbitmq-cluster-uncompressed.yaml
+```
+
+Deploy the uncompressed cluster:
+```execute
+kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-uncompressed.yaml
+```
+
+Generate data on the uncompressed cluster. For this, we will use RabbitMQ's throughput testing tool, **PerfTest**. Deploy an instance of PerfTest:
+```execute
+kubectl delete deploy perftest || true; kubectl create deploy perftest --image=pivotalrabbitmq/perf-test:latest -- sleep 10000
+```
+
+Launch the PerfTest shell:
+```execute
+kubectl exec deploy/perftest -it -- sh
+```
+
+Using PerfTest, publish messages to a quorum queue on the uncompressed cluster - wait for a few seconds for data to accumulate:
+```execute
+bin/runjava com.rabbitmq.perf.PerfTest --uri amqp://test-user:test-password@rabbitcluster-uncompressed --producers 10 --consumers 0 --routing-key "uncompressed" --quorum-queue --queue "uncompressed"
+```
+
+Navigate to the Grafana site: select the **Erlang Distribution** dashboard, select **rabbitcluster-uncompressed** from the cluster dropdown,  and view the **"Data sent to peer node /s"** widget:
+```dashboard:open-url
+url: {{ ingress_protocol }}://grafana.{{ ingress_domain }}
+```
+
+Back on the Perftest shell: hit **Ctrl-C**, then exit the shell:
+```execute
+exit
+```
+
+Now, configure a Tanzu RabbitMQ cluster, which enables inter-node compression by default:
+```editor:open-file
+file: ~/other/resources/rabbitmq/rabbitmq-cluster-compressed.yaml
+```
+
+Deploy the compressed cluster:
+```execute
+kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-compressed.yaml
+```
+
+Relaunch the PerfTest shell:
+```execute
+kubectl exec deploy/perftest -it -- sh
+```
+
+Generate data on the compressed cluster - wait for a few seconds for data to accumulate:
+```execute
+bin/runjava com.rabbitmq.perf.PerfTest --uri amqp://test-user:test-password@rabbitcluster-compressed --producers 10 --consumers 0 --routing-key "compressed" --quorum-queue --queue "compressed"
+```
+
+Navigate again to the Grafana site: select the **Erlang Distribution** dashboard, select **rabbitcluster-compressed** from the cluster dropdown, and view the **"Data sent to peer node /s"** widget (should be much less):
+```dashboard:open-url
+url: {{ ingress_protocol }}://grafana.{{ ingress_domain }}
+```
+
+Back on the Perftest shell: hit **Ctrl-C**, then exit the shell:
+```execute
+exit
+```
+
 #### Standby Replication Operator
 
 **Tanzu RabbitMQ** provides a streamlined approach for replication across sites with its **Standby Replication** plugins.
@@ -54,6 +125,8 @@ Let's create a new **Quorum Queue** - here is the manifest:
 ```editor:open-file
 file: ~/other/resources/rabbitmq/rabbitmq-cluster-standbyreplication-quorum-queue.yaml
 ```
+Notice that the Quorum Queue is created in a vhost **test**. 
+For a vhost to be eligible for standby replication, it must exist prior to policy creation, and must have the **standby_replication** tag.
 
 Let's deploy it:
 ```execute
@@ -113,7 +186,7 @@ kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-standbyreplication-
 ##### Configuring downstream (Schema Replication and Standby Message Replication plugin)
 Now that we have configured the upstream cluster, we will configure the downstream to receive replicated schema and messages from the upstream.
 Similarly to before, we will configure the **Schema Replication** plugin for the downstream.
-Here is the manifest (in our case, we will reuse the replication user credentials from the upstream):
+Here is the manifest:
 ```editor:open-file
 file: ~/other/resources/rabbitmq/rabbitmq-cluster-standbyreplication-downstream-credsandpermissions.yaml
 ```
@@ -130,7 +203,7 @@ file: ~/other/resources/rabbitmq/rabbitmq-cluster-standbyreplication-downstream-
 
 Deploy the **Schema Replication** object:
 ```execute
-kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-standbyreplication-downstream-schema-object.yaml -n {{ session_namespace }}
+sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/rabbitmq/rabbitmq-cluster-standbyreplication-downstream-schema-object.yaml && kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-standbyreplication-downstream-schema-object.yaml -n {{ session_namespace }}
 ```
 
 Similarly, we will configure the **Standby Message Replication** plugin for the downstream.
@@ -146,11 +219,6 @@ kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-standbyreplication-
 ##### Testing
 Now, we will test that the standby replication is working as expected. For this, we will use RabbitMQ's throughput testing tool, **PerfTest**.
 
-Deploy an instance of PerfTest:
-```execute
-kubectl delete deploy perftest || true; kubectl create deploy perftest --image=pivotalrabbitmq/perf-test:latest -- sleep 10000
-```
-
 Launch the PerfTest shell:
 ```execute
 kubectl exec deploy/perftest -it -- sh
@@ -158,7 +226,7 @@ kubectl exec deploy/perftest -it -- sh
 
 Using PerfTest, publish 10000 messages to the quorum queue created in the upstream cluster:
 ```execute
-bin/runjava com.rabbitmq.perf.PerfTest --uri amqp://test-user:test-password@rabbitcluster-upstream1 --producers 10 --consumers 0 --predeclared --routing-key "demo.odd.queue" --pmessages 10000 --queue "demo.odd.queue"
+bin/runjava com.rabbitmq.perf.PerfTest --uri amqp://test-user:test-password@rabbitcluster-upstream1/test --producers 10 --consumers 0 --predeclared --routing-key "demo.odd.queue" --pmessages 10000 --queue "demo.odd.queue"
 ```
 
 Exit the shell:
@@ -173,33 +241,30 @@ url: {{ ingress_protocol }}://grafana.{{ ingress_domain }}
 
 Similarly, select **rabbitcluster-downstream1** from the cluster dropdown above. Notice that it is entirely empty.
 
-Next, **delete 2 of the nodes from the upstream cluster**, and then promote the downstream cluster - check that there are vhosts available to recover:
+Check that there are vhosts available to recover in the downstream cluster:
 ```execute
-kubectl exec -it pod rabbitcluster-downstream1-server-0 -- rabbitmqctl list_vhosts_available_for_standby_replication_recovery
+kubectl exec -it rabbitcluster-downstream1-server-0 -- rabbitmqctl list_vhosts_available_for_standby_replication_recovery
 ```
 
-Start the recovery process:
+Next, **delete 2 of the nodes from the upstream cluster**, and then promote the downstream cluster by starting the recovery process:
 ```execute
-kubectl exec -it pod rabbitcluster-downstream1-server-0 -- rabbitmqctl promote_standby_replication_downstream_cluster --all-available
+kubectl exec -it rabbitcluster-downstream1-server-0 -- rabbitmqctl promote_standby_replication_downstream_cluster --all-available
 ```
 
 Create a summary of the recovery process status:
 ```execute
-kubectl exec -it pod rabbitcluster-downstream1-server-0 -- rabbitmqctl display_standby_promotion_summary
+kubectl exec -it rabbitcluster-downstream1-server-0 -- rabbitmqctl display_standby_promotion_summary
 ```
 
 The last timestamp will be used as a starting point for future recovery jobs, so that recovery can be safely launched without replicating 
 previously copied data. Notice that restarting the recovery process is an idempotent task:
 ```execute
-kubectl exec -it pod rabbitcluster-downstream1-server-0 -- rabbitmqctl promote_standby_replication_downstream_cluster --all-available
+kubectl exec -it rabbitcluster-downstream1-server-0 -- rabbitmqctl promote_standby_replication_downstream_cluster --all-available
 ```
 
 Observe the replicated data in the Grafana dashboard:
 ```dashboard:open-url
 url: {{ ingress_protocol }}://grafana.{{ ingress_domain }}
 ```
-
-#### Inter-node Data Compression
-
 
 Sometimes, the ideal use case is to leverage RabbitMQ transparently as the messaging transport layer, without having to be aware of its inner workings or semantics. For that, we can leverage  **Spring Cloud Data Flow**.

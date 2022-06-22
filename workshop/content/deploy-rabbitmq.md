@@ -91,7 +91,7 @@ printf "Username: admin\nPassword: $(kubectl get secret grafana-admin --namespac
 
 We can also view a pre-built metrics dashboard in **Wavefront**. To enable this, the **Wavefront Collector** for Kubernetes is required to forward metrics emitted by RabbitMQ (via the **rabbitmq_prometheus** plugin) to the Wavefront proxy. Install it now:
 ```execute
-kubectl apply -f ~/other/resources/wavefront.yaml -n default && kubectl apply -f ~/other/resources/wavefront-collector.yaml -n wavefront-collector
+kubectl apply -f ~/other/resources/wavefront/wavefront.yaml -n default && kubectl apply -f ~/other/resources/wavefront/wavefront-collector.yaml -n wavefront-collector
 ```
 
 View the Wavefront dashboard:
@@ -162,7 +162,7 @@ Upgrade the cluster to the Tanzu RabbitMQ distribution by updating the OCI image
 kubectl edit rabbitmqcluster rabbitcluster1 -n {{ session_namespace }}
 ```
 
-Next, comment out the **image** field - this will update the cluster by rebuilding it with the default OCI image for the operator.
+Comment out the **image** field - this will update the cluster by rebuilding it with the default OCI image for the operator.
 
 <font color="red">(<b>Discuss rolling upgrade</b>)</font>
 
