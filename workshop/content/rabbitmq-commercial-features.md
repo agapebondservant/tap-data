@@ -143,6 +143,62 @@ Deploy the Standby Message Replication object:
 kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-standbyreplication-downstream-message-object.yaml -n {{ session_namespace }}
 ```
 
+##### Testing
+Now, we will test that the standby replication is working as expected. For this, we will use RabbitMQ's throughput testing tool, **PerfTest**.
+
+Deploy an instance of PerfTest:
+```execute
+kubectl delete deploy perftest || true; kubectl create deploy perftest --image=pivotalrabbitmq/perf-test:latest -- sleep 10000
+```
+
+Launch the PerfTest shell:
+```execute
+kubectl exec deploy/perftest -it -- sh
+```
+
+Using PerfTest, publish 10000 messages to the quorum queue created in the upstream cluster:
+```execute
+bin/runjava com.rabbitmq.perf.PerfTest --uri amqp://test-user:test-password@rabbitcluster-upstream1 --producers 10 --consumers 0 --predeclared --routing-key "demo.odd.queue" --pmessages 10000 --queue "demo.odd.queue"
+```
+
+Exit the shell:
+```execute
+exit
+```
+
+Navigate to the Grafana dashboard and confirm that the messages were indeed successfully published (select **rabbitcluster-upstream1** from the cluster dropdown):
+```dashboard:open-url
+url: {{ ingress_protocol }}://grafana.{{ ingress_domain }}
+```
+
+Similarly, select **rabbitcluster-downstream1** from the cluster dropdown above. Notice that it is entirely empty.
+
+Next, **delete 2 of the nodes from the upstream cluster**, and then promote the downstream cluster - check that there are vhosts available to recover:
+```execute
+kubectl exec -it pod rabbitcluster-downstream1-server-0 -- rabbitmqctl list_vhosts_available_for_standby_replication_recovery
+```
+
+Start the recovery process:
+```execute
+kubectl exec -it pod rabbitcluster-downstream1-server-0 -- rabbitmqctl promote_standby_replication_downstream_cluster --all-available
+```
+
+Create a summary of the recovery process status:
+```execute
+kubectl exec -it pod rabbitcluster-downstream1-server-0 -- rabbitmqctl display_standby_promotion_summary
+```
+
+The last timestamp will be used as a starting point for future recovery jobs, so that recovery can be safely launched without replicating 
+previously copied data. Notice that restarting the recovery process is an idempotent task:
+```execute
+kubectl exec -it pod rabbitcluster-downstream1-server-0 -- rabbitmqctl promote_standby_replication_downstream_cluster --all-available
+```
+
+Observe the replicated data in the Grafana dashboard:
+```dashboard:open-url
+url: {{ ingress_protocol }}://grafana.{{ ingress_domain }}
+```
+
 #### Inter-node Data Compression
 
 

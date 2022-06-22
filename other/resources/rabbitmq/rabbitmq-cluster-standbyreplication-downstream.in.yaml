@@ -3,7 +3,7 @@ kind: RabbitmqCluster
 metadata:
   name: rabbitcluster-downstream1
 spec:
-  image: oawofolu/vmware-tanzu-rabbitmq:${DATA_E2E_RABBIT_OPERATOR_VERSION}
+  replicas: 3
   service:
     type: LoadBalancer
   rabbitmq:

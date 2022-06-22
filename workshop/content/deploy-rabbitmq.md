@@ -70,7 +70,7 @@ file: ~/other/resources/rabbitmq/rabbitmq-cluster.yaml
 
 First deploy a cluster with just 1 replica:
 ```execute
-kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-monitor.yaml; kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-operator-monitor.yaml; kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster.yaml -n {{ session_namespace }};
+kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-monitor.yaml -nmonitoring-tools; kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-operator-monitor.yaml -nmonitoring-tools; kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster.yaml -n {{ session_namespace }};
 ```
 
 Create an Ingress for the Management UI:
@@ -162,10 +162,7 @@ Upgrade the cluster to the Tanzu RabbitMQ distribution by updating the OCI image
 kubectl edit rabbitmqcluster rabbitcluster1 -n {{ session_namespace }}
 ```
 
-Change the container image to point to the specified path below:
-```copy
-oawofolu/vmware-tanzu-rabbitmq:{{DATA_E2E_RABBIT_OPERATOR_VERSION}}
-```
+Next, comment out the **image** field - this will update the cluster by rebuilding it with the default OCI image for the operator.
 
 <font color="red">(<b>Discuss rolling upgrade</b>)</font>
 
