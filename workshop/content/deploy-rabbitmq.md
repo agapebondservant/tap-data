@@ -138,7 +138,7 @@ Exit the shell:
 exit
 ```
 
-Now login to the RabbitMQ management UI with credentials **demo/CHANGEME** - observe that the user has full access to the default **/** virtual host.
+Now hit **Esc** to return to the pod view, login to the RabbitMQ management UI with credentials **demo/CHANGEME** - observe that the user has full access to the default **/** virtual host.
 
 #### BUILT-IN CLUSTERING
 A cluster is a logical grouping of resources whereby the state and data of a RabbitMQ environment is distributed across multiple nodes. By default, RabbitMQ deploys resources - virtual hosts, exchanges, users, user permissions, non-replicated queues - to a single node. To convert it to a multi-node system, new nodes need to be explicitly added to the topology. This can be done declaratively via config file or plugins, or manually via **rabbitmqctl** cli. 

@@ -19,7 +19,7 @@ stringData:
 apiVersion: rabbitmq.com/v1beta1
 kind: User
 metadata:
-  name: rabbitmq-uncompressed
+  name: rabbitmq-compressed
 spec:
   rabbitmqClusterReference:
     name:  rabbitcluster-compressed
@@ -29,11 +29,11 @@ spec:
 apiVersion: rabbitmq.com/v1beta1
 kind: Permission
 metadata:
-  name: rabbitmq-uncompressed.all
+  name: rabbitmq-compressed.all
 spec:
   vhost: "/"
   userReference:
-    name: rabbitmq-uncompressed
+    name: rabbitmq-compressed
   permissions:
     write: ".*"
     configure: ".*"

@@ -20,13 +20,14 @@ This can be especially beneficial with high-traffic workloads, or multi-site wor
 With **inter-node data compression**, bandwidth is reduced by orders of magnitude, which can result in significant cost savings.
 
 To demonstrate this, first configure an **uncompressed** cluster (using FOSS RabbitMQ):
-```editor:open-file
+```editor:select-matching-text
 file: ~/other/resources/rabbitmq/rabbitmq-cluster-uncompressed.yaml
+text: "image:"
 ```
 
 Deploy the uncompressed cluster:
 ```execute
-kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-uncompressed.yaml
+kubectl wait --for=condition=Ready pod/rabbitcluster-uncompressed-server-0 -n {{ session_namespace }} && kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-uncompressed.yaml
 ```
 
 Generate data on the uncompressed cluster. For this, we will use RabbitMQ's throughput testing tool, **PerfTest**. Deploy an instance of PerfTest:
@@ -34,7 +35,7 @@ Generate data on the uncompressed cluster. For this, we will use RabbitMQ's thro
 kubectl delete deploy perftest || true; kubectl create deploy perftest --image=pivotalrabbitmq/perf-test:latest -- sleep 10000
 ```
 
-Launch the PerfTest shell:
+Once the deployment shows as ready (in the lower console), launch the PerfTest shell:
 ```execute
 kubectl exec deploy/perftest -it -- sh
 ```
@@ -61,7 +62,7 @@ file: ~/other/resources/rabbitmq/rabbitmq-cluster-compressed.yaml
 
 Deploy the compressed cluster:
 ```execute
-kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-compressed.yaml
+kubectl wait --for=condition=Ready pod/rabbitcluster-compressed-server-0 -n {{ session_namespace }} && kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-compressed.yaml
 ```
 
 Relaunch the PerfTest shell:
