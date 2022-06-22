@@ -1,8 +1,9 @@
 apiVersion: rabbitmq.com/v1beta1
 kind: RabbitmqCluster
 metadata:
-  name: rabbitcluster-compressed
+  name: rabbitcluster-uncompressed
 spec:
+  image: rabbitmq:3.9-management
   replicas: 3
   service:
     type: LoadBalancer
@@ -10,7 +11,7 @@ spec:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: rabbitcluster-compressed-secret
+  name: rabbitcluster-uncompressed-secret
 type: Opaque
 stringData:
   username: test-user
@@ -22,9 +23,9 @@ metadata:
   name: rabbitmq-uncompressed
 spec:
   rabbitmqClusterReference:
-    name:  rabbitcluster-compressed
+    name:  rabbitcluster-uncompressed
   importCredentialsSecret:
-    name: rabbitcluster-compressed-secret
+    name: rabbitcluster-uncompressed-secret
 ---
 apiVersion: rabbitmq.com/v1beta1
 kind: Permission
@@ -39,4 +40,4 @@ spec:
     configure: ".*"
     read: ".*"
   rabbitmqClusterReference:
-    name: rabbitcluster-compressed
+    name: rabbitcluster-uncompressed
