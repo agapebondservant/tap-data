@@ -70,7 +70,7 @@ file: ~/other/resources/rabbitmq/rabbitmq-cluster.yaml
 
 First deploy a cluster with just 1 replica:
 ```execute
-kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-monitor.yaml; kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster.yaml -n {{ session_namespace }};
+kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-monitor.yaml; kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-operator-monitor.yaml; kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster.yaml -n {{ session_namespace }};
 ```
 
 Create an Ingress for the Management UI:

@@ -241,6 +241,7 @@ helm install prometheus prometheus-community/kube-prometheus-stack --create-name
 --set prometheus.service.port=8000 --set prometheus.service.type=ClusterIP \
 --set grafana.enabled=false,alertmanager.enabled=false,nodeExporter.enabled=false \
 --set prometheus.prometheusSpec.podMonitorSelectorNilUsesHelmValues=false \
+--set prometheus.prometheusSpec.serviceMonitorSelectorNilUsesHelmValues=false\
 --wait
 kubectl apply -f resources/prometheus-httpproxy.yaml
 ```

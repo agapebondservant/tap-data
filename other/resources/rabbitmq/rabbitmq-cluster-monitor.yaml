@@ -4,6 +4,8 @@ kind: ServiceMonitor
 metadata:
   name: rabbitmq
   # If labels are defined in spec.serviceMonitorSelector.matchLabels of your deployed Prometheus object, make sure to include them here.
+  labels:
+    release: prometheus
 spec:
   endpoints:
     - port: prometheus

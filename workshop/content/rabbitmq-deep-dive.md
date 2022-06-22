@@ -1,4 +1,4 @@
-### Deploying Tanzu RabbitMQ - Commercial Features
+### Deploying Tanzu RabbitMQ - Deep Dive
 
 Now we will cover the following:
 
