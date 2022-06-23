@@ -91,7 +91,7 @@ printf "Username: admin\nPassword: $(kubectl get secret grafana-admin --namespac
 
 We can also view a pre-built metrics dashboard in **Wavefront**. To enable this, the **Wavefront Collector** for Kubernetes is required to forward metrics emitted by RabbitMQ (via the **rabbitmq_prometheus** plugin) to the Wavefront proxy. Install it now:
 ```execute
-kubectl apply -f ~/other/resources/wavefront/wavefront.yaml -n default && kubectl apply -f ~/other/resources/wavefront/wavefront-collector.yaml -n wavefront-collector
+kubectl apply -f ~/other/resources/wavefront/wavefront.yaml -n wavefront && kubectl apply -f ~/other/resources/wavefront/wavefront-collector.yaml -n wavefront-collector
 ```
 
 View the Wavefront dashboard:

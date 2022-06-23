@@ -363,7 +363,7 @@ data:
         type: prometheus
         selectors:
           images:
-            - 'rabbitmq*'
+            - '*rabbitmq*'
         port: 15692
         path: /metrics
         scheme: http

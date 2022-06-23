@@ -27,12 +27,12 @@ text: "image:"
 
 Deploy the uncompressed cluster:
 ```execute
-kubectl wait --for=condition=Ready pod/rabbitcluster-uncompressed-server-0 -n {{ session_namespace }} && kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-uncompressed.yaml
+kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-uncompressed.yaml
 ```
 
 Generate data on the uncompressed cluster. For this, we will use RabbitMQ's throughput testing tool, **PerfTest**. Deploy an instance of PerfTest:
 ```execute
-kubectl delete deploy perftest || true; kubectl create deploy perftest --image=pivotalrabbitmq/perf-test:latest -- sleep 10000
+kubectl wait --for=condition=Ready pod/rabbitcluster-uncompressed-server-2 -n {{ session_namespace }} && kubectl delete deploy perftest || true; kubectl create deploy perftest --image=pivotalrabbitmq/perf-test:latest -- sleep 10000
 ```
 
 Once the deployment shows as ready (in the lower console), launch the PerfTest shell:
@@ -62,12 +62,12 @@ file: ~/other/resources/rabbitmq/rabbitmq-cluster-compressed.yaml
 
 Deploy the compressed cluster:
 ```execute
-kubectl wait --for=condition=Ready pod/rabbitcluster-compressed-server-0 -n {{ session_namespace }} && kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-compressed.yaml
+kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-compressed.yaml
 ```
 
 Relaunch the PerfTest shell:
 ```execute
-kubectl exec deploy/perftest -it -- sh
+kubectl wait --for=condition=Ready pod/rabbitcluster-compressed-server-0 -n {{ session_namespace }} && kubectl exec deploy/perftest -it -- sh
 ```
 
 Generate data on the compressed cluster - wait for a few seconds for data to accumulate:
