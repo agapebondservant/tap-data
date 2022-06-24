@@ -10,4 +10,4 @@ spec:
     upstreamSecret:
       name: dowmstream-secret # an existing Kubernetes secret; required value
   rabbitmqClusterReference:
-    name: rabbitcluster-downstream1
+    name: rabbitcluster-downstream1-secret
