@@ -8,6 +8,6 @@ spec:
   downstreamModeConfiguration:
     endpoints: "rabbitcluster-upstream1:5552"
     upstreamSecret:
-      name: dowmstream-secret # an existing Kubernetes secret; required value
+      name: rabbitcluster-downstream1-secret # an existing Kubernetes secret; required value
   rabbitmqClusterReference:
-    name: rabbitcluster-downstream1-secret
+    name: rabbitcluster-downstream1
