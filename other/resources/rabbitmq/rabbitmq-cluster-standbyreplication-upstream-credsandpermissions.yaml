@@ -20,7 +20,7 @@ spec:
   importCredentialsSecret:
     name: rabbitcluster-upstream1-secret
 ---
-#permissions for the schema-replication user
+#permissions for the schema-replication user to access "test" vhost
 apiVersion: rabbitmq.com/v1beta1
 kind: Permission
 metadata:
@@ -36,6 +36,7 @@ spec:
   rabbitmqClusterReference:
     name: rabbitcluster-upstream1
 ---
+#permissions for the schema-replication user to access "rabbitmq_schema_definition_sync" vhost
 apiVersion: rabbitmq.com/v1beta1
 kind: Permission
 metadata:

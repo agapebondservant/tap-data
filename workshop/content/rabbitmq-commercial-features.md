@@ -207,6 +207,13 @@ Deploy the **Schema Replication** object:
 sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/rabbitmq/rabbitmq-cluster-standbyreplication-downstream-schema-object.yaml && kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-standbyreplication-downstream-schema-object.yaml -n {{ session_namespace }}
 ```
 
+After about 1 minute (*twice* the replication interval - 30 seconds by default), 
+navigate to the Grafana website, select the **RabbitMQ-Overview** dashboard and observe that the queue is now replicated in the downstream site
+(select **rabbitcluster-downstream1** from the cluster dropdown):
+```dashboard:open-url
+url: {{ ingress_protocol }}://grafana.{{ ingress_domain }}
+```
+
 ##### Configuring Standby Message Replication plugin (upstream)
 After configuring the **Schema Replication** plugin, we will now configure the **Standby Message Replication** plugin,
 which will take care of **queue replication** to the standby. In our case, we will reuse the User created for Schema Replication above.
@@ -274,7 +281,7 @@ Similarly, select **rabbitcluster-downstream1** from the cluster dropdown above.
 
 Ensure that the streaming log has replicated metrics on the downstream side:
 ```execute
-kubectl exec -it rabbitcluster-downstream1-server-0 -- rabbitmqctl inspect_standby_downstream_metrics
+kubectl exec -it rabbitcluster-downstream1-server-0 -- rabbitmq-diagnostics inspect_standby_downstream_metrics
 ```
 
 Simiarly, inspect the replication data associated with the metrics:
