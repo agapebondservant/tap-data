@@ -35,3 +35,18 @@ spec:
     read: ".*"
   rabbitmqClusterReference:
     name: rabbitcluster-upstream1
+---
+apiVersion: rabbitmq.com/v1beta1
+kind: Permission
+metadata:
+  name: rabbitmq-replicator.schema-definition-sync.all
+spec:
+  vhost: "rabbitmq_schema_definition_sync"
+  userReference:
+    name: rabbitmq-replicator
+  permissions:
+    write: ".*"
+    configure: ".*"
+    read: ".*"
+  rabbitmqClusterReference:
+    name: rabbitcluster-upstream1

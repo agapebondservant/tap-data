@@ -124,14 +124,14 @@ so the recommendation is to use quorum queues for use cases where data safety is
 
 Let's create a new **Quorum Queue** - here is the manifest:
 ```editor:open-file
-file: ~/other/resources/rabbitmq/rabbitmq-cluster-standbyreplication-quorum-queue.yaml
+file: ~/other/resources/rabbitmq/rabbitmq-cluster-standbyreplication-upstream-quorum-queue.yaml
 ```
 Notice that the Quorum Queue is created in a vhost **test**. 
-For a vhost to be eligible for standby replication, it must exist prior to policy creation, and must have the **standby_replication** tag.
+For an upstream vhost to be eligible for standby replication, it must exist prior to policy creation, and must have the **standby_replication** tag.
 
 Let's deploy it:
 ```execute
-kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-standbyreplication-quorum-queue.yaml -n {{ session_namespace }}
+kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-standbyreplication-upstream-quorum-queue.yaml -n {{ session_namespace }}
 ```
 
 Similarly, we create a new downstream cluster which will serve as the hot standby:
@@ -148,6 +148,7 @@ kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-standbyreplication-
 
 ##### Configuring Schema Replication plugin (upstream)
 Next, we will configure the **Schema Replication** plugin, which will take care of **schema replication**. 
+
 First we configure the user that will be used to establish the connection to the upstream.
 We do this configuring the user credentials and permissions:
 ```editor:open-file
@@ -187,6 +188,19 @@ kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-standbyreplication-
 ##### Configuring downstream (Schema Replication and Standby Message Replication plugin)
 Now that we have configured the upstream cluster, we will configure the downstream to receive replicated schema and messages from the upstream.
 Similarly to before, we will configure the **Schema Replication** plugin for the downstream.
+
+
+First, we will create a **schema replication** vhost in the downstream to match the upstream:
+```editor:open-file
+file: ~/other/resources/rabbitmq/rabbitmq-cluster-standbyreplication-downstream-vhost.yaml
+```
+
+Deploy the new Vhost:
+```execute
+kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-standbyreplication-downstream-vhost.yaml
+```
+
+Next, we will configure the **Schema Replication** user and permissions as before.
 Here is the manifest:
 ```editor:open-file
 file: ~/other/resources/rabbitmq/rabbitmq-cluster-standbyreplication-downstream-credsandpermissions.yaml
