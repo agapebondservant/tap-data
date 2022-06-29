@@ -1,4 +1,6 @@
 ### Deploying Tanzu RabbitMQ - Commercial Features
+![Tanzu RabbitMQ Commercial Features](images/tanzurabbit.png)
+**Tanzu RabbitMQ** includes several enterprise-grade, commercial-only features.
 
 Now we will cover the following:
 
