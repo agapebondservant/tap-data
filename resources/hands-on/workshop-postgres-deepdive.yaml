@@ -21,7 +21,7 @@ spec:
     - name: WORKSHOP_TOPIC
       value: data-postgres-deepdive
     - name: DEMO_MODE
-      value: no
+      value: "no"
     ingresses:
     - name: jupyter
       port: 8888
