@@ -3,8 +3,8 @@ kind: Workshop
 metadata:
   name: data-rabbitmq-deepdive
 spec:
-  title: Tanzu RabbitMQ Deep Dive
-  description: Demonstration of features of Tanzu RabbitMQ
+  title: Tanzu RabbitMQ - Kubernetes Deep Dive
+  description: Demonstration of features of Tanzu RabbitMQ on Kubernetes
   vendor: eduk8s.io
   difficulty: beginner
   duration: 120m
@@ -20,6 +20,8 @@ spec:
       value: workshop-rabbitmq-deepdive.yaml
     - name: WORKSHOP_TOPIC
       value: data-rabbitmq-deepdive
+    - name: DEMO_MODE
+      value: yes
     ingresses:
     - name: jupyter
       port: 8888

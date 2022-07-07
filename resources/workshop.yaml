@@ -18,6 +18,8 @@ spec:
       value: "true"
     - name: WORKSHOP_TOPIC
       value: data-e2e
+    - name: DEMO_MODE
+      value: yes
     ingresses:
     - name: jupyter
       port: 8888

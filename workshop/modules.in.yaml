@@ -4,13 +4,13 @@ modules:
     deploy-postgres:
         name: Deploy Postgres
     postgres-deep-dive:
-        name: Postgres Deep Dive
+        name: Postgres Kubernetes Deep Dive
     data-with-tap:
         name: Tanzu Data with TAP
     deploy-rabbitmq:
         name: Deploy RabbitMQ
     rabbitmq-deep-dive:
-        name: RabbitMQ Deep Dive
+        name: RabbitMQ Kubernetes Deep Dive
     rabbitmq-commercial-features:
         name: RabbitMQ Commercial Features
     cloud-native-datapipelines:
@@ -22,7 +22,7 @@ modules:
     deploy-imdg:
         name: Deploy IMDG
     gemfire-deep-dive:
-        name: Gemfire Deep Dive
+        name: Gemfire Kubernetes Deep Dive
     deploying-spring-cloud-gateway:
         name: Deploy Spring Cloud Gateway
     create-datapipeline:

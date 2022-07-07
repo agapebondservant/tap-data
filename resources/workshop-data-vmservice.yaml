@@ -20,6 +20,8 @@ spec:
       value: workshop-data-vmservice.yaml
     - name: WORKSHOP_TOPIC
       value: data-vmservice
+    - name: DEMO_MODE
+      value: yes
     ingresses:
     - name: jupyter
       port: 8888

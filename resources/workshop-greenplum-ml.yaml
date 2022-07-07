@@ -20,6 +20,8 @@ spec:
       value: workshop-greenplum-ml.yaml
     - name: WORKSHOP_TOPIC
       value: data-greenplum-ml
+    - name: DEMO_MODE
+      value: yes
     ingresses:
     - name: jupyter
       port: 8888

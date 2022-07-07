@@ -20,6 +20,8 @@ spec:
       value: workshop-data-with-tap.yaml
     - name: WORKSHOP_TOPIC
       value: data-with-tap-demo
+    - name: DEMO_MODE
+      value: yes
     ingresses:
     - name: jupyter
       port: 8888

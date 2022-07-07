@@ -540,15 +540,16 @@ resources/scripts/deploy-workshop.sh
 #### Deploy Single Workshop to Pre-Existing LearningCenter Portal<a name="buildsingle"/>
 * Make sure all relevant pre-requisites are set up in your cluster: <a href="#pre-reqs">Setup required pre-installations</a>
 * Make sure TAP is installed (including LearningCenter): <a href="#tap-install">Setup required pre-installations</a>
-* Follow the instructions to add the desired workshop to your Learning Center as shown:
+* Make sure additional pre-requisites are set up for the workshop: <a href="#workshop-pre-reqs">Setup required pre-installations for workshop</a>
+ Follow the instructions to add the desired workshop to your Learning Center as shown:
 
-  | Workshop Name            | Link                                      |
-  |--------------------------|-------------------------------------------|
-  | Tanzu Data with TAP      | <a href="#workshopa">View Instructions</a>|
+  | Workshop Name                              | Link                                                       |
+  |--------------------------------------------|------------------------------------------------------------|
+  | Tanzu Data with TAP                        | <a href="#workshopa">View Instructions</a>                 |
+  | Tanzu Postgres - Kubernetes Deepdive       | <a href="#workshopb">View Instructions</a>                 |
 
-
-##### Deploy "Tanzu Data With TAP"<a name="workshopa"/>
-Setup pre-reqs for installing Postgres with Tanzu cli:
+##### Deploy "Tanzu Data With TAP"<a name="workshop-pre-reqs"/>
+Setup pre-reqs for various packages required by workshops with Tanzu cli:
 ```
 source <path-to-your-env-file>
 echo $DATA_E2E_REGISTRY_PASSWORD | docker login registry-1.docker.io --username=$DATA_E2E_REGISTRY_USERNAME --password-stdin
@@ -557,6 +558,7 @@ export TDS_VERSION=1.0.0
 imgpkg copy -b registry.tanzu.vmware.com/packages-for-vmware-tanzu-data-services/tds-packages:$TDS_VERSION --to-repo $DATA_E2E_REGISTRY_USERNAME/tds-packages
 ```
 
+##### Deploy "Tanzu Data With TAP"<a name="workshopa"/>
 Add the following to your `training-portal.yaml` (under **spec.workshops**):
 ```
 - name: data-with-tap
@@ -576,6 +578,29 @@ kubectl apply -f <path-to-your-training-portal.yaml>
 watch kubectl get learningcenter-training
 (For Presenter Mode:)
 kubectl apply -f resources/hands-on/workshop-data-with-tap-demo.yaml
+watch kubectl get learningcenter-training
+```
+
+##### Deploy "Tanzu Postgres - Kubernetes Deepdive"<a name="workshopb"/>
+Add the following to your `training-portal.yaml` (under **spec.workshops**):
+```
+- name: data-postgres-deepdive
+  capacity: 10 #Change the capacity to the number of expected participants
+  reserved: 1
+  expires: 120m
+  orphaned: 5m
+```
+
+Run the following:
+```
+resources/scripts/deploy-handson-workshop.sh <path-to-your-env-file>
+kubectl delete --all learningcenter-training
+kubectl apply -f resources/hands-on/system-profile.yaml
+kubectl apply -f resources/hands-on/workshop-postgres-deepdive.yaml
+kubectl apply -f <path-to-your-training-portal.yaml>
+watch kubectl get learningcenter-training
+(For Presenter Mode:)
+kubectl apply -f resources/hands-on/workshop-postgres-deepdive-demo.yaml
 watch kubectl get learningcenter-training
 ```
   

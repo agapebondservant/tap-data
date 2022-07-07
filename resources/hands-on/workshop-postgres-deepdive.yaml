@@ -1,10 +1,10 @@
 apiVersion: learningcenter.tanzu.vmware.com/v1beta1
 kind: Workshop
 metadata:
-  name: data-nosql
+  name: data-postgres-deepdive
 spec:
-  title: NoSQL with Tanzu Data
-  description: Demonstration of NoSQL features of Tanzu Postgres and Tanzu Gemfire
+  title: Tanzu Postgres - Kubernetes Deep Dive
+  description: Demonstration of features of Tanzu Postgres on Kubernetes
   vendor: eduk8s.io
   difficulty: beginner
   duration: 120m
@@ -17,11 +17,11 @@ spec:
     - name: ENABLE_JUPYTERLAB
       value: "true"
     - name: WORKSHOP_FILE
-      value: workshop-data-nosql.yaml
+      value: workshop-postgres-deepdive.yaml
     - name: WORKSHOP_TOPIC
-      value: data-nosql
+      value: data-postgres-deepdive
     - name: DEMO_MODE
-      value: yes
+      value: no
     ingresses:
     - name: jupyter
       port: 8888
@@ -37,6 +37,14 @@ spec:
       port: 8050
       protocol: http
       host: "$(ingress_protocol):petclinic-app-analytics.$(session_namespace).svc.cluster.local" 
+    - name: petclinic-claims-dashboard
+      port: 8050
+      protocol: http
+      host: "$(ingress_protocol):petclinic-claims-dashboard.$(session_namespace).svc.cluster.local"
+    - name: postgres1
+      port: 5432
+      protocol: http
+      host: "$(ingress_protocol):pginstance-1.$(session_namespace).svc.cluster.local"
     dashboards:
     - name: Jupyter
       url: "$(ingress_protocol)://$(session_namespace)-jupyter.$(ingress_domain)/"

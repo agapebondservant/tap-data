@@ -30,7 +30,7 @@ To resolve this, we will need to provision a persistent data store.
 
 **Tanzu Postgres** is a _full-featured_ object-relational data store.
 
-{% if ENV_WORKSHOP_TOPIC != 'data-with-tap' and ENV_WORKSHOP_TOPIC != 'data-with-tap-demo' %}
+{% if ENV_WORKSHOP_TOPIC != 'data-with-tap' and ENV_WORKSHOP_TOPIC != 'data-with-tap-demo' and ENV_DEMO_MODE == 'yes' %}
 Let's deploy the Tanzu Postgres **operator**:
 
 ```execute

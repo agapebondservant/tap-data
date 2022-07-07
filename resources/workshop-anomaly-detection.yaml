@@ -20,6 +20,8 @@ spec:
       value: workshop-anomaly-detection.yaml
     - name: WORKSHOP_TOPIC
       value: data-anomaly-detection
+    - name: DEMO_MODE
+      value: yes
     ingresses:
     - name: jupyter
       port: 8888

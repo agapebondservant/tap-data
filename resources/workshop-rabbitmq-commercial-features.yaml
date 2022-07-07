@@ -20,6 +20,8 @@ spec:
       value: workshop-rabbitmq-commercial-features.yaml
     - name: WORKSHOP_TOPIC
       value: data-rabbitmq-commercial-features
+    - name: DEMO_MODE
+      value: yes
     ingresses:
     - name: jupyter
       port: 8888
