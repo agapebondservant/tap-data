@@ -245,7 +245,7 @@ kubectl apply -f ~/other/resources/postgres/postgres-tap-resourceclaimpolicy.yam
 
 Now the Postgres DB should be consumable in other namespaces. To demonstrate, create a new namespace:
 ```execute
-kubectl create ns test-{{session_namespace}} --dry-run=client -oyaml | kubectl apply -f -
+kubectl delete ns test-{{ session_namespace }} || true; kubectl create ns test-{{session_namespace}}
 ```
 
 Prepare to deploy a new Workload (including setting up RBAC permissions and exporting the registry secret to the new namespace):

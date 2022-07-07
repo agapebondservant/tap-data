@@ -568,7 +568,7 @@ Add the following to your `training-portal.yaml` (under **spec.workshops**):
 
 Run the following:
 ```
-resources/scripts/deploy-workshop.sh <path-to-your-env-file>
+resources/scripts/deploy-handson-workshop.sh <path-to-your-env-file>
 kubectl delete --all learningcenter-training
 kubectl apply -f resources/hands-on/system-profile.yaml
 kubectl apply -f resources/hands-on/workshop-data-with-tap-external.yaml
