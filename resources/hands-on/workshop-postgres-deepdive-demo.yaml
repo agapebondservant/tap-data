@@ -3,7 +3,7 @@ kind: Workshop
 metadata:
   name: data-postgres-deepdive-demo
 spec:
-  title: Tanzu Postgres - Kubernetes Deep Dive
+  title: Tanzu Postgres - Kubernetes Deep Dive (Presenter Mode)
   description: Demonstration of features of Tanzu Postgres on Kubernetes
   vendor: eduk8s.io
   difficulty: beginner
