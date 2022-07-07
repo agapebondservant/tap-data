@@ -589,6 +589,10 @@ Add the following to your `training-portal.yaml` (under **spec.workshops**):
   reserved: 1
   expires: 120m
   orphaned: 5m
+- name: data-postgres-deepdive-demo
+  capacity: 1
+  expires: 120m
+  orphaned: 5m
 ```
 
 Run the following:

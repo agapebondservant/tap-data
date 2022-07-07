@@ -1,15 +1,15 @@
 apiVersion: learningcenter.tanzu.vmware.com/v1beta1
 kind: TrainingPortal
 metadata:
-  name: starbucks
+  name: starbux
 spec:
   workshops:
-    - name: data-with-tap
+    - name: data-postgres-deepdive
       capacity: 10
       reserved: 1
       expires: 2h
       orphaned: 5m
-    - name: data-with-tap-demo
+    - name: data-postgres-deepdive-demo
       capacity: 1
       expires: 2h
       orphaned: 5m

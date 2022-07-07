@@ -1,7 +1,7 @@
 apiVersion: learningcenter.tanzu.vmware.com/v1beta1
 kind: Workshop
 metadata:
-  name: data-postgres-deepdive
+  name: data-postgres-deepdive-demo
 spec:
   title: Tanzu Postgres - Kubernetes Deep Dive
   description: Demonstration of features of Tanzu Postgres on Kubernetes
