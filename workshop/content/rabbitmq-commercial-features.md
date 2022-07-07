@@ -247,7 +247,7 @@ kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-standbyreplication-
 Now, we will test that the schema replication is working as expected. 
 First, we will identify the node where downstream replication was orchestrated:
 ```execute
-export downstream_replication_pod=pod/rabbitcluster-downstream1-server-0; for tmp_pod in $(kubectl get pod -l app.kubernetes.io/name=rabbitcluster-downstream1 -o name); do if $(kubectl exec -it $tmp_pod -- rabbitmqctl list_vhosts_available_for_standby_replication_recovery | grep -q test); then export downstream_replication_pod=$tmp_pod; fi; done; echo $downstream_replication_pod
+for tmp_pod in $(kubectl get pod -l app.kubernetes.io/name=rabbitcluster-downstream1 -o name); do if $(kubectl exec -it $tmp_pod -- rabbitmqctl list_vhosts_available_for_standby_replication_recovery | grep -q test); then export downstream_replication_pod=$tmp_pod; fi; done; echo $downstream_replication_pod
 ```
 
 Next, we will check that there are vhosts available to recover in the downstream cluster:
