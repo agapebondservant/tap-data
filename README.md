@@ -10,15 +10,16 @@ NOTE:
 1. [Kubernetes Cluster Prep](#pre-reqs)
 2. [Install Minio](#minio)
 3. [Install Prometheus and Grafana](#prometheusgrafana)
-4. [Install Datadog](#datadog)
-5. [Install ArgoCD](#argocd)
-6. [Install OperatorUI](#operatorui)
-7. [Pre-deploy Greenplum and Spring Cloud Data Flow](#predeploys)
-8. [Build secondary cluster (for multi-site demo)](#multisite)
-9. [Install TAP](#tap-install)
-10. [Deploy Tanzu Data Workshops](#buildanddeploy)
-11. [Deploy Single Workshop to Pre-Existing LearningCenter Portal](#buildsingle)
-12. [Other: How-tos/General Info (not needed for setup)](#other)
+4. [Install Wavefront](#wavefront)
+5. [Install Datadog](#datadog)
+6. [Install ArgoCD](#argocd)
+7. [Install OperatorUI](#operatorui)
+8. [Pre-deploy Greenplum and Spring Cloud Data Flow](#predeploys)
+9. [Build secondary cluster (for multi-site demo)](#multisite)
+10. [Install TAP](#tap-install)
+11. [Deploy Tanzu Data Workshops](#buildanddeploy)
+12. [Deploy Single Workshop to Pre-Existing LearningCenter Portal](#buildsingle)
+13. [Other: How-tos/General Info (not needed for setup)](#other)
 
 #### Kubernetes Cluster Prep<a name="pre-reqs"/>
 * Create .env file in root directory (use .env-sample as a template - do NOT check into Git)
@@ -262,6 +263,14 @@ For Prometheus RSocket Proxy:
 kubectl apply -f resources/prometheus-proxy/proxyhelm/
 kubectl apply -f resources/prometheus-proxy/proxyhelm/prometheus-proxy-http-proxy.yaml
 ```
+
+#### Install Wavefront <a name="wavefront"/>
+```
+source </path/to/env/file>
+helm repo add wavefront https://wavefronthq.github.io/helm/
+helm repo update
+```
+
 
 #### Install Datadog <a name="datadog"/>
 * Install Datadog: (only required for these workshops: <b>Postgres Deep Dive</b>)

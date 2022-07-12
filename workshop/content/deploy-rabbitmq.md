@@ -89,14 +89,16 @@ url: {{ ingress_protocol }}://grafana.{{ ingress_domain }}
 printf "Username: admin\nPassword: $(kubectl get secret grafana-admin --namespace monitoring-tools -o jsonpath="{.data.GF_SECURITY_ADMIN_PASSWORD}" | base64 --decode)\n"
 ```
 
-We can also view a pre-built metrics dashboard in **Wavefront**. To enable this, the **Wavefront Collector** for Kubernetes is required to forward metrics emitted by RabbitMQ (via the **rabbitmq_prometheus** plugin) to the Wavefront proxy. Install it now:
+We can also view a pre-built metrics dashboard in **Wavefront**. To enable this, the **Wavefront Collector** for Kubernetes is required to forward metrics emitted by RabbitMQ (via the **rabbitmq_prometheus** plugin) to the Wavefront proxy. Install it now via a pre-packaged helm chart:
 ```execute
-kubectl apply -f ~/other/resources/wavefront/wavefront.yaml -n wavefront && kubectl apply -f ~/other/resources/wavefront/wavefront-collector.yaml -n wavefront-collector
+helm uninstall wavefront-{{ session_namespace }} --namespace {{ session_namespace }} || true; helm install wavefront-{{ session_namespace }} wavefront/wavefront --set wavefront.url={{ DATA_E2E_WAVEFRONT_URL }} --set wavefront.token={{ DATA_E2E_WAVEFRONT_ACCESS_TOKEN }}  --set clusterName=rabbit-{{ session_namespace }}  --namespace {{ session_namespace }}
 ```
 
-View the Wavefront dashboard:
+Notice as the Wavefront associated pods begin to appear (lower console).
+
+After a few minutes, Wavefront should begin to collect metrics from the Rabbit cluster. View the Wavefront dashboard:
 ```dashboard:open-url
-url: https://vmware.wavefront.com/u/Cn2TlXWTDl?t=vmware
+url: {{ DATA_E2E_WAVEFRONT_RABBIT_DASHBOARD_URL }}
 ```
 
 We can also view the Management UI, which is also pre-integrated with the Tanzu RabbitMQ operator.

@@ -9,7 +9,3 @@ spec:
       reserved: 1
       expires: 2h
       orphaned: 5m
-    - name: data-postgres-deepdive-demo
-      capacity: 1
-      expires: 2h
-      orphaned: 5m
