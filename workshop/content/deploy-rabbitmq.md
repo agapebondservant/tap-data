@@ -91,14 +91,18 @@ printf "Username: admin\nPassword: $(kubectl get secret grafana-admin --namespac
 
 We can also view a pre-built metrics dashboard in **Wavefront**. To enable this, the **Wavefront Collector** for Kubernetes is required to forward metrics emitted by RabbitMQ (via the **rabbitmq_prometheus** plugin) to the Wavefront proxy. Install it now via a pre-packaged helm chart:
 ```execute
-helm repo add wavefront https://wavefronthq.github.io/helm/ -n{{ session_namespace }}; helm repo update -n{{ session_namespace }}; helm uninstall wavefront-{{ session_namespace }} --namespace {{ session_namespace }} || true; helm install wavefront-{{ session_namespace }} wavefront/wavefront --set wavefront.url={{ DATA_E2E_WAVEFRONT_URL }} --set wavefront.token={{ DATA_E2E_WAVEFRONT_ACCESS_TOKEN }}  --set clusterName=rabbit-{{ session_namespace }}  --namespace {{ session_namespace }}
+helm repo add wavefront https://wavefronthq.github.io/helm/ -n{{ session_namespace }}; helm repo update -n{{ session_namespace }}; helm uninstall wavefront-{{ session_namespace }} --namespace {{ session_namespace }} || true; helm install wavefront-{{ session_namespace }} wavefront/wavefront --set wavefront.url='{{ DATA_E2E_WAVEFRONT_URL }}' --set wavefront.token='{{ DATA_E2E_WAVEFRONT_ACCESS_TOKEN }}'  --set clusterName=rabbit-{{ session_namespace }}  --namespace {{ session_namespace }}
 ```
 
-Notice as the Wavefront associated pods begin to appear (lower console).
+<font color="red">Notice as the Wavefront Collector and Proxy nodes begin to appear (lower console).</font>
 
-After a few minutes, Wavefront should begin to collect metrics from the Rabbit cluster. View the Wavefront dashboard:
+After a few seconds, Wavefront should begin to collect metrics from the Rabbit cluster. View the Wavefront dashboard:
 ```dashboard:open-url
 url: {{ DATA_E2E_WAVEFRONT_RABBIT_DASHBOARD_URL }}
+```
+<font color="red"><b>NOTE:</b></font> From the "cluster" dropdown, select the cluster name below - it should appear after a few seconds:
+```copy
+rabbit-{{ session_namespace }}
 ```
 
 We can also view the Management UI, which is also pre-integrated with the Tanzu RabbitMQ operator.
