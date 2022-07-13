@@ -58,17 +58,18 @@ Verify that the install was successful. <font color="red">NOTE: Hit **Ctrl-C** t
 watch kubectl get packageinstalls -nrabbitmq-system
 ```
 
-The **krew** plugin provides a native approach for managing RabbitMQ clusters. View a list of supported commands:
+The **krew** plugin manager allows for the installation of the **kubectl rabbitmq** plugin, 
+which provides a native approach for managing RabbitMQ clusters. View a list of supported commands:
 ```execute
 export PATH="${PATH}:${HOME}/.krew/bin" && kubectl krew install rabbitmq  && kubectl rabbitmq help
 ```
 
-Next, let's deploy a highly available Tanzu RabbitMQ **cluster**. Here is the manifest:
+Next, let's deploy a Tanzu RabbitMQ **instance**. Here is the manifest:
 ```editor:open-file
 file: ~/other/resources/rabbitmq/rabbitmq-cluster.yaml
 ```
 
-First deploy a cluster with just 1 replica:
+First deploy an instance with just 1 replica:
 ```execute
 kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-monitor.yaml -nmonitoring-tools; kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-operator-monitor.yaml -nmonitoring-tools; kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster.yaml -n {{ session_namespace }};
 ```
