@@ -74,6 +74,11 @@ First deploy an instance with just 1 replica:
 kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-monitor.yaml -nmonitoring-tools; kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-operator-monitor.yaml -nmonitoring-tools; kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster.yaml -n {{ session_namespace }};
 ```
 
+View details about the RabbitMQ instance just created, including the defaults that were automatically applied:
+```execute
+kubectl get rabbitmqcluster rabbitcluster1 -oyaml -n {{ session_namespace }}
+```
+
 Create an Ingress for the Management UI:
 <font color="red">Wait for cluster nodes to show up before running</font>
 ```execute
@@ -88,6 +93,27 @@ url: {{ ingress_protocol }}://grafana.{{ ingress_domain }}
 <font color="red">Use the credentials below to login to the Grafana dashboard:</font>
 ```execute
 printf "Username: admin\nPassword: $(kubectl get secret grafana-admin --namespace monitoring-tools -o jsonpath="{.data.GF_SECURITY_ADMIN_PASSWORD}" | base64 --decode)\n"
+```
+
+We can also use the pre-deployed **Topology operator** to deploy not just RabbitMQ instances, but other RabbitMQ resources 
+like **queues**, **exchanges**, **users**, **vhosts**, etc. Here is the manifest we will use:
+```editor:open-file
+file: ~/other/resources/rabbitmq/rabbitmq-cluster-sample-queues.yaml
+```
+
+Create the queues defined above:
+```execute
+kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-sample-queues.yaml -n {{ session_namespace }}
+```
+
+We will also publish some messages (about 100k) to a new persistent queue. We will use **PerfTest**, RabbitMQ's throughput testing tool:
+```execute
+kubectl rabbitmq perf-test rabbitcluster1  -C 100000 --quorum-queue --queue demo.seed.queue --consumers 0
+```
+
+View the messages (and the newly created queue) in the Grafana dashboard:
+```dashboard:open-url
+url: {{ ingress_protocol }}://grafana.{{ ingress_domain }}
 ```
 
 We can also view a pre-built metrics dashboard in **Wavefront**. To enable this, the **Wavefront Collector** for Kubernetes is required to forward metrics emitted by RabbitMQ (via the **rabbitmq_prometheus** plugin) to the Wavefront proxy. Install it now via a pre-packaged helm chart:

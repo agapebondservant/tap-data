@@ -1,0 +1,49 @@
+---
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: demo.queue.east
+spec:
+  name: demo.queue.east
+  autoDelete: false
+  durable: true
+  type: quorum
+  rabbitmqClusterReference:
+    name: rabbitcluster1
+---
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: demo.queue.west
+spec:
+  name: demo.queue.west
+  autoDelete: false
+  durable: true
+  type: quorum
+  rabbitmqClusterReference:
+    name: rabbitcluster1
+---
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: demo.queue.north
+spec:
+  name: demo.queue.north
+  autoDelete: false
+  durable: true
+  type: quorum
+  rabbitmqClusterReference:
+    name: rabbitcluster1
+---
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: demo.queue.south
+spec:
+  name: demo.queue.south
+  autoDelete: false
+  durable: true
+  type: quorum
+  rabbitmqClusterReference:
+    name: rabbitcluster1
+---
