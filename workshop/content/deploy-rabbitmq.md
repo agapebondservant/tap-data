@@ -218,3 +218,8 @@ We can also view the messages in **Wavefront**:
 ```dashboard:open-url
 url: {{ DATA_E2E_WAVEFRONT_RABBIT_DASHBOARD_URL }}
 ```
+
+<font color="red">(<b>NOTE</b>: Delete the PerfTest job before proceeding:</font>
+```execute
+kubectl delete job perf-test -n {{ session_namespace }}
+```
