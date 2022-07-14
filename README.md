@@ -556,6 +556,7 @@ resources/scripts/deploy-workshop.sh
   |--------------------------------------------|------------------------------------------------------------|
   | Tanzu Data with TAP                        | <a href="#workshopa">View Instructions</a>                 |
   | Tanzu Postgres - Kubernetes Deepdive       | <a href="#workshopb">View Instructions</a>                 |
+  | Tanzu RabbitMQ - Commercial Features       | <a href="#workshopc">View Instructions</a>                 |
 
 ##### Deploy "Tanzu Data With TAP"<a name="workshop-pre-reqs"/>
 Setup pre-reqs for various packages required by workshops with Tanzu cli:
@@ -614,6 +615,33 @@ kubectl apply -f <path-to-your-training-portal.yaml>
 watch kubectl get learningcenter-training
 (For Presenter Mode:)
 kubectl apply -f resources/hands-on/workshop-postgres-deepdive-demo.yaml
+watch kubectl get learningcenter-training
+```
+
+##### Deploy "Tanzu RabbitMQ - Commercial Features"<a name="workshopc"/>
+Add the following to your `training-portal.yaml` (under **spec.workshops**):
+```
+- name: data-rabbitmq-commercial-features
+  capacity: 10 #Change the capacity to the number of expected participants
+  reserved: 1
+  expires: 120m
+  orphaned: 5m
+- name: data-rabbitmq-commercial-features-demo
+  capacity: 1
+  expires: 120m
+  orphaned: 5m
+```
+
+Run the following:
+```
+resources/scripts/deploy-handson-workshop.sh <path-to-your-env-file>
+kubectl delete --all learningcenter-training
+kubectl apply -f resources/hands-on/system-profile.yaml
+kubectl apply -f resources/hands-on/workshop-rabbitmq-commercial-features.yaml
+kubectl apply -f <path-to-your-training-portal.yaml>
+watch kubectl get learningcenter-training
+(For Presenter Mode:)
+kubectl apply -f resources/hands-on/workshop-rabbitmq-commercial-features-demo.yaml
 watch kubectl get learningcenter-training
 ```
   

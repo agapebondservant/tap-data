@@ -1,10 +1,10 @@
 apiVersion: learningcenter.tanzu.vmware.com/v1beta1
 kind: Workshop
 metadata:
-  name: data-postgres-deepdive-demo
+  name: data-rabbitmq-commercial-features-demo
 spec:
-  title: Tanzu Postgres - Kubernetes Deep Dive (Presenter Mode)
-  description: Demonstration of features of Tanzu Postgres on Kubernetes
+  title: Tanzu RabbitMQ Commercial Features
+  description: Demonstration of commercial features of Tanzu RabbitMQ
   vendor: eduk8s.io
   difficulty: beginner
   duration: 120m
@@ -17,11 +17,11 @@ spec:
     - name: ENABLE_JUPYTERLAB
       value: "true"
     - name: WORKSHOP_FILE
-      value: workshop-postgres-deepdive.yaml
+      value: workshop-rabbitmq-commercial-features.yaml
     - name: WORKSHOP_TOPIC
-      value: data-postgres-deepdive
+      value: data-rabbitmq-commercial-features
     - name: DEMO_MODE
-      value: "yes"
+      value: yes
     ingresses:
     - name: jupyter
       port: 8888
@@ -37,17 +37,11 @@ spec:
       port: 8050
       protocol: http
       host: "$(ingress_protocol):petclinic-app-analytics.$(session_namespace).svc.cluster.local" 
-    - name: petclinic-claims-dashboard
-      port: 8050
-      protocol: http
-      host: "$(ingress_protocol):petclinic-claims-dashboard.$(session_namespace).svc.cluster.local"
-    - name: postgres1
-      port: 5432
-      protocol: http
-      host: "$(ingress_protocol):pginstance-1.$(session_namespace).svc.cluster.local"
     dashboards:
     - name: Jupyter
       url: "$(ingress_protocol)://$(session_namespace)-jupyter.$(ingress_domain)/"
+    - name: Whiteboard
+      url: https://excalidraw.com/
     #! namespaces:
       #! Allow workshop to run containers as root (note: this is different from the workshop instances which will host deployments created during the course of the workshop)
       #! security:

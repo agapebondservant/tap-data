@@ -2,7 +2,7 @@
 ### Deploying Tanzu RabbitMQ
 ![Tanzu RabbitMQ High-Level Architecture](images/rabbit_architecture.png)
 **Tanzu RabbitMQ** is a _full-featured_ enterprise-grade message broker.
-
+{% if ENV_DEMO_MODE == 'yes' %}
 First, let's update our **default** service account user with the RBAC permissions it needs to deploy the operator - here are the RBAC permissions:
 ```editor:open-file
 file: ~/other/resources/rabbitmq/rabbitmq-operator-rbac.yaml
@@ -57,6 +57,7 @@ Verify that the install was successful. <font color="red">NOTE: Hit **Ctrl-C** t
 ```execute
 watch kubectl get packageinstalls -nrabbitmq-system
 ```
+{% endif %}
 
 The **krew** plugin manager allows for the installation of the **kubectl rabbitmq** plugin, 
 which provides a native approach for managing RabbitMQ clusters. View a list of supported commands:
@@ -213,7 +214,7 @@ View the messages (and the newly created queue) in the Grafana dashboard:
 url: {{ ingress_protocol }}://grafana.{{ ingress_domain }}
 ```
 
-We can also view a pre-built metrics dashboard in **Wavefront**. To enable this, the **Wavefront Collector** for Kubernetes is required to forward metrics emitted by RabbitMQ (via the **rabbitmq_prometheus** plugin) to the Wavefront proxy. Install it now via a pre-packaged helm chart:
-```execute
-helm repo add wavefront https://wavefronthq.github.io/helm/ -n{{ session_namespace }}; helm repo update -n{{ session_namespace }}; helm uninstall wavefront-{{ session_namespace }} --namespace {{ session_namespace }} || true; helm install wavefront-{{ session_namespace }} wavefront/wavefront --set wavefront.url='{{ DATA_E2E_WAVEFRONT_URL }}' --set wavefront.token='{{ DATA_E2E_WAVEFRONT_ACCESS_TOKEN }}'  --set clusterName=rabbit-{{ session_namespace }}  --namespace {{ session_namespace }}
+We can also view the messages in **Wavefront**:
+```dashboard:open-url
+url: {{ DATA_E2E_WAVEFRONT_RABBIT_DASHBOARD_URL }}
 ```
