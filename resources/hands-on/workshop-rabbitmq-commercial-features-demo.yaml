@@ -3,7 +3,7 @@ kind: Workshop
 metadata:
   name: data-rabbitmq-commercial-features-demo
 spec:
-  title: Tanzu RabbitMQ Commercial Features
+  title: Tanzu RabbitMQ Commercial Features (Presenter Mode)
   description: Demonstration of commercial features of Tanzu RabbitMQ
   vendor: eduk8s.io
   difficulty: beginner
@@ -21,7 +21,7 @@ spec:
     - name: WORKSHOP_TOPIC
       value: data-rabbitmq-commercial-features
     - name: DEMO_MODE
-      value: yes
+      value: "yes"
     ingresses:
     - name: jupyter
       port: 8888
