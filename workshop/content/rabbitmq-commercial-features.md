@@ -4,6 +4,7 @@
 
 Now we will cover the following:
 
+{% if ENV_DEMO_MODE == 'yes' %}
 #### Deploying via the Operator UI
 With **Tanzu RabbitMQ**, brokers/clusters can be deployed by using the **Tanzu Operator UI**. First, refresh the UI settings to ensure that it is in sync with the latest Operator changes:
 ```execute
@@ -14,6 +15,7 @@ Now access the Operator UI:
 ```dashboard:open-url
 url: http://operator-ui.{{ ingress_domain }}
 ```
+{% endif %}
 
 #### Inter-node Data Compression
 **Tanzu RabbitMQ** provides out-of-the-box compression for traffic between nodes, as well as client-to-node traffic.
