@@ -530,7 +530,7 @@ tanzu acc create mlflow --git-repository https://github.com/agapebondservant/mlf
 
 #### Deploy Tanzu Data Workshops<a name="buildanddeploy"/>
 * Build Workshop image:
-  (see resources/scripts/deploy-workshop.sh)
+  (see resources/scripts/deploy-image.sh)
 
 [comment]: <> (Only perform the following if there are 7+ nodes in= the k8s cluster)
 [comment]: <> (Label a subset of the nodes \(for which anti-affinity/affinity rules will apply\):)
