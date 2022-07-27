@@ -489,7 +489,7 @@ watch kubectl get learningcenter-training
 * Install FluxCD controller:
 ```
 tanzu package available list fluxcd.source.controller.tanzu.vmware.com -n tap-install (ensure packages are listed)
-tanzu package install fluxcd-source-controller -p fluxcd.source.controller.tanzu.vmware.com -v 0.16.1 -n tap-install
+tanzu package install fluxcd-source-controller -p fluxcd.source.controller.tanzu.vmware.com -v 0.16.4 -n tap-install
 Verify that package is running: tanzu package installed get fluxcd-source-controller -n tap-install
 Verify "Reconcile Succeeded": kubectl get pods -n flux-system
 ```
