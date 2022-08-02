@@ -10,7 +10,7 @@ spec:
   duration: 120m
   url: https://github.com/agapebondservant/tap-data
   content:
-    image: oawofolu/tanzu-data-tap-workshop:latest
+    image: oawofolu/tanzu-data-tap:latest
     files: github.com/agapebondservant/tap-data?ref=main
   session:
     env:
