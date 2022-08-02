@@ -1,0 +1,6 @@
+name: Tanzu RabbitMQ Commercial Features
+
+modules:
+    activate:
+    - deploy-rabbitmq
+    - rabbitmq-anomaly-detection

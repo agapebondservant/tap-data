@@ -1,0 +1,10 @@
+apiVersion: learningcenter.tanzu.vmware.com/v1beta1
+kind: TrainingPortal
+metadata:
+  name: starbux
+spec:
+  workshops:
+    - name: data-postgres-deepdive
+      capacity: 5
+      expires: 120m
+      orphaned: 5m

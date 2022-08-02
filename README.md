@@ -27,11 +27,6 @@ NOTE:
 * Populate the .env file where possible (NOTE: only a subset of the variables can be populated at the moment.
 New entries will be populated as the install proceeds)
 
-* Populate a ConfigMap based on the .env file
-```
-sed 's/export //g' .env > .env-properties && kubectl create configmap data-e2e-env --from-env-file=.env-properties && rm .env-properties
-```
-
 * Create a Management Cluster (Optional - required only if management cluster does not exist) 
 ```
 tanzu management-cluster permissions aws set && tanzu management-cluster create <your-management-cluster-name>  --file  -v 6
@@ -45,6 +40,11 @@ tanzu cluster create <your-cluster-name> --file resources/tanzu-aws.yaml
 watch tanzu cluster get <your-cluster-name>
 tanzu cluster kubeconfig get <your-cluster-name> --admin
 kubectl config use-context <your-cluster-name>-admin@<your-cluster-name>
+```
+
+* Populate a ConfigMap based on the .env file
+```
+sed 's/export //g' .env > .env-properties && kubectl create configmap data-e2e-env --from-env-file=.env-properties && rm .env-properties
 ```
 
 * Update manifests as appropriate:
@@ -440,6 +440,8 @@ export INSTALL_REGISTRY_HOSTNAME=index.docker.io
 imgpkg copy -b registry.tanzu.vmware.com/tanzu-application-platform/tap-packages:${TAP_VERSION} --to-repo ${INSTALL_REGISTRY_HOSTNAME}/${DATA_E2E_REGISTRY_USERNAME}/tap-packages
 imgpkg copy -b registry.tanzu.vmware.com/p-rabbitmq-for-kubernetes/tanzu-rabbitmq-package-repo:${DATA_E2E_RABBIT_OPERATOR_VERSION} --to-repo ${INSTALL_REGISTRY_HOSTNAME}/oawofolu/vmware-tanzu-rabbitmq
 
+
+#### Install TAP
 kubectl create ns tap-install
 tanzu secret registry add tap-registry \
 --username ${INSTALL_REGISTRY_USERNAME} --password ${INSTALL_REGISTRY_PASSWORD} \
@@ -496,13 +498,13 @@ Verify "Reconcile Succeeded": kubectl get pods -n flux-system
 * Install Source Controller:
 ```
 tanzu package available list controller.source.apps.tanzu.vmware.com --namespace tap-install
-tanzu package install source-controller -p controller.source.apps.tanzu.vmware.com -v 0.2.0 -n tap-install
+tanzu package install source-controller -p controller.source.apps.tanzu.vmware.com -v 0.3.3 -n tap-install
 Verify that package is running: tanzu package installed get source-controller -n tap-install
 ```
 * Install App Accelerator: (see https://docs.vmware.com/en/Tanzu-Application-Platform/1.0/tap/GUID-cert-mgr-contour-fcd-install-cert-mgr.html)
 ```
 tanzu package available list accelerator.apps.tanzu.vmware.com --namespace tap-install
-tanzu package install app-accelerator -p accelerator.apps.tanzu.vmware.com -v 1.0.1 -n tap-install -f resources/app-accelerator-values.yaml
+tanzu package install app-accelerator -p accelerator.apps.tanzu.vmware.com -v 1.1.2 -n tap-install -f resources/app-accelerator-values.yaml
 Verify that package is running: tanzu package installed get app-accelerator -n tap-install
 Get the IP address for the App Accelerator API: kubectl get service -n accelerator-system
 ```
@@ -514,7 +516,7 @@ source .env
 envsubst < resources/tap-gui-values.in.yaml > resources/tap-gui-values.yaml
 tanzu package install tap-gui \
   --package-name tap-gui.tanzu.vmware.com \
-  --version 1.1.0 -n tap-install \
+  --version 1.1.1 -n tap-install \
   -f resources/tap-gui-values.yaml
 ```
 
@@ -558,6 +560,7 @@ resources/scripts/deploy-workshop.sh
   | Tanzu Data with TAP                        | <a href="#workshopa">View Instructions</a>                 |
   | Tanzu Postgres - Kubernetes Deepdive       | <a href="#workshopb">View Instructions</a>                 |
   | Tanzu RabbitMQ - Commercial Features       | <a href="#workshopc">View Instructions</a>                 |
+  | Tanzu RabbitMQ - Realtime Analytics Demo   | <a href="#workshopd">View Instructions</a>
 
 ##### Deploy "Tanzu Data With TAP"<a name="workshop-pre-reqs"/>
 Setup pre-reqs for various packages required by workshops with Tanzu cli:
@@ -643,6 +646,33 @@ kubectl apply -f <path-to-your-training-portal.yaml>
 watch kubectl get learningcenter-training
 (For Presenter Mode:)
 kubectl apply -f resources/hands-on/workshop-rabbitmq-commercial-features-demo.yaml
+watch kubectl get learningcenter-training
+```
+
+##### Deploy "Tanzu RabbitMQ - Commercial Features"<a name="workshopd"/>
+Add the following to your `training-portal.yaml` (under **spec.workshops**):
+```
+- name: data-rabbitmq-realtime-analytics
+  capacity: 10 #Change the capacity to the number of expected participants
+  reserved: 1
+  expires: 120m
+  orphaned: 5m
+- name: data-rabbitmq-realtime-analytics
+  capacity: 1
+  expires: 120m
+  orphaned: 5m
+```
+
+Run the following:
+```
+resources/scripts/deploy-handson-workshop.sh <path-to-your-env-file>
+kubectl delete --all learningcenter-training
+kubectl apply -f resources/hands-on/system-profile.yaml
+kubectl apply -f resources/hands-on/workshop-rabbitmq-realtime-analytics.yaml
+kubectl apply -f <path-to-your-training-portal.yaml>
+watch kubectl get learningcenter-training
+(For Presenter Mode:)
+kubectl apply -f resources/hands-on/workshop-rabbitmq-realtime-analytics-demo.yaml
 watch kubectl get learningcenter-training
 ```
   

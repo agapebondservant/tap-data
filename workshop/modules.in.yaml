@@ -33,6 +33,8 @@ modules:
       name: Handling Data Operations
     deploy-mysql:
       name: Deploy MySQL
+    rabbitmq-anomaly-detection:
+      name: Anomaly Detection with RabbitMQ pipelines
 config:
     vars:
     - name: DATA_E2E_REGISTRY_USERNAME
