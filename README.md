@@ -44,7 +44,7 @@ kubectl config use-context <your-cluster-name>-admin@<your-cluster-name>
 
 * Populate a ConfigMap based on the .env file
 ```
-sed 's/export //g' .env > .env-properties && kubectl create configmap data-e2e-env --from-env-file=.env-properties && rm .env-properties
+kubectl delete configmap data-e2e-env || true; sed 's/export //g' .env > .env-properties && kubectl create configmap data-e2e-env --from-env-file=.env-properties && rm .env-properties
 ```
 
 * Update manifests as appropriate:
