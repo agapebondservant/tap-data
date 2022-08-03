@@ -1,4 +1,4 @@
-### Deploying Tanzu RabbitMQ - Deep Dive
+### Anomaly Detection Demo
 
 Now we will walk through a demo of **Realtime Analytics** with Tanzu RabbitMQ.
 
