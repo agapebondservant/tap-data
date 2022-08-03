@@ -531,6 +531,33 @@ tanzu plugin install --local <path-to-tanzu-cli> all
 tanzu acc create mlflow --git-repository https://github.com/agapebondservant/mlflow-accelerator.git --git-branch main
 ```
 
+* Install Analytics Apps:
+Create a namespace for the analytics apps:
+```
+kubectl create ns streamlit
+```
+
+The Analytics apps should reside on their own exclusive nodes.
+Apply taints and affinities to 2 of the nodes in the cluster:
+```
+kubectl get nodes
+kubectl taint nodes <FIRST NODE TO TAINT> analytics=anomaly:NoSchedule
+kubectl taint nodes <SECOND NODE TO TAINT> analytics=anomaly:NoSchedule
+kubectl label nodes <FIRST NODE TO LABEL> analytics=anomaly
+kubectl label nodes <SECOND NODE TO LABEL> analytics=anomaly
+```
+
+Deploy the Analytics apps and dependencies:
+```
+kubectl apply -f ~/other/resources/analytics/anomaly-detection-demo -nstreamlit
+kubectl apply -f other/resources/analytics/anomaly-detection-demo/dashboard.yaml -nstreamlit
+kubectl apply -f other/resources/analytics/anomaly-detection-demo/tracker.yaml -nstreamlit
+watch kubectl get all -nstreamlit
+# (NOTE: If on AWS, change the timeout settings for the LoadBalancers to 3600)
+# (NOTE: Update your DNS: create CNAME records for anomaly-dashboard.<YOUR_BASE_URL> and anomaly-tracker.<YOUR_BASE_URL> 
+pointing to the dashboard and tracker apps respectively)
+```
+
 #### Deploy Tanzu Data Workshops<a name="buildanddeploy"/>
 * Build Workshop image:
   (see resources/scripts/deploy-image.sh)

@@ -1,0 +1,138 @@
+---
+# credentials for the schema-replication user
+apiVersion: v1
+kind: Secret
+metadata:
+  name: rabbitanalytics1-secret
+type: Opaque
+stringData:
+  username: data-user
+  password: data-password
+---
+# analytics1 user
+apiVersion: rabbitmq.com/v1beta1
+kind: User
+metadata:
+  name: rabbitanalytics1-user
+spec:
+  tags:
+    - management
+  rabbitmqClusterReference:
+    name:  rabbitanalytics1
+  importCredentialsSecret:
+    name: rabbitanalytics1-secret
+---
+#permissions for the analytics1 user
+apiVersion: rabbitmq.com/v1beta1
+kind: Permission
+metadata:
+  name: rabbitanalytics1.default.all
+spec:
+  vhost: "/"
+  userReference:
+    name: rabbitanalytics1-user
+  permissions:
+    write: ".*"
+    configure: ".*"
+    read: ".*"
+  rabbitmqClusterReference:
+    name: rabbitanalytics1
+
+# Analytics cluster
+---
+apiVersion: rabbitmq.com/v1beta1
+kind: RabbitmqCluster
+metadata:
+  name: rabbitanalytics1
+spec:
+  image: rabbitmq:3.9-management
+  replicas: 3
+  service:
+    type: LoadBalancer
+
+# Exchanges
+---
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: rabbitanalytics1-stream-exchange
+spec:
+  name: rabbitanalytics1-stream-exchange
+  type: fanout
+  autoDelete: false
+  durable: true
+  rabbitmqClusterReference:
+    name: rabbitanalytics1
+---
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: rabbitanalytics1-exchange
+spec:
+  name: rabbitanalytics1-exchange
+  type: topic
+  autoDelete: false
+  durable: true
+  rabbitmqClusterReference:
+    name: rabbitanalytics1
+
+# Queue (Stream-backed)
+---
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: rabbitanalytics1-stream
+spec:
+  name: rabbitanalytics1-stream
+  autoDelete: false
+  durable: true
+  type: stream
+  rabbitmqClusterReference:
+    name: rabbitanalytics1
+
+# Queue Binding
+---
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: rabbitanalytics1-binding
+spec:
+  source: rabbitanalytics1-stream-exchange
+  destination: rabbitanalytics1-stream
+  destinationType: queue
+  routingKey: "anomaly.#"
+  rabbitmqClusterReference:
+    name: rabbitanalytics1
+
+---
+# Proxies
+---
+# Management UI
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: rmqui-httpproxy
+spec:
+  routes:
+    - conditions:
+        - prefix: /
+      services:
+        - name: rabbitanalytics1
+          port: 15672
+  virtualhost:
+    fqdn: rmqui.${DATA_E2E_BASE_URL}
+---
+# Rabbit Cluster
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: rmq-httpproxy
+spec:
+  routes:
+    - conditions:
+        - prefix: /
+      services:
+        - name: rabbitanalytics1
+          port: 5672
+  virtualhost:
+    fqdn: rmq.${DATA_E2E_BASE_URL}

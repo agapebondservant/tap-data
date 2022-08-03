@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+  labels:
+    app: streamlit-dashboard
+  name: streamlit-dashboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: streamlit-dashboard
+  template:
+    metadata:
+      labels:
+        app: streamlit-dashboard
+    spec:
+      containers:
+      - command:
+        - streamlit
+        - run
+        - app/main/python/dashboard.py
+        image: oawofolu/streamlit
+        imagePullPolicy: Always
+        name: streamlit
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      tolerations:
+        - key: "analytics"
+          operator: "Equal"
+          value: "anomaly"
+          effect: "NoSchedule"
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: analytics
+                    operator: In
+                    values:
+                      - anomaly
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: streamlit-dashboard-svc
+  name: streamlit-dashboard-svc
+spec:
+  ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8501
+  selector:
+    app: streamlit-dashboard
+  type: LoadBalancer
+

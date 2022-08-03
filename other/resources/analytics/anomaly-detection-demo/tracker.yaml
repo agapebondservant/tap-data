@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+  labels:
+    app: streamlit-tracker
+  name: streamlit-tracker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: streamlit-tracker
+  template:
+    metadata:
+      labels:
+        app: streamlit-tracker
+    spec:
+      containers:
+      - command:
+        - streamlit
+        - run
+        - app/main/python/tracker.py
+        image: oawofolu/streamlit
+        imagePullPolicy: Always
+        name: streamlit
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      tolerations:
+        - key: "analytics"
+          operator: "Equal"
+          value: "anomaly"
+          effect: "NoSchedule"
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: analytics
+                    operator: In
+                    values:
+                      - anomaly
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: streamlit-tracker-svc
+  name: streamlit-tracker-svc
+spec:
+  ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8501
+  selector:
+    app: streamlit-tracker
+  type: LoadBalancer
+
