@@ -5,5 +5,17 @@ Now we will walk through a demo of **Realtime Analytics** with Tanzu RabbitMQ.
 Show the **User Experience** dashboard app:
 ```dashboard:open-url
 name: Anomalies
-url: {{ ingress_protocol }}://anomaly-{{ session_namespace }}.{{ DATA_E2E_BASE_URL }}
+url: {{ ingress_protocol }}://anomaly-dashboard.{{ DATA_E2E_BASE_URL }}
+```
+
+Show the **User Experience** tracker app:
+```dashboard:open-url
+name: Tracker
+url: {{ ingress_protocol }}://anomaly-tracker.{{ DATA_E2E_BASE_URL }}
+```
+
+Show the RabbitMQ Management dashboard -login with credentials **data-user/data-password**:
+```dashboard:open-url
+name: RabbitMQ
+url: {{ ingress_protocol }}://anomaly-tracker.{{ DATA_E2E_BASE_URL }}
 ```

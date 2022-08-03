@@ -1,4 +1,4 @@
-name: Tanzu RabbitMQ Commercial Features
+name: Tanzu RabbitMQ Anomaly Detection Demo
 
 modules:
     activate:

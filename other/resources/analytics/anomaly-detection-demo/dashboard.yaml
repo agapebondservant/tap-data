@@ -39,19 +39,4 @@ spec:
                     operator: In
                     values:
                       - anomaly
----
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app: streamlit-dashboard-svc
-  name: streamlit-dashboard-svc
-spec:
-  ports:
-    - port: 8080
-      protocol: TCP
-      targetPort: 8501
-  selector:
-    app: streamlit-dashboard
-  type: LoadBalancer
 

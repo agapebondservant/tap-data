@@ -166,3 +166,4 @@ resources/training-portal-sample.yaml
 ./other/resources/datadog/data-dog-with-db-config.yaml
 ./other/resources/wavefront/wavefront.yaml
 ./other/resources/scdf/scdf-http-proxy.yaml
+/Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/analytics/anomaly-detection-demo/rabbitmq-analytics.yaml

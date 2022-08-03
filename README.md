@@ -549,10 +549,13 @@ kubectl label nodes <SECOND NODE TO LABEL> analytics=anomaly
 
 Deploy the Analytics apps and dependencies:
 ```
-kubectl apply -f ~/other/resources/analytics/anomaly-detection-demo -nstreamlit
+kubectl get all -o name -n streamlit | xargs kubectl delete -n streamlit
+kubectl apply -f other/resources/analytics/anomaly-detection-demo/rabbitmq-analytics.yaml -nstreamlit
 kubectl apply -f other/resources/analytics/anomaly-detection-demo/dashboard.yaml -nstreamlit
 kubectl apply -f other/resources/analytics/anomaly-detection-demo/tracker.yaml -nstreamlit
+kubectl apply -f other/resources/analytics/anomaly-detection-demo/dashboard-tracker-svc.yaml -nstreamlit
 watch kubectl get all -nstreamlit
+kubectl get svc -n streamlit
 # (NOTE: If on AWS, change the timeout settings for the LoadBalancers to 3600)
 # (NOTE: Update your DNS: create CNAME records for anomaly-dashboard.<YOUR_BASE_URL> and anomaly-tracker.<YOUR_BASE_URL> 
 pointing to the dashboard and tracker apps respectively)

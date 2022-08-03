@@ -1,9 +1,10 @@
 
 ### Deploying Tanzu RabbitMQ
 {% if ENV_WORKSHOP_TOPIC == 'data-rabbitmq-realtime-analytics' or ENV_WORKSHOP_TOPIC == 'data-rabbitmq-realtime-analytics-demo' %}
-<h2 style="color:red">You can SKIP THIS SECTION if your Tanzu RabbitMQ operator has already been set up.
+<div style="background: yellow">
+<font="color:red"><b>NOTE: You can SKIP THIS SECTION if your Tanzu RabbitMQ operator has already been set up.
 
-Just create the necessary RabbitMQ topology here:</h2>
+Just create the necessary RabbitMQ topology here:</b></font>
 ```execute
 clear && kubectl create ns rabbitmq-system --dry-run -o yaml | kubectl apply -f - && kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-operator-rbac.yaml -n rabbitmq-system && kubectl create clusterrolebinding tanzu-rabbitmq-crd-install-binding --clusterrole=tanzu-rabbitmq-crd-install --serviceaccount=rabbitmq-system:default -n rabbitmq-system --dry-run -o yaml | kubectl apply -n rabbitmq-system -f - 
 ```
@@ -12,11 +13,7 @@ Apply the following to enable Wavefront integration:
 ```execute
 helm repo add wavefront https://wavefronthq.github.io/helm/ -n{{ session_namespace }}; helm repo update -n{{ session_namespace }}; helm uninstall wavefront-{{ session_namespace }} --namespace {{ session_namespace }} || true; helm install wavefront-{{ session_namespace }} wavefront/wavefront --set wavefront.url='{{ DATA_E2E_WAVEFRONT_URL }}' --set wavefront.token='{{ DATA_E2E_WAVEFRONT_ACCESS_TOKEN }}'  --set clusterName=rabbit-{{ session_namespace }}  --namespace {{ session_namespace }}
 ```
-
-Finally, set up the demo if needed (might already be set up):
-```execute
-kubectl apply -f ~/other/resources/analytics/anomaly-detection-demo
-```
+</div>
 {% endif %}
 
 ![Tanzu RabbitMQ High-Level Architecture](images/rabbit_architecture.png)

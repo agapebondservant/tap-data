@@ -120,7 +120,7 @@ spec:
         - name: rabbitanalytics1
           port: 15672
   virtualhost:
-    fqdn: rmqui.${DATA_E2E_BASE_URL}
+    fqdn: rmqui.tanzudatatap.ml
 ---
 # Rabbit Cluster
 apiVersion: projectcontour.io/v1
@@ -135,4 +135,4 @@ spec:
         - name: rabbitanalytics1
           port: 5672
   virtualhost:
-    fqdn: rmq.${DATA_E2E_BASE_URL}
+    fqdn: rmq.tanzudatatap.ml
