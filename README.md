@@ -19,7 +19,8 @@ NOTE:
 10. [Install TAP](#tap-install)
 11. [Deploy Tanzu Data Workshops](#buildanddeploy)
 12. [Deploy Single Workshop to Pre-Existing LearningCenter Portal](#buildsingle)
-13. [Other: How-tos/General Info (not needed for setup)](#other)
+13. [Create Carvel Packages for Dependencies](#carvelpackages)
+14. [Other: How-tos/General Info (not needed for setup)](#other)
 
 #### Kubernetes Cluster Prep<a name="pre-reqs"/>
 * Create .env file in root directory (use .env-sample as a template - do NOT check into Git)
@@ -550,12 +551,30 @@ kubectl label nodes <SECOND NODE TO LABEL> analytics=anomaly
 Deploy the Analytics apps and dependencies:
 ```
 kubectl get all -o name -n streamlit | xargs kubectl delete -n streamlit
-kubectl apply -f other/resources/analytics/anomaly-detection-demo/rabbitmq-analytics.yaml -nstreamlit
+watch kubectl get all -n streamlit
+
+kubectl apply -f other/resources/analytics/anomaly-detection-demo/rabbitmq-analytics-cluster.yaml -nstreamlit
+watch kubectl get all -n streamlit
+
+kubectl apply -f other/resources/analytics/anomaly-detection-demo/rabbitmq-analytics-topology.yaml -nstreamlit
+watch kubectl get all -n streamlit
+
+kubectl apply -f other/resources/analytics/anomaly-detection-demo/rabbitmq-analytics-bindings.yaml -nstreamlit
+watch kubectl get all -n streamlit
+
 kubectl apply -f other/resources/analytics/anomaly-detection-demo/dashboard.yaml -nstreamlit
 kubectl apply -f other/resources/analytics/anomaly-detection-demo/tracker.yaml -nstreamlit
+watch kubectl get all -n streamlit
+
+export ANOMALY_POD_NAME=$(kubectl get pods --namespace streamlit -l "app=streamlit-dashboard" -o jsonpath="{.items[0].metadata.name}")
+kubectl port-forward $ANOMALY_POD_NAME 8091:8501 -nstreamlit
+
+export ANOMALY_POD_NAME=$(kubectl get pods --namespace streamlit -l "app=streamlit-dashboard" -o jsonpath="{.items[0].metadata.name}")
+kubectl logs $ANOMALY_POD_NAME -nstreamlit --tail -1
+
+# For exposing externally accessible endpoints:
 kubectl apply -f other/resources/analytics/anomaly-detection-demo/dashboard-tracker-svc.yaml -nstreamlit
-watch kubectl get all -nstreamlit
-kubectl get svc -n streamlit
+watch kubectl get svc -n streamlit
 # (NOTE: If on AWS, change the timeout settings for the LoadBalancers to 3600)
 # (NOTE: Update your DNS: create CNAME records for anomaly-dashboard.<YOUR_BASE_URL> and anomaly-tracker.<YOUR_BASE_URL> 
 pointing to the dashboard and tracker apps respectively)
@@ -704,6 +723,12 @@ watch kubectl get learningcenter-training
 (For Presenter Mode:)
 kubectl apply -f resources/hands-on/workshop-rabbitmq-realtime-analytics-demo.yaml
 watch kubectl get learningcenter-training
+```
+
+#### Create Carvel Packages for Dependencies (not needed for setup)<a name="carvelpackages"/>
+* Run the script below:
+```
+
 ```
   
 #### Other: How-tos/General Info (not needed for setup)<a name="other"/>
