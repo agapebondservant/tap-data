@@ -14,8 +14,8 @@ kubectl create secret docker-registry image-pull-secret --namespace=rabbitmq-sys
 --docker-password='{{ DATA_E2E_REGISTRY_PASSWORD }}' \
 --dry-run -o yaml | kubectl apply -f -
 
-sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" other/resources/rabbitmq/rabbitmq-operator-secretexport.yaml
-kubectl apply -f other/resources/rabbitmq/rabbitmq-operator-secretexport.yaml
+sed -i ".bak" "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" other/resources/rabbitmq/rabbitmq-operator-secretexport-main.yaml
+kubectl apply -f other/resources/rabbitmq/rabbitmq-operator-secretexport-main.yaml
 
 kapp delete -a tanzu-rabbitmq-repo -y -nrabbitmq-system
 kapp deploy -a tanzu-rabbitmq-repo -f other/resources/rabbitmq/rabbitmq-operator-packagerepository.yaml -y -nrabbitmq-system
