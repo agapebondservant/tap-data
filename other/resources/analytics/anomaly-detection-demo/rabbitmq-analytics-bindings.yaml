@@ -1,0 +1,52 @@
+# Queue Binding
+---
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: rabbitanalytics4-binding
+spec:
+  source: rabbitanalytics4-stream-exchange
+  destination: rabbitanalytics4-stream
+  destinationType: queue
+  routingKey: "anomaly.#"
+  rabbitmqClusterReference:
+    name: rabbitanalytics4
+
+---
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: rabbitanalytics4-stats-binding
+spec:
+  source: rabbitanalytics4-exchange
+  destination: rabbitanalytics4-stats
+  destinationType: queue
+  routingKey: "anomaly.stats"
+  rabbitmqClusterReference:
+    name: rabbitanalytics4
+
+---
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: rabbitanalytics4-dashboard-binding
+spec:
+  source: rabbitanalytics4-exchange
+  destination: rabbitanalytics4-dashboard
+  destinationType: queue
+  routingKey: "anomaly.datapublished"
+  rabbitmqClusterReference:
+    name: rabbitanalytics4
+
+---
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: rabbitanalytics4-inference-binding
+spec:
+  source: rabbitanalytics4-exchange
+  destination: rabbitanalytics4-inference
+  destinationType: queue
+  routingKey: "anomaly.datapublished"
+  rabbitmqClusterReference:
+    name: rabbitanalytics4

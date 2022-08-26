@@ -20,6 +20,7 @@ spec:
         - streamlit
         - run
         - app/main/python/tracker.py
+        - --logger.level=info
         image: oawofolu/streamlit
         imagePullPolicy: Always
         name: streamlit
@@ -39,19 +40,4 @@ spec:
                     operator: In
                     values:
                       - anomaly
----
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app: streamlit-tracker-svc
-  name: streamlit-tracker-svc
-spec:
-  ports:
-    - port: 8080
-      protocol: TCP
-      targetPort: 8501
-  selector:
-    app: streamlit-tracker
-  type: LoadBalancer
 

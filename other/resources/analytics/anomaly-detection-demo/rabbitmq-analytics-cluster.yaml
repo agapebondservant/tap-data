@@ -1,0 +1,11 @@
+#The RMQ cluster
+---
+apiVersion: rabbitmq.com/v1beta1
+kind: RabbitmqCluster
+metadata:
+  name: rabbitanalytics4
+spec:
+  image: rabbitmq:3.9-management
+  replicas: 3
+  service:
+    type: LoadBalancer

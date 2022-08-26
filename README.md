@@ -6,21 +6,36 @@ NOTE:
   it is recommended not to use a permanent Kubernetes cluster, and instead to use a
   temporary Kubernetes cluster that is created on demand and destroyed right after a session (see [here](https://docs.vmware.com/en/Tanzu-Application-Platform/1.0/tap/GUID-learning-center-about.html#use-cases-1 "Docs"))
 
-#### Contents
-1. [Kubernetes Cluster Prep](#pre-reqs)
-2. [Install Minio](#minio)
-3. [Install Prometheus and Grafana](#prometheusgrafana)
-4. [Install Wavefront](#wavefront)
-5. [Install Datadog](#datadog)
-6. [Install ArgoCD](#argocd)
-7. [Install OperatorUI](#operatorui)
-8. [Pre-deploy Greenplum and Spring Cloud Data Flow](#predeploys)
-9. [Build secondary cluster (for multi-site demo)](#multisite)
-10. [Install TAP](#tap-install)
-11. [Deploy Tanzu Data Workshops](#buildanddeploy)
-12. [Deploy Single Workshop to Pre-Existing LearningCenter Portal](#buildsingle)
-13. [Create Carvel Packages for Dependencies](#carvelpackages)
-14. [Other: How-tos/General Info (not needed for setup)](#other)
+## NOTE: For WORKSHOPS-AS-A-SERVICE <a name="workshops-as-a-service"/>
+For Workshops-as-a-Service, follow the instructions in this section.
+(The rest of this guide should not apply except when indicated.)
+
+Pre-requisites: A Kubernetes cluster with TAP installed - see [Install TAP](#tap-install)
+
+* Run the script: `resources/scripts/workshop-as-a-service/setup.sh`
+
+* The following workshop files may be deployed:
+    - workshop/workshop-postgres-deepdive.yaml
+    - workshop/workshop-rabbitmq-commercial-features.yaml
+    - workshop/workshop-mysql-deepdive.yaml
+    - workshop/workshop-data-with-tap.yaml
+
+## Contents
+1. [For Workshops-as-a-Service](#workshops-as-a-service)
+2. [Kubernetes Cluster Prep](#pre-reqs)
+3. [Install Minio](#minio)
+4. [Install Prometheus and Grafana](#prometheusgrafana)
+5. [Install Wavefront](#wavefront)
+6. [Install Datadog](#datadog)
+7. [Install ArgoCD](#argocd)
+8. [Install OperatorUI](#operatorui)
+9. [Pre-deploy Greenplum and Spring Cloud Data Flow](#predeploys)
+10. [Build secondary cluster (for multi-site demo)](#multisite)
+11. [Install TAP](#tap-install)
+12. [Deploy Tanzu Data Workshops](#buildanddeploy)
+13. [Deploy Single Workshop to Pre-Existing LearningCenter Portal](#buildsingle)
+14. [Create Carvel Packages for Dependencies](#carvelpackages)
+15. [Other: How-tos/General Info (not needed for setup)](#other)
 
 #### Kubernetes Cluster Prep<a name="pre-reqs"/>
 * Create .env file in root directory (use .env-sample as a template - do NOT check into Git)
@@ -311,7 +326,7 @@ resources/scripts/setup.sh
 ```
 * Pre-deploy Spring Cloud Data Flow: (only required for these workshops: <b>RabbitMQ Workshops, Gemfire Workshops, Greenplum Workshops, ML/AI workshops</b>)
 ```
-resources/scripts/setup-scdf.sh
+resources/scripts/setup-scdf-carvel.sh
 ```
 Register gemfire starter apps:
 sink.gemfire=docker:springcloudstream/gemfire-sink-rabbit:2.1.6.RELEASE
@@ -609,7 +624,7 @@ resources/scripts/deploy-workshop.sh
   | Tanzu Data with TAP                        | <a href="#workshopa">View Instructions</a>                 |
   | Tanzu Postgres - Kubernetes Deepdive       | <a href="#workshopb">View Instructions</a>                 |
   | Tanzu RabbitMQ - Commercial Features       | <a href="#workshopc">View Instructions</a>                 |
-  | Tanzu RabbitMQ - Realtime Analytics Demo   | <a href="#workshopd">View Instructions</a>
+  | Tanzu RabbitMQ - Realtime Analytics Demo   | <a href="#workshopd">View Instructions</a>                 |
 
 ##### Deploy "Tanzu Data With TAP"<a name="workshop-pre-reqs"/>
 Setup pre-reqs for various packages required by workshops with Tanzu cli:
