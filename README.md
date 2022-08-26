@@ -14,7 +14,7 @@ Pre-requisites: A Kubernetes cluster with TAP installed - see [Install TAP](#tap
 
 * Run the script: `resources/scripts/workshop-as-a-service/setup.sh`
 
-* The following workshop files may be deployed:
+* Once the script has completed successfully, deploy the workshops below:
     - workshop/workshop-postgres-deepdive.yaml
     - workshop/workshop-rabbitmq-commercial-features.yaml
     - workshop/workshop-mysql-deepdive.yaml
