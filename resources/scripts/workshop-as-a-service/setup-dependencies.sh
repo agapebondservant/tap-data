@@ -12,7 +12,7 @@ echo "NOTE: Setup a CNAME DNS record for the ProjectContour Loadbalancer endpoin
 # Setup Metrics Server
 #########################################################################
 echo "Installing Metrics Server..."
-kubectl apply -f resources/metrics-server.yaml; watch kubectl get deployment metrics-server -n kube-system
+kubectl apply -f resources/metrics-server.yaml
 echo "Metrics Server installed."
 
 ########################################################################

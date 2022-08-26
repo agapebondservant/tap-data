@@ -169,3 +169,5 @@ resources/training-portal-sample.yaml
 /Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/analytics/anomaly-detection-demo/rabbitmq-analytics.yaml
 .env-bkup 
 .env-template
+/Users/oawofolu/PIVOTAL/data/educates/tap/resources/minio-plain-http-proxy.yaml
+resources/minio-plain-http-proxy.yaml
