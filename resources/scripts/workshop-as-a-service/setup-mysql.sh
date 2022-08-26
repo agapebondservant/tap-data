@@ -4,9 +4,9 @@ echo "Installing MySQL..."
 
 kubectl create ns mysql-system
 
-kubectl create secret docker-registry image-pull-secret --namespace=mysql-system
---docker-username='$DATA_E2E_REGISTRY_USERNAME'
---docker-password='$DATA_E2E_REGISTRY_PASSWORD'
+kubectl create secret docker-registry image-pull-secret --namespace=mysql-system \
+--docker-username='$DATA_E2E_REGISTRY_USERNAME' \
+--docker-password='$DATA_E2E_REGISTRY_PASSWORD' \
 --dry-run -o yaml | kubectl apply -f - 
 
 helm uninstall mysql --namespace mysql-system
@@ -45,7 +45,7 @@ do
   kubectl delete crd ${i} > /dev/null 2>&1
 done
 
-helm install mysql other/resources/mysql/operator{{DATA_E2E_MYSQL_OPERATOR_VERSION}} \
+helm install mysql other/resources/mysql/operator${DATA_E2E_MYSQL_OPERATOR_VERSION} \
 -f other/resources/mysql/overrides.yaml \
 --namespace mysql-system --wait &> /dev/null
 

@@ -2,13 +2,17 @@
 
 echo "Installing Postgres..."
 
+kubectl delete ns postgres-system --ignore-not-found=true
+
+kubectl create ns postgres-system
+
 kubectl create secret docker-registry image-pull-secret --namespace=default --docker-username='$DATA_E2E_REGISTRY_USERNAME' \
         --docker-password='$DATA_E2E_REGISTRY_PASSWORD' \
         --dry-run -o yaml | kubectl apply -f -
 
 helm uninstall postgres --namespace default
 
-helm uninstall postgres --namespace {{ session_namespace }}
+helm uninstall postgres --namespace postgres-system
 
 for i in $(kubectl get clusterrole | grep postgres | grep -v postgres-operator-default-cluster-role)
 do
@@ -45,9 +49,9 @@ do
   kubectl delete crd ${i} > /dev/null 2>&1
 done
 
-helm install postgres ~/other/resources/postgres/operator{{DATA_E2E_POSTGRES_VERSION}} -f ~/other/resources/postgres/overrides.yaml \
-      --namespace {{ session_namespace }} --wait &> /dev/null
+helm install postgres other/resources/postgres/operator${DATA_E2E_POSTGRES_VERSION} -f other/resources/postgres/overrides.yaml \
+      --namespace postgres-system --wait &> /dev/null
 
-kubectl apply -f ~/other/resources/postgres/operator{{DATA_E2E_POSTGRES_VERSION}}/crds/
+kubectl apply -f other/resources/postgres/operator${DATA_E2E_POSTGRES_VERSION}/crds/
 
 echo "Postgres installed."
