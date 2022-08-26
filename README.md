@@ -8,7 +8,7 @@ NOTE:
 
 ## NOTE: For WORKSHOPS-AS-A-SERVICE <a name="workshops-as-a-service"/>
 For Workshops-as-a-Service, follow the instructions in this section.
-(The rest of this guide should not apply except when indicated.)
+(The rest of this guide should not apply except where indicated.)
 
 Pre-requisites: A Kubernetes cluster with TAP installed - see [Install TAP](#tap-install)
 
