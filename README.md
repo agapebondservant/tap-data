@@ -450,8 +450,8 @@ docker login registry-1.docker.io
 docker login registry.tanzu.vmware.com
 export INSTALL_REGISTRY_USERNAME=$DATA_E2E_REGISTRY_USERNAME
 export INSTALL_REGISTRY_PASSWORD=$DATA_E2E_REGISTRY_PASSWORD
-#export TAP_VERSION=1.1.0
-export TAP_VERSION=1.1.1
+#export TAP_VERSION=1.1.1
+export TAP_VERSION=1.2.0
 export INSTALL_REGISTRY_HOSTNAME=index.docker.io
 imgpkg copy -b registry.tanzu.vmware.com/tanzu-application-platform/tap-packages:${TAP_VERSION} --to-repo ${INSTALL_REGISTRY_HOSTNAME}/${DATA_E2E_REGISTRY_USERNAME}/tap-packages
 imgpkg copy -b registry.tanzu.vmware.com/p-rabbitmq-for-kubernetes/tanzu-rabbitmq-package-repo:${DATA_E2E_RABBIT_OPERATOR_VERSION} --to-repo ${INSTALL_REGISTRY_HOSTNAME}/oawofolu/vmware-tanzu-rabbitmq
@@ -473,7 +473,7 @@ tanzu package available get tap.tanzu.vmware.com/$TAP_VERSION --values-schema --
 tanzu package install tap -p tap.tanzu.vmware.com -v $TAP_VERSION --values-file resources/tap-values.yaml -n tap-install
 ```
 
-To upgrade to TAP 1.1.1:
+(Optional) To downgrade to TAP 1.1.1:
 ```
 tanzu package installed update tap -p tap.tanzu.vmware.com -v 1.1.1-build.1  --values-file resources/tap-values.yaml -n tap-install
 tanzu package repository get tanzu-tap-repository --namespace tap-install
