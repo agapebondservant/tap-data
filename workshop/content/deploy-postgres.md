@@ -377,7 +377,7 @@ file: ~/other/resources/postgres/postgres-backup-location-dr.yaml
 
 Deploy it:
 ```execute
-export TMP_STANZA_NM=$(kubectl exec pginstance-0 -c pg-container -n {{ session_namespace }} -- bash -c 'echo $BACKUP_STANZA_NAME') && sed -i "s/YOUR_STANZA_NAME/$TMP_STANZA_NM/g" ~/other/resources/postgres/postgres-backup-location-dr.yaml && kubectl apply -f ~/other/resources/postgres/postgres-backup-location-dr.yaml -n pg-restore-{{ session_namespace }}
+export TMP_STANZA_NM=$(kubectl exec pginstance-1-0 -c pg-container -n {{ session_namespace }} -- bash -c 'echo $BACKUP_STANZA_NAME') && sed -i "s/YOUR_STANZA_NAME/$TMP_STANZA_NM/g" ~/other/resources/postgres/postgres-backup-location-dr.yaml && kubectl apply -f ~/other/resources/postgres/postgres-backup-location-dr.yaml -n pg-restore-{{ session_namespace }}
 ```
 
 Notice the field **sourceStanzaName**:
@@ -388,7 +388,7 @@ text: "sourceStanzaName"
 
 The field contains the value of the primary site's backup **stanza**, obtained here:
 ```execute
-kubectl exec pginstance-0 -c pg-container -n {{ session_namespace }} -- bash -c 'echo $BACKUP_STANZA_NAME'
+kubectl exec pginstance-1-0 -c pg-container -n {{ session_namespace }} -- bash -c 'echo $BACKUP_STANZA_NAME'
 ```
 
 Verify that the standby instance is in continuous restore mode:
