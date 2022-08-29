@@ -356,7 +356,7 @@ watch kubectl get postgresrestore.sql.tanzu.vmware.com/pg-simple-restore -n pg-r
 2
 ```
 
-#### Continuous Restore
+#### Continuous Restore (for Disaster Recovery)
 Having a backup-and-restore/recovery plan is an important part of Disaster Recovery.
 However, you may need to go a step further by automating an **active-passive** solution, 
 whereby you can setup a warm standby/failover site that can be easily promoted or demoted following a catastrophe.
