@@ -171,3 +171,4 @@ resources/training-portal-sample.yaml
 .env-template
 /Users/oawofolu/PIVOTAL/data/educates/tap/resources/minio-plain-http-proxy.yaml
 resources/minio-plain-http-proxy.yaml
+resources/tap-gui-httpproxy.yaml

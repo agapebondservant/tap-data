@@ -1,0 +1,21 @@
+---
+# specify the url for the docker image for the operator, e.g. gcr.io/<my_project>/postgres-operator
+operatorImage: registry.tanzu.vmware.com/tanzu-sql-postgres/postgres-operator:v1.8.0
+
+# specify the docker image for postgres instance, e.g. gcr.io/<my_project>/postgres-instance
+postgresImage: registry.tanzu.vmware.com/tanzu-sql-postgres/postgres-instance:v1.8.0
+
+# specify the name of the docker-registry secret to allow the cluster to authenticate with the container registry for pulling images
+dockerRegistrySecretName: regsecret
+
+# override the default self-signed cert-manager cluster issuer
+certManagerClusterIssuerName: postgres-operator-ca-certificate-cluster-issuer
+
+# set the resources for the postgres operator deployment
+resources: {}
+#  limits:
+#    cpu: 500m
+#    memory: 300Mi
+#  requests:
+#    cpu: 500m
+#    memory: 300Mi

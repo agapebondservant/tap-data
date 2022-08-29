@@ -519,9 +519,7 @@ Verify that package is running: tanzu package installed get source-controller -n
 ```
 * Install App Accelerator: (see https://docs.vmware.com/en/Tanzu-Application-Platform/1.0/tap/GUID-cert-mgr-contour-fcd-install-cert-mgr.html)
 ```
-tanzu package available list accelerator.apps.tanzu.vmware.com --namespace tap-install
-tanzu package install app-accelerator -p accelerator.apps.tanzu.vmware.com -v 1.1.2 -n tap-install -f resources/app-accelerator-values.yaml
-Verify that package is running: tanzu package installed get app-accelerator -n tap-install
+Verify that package is running: tanzu package installed get accelerator -n tap-install
 Get the IP address for the App Accelerator API: kubectl get service -n accelerator-system
 ```
 
@@ -534,6 +532,8 @@ tanzu package install tap-gui \
   --package-name tap-gui.tanzu.vmware.com \
   --version 1.1.1 -n tap-install \
   -f resources/tap-gui-values.yaml
+envsubst < resources/tap-gui-httpproxy.in.yaml > resources/tap-gui-httpproxy.yaml
+kubectl apply -f resources/tap-gui-httpproxy.yaml
 ```
 
 Verify installation:

@@ -1,0 +1,20 @@
+# permissions for end users to view postgresbackups.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: postgresbackup-viewer-role
+rules:
+- apiGroups:
+  - sql.tanzu.vmware.com
+  resources:
+  - postgresbackups
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - sql.tanzu.vmware.com
+  resources:
+  - postgresbackups/status
+  verbs:
+  - get

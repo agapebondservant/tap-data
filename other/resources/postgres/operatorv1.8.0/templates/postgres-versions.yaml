@@ -1,0 +1,27 @@
+apiVersion: sql.tanzu.vmware.com/v1
+kind: PostgresVersion
+metadata:
+  name: postgres-11
+spec:
+  dbVersion: "11.16"
+---
+apiVersion: sql.tanzu.vmware.com/v1
+kind: PostgresVersion
+metadata:
+  name: postgres-12
+spec:
+  dbVersion: "12.11"
+---
+apiVersion: sql.tanzu.vmware.com/v1
+kind: PostgresVersion
+metadata:
+  name: postgres-13
+spec:
+  dbVersion: "13.7"
+---
+apiVersion: sql.tanzu.vmware.com/v1
+kind: PostgresVersion
+metadata:
+  name: postgres-14
+spec:
+  dbVersion: "14.4"
