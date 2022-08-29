@@ -357,20 +357,20 @@ watch kubectl get postgresrestore.sql.tanzu.vmware.com/pg-simple-restore -n pg-r
 ```
 
 #### Continuous Restore (for Disaster Recovery)
-Having a backup-and-restore/recovery plan is an important part of Disaster Recovery.
+Having a backup-and-restore/recovery plan is an important part of **Disaster Recovery**.
 However, you may need to go a step further by automating an **active-passive** solution, 
 whereby you can setup a warm standby/failover site that can be easily promoted or demoted following a catastrophe.
 **Tanzu Postgres** implements this by providing **continuous restore**. 
 With this feature, the synchronized backups created during the cross-namespace restore 
 can be used as **restore targets** for the Disaster Recovery operation. This means that 
-the backups will be automatically sync'd with the **secondary** or **target** site in a continuous manner.
+the backups will be automatically synchronized with the **secondary** or **target** site in a continuous manner.
 
 Let's use the newly created restore namespace as our **secondary**, or **standby/failover**, DR site.
-<font color="red">NOTE:</font> **Tanzu Postgres** supports configuring standby/failover by using another Kubernetes cluster, 
+<font color="red">NOTE:</font> **Tanzu Postgres** supports configuring standby/failover by using another Kubernetes cluster (more typical), 
 or another namespace in the same cluster.
 
-View the manifest for new **PostgresBackupLocation** and **DR instance**. 
-The **PostgresBackupLocation** will host the DR backups and serve the **restore targets** for the standby:
+View the manifest for the new DR **PostgresBackupLocation** and **instance**. 
+The **PostgresBackupLocation** will host the DR backups and provide the **restore targets** for the standby instance:
 ```editor:open-file
 file: ~/other/resources/postgres/postgres-backup-location-dr.yaml
 ```
@@ -407,12 +407,14 @@ Deploy the scheduled backup job in the primary site:
 kubectl apply -f ~/other/resources/postgres/postgres-dr-backup.yaml -n {{ session_namespace }}
 ```
 
-Verify that **continuous restore** is working - view the reported **Last Restore** times:
+Verify that **continuous restore** is working - view the target cluster's reported **Last Restore** times:
 ```execute
 watch kubectl -n pg-restore-{{ session_namespace }} get postgres pginstance-dr -o jsonpath='{.status.lastRestoreTime}'
 ```
 
-<font color="red">NOTE: Once the continuous restore has been confirmed, hit **Ctrl-C** to exit.</font>
+**Hit Ctrl-C to exit** once the continuous restore has been confirmed.
+
+**_Promotion_**
 
 To **promote** the standby instance to the primary instance, update the standby's manifest:
 ```execute
