@@ -1,22 +1,5 @@
 ---
 apiVersion: sql.tanzu.vmware.com/v1
-kind: PostgresBackupLocation
-metadata:
-  name: pg-dr-backuplocation
-spec:
-  # Can configure retention policy
-  storage:
-    s3:
-      bucket: "pg-backups"
-      bucketPath: "/dr"
-      region: ${DATA_E2E_MINIO_PG_REGION}
-      endpoint: ${DATA_E2E_MINIO_URL}
-      forcePathStyle: true
-      enableSSL: false
-      secret:
-        name: pg-minio-secret
----
-apiVersion: sql.tanzu.vmware.com/v1
 kind: Postgres
 metadata:
   name: pginstance-dr
