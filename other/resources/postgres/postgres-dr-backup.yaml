@@ -1,0 +1,10 @@
+---
+apiVersion: sql.tanzu.vmware.com/v1
+kind: PostgresBackupSchedule
+metadata:
+  name: pg-dr-backup
+spec:
+  sourceInstance:
+    name: pginstance-dr
+  type: full
+  schedule: "*/1 * * * *"

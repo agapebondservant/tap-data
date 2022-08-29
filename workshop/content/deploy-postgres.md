@@ -396,7 +396,25 @@ Verify that the standby instance is in continuous restore mode:
 kubectl logs pginstance-dr-0 -n pg-restore-{{ session_namespace }} -c pg-container
 ```
 
-To promote the standby instance to the primary instance, update the standby's manifest:
+Now, set up scheduled backups which will be continuously synchronized with the standby.
+To do this, configure a **PostgresScheduledBackup** job:
+```editor:open-file
+file: ~/other/resources/postgres/postgres-dr-backup.yaml
+```
+
+Deploy the scheduled backup job in the primary site:
+```execute
+kubectl apply -f ~/other/resources/postgres/postgres-dr-backup.yaml -n {{ session_namespace }}
+```
+
+Verify that **continuous restore** is working - view the reported **Last Restore** times:
+```execute
+watch kubectl -n pg-restore-{{ session_namespace }} get postgres pginstance-dr -o jsonpath='{.status.lastRestoreTime}'
+```
+
+<font color="red">NOTE: Once the continuous restore has been confirmed, hit **Ctrl-C** to exit.</font>
+
+To **promote** the standby instance to the primary instance, update the standby's manifest:
 ```execute
 export TMP_STANZA_NM_2=$(kubectl exec pginstance-dr-0 -c pg-container -n pg-restore-{{ session_namespace }} -- bash -c 'echo $BACKUP_STANZA_NAME') && sed -i "s/YOUR_STANZA_NAME/$TMP_STANZA_NM_2/g" ~/other/resources/postgres/postgres-dr-promote.yaml && kubectl apply -f ~/other/resources/postgres/postgres-dr-promote.yaml -n pg-restore-{{ session_namespace }}
 ```
@@ -414,6 +432,13 @@ kubectl apply -f ~/other/resources/postgres/postgres-dr-promote.yaml -n pg-resto
 Verify that the standby instance is no longer in continuous restore mode:
 ```execute
 kubectl logs pginstance-dr-0 -n pg-restore-{{ session_namespace }} -c pg-container
+```
+
+<font color="red">NOTE: A similar process applies to **failback** to the original primary site.</font>
+
+(Perform cleanup - delete the **PostgresScheduledBackup** job:)
+```execute
+kubectl apply -f ~/other/resources/postgres/postgres-dr-backup.yaml -n {{ session_namespace }}
 ```
 
 
