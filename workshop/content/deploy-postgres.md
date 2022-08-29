@@ -356,6 +356,67 @@ watch kubectl get postgresrestore.sql.tanzu.vmware.com/pg-simple-restore -n pg-r
 2
 ```
 
+#### Continuous Restore
+Having a backup-and-restore/recovery plan is an important part of Disaster Recovery.
+However, you may need to go a step further by automating an **active-passive** solution, 
+whereby you can setup a warm standby/failover site that can be easily promoted or demoted following a catastrophe.
+**Tanzu Postgres** implements this by providing **continuous restore**. 
+With this feature, the synchronized backups created during the cross-namespace restore 
+can be used as **restore targets** for the Disaster Recovery operation. This means that 
+the backups will be automatically sync'd with the **secondary** or **target** site in a continuous manner.
+
+Let's use the newly created restore namespace as our **secondary**, or **standby/failover**, DR site.
+<font color="red">NOTE:</font> **Tanzu Postgres** supports configuring standby/failover by using another Kubernetes cluster, 
+or another namespace in the same cluster.
+
+View the manifest for new **PostgresBackupLocation** and **DR instance**. 
+The **PostgresBackupLocation** will host the DR backups and serve the **restore targets** for the standby:
+```editor:open-file
+file: ~/other/resources/postgres/postgres-backup-location-dr.yaml
+```
+
+Deploy it:
+```execute
+export TMP_STANZA_NM=$(kubectl exec pginstance-0 -c pg-container -n {{ session_namespace }} -- bash -c 'echo $BACKUP_STANZA_NAME') && sed -i "s/YOUR_STANZA_NAME/$TMP_STANZA_NM/g" ~/other/resources/postgres/postgres-backup-location-dr.yaml && kubectl apply -f ~/other/resources/postgres/postgres-backup-location-dr.yaml -n pg-restore-{{ session_namespace }}
+```
+
+Notice the field **sourceStanzaName**:
+```editor:select-matching-text
+file: ~/other/resources/postgres/postgres-backup-location-dr.yaml
+text: "sourceStanzaName"
+```
+
+The field contains the value of the primary site's backup **stanza**, obtained here:
+```execute
+kubectl exec pginstance-0 -c pg-container -n {{ session_namespace }} -- bash -c 'echo $BACKUP_STANZA_NAME'
+```
+
+Verify that the standby instance is in continuous restore mode:
+```execute
+kubectl logs pginstance-dr-0 -n pg-restore-{{ session_namespace }} -c pg-container
+```
+
+To promote the standby instance to the primary instance, update the standby's manifest:
+```execute
+export TMP_STANZA_NM_2=$(kubectl exec pginstance-dr-0 -c pg-container -n pg-restore-{{ session_namespace }} -- bash -c 'echo $BACKUP_STANZA_NAME') && sed -i "s/YOUR_STANZA_NAME/$TMP_STANZA_NM_2/g" ~/other/resources/postgres/postgres-dr-promote.yaml && kubectl apply -f ~/other/resources/postgres/postgres-dr-promote.yaml -n pg-restore-{{ session_namespace }}
+```
+
+View the manifest:
+```editor:open-file
+file: ~/other/resources/postgres/postgres-dr-promote.yaml
+```
+
+Deploy it:
+```execute
+kubectl apply -f ~/other/resources/postgres/postgres-dr-promote.yaml -n pg-restore-{{ session_namespace }}
+```
+
+Verify that the standby instance is no longer in continuous restore mode:
+```execute
+kubectl logs pginstance-dr-0 -n pg-restore-{{ session_namespace }} -c pg-container
+```
+
+
 #### Demonstrating multi cluster deployments
 The **Operator pattern** of Tanzu Postgres allows for the deployment of multiple Postgres clusters from a centralized controller.
 This greatly simplifies configuration management for each Postgres cluster.
