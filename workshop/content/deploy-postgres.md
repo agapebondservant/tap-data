@@ -357,7 +357,7 @@ watch kubectl get postgresrestore.sql.tanzu.vmware.com/pg-simple-restore -n pg-r
 ```
 
 #### Continuous Restore (for Disaster Recovery) 
-A backup-and-restore/recovery plan is an important part of **Disaster Recovery** and **Business Continuity**.
+Having a backup-and-restore/recovery plan is an important part of **Disaster Recovery** and **Business Continuity**.
 However, you may need to go a step further by automating an **active-passive** solution.
 This involves setting up a **standby/failover** site that can be easily promoted during a catastrophic data loss event.
 
@@ -370,8 +370,8 @@ Let's use the newly created restore namespace as our **secondary**, or **standby
 <font color="red">NOTE:</font> **Tanzu Postgres** supports configuring standby/failover by using another Kubernetes cluster (more typical), 
 or another namespace in the same cluster.
 
-First configure the primary site - view the manifest for the **source** **PostgresBackupLocation** and **instance**.
-This  **PostgresBackupLocation** will host the **backups** for the primary:
+First configure the primary site. View the manifest for the **source** **PostgresBackupLocation** and **instance**.
+This  **PostgresBackupLocation** will host the **backups** for the primary.
 ```editor:open-file
 file: ~/other/resources/postgres/postgres-backup-location-dr-source.yaml
 ```
@@ -387,7 +387,8 @@ Notice it is the same **PostgresBackupLocation** as above - the backups will be 
 file: ~/other/resources/postgres/postgres-backup-location-dr-target.yaml
 ```
 
-Deploy it:
+Deploy it.
+<font color="red">NOTE: Wait for the primary instance node to be completely deployed: </font>
 ```execute
 export TMP_STANZA_NM=$(kubectl exec pginstance-dr-0 -c pg-container -n {{ session_namespace }} -- bash -c 'echo $BACKUP_STANZA_NAME') && sed -i "s/YOUR_STANZA_NAME/$TMP_STANZA_NM/g" ~/other/resources/postgres/postgres-backup-location-dr-target.yaml && kubectl apply -f ~/other/resources/postgres/postgres-backup-location-dr-target.yaml -n pg-restore-{{ session_namespace }}
 ```
@@ -401,6 +402,11 @@ text: "sourceStanzaName"
 The field contains the value of the primary site's backup **stanza**, obtained here:
 ```execute
 kubectl exec pginstance-dr-0 -c pg-container -n {{ session_namespace }} -- bash -c 'echo $BACKUP_STANZA_NAME'
+```
+
+Wait for the standby instance to be completely deployed (Note: Hit **Ctrl-C** once it shows Status=Running)
+```execute
+watch kubectl get postgres pginstance-dr -n pg-restore-{{ session_namespace }}
 ```
 
 Verify that the standby instance is in continuous restore mode:
@@ -419,7 +425,8 @@ Deploy the scheduled backup job in the primary site:
 kubectl apply -f ~/other/resources/postgres/postgres-dr-backup.yaml -n {{ session_namespace }}
 ```
 
-Verify that **continuous restore** is working - view the target cluster's reported **Last Restore** times:
+Verify that **continuous restore** is working - view the target cluster's reported **Last Restore** times.
+<font color="red">NOTE: The logs might take up to a couple of minutes to show up:</font>
 ```execute
 watch kubectl -n pg-restore-{{ session_namespace }} get postgres pginstance-dr -o jsonpath='{.status.lastRestoreTime}'
 ```
@@ -428,9 +435,13 @@ watch kubectl -n pg-restore-{{ session_namespace }} get postgres pginstance-dr -
 
 **_Promotion_**
 
-To **promote** the standby instance to the primary instance, update the standby's manifest:
+To **promote** the standby instance to the primary instance, first update the primary's manifest to 
+configure it as the new standby, by
+changing its **continuousRestoreTarget** property to true and updating the **sourceStanza** to the current standby's stanza.
+
+Update the primary's manifest:
 ```execute
-export TMP_STANZA_NM_2=$(kubectl exec pginstance-dr-0 -c pg-container -n pg-restore-{{ session_namespace }} -- bash -c 'echo $BACKUP_STANZA_NAME') && sed -i "s/YOUR_STANZA_NAME/$TMP_STANZA_NM_2/g" ~/other/resources/postgres/postgres-dr-promote.yaml && kubectl apply -f ~/other/resources/postgres/postgres-dr-promote.yaml -n pg-restore-{{ session_namespace }}
+export TMP_STANZA_NM_2=$(kubectl exec pginstance-dr-0 -c pg-container -n pg-restore-{{ session_namespace }} -- bash -c 'echo $BACKUP_STANZA_NAME') && sed -i "s/YOUR_STANZA_NAME/$TMP_STANZA_NM_2/g" ~/other/resources/postgres/postgres-dr-demote-source.yaml && kubectl apply -f ~/other/resources/postgres/postgres-dr-demote-source.yaml -n {{ session_namespace }}
 ```
 
 View the manifest:
@@ -438,9 +449,14 @@ View the manifest:
 file: ~/other/resources/postgres/postgres-dr-promote.yaml
 ```
 
+Next, update the standby's manifest by disabling its status as a **restore target**:
+```editor:open-file
+file: ~/other/resources/postgres/postgres-dr-promote-target.yaml
+```
+
 Deploy it:
 ```execute
-kubectl apply -f ~/other/resources/postgres/postgres-dr-promote.yaml -n pg-restore-{{ session_namespace }}
+kubectl apply -f ~/other/resources/postgres/postgres-dr-promote-target.yaml -n pg-restore-{{ session_namespace }}
 ```
 
 Verify that the standby instance is no longer in continuous restore mode:

@@ -179,3 +179,5 @@ other/resources/postgres/postgres-backup-location-dr.yaml
 other/resources/postgres/postgres-dr-promote.yaml
 other/resources/postgres/postgres-backup-location-dr-target.yaml
 other/resources/postgres/postgres-backup-location-dr-source.yaml
+/Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/postgres/postgres-backup-location-dr-target.yaml
+/Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/postgres/postgres-backup-location-dr-source.yaml

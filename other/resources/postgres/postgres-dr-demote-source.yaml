@@ -1,0 +1,17 @@
+---
+apiVersion: sql.tanzu.vmware.com/v1
+kind: Postgres
+metadata:
+  name: pginstance-dr
+spec:
+  storageClassName: generic
+  monitorStorageClassName: generic
+  highAvailability:
+    enabled: false # DR target instances must have HA set to false
+  deploymentOptions:
+    continuousRestoreTarget: true
+    sourceStanzaName: YOUR_STANZA_NAME
+  seccompProfile:
+    type: Unconfined
+  backupLocation:
+    name: pg-dr-backuplocation

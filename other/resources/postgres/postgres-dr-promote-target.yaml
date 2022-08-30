@@ -10,7 +10,6 @@ spec:
     enabled: false # DR target instances must have HA set to false
   deploymentOptions:
     continuousRestoreTarget: false
-    sourceStanzaName: YOUR_STANZA_NAME
   seccompProfile:
     type: Unconfined
   backupLocation:

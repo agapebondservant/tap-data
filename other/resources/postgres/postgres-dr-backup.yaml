@@ -4,7 +4,9 @@ kind: PostgresBackupSchedule
 metadata:
   name: pg-dr-backup
 spec:
-  sourceInstance:
-    name: pginstance-dr
-  type: full
+  backupTemplate:
+    spec:
+      sourceInstance:
+        name: pginstance-dr
+      type: full
   schedule: "*/1 * * * *"
