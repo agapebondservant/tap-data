@@ -530,7 +530,7 @@ source .env
 envsubst < resources/tap-gui-values.in.yaml > resources/tap-gui-values.yaml
 tanzu package install tap-gui \
   --package-name tap-gui.tanzu.vmware.com \
-  --version 1.1.1 -n tap-install \
+  --version 1.2.3 -n tap-install \
   -f resources/tap-gui-values.yaml
 envsubst < resources/tap-gui-httpproxy.in.yaml > resources/tap-gui-httpproxy.yaml
 kubectl apply -f resources/tap-gui-httpproxy.yaml

@@ -1,1 +1,2 @@
-controllerImage: registry.pivotal.io/tanzu-gemfire-for-kubernetes/gemfire-controller:1.0.3
+# controllerImage: registry.pivotal.io/tanzu-gemfire-for-kubernetes/gemfire-controller:1.0.3
+controllerImage: oawofolu/gemfire-controller:1.0.3

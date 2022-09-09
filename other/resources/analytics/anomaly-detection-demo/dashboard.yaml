@@ -19,7 +19,7 @@ spec:
       - command:
         - streamlit
         - run
-        - app/main/python/dashboard.py
+        - app/main/python/ui/dashboard.py
         - --logger.level=info
         image: oawofolu/streamlit
         imagePullPolicy: Always

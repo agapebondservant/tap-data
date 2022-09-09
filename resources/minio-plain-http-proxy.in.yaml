@@ -4,12 +4,12 @@ metadata:
   name: minio-plain-httpproxy
   namespace: minio-plain
 spec:
+  routes:
+    - conditions:
+        - prefix: /
+      services:
+        - name: minio
+          port: 9000
   virtualhost:
     fqdn: minio-plain.${DATA_E2E_BASE_URL}
-    tls:
-      passthrough: true
-  tcpproxy:
-    services:
-    - name: minio
-      port: 9000
     

@@ -19,7 +19,7 @@ spec:
       - command:
         - streamlit
         - run
-        - app/main/python/tracker.py
+        - app/main/python/ui/tracker.py
         - --logger.level=info
         image: oawofolu/streamlit
         imagePullPolicy: Always
