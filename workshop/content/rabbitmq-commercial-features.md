@@ -4,7 +4,7 @@
 
 Now we will cover the following:
 
-{% if ENV_DEMO_MODE == 'yes' %}
+{% if ENV_DEMO_MODE == 'notreadyyet' %}
 #### Deploying via the Operator UI
 With **Tanzu RabbitMQ**, brokers/clusters can be deployed by using the **Tanzu Operator UI**. First, refresh the UI settings to ensure that it is in sync with the latest Operator changes:
 ```execute
