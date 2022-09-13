@@ -713,7 +713,7 @@ kubectl apply -f resources/hands-on/workshop-rabbitmq-commercial-features-demo.y
 watch kubectl get learningcenter-training
 ```
 
-##### Deploy "Tanzu RabbitMQ - Commercial Features"<a name="workshopd"/>
+##### Deploy "Tanzu RabbitMQ - Realtime Analytics"<a name="workshopd"/>
 Add the following to your `training-portal.yaml` (under **spec.workshops**):
 ```
 - name: data-rabbitmq-realtime-analytics

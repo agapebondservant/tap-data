@@ -1,19 +1,10 @@
 apiVersion: learningcenter.tanzu.vmware.com/v1beta1
 kind: TrainingPortal
 metadata:
-  name: workshops
+  name: rabbitconf
 spec:
   workshops:
-  - name: data-rabbitmq-commercial-features
-    capacity: 10
-    expires: 120m
-    orphaned: 5m
-  - name: data-postgres-deepdive
-    capacity: 10
-    reserved: 1
-    expires: 120m
-    orphaned: 5m
-  - name: data-with-tap
+  - name: data-rabbitmq-commercial-features-demo
     capacity: 10
     expires: 120m
     orphaned: 5m

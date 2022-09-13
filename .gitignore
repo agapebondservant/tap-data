@@ -188,3 +188,4 @@ other/resources/scdf/scdf-rabbit-http-proxy.yaml
 ./other/resources/postgres/postgres-backup-location-dr-target.yaml
 ./other/resources/postgres/postgres-backup-location-dr-source.yaml
 ./other/resources/scdf/scdf-rabbit-http-proxy.yaml
+.env-workshops
