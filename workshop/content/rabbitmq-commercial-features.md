@@ -54,7 +54,7 @@ Navigate to the Grafana site: select the **Erlang Distribution** dashboard, sele
 url: {{ ingress_protocol }}://grafana.{{ ingress_domain }}
 ```
 
-Back on the Perftest shell: hit **Ctrl-C**, then exit the shell:
+Back on the Perftest shell: exit the shell:
 ```execute
 exit
 ```
@@ -71,7 +71,7 @@ kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-compressed.yaml
 
 Relaunch the PerfTest shell. <font color="red"><b>NOTE:</b> Wait until all 3 nodes of the compressed cluster are in <b>Ready</b> status:</font>
 ```execute
-kubectl wait --for=condition=Ready pod/rabbitcluster-compressed-server-0 -n {{ session_namespace }} && kubectl exec deploy/perftest -it -- sh
+sleep 10000; kubectl wait --for=condition=Ready pod/rabbitcluster-compressed-server-0 -n {{ session_namespace }} && kubectl exec deploy/perftest -it -- sh
 ```
 
 Generate data on the compressed cluster - wait for a few seconds for the job to complete:
@@ -84,7 +84,7 @@ Navigate again to the Grafana site: select the **Erlang Distribution** dashboard
 url: {{ ingress_protocol }}://grafana.{{ ingress_domain }}
 ```
 
-Back on the Perftest shell: hit **Ctrl-C**, then exit the shell:
+Back on the Perftest shell: then exit the shell:
 ```execute
 exit
 ```
