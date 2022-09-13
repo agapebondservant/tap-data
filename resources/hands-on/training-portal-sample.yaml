@@ -1,10 +1,19 @@
 apiVersion: learningcenter.tanzu.vmware.com/v1beta1
 kind: TrainingPortal
 metadata:
-  name: sonic
+  name: workshops
 spec:
   workshops:
-    - name: data-postgres-deepdive-demo
-      capacity: 5
-      expires: 120m
-      orphaned: 5m
+  - name: data-rabbitmq-commercial-features
+    capacity: 10
+    expires: 120m
+    orphaned: 5m
+  - name: data-postgres-deepdive
+    capacity: 10
+    reserved: 1
+    expires: 120m
+    orphaned: 5m
+  - name: data-with-tap
+    capacity: 10
+    expires: 120m
+    orphaned: 5m

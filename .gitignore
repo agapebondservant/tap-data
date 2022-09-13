@@ -183,3 +183,8 @@ other/resources/postgres/postgres-backup-location-dr-source.yaml
 /Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/postgres/postgres-backup-location-dr-source.yaml
 other/resources/scdf/scdf-rabbit-http-proxy.yaml
 /Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/scdf/scdf-rabbit-http-proxy.yaml
+./resources/minio-plain-http-proxy.yaml
+./resources/tap-gui-httpproxy.yaml
+./other/resources/postgres/postgres-backup-location-dr-target.yaml
+./other/resources/postgres/postgres-backup-location-dr-source.yaml
+./other/resources/scdf/scdf-rabbit-http-proxy.yaml

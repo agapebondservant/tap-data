@@ -36,7 +36,7 @@ kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-uncompressed.yaml
 
 Generate data on the uncompressed cluster. For this, we will use RabbitMQ's throughput testing tool, **PerfTest**. Deploy an instance of PerfTest:
 ```execute
-kubectl wait --for=condition=Ready pod/rabbitcluster-uncompressed-server-2 -n {{ session_namespace }} && kubectl delete deploy perftest || true; kubectl create deploy perftest --image=pivotalrabbitmq/perf-test:latest -- sleep 10000
+kubectl wait --for=condition=Ready pod/rabbitcluster-uncompressed-server-2 -n {{ session_namespace }} && kubectl delete deploy perftest || true; kubectl create deploy perftest --image=pivotalrabbitmq/perf-test:2.18.0 -- sleep 10000
 ```
 
 Once the deployment shows as ready (in the lower console), launch the PerfTest shell:
@@ -44,9 +44,9 @@ Once the deployment shows as ready (in the lower console), launch the PerfTest s
 kubectl exec deploy/perftest -it -- sh
 ```
 
-Using PerfTest, publish messages to a quorum queue on the uncompressed cluster - wait for a few seconds for data to accumulate:
+Using PerfTest, publish messages to a quorum queue on the uncompressed cluster - wait for a few seconds for the job to complete:
 ```execute
-bin/runjava com.rabbitmq.perf.PerfTest --uri amqp://test-user:test-password@rabbitcluster-uncompressed --producers 10 --consumers 0 --routing-key "uncompressed" --quorum-queue --queue "uncompressed"
+bin/runjava com.rabbitmq.perf.PerfTest --uri amqp://test-user:test-password@rabbitcluster-uncompressed --producers 10 --consumers 0  --routing-key "uncompressed" -pmessages 40000 --rate 5000 --quorum-queue --queue "uncompressed"
 ```
 
 Navigate to the Grafana site: select the **Erlang Distribution** dashboard, select **rabbitcluster-uncompressed** from the cluster dropdown,  and view the **"Data sent to peer node /s"** widget:
@@ -74,9 +74,9 @@ Relaunch the PerfTest shell:
 kubectl wait --for=condition=Ready pod/rabbitcluster-compressed-server-0 -n {{ session_namespace }} && kubectl exec deploy/perftest -it -- sh
 ```
 
-Generate data on the compressed cluster - wait for a few seconds for data to accumulate:
+Generate data on the compressed cluster - wait for a few seconds for the job to complete:
 ```execute
-bin/runjava com.rabbitmq.perf.PerfTest --uri amqp://test-user:test-password@rabbitcluster-compressed --producers 10 --consumers 0 --routing-key "compressed" --quorum-queue --queue "compressed"
+bin/runjava com.rabbitmq.perf.PerfTest --uri amqp://test-user:test-password@rabbitcluster-compressed --producers 10 --consumers 0 --routing-key "compressed" -pmessages 40000 --rate 5000 --quorum-queue --queue "compressed"
 ```
 
 Navigate again to the Grafana site: select the **Erlang Distribution** dashboard, select **rabbitcluster-compressed** from the cluster dropdown, and view the **"Data sent to peer node /s"** widget (should be much less):
