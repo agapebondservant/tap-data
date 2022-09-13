@@ -36,7 +36,7 @@ kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-uncompressed.yaml
 
 Generate data on the uncompressed cluster. For this, we will use RabbitMQ's throughput testing tool, **PerfTest**. Deploy an instance of PerfTest:
 ```execute
-kubectl wait --for=condition=Ready pod/rabbitcluster-uncompressed-server-2 -n {{ session_namespace }} && kubectl delete deploy perftest || true; kubectl create deploy perftest --image=pivotalrabbitmq/perf-test:2.18.0 -- sleep 10
+kubectl wait --for=condition=Ready pod/rabbitcluster-uncompressed-server-2 -n {{ session_namespace }} && kubectl delete deploy perftest || true; kubectl create deploy perftest --image=pivotalrabbitmq/perf-test:2.18.0 -- sleep 10000
 ```
 
 Once the deployment shows as ready (in the lower console), launch the PerfTest shell. <font color="red"><b>NOTE:</b> Wait until all 3 nodes of the uncompressed cluster are in <b>Ready</b> status:</font>
