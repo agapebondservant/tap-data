@@ -293,7 +293,7 @@ printf "Username: admin\nPassword: $(kubectl get secret grafana-admin --namespac
 Similarly, select **rabbitcluster-downstream1** from the cluster dropdown above. Notice that it is entirely empty.
 
 
-Ensure that the streaming log has replicated metrics on the downstream side:
+Ensure that replicated data is present on the downstream side:
 ```execute
 kubectl exec -it $downstream_replication_pod -- rabbitmq-diagnostics inspect_standby_downstream_metrics
 ```
