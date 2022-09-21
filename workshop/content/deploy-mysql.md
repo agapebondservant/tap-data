@@ -156,7 +156,7 @@ file: ~/other/resources/mysql/mysql-backup-location.yaml
 To support *TLS backend stores*, the CA bundle must be included in the *MySQLBackupLocation* configuration.
 First, copy the CA bundle:
 ```execute
-kubectl get secret tls-ssl-minio -nminio  -o go-template='{{index .data "public.crt" | base64decode}}'
+kubectl get secret tls-ssl-minio -nminio  -o jsonpath='{.data.public\.crt}' | base64 --decode
 ```
 
 Replace the section of the configuration (that starts with *YOUR_CA_CRT* and ends with *---END CERTIFICATE---*) with the content of the CA bundle you just copied:
