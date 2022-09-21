@@ -9,7 +9,7 @@ spec:
       bucket: "mysql-backups"
       bucketPath: "1/"
       region: ${DATA_E2E_MINIO_PG_REGION}
-      endpoint: ${DATA_E2E_MINIO_PLAIN_URL}
+      endpoint: ${DATA_E2E_MINIO_URL}
       forcePathStyle: true
       secret:
         name: my-backuplocation-creds-sample
