@@ -1,0 +1,30 @@
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: {{ include "tanzu-mysql-operator.name" . }}-selfsigned-clusterissuer
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "tanzu-mysql-operator.name" . }}-ca-certificate
+  namespace: cert-manager
+  labels:
+    {{- include "tanzu-mysql-operator.labels" . | nindent 4 }}
+spec:
+  isCA: true
+  commonName: {{ include "tanzu-mysql-operator.name" . }}-ca-certificate
+  secretName: {{ include "tanzu-mysql-operator.name" . }}-ca-certificate
+  issuerRef:
+    name: {{ include "tanzu-mysql-operator.name" . }}-selfsigned-clusterissuer
+    kind: ClusterIssuer
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: {{ include "tanzu-mysql-operator.name" . }}-ca-certificate-clusterissuer
+spec:
+  ca:
+    secretName: {{ include "tanzu-mysql-operator.name" . }}-ca-certificate

@@ -135,7 +135,7 @@ Here, we will use **Minio** for backup storage.
 
 First, get the Minio login credentials:
 ```execute
-clear &&  mc config host add --insecure data-fileingest-mysql {{DATA_E2E_MINIO_PLAIN_URL}} {{DATA_E2E_MINIO_PLAIN_ACCESS_KEY}} {{DATA_E2E_MINIO_PLAIN_SECRET_KEY}} && printf "Username: $(kubectl get secret minio -o jsonpath="{.data.accesskey}" -n minio-plain| base64 --decode)\nPassword: $(kubectl get secret minio -o jsonpath="{.data.secretkey}" -n minio-plain| base64 --decode)\n"
+clear &&  mc config host add --insecure data-fileingest-mysql {{DATA_E2E_MINIO_URL}} {{DATA_E2E_MINIO_ACCESS_KEY}} {{DATA_E2E_MINIO_SECRET_KEY}} && printf "Username: $(kubectl get secret minio -o jsonpath="{.data.accesskey}" -n minio | base64 --decode)\nPassword: $(kubectl get secret minio -o jsonpath="{.data.secretkey}" -n minio| base64 --decode)\n"
 ```
 
 Let's create a new bucket for our **mysqldata** backups:
@@ -145,7 +145,7 @@ mc rb --force --insecure data-fileingest-mysql/mysql-backups; mc mb --insecure -
 
 View the newly created bucket (login with the _Username_ and _Password_ printed earlier):
 ```dashboard:open-url
-url: http://minio.minio-demo.ml:9000/
+url: http://minio.{{ DATA_E2E_BASE_URL }}/
 ```
 
 Next, let's view the manifest that we would use to configure the backup location:
@@ -180,7 +180,7 @@ watch kubectl get mysqlbackup my-backup-sample -n {{ session_namespace }}
 
 View the generated backup files on Minio:
 ```dashboard:open-url
-url: http://minio.minio-demo.ml:9000/
+url: http://minio.{{ DATA_E2E_BASE_URL }}/
 ```
 
 In addition to on-demand backups, Tanzu MySQL supports scheduled backup jobs. Here's a manifest that will set up a daily backup job for our MySQL instance to be backed up to our previously defined location:
@@ -202,7 +202,7 @@ Soon, a set of scheduled jobs will be deployed (shown in the lower console windo
 
 Next, view the backup files in Minio: <font color="red">NOTE: The **.xb** backup files will be stored under a _YYYY > MM > DD_ folder substructure by default.</font>
 ```dashboard:open-url
-url: http://minio.minio-demo.ml:9000/
+url: http://minio.{{ DATA_E2E_BASE_URL }}/
 ```
 
 Now, let's perform a restore. In this case, we will downscale the HA instance to a new single-node DB. View the manifest:
