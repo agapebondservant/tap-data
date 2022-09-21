@@ -153,9 +153,20 @@ Next, let's view the manifest that we would use to configure the backup location
 file: ~/other/resources/mysql/mysql-backup-location.yaml
 ```
 
+To support *TLS backend stores*, the CA bundle must be included in the *MySQLBackupLocation* configuration.
+First, copy the CA bundle:
+```execute
+kubectl get secret tls-ssl-minio -nminio  -o go-template='{{index .data "public.crt" | base64decode}}'
+```
+
+Replace the section of the configuration (that starts with *YOUR_CA_CRT* and ends with *---END CERTIFICATE---*) with the content of the CA bundle you just copied:
+```editor:open-file
+file: ~/other/resources/mysql/mysql-backup-location.yaml
+```
+
 Deploy the configuration for the backup location:
 ```execute
-kubectl  apply -f ~/other/resources/mysql/mysql-backup-location.yaml  -n {{ session_namespace }}
+kubectl apply -f ~/other/resources/mysql/mysql-backup-location.yaml  -n {{ session_namespace }}
 ```
 
 Let's take a look at the backup configuration that was just deployed:

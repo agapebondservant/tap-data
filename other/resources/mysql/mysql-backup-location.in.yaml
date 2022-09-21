@@ -13,11 +13,17 @@ spec:
       forcePathStyle: true
       secret:
         name: my-backuplocation-creds-sample
+    caBundle: |
+      # YOUR_CA_CRT
+      -----BEGIN CERTIFICATE-----
+      RANDOMDATARANDOMDATARANDOMDATARANDOMDATARANDOMDATARANDOMDATARAND
+      RANDOMDATARANDOMDATARANDOMDATARANDOMDATARANDOMDATARANDOMDATARAND
+      -----END CERTIFICATE--------
 ---
 apiVersion: v1
 kind: Secret
 metadata:
   name: my-backuplocation-creds-sample
 stringData:
-  accessKeyId: ${DATA_E2E_MINIO_PLAIN_ACCESS_KEY}
-  secretAccessKey: ${DATA_E2E_MINIO_PLAIN_SECRET_KEY}
+  accessKeyId: ${DATA_E2E_MINIO_ACCESS_KEY}
+  secretAccessKey: ${DATA_E2E_MINIO_SECRET_KEY}
