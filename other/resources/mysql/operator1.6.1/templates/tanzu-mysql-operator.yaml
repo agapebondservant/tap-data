@@ -1,0 +1,67 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    {{- include "tanzu-mysql-operator.labels" . | nindent 4 }}
+  name: {{ include "tanzu-mysql-operator.fullname" . }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "tanzu-mysql-operator.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "tanzu-mysql-operator.labels" . | nindent 8 }}
+    spec:
+      securityContext:
+        runAsGroup: 1001
+        runAsUser: 1001
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      serviceAccountName: {{ include "tanzu-mysql-operator.serviceAccountName" . }}
+      containers:
+      - command:
+        - /manager
+        image: {{ .Values.operatorImage }}
+        name: manager
+        ports:
+        - containerPort: 9443
+          name: webhook-server
+          protocol: TCP
+        resources: {{ toYaml .Values.resources | nindent 10}}
+        volumeMounts:
+        - mountPath: /tmp/k8s-webhook-server/serving-certs
+          name: cert
+          readOnly: true
+        - mountPath: /config.yaml
+          name: manager-config
+          subPath: controller_manager_config.yaml
+        env:
+        - name: OPERATOR_VERSION
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['app.kubernetes.io/version']
+        securityContext:
+          capabilities:
+            drop:
+            - "ALL"
+          allowPrivilegeEscalation: false
+        readinessProbe:
+          httpGet:
+            port: 8081
+            path: /readyz
+      imagePullSecrets:
+      - name: {{ .Values.imagePullSecretName }}
+      terminationGracePeriodSeconds: 10
+      volumes:
+      - name: cert
+        secret:
+          defaultMode: 420
+          secretName: webhook-server-cert
+      - name: manager-config
+        configMap:
+          name: {{ include "tanzu-mysql-operator.fullname" . }}-config
+

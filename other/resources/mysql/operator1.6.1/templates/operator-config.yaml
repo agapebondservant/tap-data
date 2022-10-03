@@ -1,0 +1,26 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "{{ include "tanzu-mysql-operator.fullname" . }}-config"
+data:
+  controller_manager_config.yaml: |
+    apiVersion: with.sql.tanzu.vmware.com/v1
+    kind: MySQLOperatorConfiguration
+    health:
+      healthProbeBindAddress: :8081
+    metrics:
+      bindAddress: 127.0.0.1:8080
+    webhook:
+      port: 9443
+    leaderElection:
+      leaderElect: true
+      resourceName: 89f1ee27.with.sql.tanzu.vmware.com
+    {{- /* mysqlImage will be the latest image. This is used for restores until we have a better way. */}}
+    mysqlImage: {{ include "tanzu-mysql-operator.instanceRepo" . }}:1.6.1-mysql-8.0.29
+    operatorVersion: 1.6.1
+    defaultImagePullSecretName: {{ .Values.imagePullSecretName }}
+    versionImageList:
+    - image: {{ include "tanzu-mysql-operator.instanceRepo" . }}:1.6.1-mysql-8.0.29
+      version: 1.6.1
+    certManagerClusterIssuerName: {{ .Values.certManagerClusterIssuerName | default "tanzu-sql-with-mysql-operator-ca-certificate-clusterissuer" }}

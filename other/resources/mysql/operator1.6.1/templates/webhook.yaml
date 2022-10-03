@@ -1,0 +1,93 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: tanzu-mysql-webhook-service
+  namespace: '{{ .Release.Namespace }}'
+spec:
+  ports:
+  - port: 443
+    targetPort: 9443
+  selector:
+    app.kubernetes.io/name: '{{ include "tanzu-mysql-operator.name" . }}'
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: tanzu-mysql-serving-cert
+  namespace: '{{ .Release.Namespace }}'
+spec:
+  dnsNames:
+  - tanzu-mysql-webhook-service.{{ .Release.Namespace }}.svc
+  - tanzu-mysql-webhook-service.{{ .Release.Namespace }}.svc.cluster.local
+  issuerRef:
+    kind: Issuer
+    name: tanzu-mysql-selfsigned-issuer
+  secretName: webhook-server-cert
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: tanzu-mysql-selfsigned-issuer
+  namespace: '{{ .Release.Namespace }}'
+spec:
+  selfSigned: {}
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  annotations:
+    cert-manager.io/inject-ca-from: '{{ .Release.Namespace }}/tanzu-mysql-serving-cert'
+  creationTimestamp: null
+  name: tanzu-mysql-mutating-webhook-configuration
+webhooks:
+- admissionReviewVersions:
+  - v1
+  - v1beta1
+  clientConfig:
+    service:
+      name: tanzu-mysql-webhook-service
+      namespace: '{{ .Release.Namespace }}'
+      path: /mutate-with-sql-tanzu-vmware-com-v1-mysql
+  failurePolicy: Fail
+  name: mmysql.kb.io
+  rules:
+  - apiGroups:
+    - with.sql.tanzu.vmware.com
+    apiVersions:
+    - v1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - mysqls
+  sideEffects: None
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  annotations:
+    cert-manager.io/inject-ca-from: '{{ .Release.Namespace }}/tanzu-mysql-serving-cert'
+  creationTimestamp: null
+  name: tanzu-mysql-validating-webhook-configuration
+webhooks:
+- admissionReviewVersions:
+  - v1
+  - v1beta1
+  clientConfig:
+    service:
+      name: tanzu-mysql-webhook-service
+      namespace: '{{ .Release.Namespace }}'
+      path: /validate-with-sql-tanzu-vmware-com-v1-mysql
+  failurePolicy: Fail
+  name: vmysql.kb.io
+  rules:
+  - apiGroups:
+    - with.sql.tanzu.vmware.com
+    apiVersions:
+    - v1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - mysqls
+  sideEffects: None
