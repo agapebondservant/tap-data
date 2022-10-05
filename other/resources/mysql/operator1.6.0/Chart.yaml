@@ -1,6 +1,0 @@
----
-apiVersion: v1
-name: tanzu-sql-with-mysql-operator
-description: Helm chart for Tanzu SQL With MySQL
-appVersion: "1.6.0"
-version: "1.6.0"

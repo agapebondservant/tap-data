@@ -121,7 +121,7 @@ kubectl apply -f https://github.com/bitnami-labs/sealed-secrets/releases/downloa
 
 * Install Istio: (used by Multi-site workshops, Gemfire workshops)
 ```
-other/resources/bin/istioctl install --set profile=demo -y; 
+istio-1.13.2/bin/istioctl install --set profile=demo -y; 
 #kubectl label pods istio-injection=enabled --selector=<your selector> --namespace=<your namespace>;
 export INGRESS_HOST=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].hostname}');
 export INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="http2")].port}');
@@ -389,11 +389,11 @@ kubectl apply -f other/resources/gemfire/gemfire-cluster-with-gateway-receiver-n
 * Install Istio:
 (In primary cluster)
 ```
-other/resources/istio-1.13.2/bin/istioctl install --set profile=demo-tanzu --set installPackagePath=other/resources/istio-1.13.2/manifests -y
+istio-1.13.2/bin/istioctl install --set profile=demo-tanzu --set installPackagePath=istio-1.13.2/manifests -y
 ```
 (In secondary cluster)
 ```
-other/resources/istio-1.13.2/bin/istioctl install --set profile=demo-tanzu --set installPackagePath=other/resources/istio-1.13.2/manifests -y
+istio-1.13.2/bin/istioctl install --set profile=demo-tanzu --set installPackagePath=istio-1.13.2/manifests -y
 ```
   
 * Generate kubeconfig for accessing secondary cluster: (Must install kubeseal: https://github.com/bitnami-labs/sealed-secrets)
@@ -767,5 +767,5 @@ To connect to pgAdmin: Connect to your-svc.your-namespace.svc.cluster.local
 
 * To uninstall istio:
 ```
-other/resources/bin/istioctl x uninstall --purge -y
+istio-1.13.2/bin/istioctl x uninstall --purge -y
 ```
