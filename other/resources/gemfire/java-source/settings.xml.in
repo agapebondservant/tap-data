@@ -1,0 +1,9 @@
+<settings>
+    <servers>
+        <server>
+            <id>gemfire-release-repo</id>
+            <username>${DATA_E2E_GEMFIRE_PIVOTAL_REGISTRY_USERNAME}</username>
+            <password>${DATA_E2E_GEMFIRE_PIVOTAL_REGISTRY_PASSWORD}</password>
+        </server>
+    </servers>
+</settings>
