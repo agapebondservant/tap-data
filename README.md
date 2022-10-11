@@ -315,18 +315,6 @@ kubectl apply -f other/resources/operator-ui/tanzu-operator-ui-httpproxy.yaml --
 watch kubectl get all -noperator-ui
 ```
 
-(Older version:)
-```
-#other/resources/operator-ui/annotate.sh
-#kubectl apply -f other/resources/operator-ui/overlays.yaml
-#kubectl apply -f other/resources/operator-ui/tanzu-operator-ui-app.yaml --namespace operator-ui
-#kubectl annotate pkgi <RABBITMQ_PKGI_NAME> ext.packaging.carvel.dev/ytt-paths-from-secret-name.0=rabbitmq-operator-tsqlui-annotation-overlay-secret -n<RABBITMQ_PKGI_NAMESPACE> --overwrite
-#kubectl annotate pkgi <POSTGRES_PKGI_NAME> ext.packaging.carvel.dev/ytt-paths-from-secret-name.0=postgres-operator-tsqlui-annotation-overlay-secret -n<POSTGRES_PKGI_NAMESPACE> --overwrite
-#kubectl apply -f other/resources/operator-ui/tanzu-operator-ui-httpproxy.yaml --namespace operator-ui #only if using ProjectContour for Ingress
-#kubectl get all -noperator-ui
-
-```
-
 #### Pre-deploy Greenplum and Spring Cloud Data Flow<a name="predeploys"/>
 * Pre-deploy Greenplum: (only required for these workshops: <b>Greenplum Workshops</b>)
 ```
