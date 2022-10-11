@@ -102,7 +102,7 @@ kubectl get postgres pginstance-1 -o yaml
 {% if ENV_DEMO_MODE == 'yes' %}
 Clusters can also be deployed by using the **Tanzu Operator UI**. First, refresh the UI settings to ensure that it is in sync with the latest Operator changes:
 ```execute
-~/other/resources/operator-ui/annotate.sh; kubectl annotate pkgi postgres-operator ext.packaging.carvel.dev/ytt-paths-from-secret-name.0=postgres-operator-tsqlui-annotation-overlay-secret -ndefault --overwrite
+~/other/resources/operator-ui/crd_annotations/apply-annotations
 ```
 
 Now access the Operator UI:

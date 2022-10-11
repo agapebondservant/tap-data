@@ -76,17 +76,15 @@ View the complete configuration associated with the newly deployed Postgres clus
 ```execute
 kubectl get postgres pginstance-1 -o yaml
 ```
-{% if ENV_DEMO_MODE == 'yes' %}
 Clusters can also be deployed by using the **Tanzu Operator UI**. First, refresh the UI settings to ensure that it is in sync with the latest Operator changes:
 ```execute
-~/other/resources/operator-ui/annotate.sh
+~/other/resources/operator-ui/crd_annotations/apply-annotations
 ```
 
 Now access the Operator UI:
 ```dashboard:open-url
 url: http://operator-ui.{{ ingress_domain }}
 ```
-{% endif %}
 
 {% endif %}
 

@@ -4,18 +4,16 @@
 
 Now we will cover the following:
 
-{% if ENV_DEMO_MODE == 'notreadyyet' %}
 #### Deploying via the Operator UI
 With **Tanzu RabbitMQ**, brokers/clusters can be deployed by using the **Tanzu Operator UI**. First, refresh the UI settings to ensure that it is in sync with the latest Operator changes:
 ```execute
-~/other/resources/operator-ui/annotate.sh; kubectl annotate pkgi tanzu-rabbitmq ext.packaging.carvel.dev/ytt-paths-from-secret-name.0=rabbitmq-operator-tsqlui-annotation-overlay-secret -nrabbitmq-system --overwrite
+~/other/resources/operator-ui/crd_annotations/apply-annotations
 ```
 
 Now access the Operator UI:
 ```dashboard:open-url
 url: http://operator-ui.{{ ingress_domain }}
 ```
-{% endif %}
 
 #### Inter-node Data Compression
 **Tanzu RabbitMQ** provides out-of-the-box compression for traffic between nodes, as well as client-to-node traffic.
