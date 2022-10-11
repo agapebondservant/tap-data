@@ -1,0 +1,121 @@
+#!/usr/bin/env bash
+
+SCRIPT_DIR="$( dirname "${BASH_SOURCE[0]}")"
+
+TSQL_LABEL_KEY="sql.tanzu.vmware.com/catalog"
+TSQL_ANNOTATION_KEY="sql.tanzu.vmware.com/ui"
+
+if ! (which yq >/dev/null && yq --version | grep -q "github.com/mikefarah/yq"); then
+   echo "Please install yq from github.com/mikefarah/yq"
+   exit 1
+fi
+
+set_annotation_on_helm_deployed_crd() {
+  CRD_NAME=$1
+  ANNOTATION_FILE=$2
+  ICON=$3
+  export ICON
+
+  kubectl label --overwrite crd "${CRD_NAME}" "${TSQL_LABEL_KEY}=true"
+  kubectl annotate --overwrite crd "${CRD_NAME}" \
+    "${TSQL_ANNOTATION_KEY}=$(yq -o json -I=0  'del(.anchors) | .icon = strenv(ICON)' "${ANNOTATION_FILE}")"
+}
+
+set_annotation_on_carvel_deployed_crd() {
+  CRD_NAME=$1
+  PACKAGE_NAME=$2
+  NAMESPACE_NAME=$3
+  ANNOTATION_FILE=$4
+  ICON=$5
+  export ICON
+
+  ANNOTATION_OVERLAY_SECRET_NAME="${CRD_NAME}-tsqlui-overlay-secret"
+  ANNOTATION=$(yq -o json -I=0 'del(.anchors) | .icon = strenv(ICON)' "${ANNOTATION_FILE}")
+
+  cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ${ANNOTATION_OVERLAY_SECRET_NAME}
+  namespace: ${NAMESPACE_NAME}
+stringData:
+  update-metadata.yml: |
+    #@ load("@ytt:overlay", "overlay")
+    #@overlay/match by=overlay.subset({"kind":"CustomResourceDefinition"})
+    #@overlay/match by=overlay.subset({"metadata": {"name": "${CRD_NAME}"}})
+    ---
+    metadata:
+      #@overlay/match missing_ok=True
+      labels:
+        #@overlay/match missing_ok=True
+        ${TSQL_LABEL_KEY}: "true"
+
+      #@overlay/match missing_ok=True
+      annotations:
+        #@overlay/match missing_ok=True
+        ${TSQL_ANNOTATION_KEY}: |
+          ${ANNOTATION}
+EOF
+
+  kubectl annotate --overwrite pkgi "${PACKAGE_NAME}" \
+    ext.packaging.carvel.dev/ytt-paths-from-secret-name.0="${ANNOTATION_OVERLAY_SECRET_NAME}" \
+    -n "${NAMESPACE_NAME}"
+}
+
+# set_annotation_for_crd labels and annotates the CRD to work with tanzusqlui.
+# It takes the name of a CRD, a YAML annotation file, and an optional icon URI (e.g, data: URI or a public href).
+# The YAML annotation will have the icon URI injected, and then be transformed to JSON.
+# It detects if the CRD is managed by kapp-controller. In that case, it will apply the label and annotation by applying
+# a ytt overlay.
+function set_annotation_for_crd() {
+  local crd_name=$1
+  local annotation_file=$2
+  local icon=$3
+
+  local app_identifier
+  app_identifier=$(kubectl get crd "${crd_name}" -o=jsonpath="{.metadata.labels['kapp\.k14s\.io/app']}") || return
+  if [ -z "${app_identifier}" ]; then
+    set_annotation_on_helm_deployed_crd \
+      "${crd_name}" \
+      "${annotation_file}" \
+      "${icon}"
+  else
+    if ! which kapp >/dev/null ; then
+      echo "Please install kapp to apply annotations to kapp-installed operators"
+      exit 1
+    fi
+
+    local app_namespaced_name=$(kapp ls --column="name,namespace,label" -A --json \
+      | app_identifier=${app_identifier} yq '.Tables[0].Rows[] | select(.label == "kapp.k14s.io/app="+strenv(app_identifier))')
+    local app_name=$(yq .name <<<"$app_namespaced_name")
+    local pkgi_namespace=$(yq .namespace <<<"$app_namespaced_name")
+    local pkgi_name=${app_name%-ctrl}
+
+    set_annotation_on_carvel_deployed_crd \
+      "${crd_name}" \
+      "${pkgi_name}" \
+      "${pkgi_namespace}" \
+      "${annotation_file}" \
+      "${icon}"
+  fi
+}
+
+set_annotation_for_crd \
+  postgres.sql.tanzu.vmware.com \
+  "${SCRIPT_DIR}/postgres.yaml" \
+  "data:image/svg+xml;base64,$(base64 "${SCRIPT_DIR}/postgres-logo.svg")"
+
+set_annotation_for_crd \
+  mysqls.with.sql.tanzu.vmware.com \
+  "${SCRIPT_DIR}/mysql.yaml" \
+  "data:image/svg+xml;base64,$(base64 "${SCRIPT_DIR}/mysql-logo.svg")"
+
+set_annotation_for_crd \
+  gemfireclusters.gemfire.vmware.com \
+  "${SCRIPT_DIR}/gemfire.yaml" \
+  "data:image/svg+xml;base64,$(base64 "${SCRIPT_DIR}/gemfire-logo.svg")"
+
+set_annotation_for_crd \
+  rabbitmqclusters.rabbitmq.com \
+  "${SCRIPT_DIR}/rabbitmqcluster.yaml" \
+  "data:image/svg+xml;base64,$(base64 "${SCRIPT_DIR}/rabbitmq-logo.svg")"

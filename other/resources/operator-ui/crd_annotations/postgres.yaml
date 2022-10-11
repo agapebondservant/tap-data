@@ -1,0 +1,214 @@
+anchors:
+  - &status-db-version
+    name: DB Version
+    kind: PrinterColumn
+    jsonPath: status.dbVersion
+    type: string
+  - &status-ha
+    name: High Availability
+    kind: PrinterColumn
+    jsonPath: spec.highAvailability.enabled
+    type: boolean
+
+displayName: Tanzu SQL with Postgres
+
+form:
+  sections:
+    - name: "Instance Resources"
+      properties:
+        - jsonPath: spec.storageSize
+          displayName: Storage Size
+          kind: Quantity
+          options:
+            magnitude: G  # suffixed to the Quantity
+            unit: B       # combined with magnitude for display
+        - jsonPath: spec.cpu
+          displayName: CPU
+          kind: Quantity
+          options:
+            # magnitude: omitted for unitary
+            unit: cores
+        - jsonPath: spec.memory
+          displayName: Memory
+          kind: Quantity
+          options:
+            magnitude: Gi
+            unit: B
+    - name: "Kubernetes Configuration"
+      properties:
+        - jsonPath: spec.storageClassName
+          displayName: Database Storage Class Name
+          kind: ClusterObjectName
+          options:
+            kind: StorageClass
+            apiVersion: storage.k8s.io/v1
+        - jsonPath: spec.monitorStorageClassName
+          displayName: HA Monitor Storage Class Name
+          kind: ClusterObjectName
+          options:
+            kind: StorageClass
+            apiVersion: storage.k8s.io/v1
+        - jsonPath: spec.serviceType
+          displayName: Service Type
+          kind: Enum
+    - name: "Data Service Configuration"
+      properties:
+        - jsonPath: spec.pgConfig.dbname
+          displayName: Database Name
+          kind: Text
+        - jsonPath: spec.pgConfig.username
+          displayName: Admin Username
+          kind: Text
+        - jsonPath: spec.pgConfig.appUser
+          displayName: App Username
+          kind: Text
+        - jsonPath: spec.postgresVersion.name
+          displayName: Postgres Version
+          kind: ClusterObjectName
+          options:
+            kind: PostgresVersion
+            apiVersion: sql.tanzu.vmware.com/v1
+        - jsonPath: spec.highAvailability.enabled
+          displayName: High Availability
+          kind: Boolean
+        - jsonPath: spec.backupLocation.name
+          displayName: Backup Location
+          kind: LocalObjectName
+          options:
+            kind: PostgresBackupLocation
+            apiVersion: sql.tanzu.vmware.com/v1
+        - jsonPath: spec.logLevel
+          displayName: Log Level
+          kind: Enum
+
+table:
+  columns:
+    - name: Status
+      kind: PrinterColumn
+      jsonPath: status.currentState
+      type: string
+    - *status-db-version
+    - *status-ha
+    - name: Disk Utilization
+      kind: DiskUsage
+      dataServicePodSelector: app=postgres
+      instanceNamePodLabel: postgres-instance
+    - name: Last Backup
+      kind: PrinterColumn
+      jsonPath: status.backups.lastCreated.phase
+      type: string
+    - name: Last Successful Backup
+      kind: PrinterColumn
+      jsonPath: status.backups.lastSuccessful.timeCompleted
+      type: date
+
+detail:
+  tabs:
+    - name: Detail
+      sections:
+        - name: Instance Resources
+          kind: FieldGrid
+          columns:
+            - name: Storage Size
+              kind: PrinterColumn
+              jsonPath: spec.storageSize
+              type: string
+            - name: CPU
+              kind: PrinterColumn
+              jsonPath: spec.cpu
+              type: string
+            - name: Memory
+              kind: PrinterColumn
+              jsonPath: spec.memory
+              type: string
+        - name: Kubernetes Configuration
+          kind: FieldGrid
+          columns:
+            - name: Service Type
+              kind: PrinterColumn
+              jsonPath: spec.serviceType
+              type: string
+            - name: Storage Class Name
+              kind: PrinterColumn
+              jsonPath: spec.storageClassName
+              type: string
+            - name: HA Monitor Storage Class Name
+              kind: PrinterColumn
+              jsonPath: spec.monitorStorageClassName
+              type: string
+            - name: Seccomp Profile Type
+              kind: PrinterColumn
+              jsonPath: spec.seccompProfile.type
+              type: string
+        - name: Data Service Configuration
+          kind: FieldGrid
+          columns:
+            - *status-db-version
+            - *status-ha
+            - name: Backup Location
+              kind: PrinterColumn
+              jsonPath: spec.backupLocation.name
+              type: string
+            - name: Database Name
+              kind: PrinterColumn
+              jsonPath: spec.pgConfig.dbname
+              type: string
+            - name: Admin Username
+              kind: PrinterColumn
+              jsonPath: spec.pgConfig.username
+              type: string
+            - name: App Username
+              kind: PrinterColumn
+              jsonPath: spec.pgConfig.appUser
+              type: string
+            - name: Log Level
+              kind: PrinterColumn
+              jsonPath: spec.logLevel
+              type: string
+        - name: Pods
+          kind: ObjectsTable
+          options:
+            kind: Pod
+            apiVersion: v1
+            dataServiceSelector: app=postgres
+            instanceNameLabel: postgres-instance
+          columns:
+            - name: Role
+              kind: PrinterColumn
+              jsonPath: metadata.labels.role
+              type: string
+            - name: Status
+              kind: PrinterColumn
+              jsonPath: status.phase
+              type: string
+            - name: Node
+              kind: PrinterColumn
+              jsonPath: spec.nodeName
+              type: string
+    - name: Backups
+      sections:
+        - name: PostgresBackups
+          kind: ObjectsTable
+          options:
+            kind: PostgresBackup
+            apiVersion: sql.tanzu.vmware.com/v1
+            instanceNameLabel: postgres-instance
+          columns:
+            - name: Status
+              kind: PrinterColumn
+              jsonPath: status.phase
+              type: string
+            - name: Type
+              kind: PrinterColumn
+              jsonPath: spec.type
+              type: string
+            - name: Time Started
+              kind: PrinterColumn
+              jsonPath: status.timeStarted
+              type: string
+            - name: Duration
+              kind: TimeDelta
+              startTime:
+                jsonPath: status.timeStarted
+              endTime:
+                jsonPath: status.timeCompleted

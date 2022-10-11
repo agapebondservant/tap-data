@@ -17,7 +17,7 @@ spec:
       - name: ui
         image: ubuntu:latest
         imagePullPolicy: Always
-        command: ['sh', '-c', '/ui/tanzusql-ui-linux -kubeconfig=/kconfig/.config -open-browser=false -address=0.0.0.0:8080']
+        command: ['sh', '-c', '/ui/tanzusql-ui-linux -kubeconfig=/kconfig/config -open-browser=false -address=0.0.0.0:8080']
         ports:
           - containerPort: 8080
         volumeMounts:
@@ -44,6 +44,13 @@ spec:
           - '--'
           - 'https://github.com/agapebondservant/tanzu-operator-ui.git'
           - '/ui'
+      #- name: run-annotations
+      #  image: alpine:latest
+      #  imagePullPolicy: Always
+      #  volumeMounts:
+      #    - mountPath: /ui
+      #      name: ui-volume
+      #  command: ['sh','-c','ls /ui/cli/ && cp /ui/cli/* /usr/bin/ && apk add --no-cache bash && /ui/crd_annotations/apply-annotations']
 ---
 apiVersion: v1
 kind: Service

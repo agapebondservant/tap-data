@@ -35,3 +35,4 @@ spec:
       - '--'
       - 'https://github.com/agapebondservant/tanzu-operator-ui.git'
       - '/ui'
+

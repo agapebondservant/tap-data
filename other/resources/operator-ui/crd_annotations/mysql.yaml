@@ -1,0 +1,190 @@
+anchors:
+  - &cpu-descriptor
+    kind: Quantity
+    options:
+      # magnitude: omitted for unitary
+      unit: cores
+  - &memory-descriptor
+    kind: Quantity
+    options:
+      magnitude: Gi  # suffixed to the quantity
+      unit: B        # combined with magnitude for display
+  - &status-db-version
+    name: DB Version
+    kind: PrinterColumn
+    jsonPath: status.dbVersion
+    type: string
+  - &status-ha
+    name: High Availability
+    kind: PrinterColumn
+    jsonPath: spec.highAvailability.enabled
+    type: boolean
+
+displayName: Tanzu SQL with MySQL
+
+form:
+  sections:
+    - name: "Instance Resources"
+      properties:
+        - jsonPath: spec.storageSize
+          displayName: Storage Size
+          kind: Quantity
+          options:
+            magnitude: G
+            unit: B
+        - kind: Grid
+          layout:
+            columns:
+              - CPU
+              - Memory
+            rows:
+              - name: MySQL
+                properties:
+                  - jsonPath: spec.resources.mysql.limits.cpu
+                    <<: *cpu-descriptor
+                  - jsonPath: spec.resources.mysql.limits.memory
+                    <<: *memory-descriptor
+              - name: MySQL Sidecar
+                properties:
+                  - jsonPath: spec.resources.mysqlSidecar.limits.cpu
+                    <<: *cpu-descriptor
+                  - jsonPath: spec.resources.mysqlSidecar.limits.memory
+                    <<: *memory-descriptor
+              - name: Metrics
+                properties:
+                  - jsonPath: spec.resources.metrics.limits.cpu
+                    <<: *cpu-descriptor
+                  - jsonPath: spec.resources.metrics.limits.memory
+                    <<: *memory-descriptor
+              - name: Proxy
+                properties:
+                  - jsonPath: spec.resources.proxy.limits.cpu
+                    <<: *cpu-descriptor
+                  - jsonPath: spec.resources.proxy.limits.memory
+                    <<: *memory-descriptor
+    - name: "Kubernetes Configuration"
+      properties:
+        - jsonPath: spec.storageClassName
+          displayName: Storage Class Name
+          kind: ClusterObjectName
+          options:
+            kind: StorageClass
+            apiVersion: storage.k8s.io/v1
+        - jsonPath: spec.serviceType
+          displayName: Service Type
+          kind: Enum
+    - name: "Data Service Configuration"
+      properties:
+        - jsonPath: spec.mysqlVersion.name
+          displayName: MySQL Version
+          kind: ClusterObjectName
+          options:
+            kind: MySQLVersion
+            apiVersion: with.sql.tanzu.vmware.com/v1
+        - jsonPath: spec.highAvailability.enabled
+          displayName: High Availability
+          kind: Boolean
+
+table:
+  columns:
+    - name: Status
+      kind: PrinterColumn
+      jsonPath: status.phase
+      type: string
+#    - name: Tanzu Version
+#      kind: PrinterColumn
+#      jsonPath: "metadata.labels['app.kubernetes.io/version']"
+#      type: string
+    - *status-db-version
+    - name: Update Status
+      kind: PrinterColumn
+      jsonPath: status.conditions[?(@.type=="ReconcilePaused")].reason
+      type: string
+    - *status-ha
+    - name: Disk Utilization
+      kind: DiskUsage
+      dataServicePodSelector: app.kubernetes.io/name=mysql
+      instanceNamePodLabel: app.kubernetes.io/instance
+    - name: Last Backup
+      kind: PrinterColumn
+      jsonPath: status.backups.lastCreated.phase
+      type: string
+    - name: Last Successful Backup
+      kind: PrinterColumn
+      jsonPath: status.backups.lastSuccessful.timeCompleted
+      type: date
+
+detail:
+  tabs:
+    - name: Details
+      sections:
+        - name: Instance Resources
+          kind: FieldGrid
+          columns:
+            - name: Storage Size
+              kind: PrinterColumn
+              jsonPath: spec.storageSize
+              type: string
+            - name: MySQL resources
+              kind: PrinterColumn
+              jsonPath: spec.resources.mysql.limits.cpu
+              type: string
+            - name: MySQL Memory
+              kind: PrinterColumn
+              jsonPath: spec.resources.mysql.limits.memory
+              type: string
+        - name: Kubernetes Configuration
+          kind: FieldGrid
+          columns:
+            - name: Storage Class Name
+              kind: PrinterColumn
+              jsonPath: spec.storageClassName
+              type: string
+            - name: Service Type
+              kind: PrinterColumn
+              jsonPath: spec.serviceType
+              type: string
+        - name: Data Service Configuration
+          kind: FieldGrid
+          columns:
+            - *status-db-version
+            - *status-ha
+        - name: Pods
+          kind: ObjectsTable
+          options:
+            kind: Pod
+            apiVersion: v1
+            dataServiceSelector: app.kubernetes.io/name=mysql
+            instanceNameLabel: app.kubernetes.io/instance
+          columns:
+            - name: Status
+              kind: PrinterColumn
+              jsonPath: status.phase
+              type: string
+            - name: Node
+              kind: PrinterColumn
+              jsonPath: spec.nodeName
+              type: string
+    - name: Backups
+      sections:
+        - name: MySQLBackups
+          kind: ObjectsTable
+          options:
+            kind: MySQLBackup
+            apiVersion: with.sql.tanzu.vmware.com/v1
+            instanceNameLabel: with.sql.tanzu.vmware.com/instance
+          columns:
+            - name: Status
+              kind: PrinterColumn
+              jsonPath: status.phase
+              type: string
+            - name: Time Started
+              kind: PrinterColumn
+              jsonPath: status.timeStarted
+              type: string
+            - name: Duration
+              kind: TimeDelta
+              startTime:
+                jsonPath: status.timeStarted
+              endTime:
+                jsonPath: status.timeCompleted

@@ -1,0 +1,160 @@
+anchors:
+  - &cpu-descriptor
+    kind: Quantity
+    options:
+      # magnitude: omitted for unitary
+      unit: cores
+  - &memory-descriptor
+    kind: Quantity
+    options:
+      magnitude: Gi  # suffixed to the quantity
+      unit: B        # combined with magnitude for display
+  - &spec-replicas
+    name: Replicas
+    kind: PrinterColumn
+    jsonPath: spec.replicas
+    type: number
+
+form:
+  sections:
+    - name: "Instance Resources"
+      properties:
+        - jsonPath: spec.persistence.storage
+          displayName: Storage Size
+          kind: Quantity
+          options:
+            magnitude: G  # suffixed to the Quantity
+            unit: B       # combined with magnitude for display
+        - kind: Grid
+          layout:
+            columns:
+              - Requests
+              - Limits
+            rows:
+              - name: CPU
+                properties:
+                  - jsonPath: spec.resources.requests.cpu
+                    <<: *cpu-descriptor
+                  - jsonPath: spec.resources.limits.cpu
+                    <<: *cpu-descriptor
+              - name: Memory
+                properties:
+                  - jsonPath: spec.resources.requests.memory
+                    <<: *memory-descriptor
+                  - jsonPath: spec.resources.limits.memory
+                    <<: *memory-descriptor
+    - name: "Kubernetes Configuration"
+      properties:
+        - jsonPath: spec.persistence.storageClassName
+          displayName: Storage Class Name
+          kind: ClusterObjectName
+          options:
+            kind: StorageClass
+            apiVersion: storage.k8s.io/v1
+        - jsonPath: spec.service.type
+          displayName: Service Type
+          kind: Enum
+        - jsonPath: spec.image
+          displayName: Image
+          kind: Text
+        - jsonPath: spec.imagePullSecrets[0].name
+          displayName: Image Pull Secret
+          kind: LocalObjectName
+          options:
+            kind: Secret
+            apiVersion: v1
+            fieldSelector: type=kubernetes.io/dockerconfigjson
+        - jsonPath: spec.terminationGracePeriodSeconds
+          displayName: Termination Grace Period Timeout (in seconds)
+          kind: Integer
+    - name: "Data Service Configuration"
+      properties:
+        - jsonPath: spec.replicas
+          displayName: Replicas
+          kind: Integer
+        - jsonPath: spec.skipPostDeploySteps
+          displayName: Skip Post Deploy
+          kind: Boolean
+
+table:
+  columns:
+#    - name: All Replicas Ready
+#      kind: PrinterColumn
+#      jsonPath: "status.conditions[?(@.type == 'AllReplicasReady')].status"
+#      type: string
+#    - name: Reconcile Success
+#      kind: PrinterColumn
+#      jsonPath: "status.conditions[?(@.type == 'ReconcileSuccess')].status"
+#      type: string
+    - *spec-replicas
+    - name: Disk Utilization
+      kind: DiskUsage
+      dataServicePodSelector: app.kubernetes.io/component=rabbitmq
+      instanceNamePodLabel: app.kubernetes.io/name
+
+detail:
+  tabs:
+    - name: Details
+      sections:
+        - name: Instance Resources
+          kind: FieldGrid
+          columns:
+            - name: Storage Size
+              kind: PrinterColumn
+              jsonPath: spec.persistence.storage
+              type: string
+            - name: CPU
+              kind: PrinterColumn
+              jsonPath: spec.resources.limits.cpu
+              type: string
+            - name: Memory
+              kind: PrinterColumn
+              jsonPath: spec.resources.limits.memory
+              type: string
+        - name: Kubernetes Configuration
+          kind: FieldGrid
+          columns:
+            - name: Service Type
+              kind: PrinterColumn
+              jsonPath: spec.service.type
+              type: string
+            - name: Storage Class Name
+              kind: PrinterColumn
+              jsonPath: spec.persistence.storageClassName
+              type: string
+            - name: Image
+              kind: PrinterColumn
+              jsonPath: spec.image
+              type: string
+            - name: Image Pull Secret
+              kind: PrinterColumn
+              jsonPath: spec.imagePullSecrets[0].name
+              type: string
+            - name: Termination Grace Period Timeout (in seconds)
+              kind: PrinterColumn
+              jsonPath: spec.terminationGracePeriodSeconds
+              type: string
+        - name: Data Service Configuration
+          kind: FieldGrid
+          columns:
+            - *spec-replicas
+            - name: Skip Post Deploy
+              kind: PrinterColumn
+              jsonPath: spec.skipPostDeploySteps
+              type: boolean
+        - name: Pods
+          kind: ObjectsTable
+          options:
+            kind: Pod
+            apiVersion: v1
+            dataServiceSelector: app.kubernetes.io/component=rabbitmq
+            instanceNameLabel: app.kubernetes.io/name
+          columns:
+            - name: Status
+              kind: PrinterColumn
+              jsonPath: status.phase
+              type: string
+            - name: Node
+              kind: PrinterColumn
+              jsonPath: spec.nodeName
+              type: string

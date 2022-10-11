@@ -1,0 +1,183 @@
+anchors:
+  - &cpu-descriptor
+    kind: Quantity
+    options:
+      # magnitude: omitted for unitary
+      unit: cores
+  - &memory-descriptor
+    kind: Quantity
+    options:
+      magnitude: Gi  # suffixed to the quantity
+      unit: B        # combined with magnitude for display
+
+displayName: VMware Tanzu GemFire
+
+icon: https://d1fto35gcfffzn.cloudfront.net/tanzu/tanzu-bug.svg
+
+form:
+  sections:
+    - name: "Instance Resources"
+      properties:
+        - jsonPath: spec.servers.persistentVolumeClaim.resources.requests.storage
+          displayName: Server Storage Size
+          kind: Quantity
+          options:
+            magnitude: G  # suffixed to the Quantity
+            unit: B       # combined with magnitude for display
+        - jsonPath: spec.locators.persistentVolumeClaim.resources.requests.storage
+          displayName: Locator Storage Size
+          kind: Quantity
+          options:
+            magnitude: G  # suffixed to the Quantity
+            unit: B       # combined with magnitude for display
+        - kind: Grid
+          layout:
+            columns:
+              - CPU
+              - Memory
+            rows:
+              - name: Server
+                properties:
+                  - jsonPath: spec.servers.resources.limits.cpu
+                    <<: *cpu-descriptor
+                  - jsonPath: spec.servers.resources.limits.memory
+                    <<: *memory-descriptor
+              - name: Locator
+                properties:
+                  - jsonPath: spec.locators.resources.limits.cpu
+                    <<: *cpu-descriptor
+                  - jsonPath: spec.locators.resources.limits.memory
+                    <<: *memory-descriptor
+    - name: "Kubernetes Configuration"
+      properties:
+        - jsonPath: spec.servers.persistentVolumeClaim.storageClassName
+          displayName: Server Storage Class Name
+          kind: ClusterObjectName
+          options:
+            kind: StorageClass
+            apiVersion: storage.k8s.io/v1
+        - jsonPath: spec.locators.persistentVolumeClaim.storageClassName
+          displayName: Locator Storage Class Name
+          kind: ClusterObjectName
+          options:
+            kind: StorageClass
+            apiVersion: storage.k8s.io/v1
+        - jsonPath: spec.image
+          displayName: Image
+          kind: Text
+        - jsonPath: spec.imagePullSecrets[0].name
+          displayName: Image Pull Secret
+          kind: LocalObjectName
+          options:
+            kind: Secret
+            apiVersion: v1
+            fieldSelector: type=kubernetes.io/dockerconfigjson
+    - name: "Data Service Configuration"
+      properties:
+        - jsonPath: spec.servers.replicas
+          displayName: Server Replicas
+          kind: Integer
+        - jsonPath: spec.locators.replicas
+          displayName: Locator Replicas
+          kind: Integer
+
+table:
+  columns:
+    - name: Locators
+      kind: PrinterColumn
+      jsonPath: status.locators
+      type: string
+    - name: Servers
+      kind: PrinterColumn
+      jsonPath: status.servers
+      type: string
+    - name: Cluster Image
+      kind: PrinterColumn
+      jsonPath: status.clusterImage
+      type: string
+    - name: Operator Version
+      kind: PrinterColumn
+      jsonPath: status.operatorVersion
+      type: string
+    - name: Disk Utilization
+      kind: DiskUsage
+      dataServicePodSelector: app.kubernetes.io/name=gemfire
+      instanceNamePodLabel: app.kubernetes.io/instance
+
+detail:
+  tabs:
+    - name: Details
+      sections:
+        - name: Instance Resources
+          kind: FieldGrid
+          columns:
+            - name: Server Storage Size
+              kind: PrinterColumn
+              jsonPath: spec.servers.persistentVolumeClaim.resources.requests.storage
+              type: string
+            - name: Locator Storage Size
+              kind: PrinterColumn
+              jsonPath: spec.locators.persistentVolumeClaim.resources.requests.storage
+              type: string
+            - name: Server CPU
+              kind: PrinterColumn
+              jsonPath: spec.servers.resources.limits.cpu
+              type: string
+            - name: Locator CPU
+              kind: PrinterColumn
+              jsonPath: spec.locators.resources.limits.cpu
+              type: string
+            - name: Server Memory
+              kind: PrinterColumn
+              jsonPath: spec.servers.resources.limits.memory
+              type: string
+            - name: Locator Memory
+              kind: PrinterColumn
+              jsonPath: spec.locators.resources.limits.memory
+              type: string
+        - name: Kubernetes Configuration
+          kind: FieldGrid
+          columns:
+            - name: Image
+              kind: PrinterColumn
+              jsonPath: spec.image
+              type: string
+            - name: Server Storage Class Name
+              kind: PrinterColumn
+              jsonPath: spec.servers.persistentVolumeClaim.storageClassName
+              type: string
+            - name: Locator Storage Class Name
+              kind: PrinterColumn
+              jsonPath: spec.locators.persistentVolumeClaim.storageClassName
+              type: string
+        - name: Data Service Configuration
+          kind: FieldGrid
+          columns:
+            - name: Server Replicas
+              kind: PrinterColumn
+              jsonPath: spec.servers.replicas
+              type: string
+            - name: Locator Replicas
+              kind: PrinterColumn
+              jsonPath: spec.locators.replicas
+              type: string
+        - name: Pods
+          kind: ObjectsTable
+          options:
+            kind: Pod
+            apiVersion: v1
+            dataServiceSelector: app.kubernetes.io/name=gemfire
+            instanceNameLabel: app.kubernetes.io/instance
+          columns:
+#            - name: Component
+#              kind: PrinterColumn
+#              jsonPath: "metadata.labels['app.kubernetes.io/component']"
+#              type: string
+            - name: Status
+              kind: PrinterColumn
+              jsonPath: status.phase
+              type: string
+            - name: Node
+              kind: PrinterColumn
+              jsonPath: spec.nodeName
+              type: string
