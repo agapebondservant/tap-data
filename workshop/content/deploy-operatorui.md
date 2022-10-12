@@ -8,7 +8,7 @@ kubectl create secret docker-registry image-pull-secret --namespace=default --do
 
 Deploy the Operator UI:
 ```execute
-sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/operator-ui/tanzu-operator-ui-app.yaml && sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/operator-ui/tanzu-operator-ui-httpproxy.yaml && kubectl create configmap kconfig --from-file  ~/.kube/config && kubectl apply -f ~/other/resources/operator-ui/tanzu-operator-ui-app.yaml && kubectl apply -f  ~/other/resources/operator-ui/tanzu-operator-ui-httpproxy.yaml 
+sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/operator-ui/tanzu-operator-ui-app.yaml && sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/operator-ui/tanzu-operator-ui-httpproxy.yaml && ( kubectl delete configmap kconfig || true ) && kubectl create configmap kconfig --from-file  ~/.kube/config && kubectl apply -f ~/other/resources/operator-ui/tanzu-operator-ui-app.yaml && kubectl apply -f  ~/other/resources/operator-ui/tanzu-operator-ui-httpproxy.yaml 
 ```
 
 Run the annotation script:
@@ -74,5 +74,7 @@ url: http://operator-ui-{{session_namespace}}.{{ ingress_domain }}
 
 #### Create Service Instances
 The Operator UI can be used to create new service instances. 
-Select a service type in the left panel, click "Create Instance", and enter required fields as shown.
-
+Select a service type in the left panel, click "Create Instance", and complete and submit the displayed form:
+```dashboard:open-url
+url: http://operator-ui-{{session_namespace}}.{{ ingress_domain }}
+```
