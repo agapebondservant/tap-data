@@ -100,22 +100,34 @@ function set_annotation_for_crd() {
   fi
 }
 
-set_annotation_for_crd \
-  postgres.sql.tanzu.vmware.com \
-  "${SCRIPT_DIR}/postgres.yaml" \
-  "data:image/svg+xml;base64,$(base64 "${SCRIPT_DIR}/postgres-logo.svg")"
+if [ kubectl get crd postgres.sql.tanzu.vmware.com &> /dev/null ]
+then
+  set_annotation_for_crd \
+    postgres.sql.tanzu.vmware.com \
+    "${SCRIPT_DIR}/postgres.yaml" \
+    "data:image/svg+xml;base64,$(base64 "${SCRIPT_DIR}/postgres-logo.svg")"
+fi
 
-set_annotation_for_crd \
-  mysqls.with.sql.tanzu.vmware.com \
-  "${SCRIPT_DIR}/mysql.yaml" \
-  "data:image/svg+xml;base64,$(base64 "${SCRIPT_DIR}/mysql-logo.svg")"
+if [ kubectl get crd mysqls.with.sql.tanzu.vmware.com &> /dev/null ]
+then
+  set_annotation_for_crd \
+    mysqls.with.sql.tanzu.vmware.com \
+    "${SCRIPT_DIR}/mysql.yaml" \
+    "data:image/svg+xml;base64,$(base64 "${SCRIPT_DIR}/mysql-logo.svg")"
+fi
 
+if [ kubectl get crd gemfireclusters.gemfire.vmware.com &> /dev/null ]
+then
 set_annotation_for_crd \
   gemfireclusters.gemfire.vmware.com \
   "${SCRIPT_DIR}/gemfire.yaml" \
   "data:image/svg+xml;base64,$(base64 "${SCRIPT_DIR}/gemfire-logo.svg")"
+fi
 
+if [ kubectl get crd rabbitmqclusters.rabbitmq.com &> /dev/null ]
+then
 set_annotation_for_crd \
   rabbitmqclusters.rabbitmq.com \
   "${SCRIPT_DIR}/rabbitmqcluster.yaml" \
   "data:image/svg+xml;base64,$(base64 "${SCRIPT_DIR}/rabbitmq-logo.svg")"
+fi
