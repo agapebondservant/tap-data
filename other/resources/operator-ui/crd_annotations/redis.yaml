@@ -1,0 +1,29 @@
+displayName: Redis OperatorHub
+
+form:
+  sections:
+    - name: "Kubernetes Configuration"
+      properties:
+        - jsonPath: spec.storage.volumeClaimTemplate.spec.resources.requests.storage
+          displayName: Database Storage Size
+          kind: PrinterColumn
+          type: string
+
+table:
+  columns:
+    - name: Storage
+      kind: PrinterColumn
+      jsonPath: spec.storage.volumeClaimTemplate.spec.resources.requests.storage
+      type: string
+
+detail:
+  tabs:
+    - name: Detail
+      sections:
+        - name: Kubernetes Configuration
+          kind: FieldGrid
+          columns:
+            - name: Storage
+              kind: PrinterColumn
+              jsonPath: spec.storage.volumeClaimTemplate.spec.resources.requests.storage
+              type: string

@@ -72,6 +72,26 @@ Navigate to the Operator UI to view the newly created instances:
 url: http://operator-ui-{{session_namespace}}.{{ ingress_domain }}
 ```
 
+#### Integrate Non-VMware Operator Services
+The Operator UI can be integrated with third-party data services not managed by VMware, such as Redis, MongoDB, etc.
+
+Here we will integrate a Redis standalone instance.
+
+Deploy a Redis instance:
+```execute
+helm repo add ot-helm https://ot-container-kit.github.io/helm-charts/ && helm uninstall redis-operator --namespace redis-operator || true && kubectl delete ns redis-operator || true && kubectl create ns redis-operator && helm uninstall sample-redis --namespace {{session_namespace}} || true && helm install redis-operator ot-helm/redis-operator --namespace redis-operator && helm install sample-redis ot-helm/redis  --namespace {{session_namespace}}
+```
+
+Run the annotation script:
+```execute
+~/other/resources/operator-ui/crd_annotations/apply-annotations
+```
+
+The Redis panel should appear in the UI with the Redis instance:
+```dashboard:open-url
+url: http://operator-ui-{{session_namespace}}.{{ ingress_domain }}
+```
+
 #### Create Service Instances
 The Operator UI can be used to create new service instances. 
 Select a service type in the left panel, click "Create Instance", and complete and submit the displayed form:

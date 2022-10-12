@@ -100,7 +100,7 @@ function set_annotation_for_crd() {
   fi
 }
 
-if [ kubectl get crd postgres.sql.tanzu.vmware.com &> /dev/null ]
+if kubectl get crd postgres.sql.tanzu.vmware.com &> /dev/null
 then
   set_annotation_for_crd \
     postgres.sql.tanzu.vmware.com \
@@ -108,7 +108,7 @@ then
     "data:image/svg+xml;base64,$(base64 "${SCRIPT_DIR}/postgres-logo.svg")"
 fi
 
-if [ kubectl get crd mysqls.with.sql.tanzu.vmware.com &> /dev/null ]
+if kubectl get crd mysqls.with.sql.tanzu.vmware.com &> /dev/null
 then
   set_annotation_for_crd \
     mysqls.with.sql.tanzu.vmware.com \
@@ -116,7 +116,7 @@ then
     "data:image/svg+xml;base64,$(base64 "${SCRIPT_DIR}/mysql-logo.svg")"
 fi
 
-if [ kubectl get crd gemfireclusters.gemfire.vmware.com &> /dev/null ]
+if kubectl get crd gemfireclusters.gemfire.vmware.com &> /dev/null
 then
 set_annotation_for_crd \
   gemfireclusters.gemfire.vmware.com \
@@ -124,10 +124,26 @@ set_annotation_for_crd \
   "data:image/svg+xml;base64,$(base64 "${SCRIPT_DIR}/gemfire-logo.svg")"
 fi
 
-if [ kubectl get crd rabbitmqclusters.rabbitmq.com &> /dev/null ]
+if kubectl get crd rabbitmqclusters.rabbitmq.com &> /dev/null
 then
 set_annotation_for_crd \
   rabbitmqclusters.rabbitmq.com \
   "${SCRIPT_DIR}/rabbitmqcluster.yaml" \
   "data:image/svg+xml;base64,$(base64 "${SCRIPT_DIR}/rabbitmq-logo.svg")"
+fi
+
+if kubectl get crd redis.redis.redis.opstreelabs.in &> /dev/null
+then
+set_annotation_for_crd \
+  redis.redis.redis.opstreelabs.in \
+  "${SCRIPT_DIR}/redis.yaml" \
+  "data:image/svg+xml;base64,$(base64 "${SCRIPT_DIR}/redis-logo.svg")"
+fi
+
+if kubectl get crd redisclusters.redis.redis.opstreelabs.in &> /dev/null
+then
+set_annotation_for_crd \
+  redisclusters.redis.redis.opstreelabs.in \
+  "${SCRIPT_DIR}/rediscluster.yaml" \
+  "data:image/svg+xml;base64,$(base64 "${SCRIPT_DIR}/redis-logo.svg")"
 fi
