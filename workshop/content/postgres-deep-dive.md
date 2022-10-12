@@ -99,17 +99,15 @@ View the complete configuration associated with the newly deployed Postgres clus
 kubectl get postgres pginstance-1 -o yaml
 ```
 
-{% if ENV_DEMO_MODE == 'yes' %}
 Clusters can also be deployed by using the **Tanzu Operator UI**. First, refresh the UI settings to ensure that it is in sync with the latest Operator changes:
 ```execute
-~/other/resources/operator-ui/crd_annotations/apply-annotations
+sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/operator-ui/tanzu-operator-ui-app.yaml && kubectl apply -f ~/other/resources/operator-ui/tanzu-operator-ui-app.yaml && ~/other/resources/operator-ui/crd_annotations/apply-annotations
 ```
 
 Now access the Operator UI:
 ```dashboard:open-url
-url: http://operator-ui.{{ ingress_domain }}
+url: http://operator-ui-{{session_namespace}}.{{ ingress_domain }}
 ```
-{% endif %}
 
 ##### Service Discovery via Service Offering
 **Services Toolkit** includes the notion of a **Service Resource**.

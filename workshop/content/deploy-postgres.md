@@ -78,15 +78,13 @@ kubectl get postgres pginstance-1 -o yaml
 ```
 Clusters can also be deployed by using the **Tanzu Operator UI**. First, refresh the UI settings to ensure that it is in sync with the latest Operator changes:
 ```execute
-~/other/resources/operator-ui/crd_annotations/apply-annotations
+sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/operator-ui/tanzu-operator-ui-app.yaml && kubectl apply -f ~/other/resources/operator-ui/tanzu-operator-ui-app.yaml && ~/other/resources/operator-ui/crd_annotations/apply-annotations
 ```
 
 Now access the Operator UI:
 ```dashboard:open-url
-url: http://operator-ui.{{ ingress_domain }}
+url: http://operator-ui-{{session_namespace}}.{{ ingress_domain }}
 ```
-
-{% endif %}
 
 {% if ENV_WORKSHOP_TOPIC == 'data-e2e' %}
 After that, we can redeploy our app:
