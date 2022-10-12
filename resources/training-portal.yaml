@@ -58,6 +58,11 @@ spec:
     reserved: 1
     expires: 2h
     orphaned: 5m
+  - name: data-operatorui
+    capacity: 2
+    reserved: 1
+    expires: 2h
+    orphaned: 5m
   #!- name: data-vmservice
   #!  capacity: 1
   #!  expires: 120m

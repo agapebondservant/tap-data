@@ -15,5 +15,6 @@ resources:
 - resources/workshop-rabbitmq-commercial-features.yaml
 - resources/workshop-rabbitmq-realtime-analytics.yaml
 - resources/workshop-data-with-tap.yaml
+- resources/workshop-operatorui.yaml
 - resources/training-portal.yaml
 - resources/system-profile.yaml

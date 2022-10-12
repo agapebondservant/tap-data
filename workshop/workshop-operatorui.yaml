@@ -1,0 +1,5 @@
+name: Using the Operator UI
+
+modules:
+    activate:
+    - deploy-operatorui

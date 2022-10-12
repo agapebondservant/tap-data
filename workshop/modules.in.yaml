@@ -35,6 +35,8 @@ modules:
       name: Deploy MySQL
     rabbitmq-anomaly-detection:
       name: Anomaly Detection with RabbitMQ pipelines
+    deploy-operatorui:
+      name: Using the Operator UI
 config:
     vars:
     - name: DATA_E2E_REGISTRY_USERNAME
