@@ -86,6 +86,8 @@ Now access the Operator UI:
 url: http://operator-ui-{{session_namespace}}.{{ ingress_domain }}
 ```
 
+{% endif %}
+
 {% if ENV_WORKSHOP_TOPIC == 'data-e2e' %}
 After that, we can redeploy our app:
 ```execute
