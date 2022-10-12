@@ -64,6 +64,17 @@ View the complete configuration associated with the newly deployed MySQL cluster
 kubectl get mysql mysqlinstance-1 -o yaml
 ```
 
+#### Deploying via the Operator UI
+Clusters can also be deployed by using the **Tanzu Operator UI**. First, refresh the UI settings to ensure that it is in sync with the latest Operator changes:
+```execute
+sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/operator-ui/tanzu-operator-ui-app.yaml && sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/operator-ui/tanzu-operator-ui-httpproxy.yaml && kubectl create configmap kconfig --from-file  ~/.kube/config && kubectl apply -f ~/other/resources/operator-ui/tanzu-operator-ui-app.yaml && cp ~/other/resources/operator-ui/cli/* /home/eduk8s/bin/ && kubectl apply -f  ~/other/resources/operator-ui/tanzu-operator-ui-httpproxy.yaml && ~/other/resources/operator-ui/crd_annotations/apply-annotations
+```
+
+Now access the Operator UI:
+```dashboard:open-url
+url: http://operator-ui-{{session_namespace}}.{{ ingress_domain }}
+```
+
 {% if ENV_WORKSHOP_TOPIC == 'data-e2e' %}
 After that, we can redeploy our app:
 ```execute

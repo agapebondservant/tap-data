@@ -76,9 +76,11 @@ View the complete configuration associated with the newly deployed Postgres clus
 ```execute
 kubectl get postgres pginstance-1 -o yaml
 ```
+
+#### Deploying via the Operator UI
 Clusters can also be deployed by using the **Tanzu Operator UI**. First, refresh the UI settings to ensure that it is in sync with the latest Operator changes:
 ```execute
-sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/operator-ui/tanzu-operator-ui-app.yaml && cp ~/other/resources/operator-ui/cli/* /usr/bin/ && kubectl apply -f ~/other/resources/operator-ui/tanzu-operator-ui-app.yaml && cp ~/other/resources/operator-ui/cli/* /usr/bin/ &&  ~/other/resources/operator-ui/crd_annotations/apply-annotations
+sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/operator-ui/tanzu-operator-ui-app.yaml && sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/operator-ui/tanzu-operator-ui-httpproxy.yaml && kubectl create configmap kconfig --from-file  ~/.kube/config && kubectl apply -f ~/other/resources/operator-ui/tanzu-operator-ui-app.yaml && cp ~/other/resources/operator-ui/cli/* /home/eduk8s/bin/ && kubectl apply -f  ~/other/resources/operator-ui/tanzu-operator-ui-httpproxy.yaml && ~/other/resources/operator-ui/crd_annotations/apply-annotations
 ```
 
 Now access the Operator UI:

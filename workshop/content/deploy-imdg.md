@@ -35,6 +35,17 @@ Let's proceed to update the cluster:
 kubectl apply -f ~/other/resources/gemfire/gemfire-cluster-with-devapi.yaml -n {{ session_namespace }}
 ```
 
+#### Deploying via the Operator UI
+Clusters can also be deployed by using the **Tanzu Operator UI**. First, refresh the UI settings to ensure that it is in sync with the latest Operator changes:
+```execute
+sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/operator-ui/tanzu-operator-ui-app.yaml && sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/operator-ui/tanzu-operator-ui-httpproxy.yaml && kubectl create configmap kconfig --from-file  ~/.kube/config && kubectl apply -f ~/other/resources/operator-ui/tanzu-operator-ui-app.yaml && cp ~/other/resources/operator-ui/cli/* /home/eduk8s/bin/ && kubectl apply -f  ~/other/resources/operator-ui/tanzu-operator-ui-httpproxy.yaml && ~/other/resources/operator-ui/crd_annotations/apply-annotations
+```
+
+Now access the Operator UI:
+```dashboard:open-url
+url: http://operator-ui-{{session_namespace}}.{{ ingress_domain }}
+```
+
 Next, we wil launch the **gfsh** cli. **gfsh** is an interface that can be used for the lifecycle management and monitoring of Gemfire resources, including clusters and their members (locators/servers).
 <font color="red">NOTE: WAIT FOR THE Gemfire Locator to appear before running.</font>
 ```execute
