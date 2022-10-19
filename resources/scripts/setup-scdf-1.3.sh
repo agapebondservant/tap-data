@@ -9,8 +9,8 @@ sed -i '' -e "s/namespace/#namespace/g" ${SCDF_BASE_DATAFLOW_KUSTOMIZE_FL}
 sed -i '' -e "s/namespace/#namespace/g" ${SCDF_BASE_SKIPPER_KUSTOMIZE_FL}
 kubectl create secret docker-registry scdf-image-regcred --namespace=default --docker-server=registry.pivotal.io --docker-username="$DATA_E2E_PIVOTAL_REGISTRY_USERNAME"  --docker-password="$DATA_E2E_PIVOTAL_REGISTRY_PASSWORD" --dry-run -o yaml | kubectl apply -f - 
 other/resources/scdf/bin/uninstall-dev.sh || true
-other/resources/scdf/bin/install-dev.sh #--monitoring prometheus
-kubectl apply -f other/resources/scdf/scdf-http-proxy-default.yaml
+other/resources/scdf/bin/install-dev.sh --monitoring prometheus
+kubectl apply -f other/resources/scdf/scdf-http-proxy.yaml
 cp ${SCDF_BASE_DATAFLOW_KUSTOMIZE_FL}.other ${SCDF_BASE_DATAFLOW_KUSTOMIZE_FL}
 cp ${SCDF_BASE_SKIPPER_KUSTOMIZE_FL}.other ${SCDF_BASE_SKIPPER_KUSTOMIZE_FL}
 kubectl apply -f other/resources/rabbitmq/rabbitmq-scdf.yaml 

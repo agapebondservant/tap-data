@@ -195,3 +195,6 @@ other/resources/gemfire/java-source/settings.xml
 /Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/gemfire/java-source/settings.xml
 /Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/gemfire/java-source/src/main/resources/east/db.properties
 /Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/gemfire/java-source/src/main/resources/west/db.properties
+./other/resources/gemfire/java-source/settings.xml
+./other/resources/gemfire/java-source/src/main/resources/east/db.properties
+./other/resources/gemfire/java-source/src/main/resources/west/db.properties

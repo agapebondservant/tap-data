@@ -30,12 +30,13 @@ Pre-requisites: A Kubernetes cluster with TAP installed - see [Install TAP](#tap
 7. [Install ArgoCD](#argocd)
 8. [Install OperatorUI](#operatorui)
 9. [Pre-deploy Greenplum and Spring Cloud Data Flow](#predeploys)
-10. [Build secondary cluster (for multi-site demo)](#multisite)
-11. [Install TAP](#tap-install)
-12. [Deploy Tanzu Data Workshops](#buildanddeploy)
-13. [Deploy Single Workshop to Pre-Existing LearningCenter Portal](#buildsingle)
-14. [Create Carvel Packages for Dependencies](#carvelpackages)
-15. [Other: How-tos/General Info (not needed for setup)](#other)
+10. [Install Kubeflow Pipelines](#kubeflowpipelines)
+11. [Build secondary cluster (for multi-site demo)](#multisite)
+12. [Install TAP](#tap-install)
+13. [Deploy Tanzu Data Workshops](#buildanddeploy)
+14. [Deploy Single Workshop to Pre-Existing LearningCenter Portal](#buildsingle)
+15. [Create Carvel Packages for Dependencies](#carvelpackages)
+16. [Other: How-tos/General Info (not needed for setup)](#other)
 
 #### Kubernetes Cluster Prep<a name="pre-reqs"/>
 * Create .env file in root directory (use .env-sample as a template - do NOT check into Git)
@@ -45,7 +46,7 @@ New entries will be populated as the install proceeds)
 
 * Create a Management Cluster (Optional - required only if management cluster does not exist) 
 ```
-tanzu management-cluster permissions aws set && tanzu management-cluster create <your-management-cluster-name>  --file  -v 6
+AWS_REGION=<your-region> tanzu management-cluster permissions aws set && tanzu management-cluster create <your-management-cluster-name>  --file  -v 6
 ```
 (NOTE: Follow instructions for deploying a Tanzu Management cluster here: https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-index.html)
 
@@ -81,6 +82,7 @@ kubectl apply -f resources/storageclass.yaml
 * Mark the storage class as default: 
 ```
 kubectl patch storageclass generic -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+kubectl patch storageclass default -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
 ```
 
 * Create the network policy (networkpolicy.yaml - uses allow-all-ingress for now)
@@ -323,12 +325,18 @@ resources/scripts/setup.sh
 ```
 * Pre-deploy Spring Cloud Data Flow: (only required for these workshops: <b>RabbitMQ Workshops, Gemfire Workshops, Greenplum Workshops, ML/AI workshops</b>)
 ```
-resources/scripts/setup-scdf-carvel.sh
+resources/scripts/setup-scdf-1.3.sh
 ```
 Register gemfire starter apps:
 sink.gemfire=docker:springcloudstream/gemfire-sink-rabbit:2.1.6.RELEASE
 source.gemfire=docker:springcloudstream/gemfire-source-rabbit:2.1.6.RELEASE
 source.gemfire-cq=docker:springcloudstream/gemfire-cq-source-rabbit:2.1.6.RELEASE
+
+#### Deploy Kubeflow Pipelines <a name="kubeflowpipelines"/>
+* Deploy Kubeflow Pipelines:
+
+See [this link](https://github.com/agapebondservant/kubeflow-pipelines-accelerator)
+
 
 #### Build secondary cluster (only required for multi-site demo)<a name="multisite"/>
 * Create new cluster:
@@ -356,6 +364,11 @@ kubectl apply -f resources/podsecuritypolicy.yaml
 * Install Contour: (NOTE: Change the Loadbalancer's healthcheck from HTTP to TCP in the AWS Console)
 ```
 kubectl apply -f https://projectcontour.io/quickstart/v1.18.2/contour.yaml
+```
+
+* Install SealedSecrets:
+```
+kubectl apply -f https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.17.4/controller.yaml
 ```
 
 * Install the Kubernetes Metrics server: 
@@ -489,7 +502,7 @@ tanzu package installed list -A -n tap-install
 * Install Learning Center:
 ```
 tanzu package available list learningcenter.tanzu.vmware.com --namespace tap-install # To view available packages for learningcenter
-tanzu package install learning-center --package-name learningcenter.tanzu.vmware.com --version 0.1.1 -f resources/learning-center-config.yaml -n tap-install
+tanzu package install learning-center --package-name learningcenter.tanzu.vmware.com --version 0.2.1 -f resources/learning-center-config.yaml -n tap-install
 kubectl get all -n learningcenter
 tanzu package available list workshops.learningcenter.tanzu.vmware.com --namespace tap-install
 ```
@@ -501,47 +514,14 @@ kubectl apply -f resources/training-portal-sample.yaml
 watch kubectl get learningcenter-training
 ```
 
-* Install FluxCD controller:
-```
-tanzu package available list fluxcd.source.controller.tanzu.vmware.com -n tap-install (ensure packages are listed)
-tanzu package install fluxcd-source-controller -p fluxcd.source.controller.tanzu.vmware.com -v 0.16.4 -n tap-install
-Verify that package is running: tanzu package installed get fluxcd-source-controller -n tap-install
-Verify "Reconcile Succeeded": kubectl get pods -n flux-system
-```
-* Install Source Controller:
-```
-tanzu package available list controller.source.apps.tanzu.vmware.com --namespace tap-install
-tanzu package install source-controller -p controller.source.apps.tanzu.vmware.com -v 0.3.3 -n tap-install
-Verify that package is running: tanzu package installed get source-controller -n tap-install
-```
-* Install App Accelerator: (see https://docs.vmware.com/en/Tanzu-Application-Platform/1.0/tap/GUID-cert-mgr-contour-fcd-install-cert-mgr.html)
-```
-Verify that package is running: tanzu package installed get accelerator -n tap-install
-Get the IP address for the App Accelerator API: kubectl get service -n accelerator-system
-```
-
-* Install the TAP GUI:
-```
-tanzu package available list tap-gui.tanzu.vmware.com --namespace tap-install
-source .env
-envsubst < resources/tap-gui-values.in.yaml > resources/tap-gui-values.yaml
-tanzu package install tap-gui \
-  --package-name tap-gui.tanzu.vmware.com \
-  --version 1.2.3 -n tap-install \
-  -f resources/tap-gui-values.yaml
-envsubst < resources/tap-gui-httpproxy.in.yaml > resources/tap-gui-httpproxy.yaml
-kubectl apply -f resources/tap-gui-httpproxy.yaml
-```
-
-Verify installation:
-```
-tanzu package installed get tap-gui -n tap-install
-```
-
 Publish Accelerators:
 ```
 tanzu plugin install --local <path-to-tanzu-cli> all
 tanzu acc create mlflow --git-repository https://github.com/agapebondservant/mlflow-accelerator.git --git-branch main
+tanzu acc create jupyter --git-repository https://github.com/agapebondservant/jupyter-accelerator.git --git-branch main
+tanzu acc create appcollator --git-repository https://github.com/agapebondservant/app-collator.git --git-branch main
+tanzu acc create mlmetrics --git-repository https://github.com/agapebondservant/ml-metrics-accelerator.git --git-branch main
+tanzu acc create scdf-mlmodel --git-repository https://github.com/agapebondservant/scdf-ml-model.git --git-branch main
 ```
 
 * Install Analytics Apps:
