@@ -13,8 +13,8 @@ would not be missed.)
 Here is the manifest that would be used to configure the **GatewayReceiver**:
 ```editor:select-matching-text
 file: ~/other/resources/gemfire/gemfire-cluster-with-gateway-receiver.yaml
-text: "start-dev-rest-api"
-after: 3
+text: "readSerialized: true"
+after: 6
 ```
 
 Deploy the new site:
@@ -35,8 +35,8 @@ kubectl -n {{ session_namespace }} exec -it gemfire2-locator-0 -- gfsh -e connec
 Next, let's update the previously existing with the **GatewaySender** - here is the manifest:
 ```editor:select-matching-text
 file: ~/other/resources/gemfire/gemfire-cluster-with-gateway-sender.yaml
-text: "start-dev-rest-api"
-after: 3
+text: "readSerialized: true"
+after: 6
 ```
 
 Update the sending cluster:
@@ -56,7 +56,7 @@ kubectl -n {{ session_namespace }} exec -it gemfire1-locator-0 -- gfsh -e connec
 
 Show the list of configured gateways:
 ```execute
-kubectl -n {{ session_namespace }} exec -it gemfire1-locator-0 -- gfsh -e connect -e "list gateways"
+kubectl -n {{ session_namespace }} exec -it gemfire1-locator-0 -- gfsh connect -e "set variable --name=APP_RESULT_VIEWER --value=80000" -e "list gateways"
 ```
 
 ### WAN Replication

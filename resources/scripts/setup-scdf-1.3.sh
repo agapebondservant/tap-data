@@ -13,5 +13,6 @@ other/resources/scdf/bin/install-dev.sh --monitoring prometheus
 kubectl apply -f other/resources/scdf/scdf-http-proxy.yaml
 cp ${SCDF_BASE_DATAFLOW_KUSTOMIZE_FL}.other ${SCDF_BASE_DATAFLOW_KUSTOMIZE_FL}
 cp ${SCDF_BASE_SKIPPER_KUSTOMIZE_FL}.other ${SCDF_BASE_SKIPPER_KUSTOMIZE_FL}
-kubectl apply -f other/resources/rabbitmq/rabbitmq-scdf.yaml 
+kubectl apply -f other/resources/rabbitmq/rabbitmq-scdf.yaml
+kubectl set env deployment/scdf-server SPRING_CLOUD_DATAFLOW_METRICS_DASHBOARD_URL=grafana.$DATA_E2E_BASE_URL LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_CLOUD=DEBUG
 
