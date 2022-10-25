@@ -22,7 +22,7 @@ Deploy the new site:
 sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/gemfire/gemfire-cluster-with-gateway-receiver.yaml && kubectl apply -f ~/other/resources/gemfire/gemfire-cluster-with-gateway-receiver.yaml
 ```
 
-Create the **GatewayReceiver**:
+Create the **GatewayReceiver** <font color="red">NOTE: Wait for the **gemfire2** cluster to show all pods as "Ready" before proceeding:</font>
 ```execute
 kubectl -n {{ session_namespace }} exec -it gemfire2-locator-0 -- gfsh -e connect -e "create gateway-receiver --start-port=13000 --end-port=14000 --hostname-for-senders=gemfire2-server.{{ session_namespace }}.svc.cluster.local"
 ```
@@ -39,7 +39,7 @@ text: "readSerialized: true"
 after: 6
 ```
 
-Update the sending cluster:
+Update the sending cluster  <font color="red">NOTE: Wait for the **gemfire1** cluster to restart by showing all pods as "Ready" before proceeding:</font>
 ```execute
 sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/gemfire/gemfire-cluster-with-gateway-sender.yaml && kubectl apply -f ~/other/resources/gemfire/gemfire-cluster-with-gateway-sender.yaml
 ```
@@ -56,7 +56,7 @@ kubectl -n {{ session_namespace }} exec -it gemfire1-locator-0 -- gfsh -e connec
 
 Show the list of configured gateways:
 ```execute
-kubectl -n {{ session_namespace }} exec -it gemfire1-locator-0 -- gfsh connect -e "set variable --name=APP_RESULT_VIEWER --value=80000" -e "list gateways"
+kubectl -n {{ session_namespace }} exec -it gemfire1-locator-0 -- gfsh -e connect -e "set variable --name=APP_RESULT_VIEWER --value=80000" -e "list gateways"
 ```
 
 ### WAN Replication
@@ -64,12 +64,13 @@ Now, we will demonstrate the same multi-site replication across geographically d
 provides robust, native support for WAN replication. The deployment process will be mostly identical,
 except that we will need to define **remote-locators** which each cluster will use for discovering remote sites to potentially connect to. 
 
-This will be a topology whereby a primary site in Los Angeles (**us-west**) is configured for one-way replication to a secondary readonly site
-in New York (**us-east**). Other topologies such as **ring** and **full-mesh** are also supported. 
+This will be a topology whereby a primary site in one region is configured for one-way replication to a secondary readonly site 
+in a different region. 
+Other topologies such as **ring** and **full-mesh** are also supported. 
 
-Here is the configuration for the primary West site: 
+Here is the configuration for the primary site: 
 ```editor:select-matching-text
-file: ~/other/resources/gemfire/gemfire-cluster-with-gateway-sender-la.yaml
+file: ~/other/resources/gemfire/gemfire-cluster-with-gateway-sender-primary.yaml
 text: "jvmOptions"
 after: 2
 ```
@@ -77,48 +78,48 @@ after: 2
 In order to allow sites from remote networks to connect, there needs to be some kind of infrastructure in place that will allow cross-regional communication.
 Here, we will use **Istio Gateway** to set up a LoadBalancer entrypoint at the cluster's edge. Here is the gateway's manifest:
 ```editor:open-file
-file: ~/other/resources/gemfire/gemfire-istio-la.yaml
+file: ~/other/resources/gemfire/gemfire-istio-primary.yaml
 ```
 
-Deploy the West site with the Istio Gateway:
+Deploy the Primary site with the Istio Gateway:
 ```execute
-sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/gemfire/gemfire-istio-la.yaml && kubectl apply -f ~/other/resources/gemfire/gemfire-istio-la.yaml -n {{ session_namespace }} && export ISTIO_INGRESS_HOST_WEST=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].hostname}') &&  sed -i "s/PRIMARY_ISTIO_INGRESS_HOSTNAME/${ISTIO_INGRESS_HOST_WEST}/g" ~/other/resources/gemfire/gemfire-cluster-with-gateway-sender-la.yaml && kubectl apply -f ~/other/resources/gemfire/gemfire-cluster-with-gateway-sender-la.yaml
+sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/gemfire/gemfire-istio-primary.yaml && kubectl apply -f ~/other/resources/gemfire/gemfire-istio-primary.yaml -n {{ session_namespace }} && export ISTIO_INGRESS_HOST_PRIMARY=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].hostname}') &&  sed -i "s/PRIMARY_ISTIO_INGRESS_HOSTNAME/${ISTIO_INGRESS_HOST_PRIMARY}/g" ~/other/resources/gemfire/gemfire-cluster-with-gateway-sender-primary.yaml && kubectl apply -f ~/other/resources/gemfire/gemfire-cluster-with-gateway-sender-primary.yaml
 ```
 
-Next, we will create a Gemfire Cluster in our secondary East site:
+Next, we will create a Gemfire Cluster in our secondary site <font color="red">NOTE: Wait for the **gemfire0** cluster to show all pods as "Ready" before proceeding:</font>
 ```editor:select-matching-text
-file: ~/other/resources/gemfire/gemfire-cluster-with-gateway-receiver-ny.yaml
+file: ~/other/resources/gemfire/gemfire-cluster-with-gateway-receiver-secondary.yaml
 text: "remote-locators"
 ```
 
-Notice the line with the **remote-locators** field. This will provide the locators for the West region, which the East site will query to find out about 
-connected Gateway Sender, Async Event Queues etc. Update the **remote-locators** field with the locator info for the West site, using the newly generated 
+Notice the line with the **remote-locators** field. This will provide the locators for the Primary region, which the Secondary site will query to find out about 
+connected Gateway Sender, Async Event Queues etc. Update the **remote-locators** field with the locator info for the Primary site, using the newly generated 
 Istio Gateway:
 ```execute
-sed -i "s/#remote-locators:/remote-locators: $ISTIO_INGRESS_HOST_WEST[10334]/g" ~/other/resources/gemfire/gemfire-cluster-with-gateway-receiver-ny.yaml
+sed -i "s/#remote-locators:/remote-locators: $ISTIO_INGRESS_HOST_PRIMARY[10334]/g" ~/other/resources/gemfire/gemfire-cluster-with-gateway-receiver-secondary.yaml
 ```
 
-Deploy the East site (<font color="red">NOTE: Click **Ctrl-C** after the locator and server nodes show up as Ready:</font>)
+Deploy the Secondary site (<font color="red">NOTE: Click **Ctrl-C** after the locator and server nodes show up as Ready:</font>)
 ```execute
-(kubectl get secret kconfig -n default -o jsonpath="{.data.myfile}" | base64 --decode) > mykubeconfig && kubectl config use-context secondary-ctx --kubeconfig=mykubeconfig; kubectl create ns {{session_namespace}} --kubeconfig mykubeconfig;  sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/gemfire/gemfire-istio-ny.yaml && kubectl apply -f ~/other/resources/gemfire/gemfire-istio-ny.yaml  --namespace={{session_namespace}} --kubeconfig=mykubeconfig && export ISTIO_INGRESS_HOST_EAST=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].hostname}' --kubeconfig=mykubeconfig);  kubectl create secret docker-registry image-pull-secret --namespace={{ session_namespace }} --docker-server=registry.pivotal.io --docker-username='{{ DATA_E2E_PIVOTAL_REGISTRY_USERNAME }}' --docker-password='{{ DATA_E2E_PIVOTAL_REGISTRY_PASSWORD }}' --dry-run -o yaml | kubectl apply --kubeconfig=mykubeconfig -f - && sed -i "s/SECONDARY_ISTIO_INGRESS_HOSTNAME/$ISTIO_INGRESS_HOST_EAST/g" ~/other/resources/gemfire/gemfire-cluster-with-gateway-receiver-ny.yaml && kubectl apply -f ~/other/resources/gemfire/gemfire-cluster-with-gateway-receiver-ny.yaml --namespace={{session_namespace}} --kubeconfig=mykubeconfig; watch kubectl get pods -n {{session_namespace}} --kubeconfig=mykubeconfig; kubectl config use-context eduk8s
+(kubectl get secret kconfig -n default -o jsonpath="{.data.myfile}" | base64 --decode) > mykubeconfig && kubectl config use-context secondary-ctx --kubeconfig=mykubeconfig; kubectl create ns {{session_namespace}} --kubeconfig mykubeconfig;  sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/gemfire/gemfire-istio-secondary.yaml && kubectl apply -f ~/other/resources/gemfire/gemfire-istio-secondary.yaml  --namespace={{session_namespace}} --kubeconfig=mykubeconfig && export ISTIO_INGRESS_HOST_SECONDARY=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].hostname}' --kubeconfig=mykubeconfig);  kubectl create secret docker-registry image-pull-secret --namespace={{ session_namespace }} --docker-server=registry.pivotal.io --docker-username='{{ DATA_E2E_PIVOTAL_REGISTRY_USERNAME }}' --docker-password='{{ DATA_E2E_PIVOTAL_REGISTRY_PASSWORD }}' --dry-run -o yaml | kubectl apply --kubeconfig=mykubeconfig -f - && sed -i "s/SECONDARY_ISTIO_INGRESS_HOSTNAME/$ISTIO_INGRESS_HOST_SECONDARY/g" ~/other/resources/gemfire/gemfire-cluster-with-gateway-receiver-secondary.yaml && kubectl apply -f ~/other/resources/gemfire/gemfire-cluster-with-gateway-receiver-secondary.yaml --namespace={{session_namespace}} --kubeconfig=mykubeconfig; watch kubectl get pods -n {{session_namespace}} --kubeconfig=mykubeconfig; kubectl config use-context eduk8s
 ```
 
 Create the **GatewayReceiver**:
 ```execute
-kubectl config use-context secondary-ctx --kubeconfig=mykubeconfig && kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 --kubeconfig mykubeconfig -- gfsh -e connect -e "create gateway-receiver --start-port=13000 --end-port=14000 --hostname-for-senders=$ISTIO_INGRESS_HOST_EAST" && kubectl config use-context eduk8s
+kubectl config use-context secondary-ctx --kubeconfig=mykubeconfig; kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 --kubeconfig mykubeconfig -- gfsh -e connect -e "create gateway-receiver --start-port=13000 --end-port=14000 --hostname-for-senders=$ISTIO_INGRESS_HOST_SECONDARY"; kubectl config use-context eduk8s
 ```
 
 Create a new region, *posts*, which will match the producing region on the sending side:
 ```execute
-kubectl config use-context secondary-ctx --kubeconfig=mykubeconfig && kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 --kubeconfig mykubeconfig -- gfsh -e connect -e "create region --name=posts --type=PARTITION"; kubectl config use-context eduk8s
+kubectl config use-context secondary-ctx --kubeconfig=mykubeconfig; kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 --kubeconfig mykubeconfig -- gfsh -e connect -e "create region --name=posts --type=PARTITION"; kubectl config use-context eduk8s
 ```
 
-Update the West Site with the **remote-locator** info for the East site:
+Update the Primary Site with the **remote-locator** info for the Secondary site:
 ```execute
-sed -i "s/#remote-locators:/remote-locators: $ISTIO_INGRESS_HOST_EAST[10334]/g" ~/other/resources/gemfire/gemfire-cluster-with-gateway-sender-la.yaml
+sed -i "s/#remote-locators:/remote-locators: $ISTIO_INGRESS_HOST_SECONDARY[10334]/g" ~/other/resources/gemfire/gemfire-cluster-with-gateway-sender-primary.yaml
 ```
 
-Configure the **GatewaySender** in the **West** site:
+Configure the **GatewaySender** in the **Primary** site:
 ```execute
 kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 -- gfsh -e connect -e "create gateway-sender --id=sender1 --parallel=true --remote-distributed-system-id=2"
 ```

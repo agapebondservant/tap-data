@@ -418,10 +418,12 @@ t_server=$(kubectl config view -o jsonpath="{.clusters[?(@.name==\"$t_cluster\")
 t_user=$(kubectl config view -o jsonpath="{.contexts[?(@.name==\"$t_context\")].context.user}")
 t_client_certificate_data=$(kubectl config view --flatten -o jsonpath="{.users[?(@.name==\"$t_user\")].user.client-certificate-data}" | openssl enc -d -base64 -A)
 t_client_key_data=$(kubectl config view --flatten -o jsonpath="{.users[?(@.name==\"$t_user\")].user.client-key-data}" | openssl enc -d -base64 -A)
+
 t_ca_crt="$(mktemp)"; echo "$t_ca_crt_data" > $t_ca_crt
 t_client_key="$(mktemp)"; echo "$t_client_key_data" > $t_client_key
 t_client_certificate="$(mktemp)"; echo "$t_client_certificate_data" > $t_client_certificate
- 
+
+rm -f myfile 
 kubectl config set-credentials secondary-user --client-certificate="$t_client_certificate" --client-key="$t_client_key" --embed-certs=true --kubeconfig myfile
 kubectl config set-cluster secondary-cluster --server="$t_server" --certificate-authority="$t_ca_crt" --embed-certs=true --kubeconfig myfile
 kubectl config set-context secondary-ctx --cluster="secondary-cluster" --user="secondary-user" --kubeconfig myfile
