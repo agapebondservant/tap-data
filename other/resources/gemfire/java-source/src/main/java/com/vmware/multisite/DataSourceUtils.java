@@ -62,6 +62,7 @@ public class DataSourceUtils {
                     pdxEntry.getField("phone"),
                     pdxEntry.getField("claimdate"),
                     pdxEntry.getField("city"),
+                    pdxEntry.getField("region"),
                     pdxEntry.getField("amount"));
             return true;
         } catch (Exception e) {
@@ -80,6 +81,7 @@ public class DataSourceUtils {
                     entry.getField("phone"),
                     entry.getField("claimdate"),
                     entry.getField("city"),
+                    entry.getField("region"),
                     entry.getField("amount"),
                     entry.getField("id"));
             return true;
@@ -112,6 +114,7 @@ public class DataSourceUtils {
                     pdxEntry.get("phone").asText(),
                     pdxEntry.get("claimdate").asText(),
                     pdxEntry.get("city").asText(),
+                    pdxEntry.get("region").asText(),
                     pdxEntry.get("amount").asInt());
             return true;
         } catch (SQLException e) {

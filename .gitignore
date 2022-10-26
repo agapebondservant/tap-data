@@ -199,3 +199,4 @@ other/resources/gemfire/java-source/settings.xml
 ./other/resources/gemfire/java-source/src/main/resources/east/db.properties
 ./other/resources/gemfire/java-source/src/main/resources/west/db.properties
 kconfigsecret.yaml
+other/resources/gemfire/python-source/app/config.py

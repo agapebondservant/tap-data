@@ -28,6 +28,10 @@ cities = ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix', 'Philadelp
           'Dallas', 'San Jose', 'Austin',
           'Jacksonville', 'Fort Worth', 'Columbus', 'Indianapolis', 'Charlotte', 'San Francisco', 'Seattle', 'Denver',
           'Washington']
+regions = ['primary', 'secondary', 'primary', 'secondary', 'secondary', 'primary', 'secondary', 'secondary',
+           'secondary', 'secondary', 'secondary',
+           'primary', 'secondary', 'primary', 'primary', 'primary', 'secondary', 'secondary', 'primary',
+           'primary']
 
 # Generate random data
 for i in range(sys.maxsize if int(sys.argv[1]) == -1 else int(sys.argv[1])):
@@ -40,6 +44,7 @@ for i in range(sys.maxsize if int(sys.argv[1]) == -1 else int(sys.argv[1])):
                'phone': fake.phone_number(),
                'claimdate': datetime.now().strftime("%m-%d-%Y %H:%M:%S"),
                'city': city,
+               'region': regions[cities.index(city)],
                'amount': random.randint(200, 1000)}
 
     print(json.dumps(my_dict, indent=2))
