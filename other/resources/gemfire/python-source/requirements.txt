@@ -18,3 +18,4 @@ Pillow
 streamlit-autorefresh
 protobuf==3.19.5
 fastapi
+modin[ray]
