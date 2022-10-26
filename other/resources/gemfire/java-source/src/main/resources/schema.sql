@@ -14,7 +14,7 @@ CREATE TABLE claims (
     dob varchar2(10),
     address varchar2(250),
     phone varchar2(50),
-    claimdate varchar2(10),
+    claimdate varchar2(20),
     city varchar2(50),
     amount number(9,0)
 );

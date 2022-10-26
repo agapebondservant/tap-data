@@ -106,12 +106,12 @@ Deploy the Secondary site (<font color="red">NOTE: Click **Ctrl-C** after the lo
 
 Create the **GatewayReceiver**:
 ```execute
-kubectl config use-context secondary-ctx --kubeconfig=mykubeconfig; kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 --kubeconfig mykubeconfig -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_SECONDARY:7070/gemfire" -e "create gateway-receiver --start-port=13000 --end-port=14000 --hostname-for-senders=$ISTIO_INGRESS_HOST_SECONDARY"; kubectl config use-context eduk8s
+kubectl config use-context secondary-ctx --kubeconfig=mykubeconfig; kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 --kubeconfig mykubeconfig -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_SECONDARY:7070/gemfire/v1" -e "create gateway-receiver --start-port=13000 --end-port=14000 --hostname-for-senders=$ISTIO_INGRESS_HOST_SECONDARY"; kubectl config use-context eduk8s
 ```
 
 Create a new region, *posts*, which will match the producing region on the sending side:
 ```execute
-kubectl config use-context secondary-ctx --kubeconfig=mykubeconfig; kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 --kubeconfig mykubeconfig -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_SECONDARY:7070/gemfire" -e "create region --name=posts --type=PARTITION"; kubectl config use-context eduk8s
+kubectl config use-context secondary-ctx --kubeconfig=mykubeconfig; kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 --kubeconfig mykubeconfig -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_SECONDARY:7070/gemfire/v1" -e "create region --name=posts --type=PARTITION"; kubectl config use-context eduk8s
 ```
 
 Update the Primary Site with the **remote-locator** info for the Secondary site:
@@ -121,17 +121,17 @@ sed -i "s/#remote-locators:/remote-locators: $ISTIO_INGRESS_HOST_SECONDARY[10334
 
 Configure the **GatewaySender** in the **Primary** site:
 ```execute
-kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire" -e "create gateway-sender --id=sender1 --parallel=true --remote-distributed-system-id=2"
+kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "create gateway-sender --id=sender1 --parallel=true --remote-distributed-system-id=2"
 ```
 
 Create a new region, *posts*, which will stream events to the GatewaySender's queue:
 ```execute
-kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire" -e "create region --name=posts --type=PARTITION --gateway-sender-id=sender1"
+kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "create region --name=posts --type=PARTITION --gateway-sender-id=sender1"
 ```
 
 Show the list of configured gateways:
 ```execute
-kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire" -e "list gateways"
+kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "list gateways"
 ```
 
 

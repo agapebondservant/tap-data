@@ -1,10 +1,10 @@
 apiVersion: learningcenter.tanzu.vmware.com/v1beta1
 kind: TrainingPortal
 metadata:
-  name: rabbitconf
+  name: capitalgroup
 spec:
   workshops:
-  - name: data-rabbitmq-commercial-features-demo
-    capacity: 10
+  - name: data-rabbitmq-commercial-features
+    capacity: 5
     expires: 120m
     orphaned: 5m
