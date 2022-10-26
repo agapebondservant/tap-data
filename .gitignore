@@ -200,3 +200,6 @@ other/resources/gemfire/java-source/settings.xml
 ./other/resources/gemfire/java-source/src/main/resources/west/db.properties
 kconfigsecret.yaml
 other/resources/gemfire/python-source/app/config.py
+/Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/gemfire/java-source/src/main/resources/primary/db.properties
+/Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/gemfire/java-source/src/main/resources/secondary/db.properties
+/Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/gemfire/python-source/app/config.py

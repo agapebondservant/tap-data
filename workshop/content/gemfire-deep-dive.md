@@ -75,6 +75,7 @@ text: "jvmOptions"
 after: 2
 ```
 
+#### Set up cross-cluster communication via Istio Gateway on the primary site, including remote locator information
 In order to allow sites from remote networks to connect, there needs to be some kind of infrastructure in place that will allow cross-regional communication.
 Here, we will use **Istio Gateway** to set up a LoadBalancer entrypoint at the cluster's edge. Here is the gateway's manifest:
 ```editor:open-file
@@ -86,6 +87,7 @@ Deploy the Primary site with the Istio Gateway:
 sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/gemfire/gemfire-istio-primary.yaml && kubectl apply -f ~/other/resources/gemfire/gemfire-istio-primary.yaml -n {{ session_namespace }} && export ISTIO_INGRESS_HOST_PRIMARY=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].hostname}') &&  sed -i "s/PRIMARY_ISTIO_INGRESS_HOSTNAME/${ISTIO_INGRESS_HOST_PRIMARY}/g" ~/other/resources/gemfire/gemfire-cluster-with-gateway-sender-primary.yaml && kubectl apply -f ~/other/resources/gemfire/gemfire-cluster-with-gateway-sender-primary.yaml
 ```
 
+#### Deploy the secondary cluster with the Gateway Receiver, Istio Gateway and up-to-date remote locator information
 Next, we will create a Gemfire Cluster in our secondary site <font color="red">(NOTE: Wait for the **gemfire0** cluster to show all pods as "Ready" before proceeding:)</font>
 ```editor:select-matching-text
 file: ~/other/resources/gemfire/gemfire-cluster-with-gateway-receiver-secondary.yaml
@@ -109,11 +111,13 @@ Create the **GatewayReceiver**:
 kubectl config use-context secondary-ctx --kubeconfig=mykubeconfig; kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 --kubeconfig mykubeconfig -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_SECONDARY:7070/gemfire/v1" -e "create gateway-receiver --start-port=13000 --end-port=14000 --hostname-for-senders=$ISTIO_INGRESS_HOST_SECONDARY"; kubectl config use-context eduk8s
 ```
 
-Create a new region, *posts*, which will match the producing region on the sending side:
+Create a new region, *claims*, which will match the producing region on the sending side:
 ```execute
-kubectl config use-context secondary-ctx --kubeconfig=mykubeconfig; kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 --kubeconfig mykubeconfig -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_SECONDARY:7070/gemfire/v1" -e "create region --name=posts --type=PARTITION"; kubectl config use-context eduk8s
+kubectl config use-context secondary-ctx --kubeconfig=mykubeconfig; kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 --kubeconfig mykubeconfig -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_SECONDARY:7070/gemfire/v1" -e "create region --name=claims --type=PARTITION"; kubectl config use-context eduk8s
 ```
 
+#### Configure the Gateway Sender with up-to-date remote locator information 
+#### **NOTE: as a best practice, should start after Gateway Receiver**
 Update the Primary Site with the **remote-locator** info for the Secondary site:
 ```execute
 sed -i "s/#remote-locators:/remote-locators: $ISTIO_INGRESS_HOST_SECONDARY[10334]/g" ~/other/resources/gemfire/gemfire-cluster-with-gateway-sender-primary.yaml
@@ -124,16 +128,35 @@ Configure the **GatewaySender** in the **Primary** site:
 kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "create gateway-sender --id=sender1 --parallel=true --remote-distributed-system-id=2"
 ```
 
-Create a new region, *posts*, which will stream events to the GatewaySender's queue:
+Create a new region, *claims*, which will stream events to the GatewaySender's queue:
 ```execute
-kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "create region --name=posts --type=PARTITION --gateway-sender-id=sender1"
+kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "create region --name=claims --type=PARTITION --gateway-sender-id=sender1"
 ```
 
 Show the list of configured gateways:
 ```execute
-kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "list gateways"
+kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "set variable --name=APP_RESULT_VIEWER --value=80000" -e "list gateways"
 ```
 
+#### Deploy the CacheListener for Oracle Write-Through
+Tanzu Gemfire supports event handling for various event-generating operations: region updates, new cache entries, etc.
+Here, we will implement the **CacheListener** adapter to synchronously update a backend Oracle database when the **claims** region is updated.
+This will occur in both the primary and secondary sites, hence enabling an active-active Oracle setup. 
+
+Here is the **CacheListener** to be deployed:
+```editor:open-file
+file: ~/other/resources/gemfire/java-source/src/main/java/com/vmware/multisite/SyncOracleCacheListener.java
+```
+
+Build the **CacheListener** jar file for the **primary** site, and deploy it to the primary cluster:
+```execute
+cd other/resources/gemfire/java-source; ./mvnw -s settings.xml clean package -Ddemo.resources.dir=src/main/resources/primary; cd ../../../..; kubectl cp ~/other/resources/gemfire/java-source/target/gemfire-multisite-poc-1.0-SNAPSHOT.jar  {{session_namespace}}/gemfire0-locator-0 :/tmp; kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "deploy --jars=/tmp/gemfire-multisite-poc-1.0-SNAPSHOT.jar"
+```
+
+Similarly, build the **CacheListener** jar file for the **secondary** site and deploy to the secondary cluster:
+```execute
+cd other/resources/gemfire/java-source; ./mvnw -s settings.xml clean package -Ddemo.resources.dir=src/main/resources/secondary; cd ../../../..; kubectl config use-context secondary-ctx --kubeconfig=mykubeconfig; kubectl cp ~/other/resources/gemfire/java-source/target/gemfire-multisite-poc-1.0-SNAPSHOT.jar  {{session_namespace}}/gemfire0-locator-0 :/tmp --kubeconfig mykubeconfig; kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 --kubeconfig mykubeconfig -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_SECONDARY:7070/gemfire/v1" -e "deploy --jars=/tmp/gemfire-multisite-poc-1.0-SNAPSHOT.jar"
+```
 
 ### Gemfire and NoSQL
 
