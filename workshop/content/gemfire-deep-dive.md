@@ -98,19 +98,24 @@ Notice the line with the **remote-locators** field. This will provide the locato
 connected Gateway Sender, Async Event Queues etc. 
 
 Update the **remote-locators** field with the locator info for the Primary site, using the newly generated 
-Istio Gateway. <font color="red">(NOTE: Wait for the **gemfire0** cluster to show all pods as "Ready" before proceeding:)</font>
+Istio Gateway:
 ```execute
 sed -i "s/#remote-locators:/remote-locators: $ISTIO_INGRESS_HOST_PRIMARY[10334]/g" ~/other/resources/gemfire/gemfire-cluster-with-gateway-receiver-secondary.yaml
 ```
 
-Deploy the Secondary site (<font color="red">NOTE: Click **Ctrl-C** after the locator and server nodes show up as Ready:</font>)
+View the update:
+```editor:open-file
+file: ~/other/resources/gemfire/gemfire-cluster-with-gateway-receiver-secondary.yaml
+```
+
+Deploy the Secondary site. <b>You must wait for the gemfire cluster to show all pods as "Ready" before proceeding.</b> (<font color="red">NOTE: Click **Ctrl-C** after the locator and server nodes show up as Ready:</font>)
 ```execute
 (kubectl get secret kconfig -n default -o jsonpath="{.data.myfile}" | base64 --decode) > mykubeconfig && kubectl config use-context secondary-ctx --kubeconfig=mykubeconfig; kubectl delete gemfirecluster gemfire0 -n {{session_namespace}} --kubeconfig=mykubeconfig || true; kubectl create ns {{session_namespace}} --kubeconfig mykubeconfig || true;  sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/gemfire/gemfire-istio-secondary.yaml && kubectl apply -f ~/other/resources/gemfire/gemfire-istio-secondary.yaml  --namespace={{session_namespace}} --kubeconfig=mykubeconfig && export ISTIO_INGRESS_HOST_SECONDARY=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].hostname}' --kubeconfig=mykubeconfig);  kubectl create secret docker-registry image-pull-secret --namespace={{ session_namespace }} --docker-server=registry.pivotal.io --docker-username='{{ DATA_E2E_PIVOTAL_REGISTRY_USERNAME }}' --docker-password='{{ DATA_E2E_PIVOTAL_REGISTRY_PASSWORD }}' --dry-run -o yaml | kubectl apply --kubeconfig=mykubeconfig -f - && sed -i "s/SECONDARY_ISTIO_INGRESS_HOSTNAME/$ISTIO_INGRESS_HOST_SECONDARY/g" ~/other/resources/gemfire/gemfire-cluster-with-gateway-receiver-secondary.yaml && kubectl apply -f ~/other/resources/gemfire/gemfire-cluster-with-gateway-receiver-secondary.yaml --namespace={{session_namespace}} --kubeconfig=mykubeconfig; watch kubectl get pods -n {{session_namespace}} --kubeconfig=mykubeconfig; kubectl config use-context eduk8s
 ```
 
 Create the **GatewayReceiver**:
 ```execute
-kubectl config use-context secondary-ctx --kubeconfig=mykubeconfig; kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 --kubeconfig mykubeconfig -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_SECONDARY:7070/gemfire/v1" -e "destroy gateway-receiver" -e "create gateway-receiver --start-port=13000 --end-port=14000 --hostname-for-senders=$ISTIO_INGRESS_HOST_SECONDARY" -e "set variable --name=APP_RESULT_VIEWER --value=90000"; kubectl config use-context eduk8s
+kubectl config use-context secondary-ctx --kubeconfig=mykubeconfig; kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 --kubeconfig mykubeconfig -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_SECONDARY:7070/gemfire/v1" -e "destroy gateway-receiver" || true; kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 --kubeconfig mykubeconfig -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_SECONDARY:7070/gemfire/v1" -e "create gateway-receiver --start-port=13000 --end-port=14000 --hostname-for-senders=$ISTIO_INGRESS_HOST_SECONDARY" -e "set variable --name=APP_RESULT_VIEWER --value=90000"; kubectl config use-context eduk8s
 ```
 
 Show the list of configured gateways:
@@ -128,6 +133,11 @@ kubectl config use-context secondary-ctx --kubeconfig=mykubeconfig; kubectl -n {
 Update the Primary Site with the **remote-locator** info for the Secondary site:
 ```execute
 sed -i "s/#remote-locators:/remote-locators: $ISTIO_INGRESS_HOST_SECONDARY[10334]/g" ~/other/resources/gemfire/gemfire-cluster-with-gateway-sender-primary.yaml
+```
+
+View the update:
+```editor:open-file
+file: ~/other/resources/gemfire/gemfire-cluster-with-gateway-sender-primary.yaml
 ```
 
 Configure the **GatewaySender** in the **Primary** site:
