@@ -83,6 +83,14 @@ spec:
             host: gemfire0-locator-0-svc.YOUR_SESSION_NAMESPACE.svc.cluster.local
             port:
               number: 7070
+    - match:
+        - uri:
+            prefix: /pulse/
+      route:
+        - destination:
+            host: gemfire0-locator-0-svc.YOUR_SESSION_NAMESPACE.svc.cluster.local
+            port:
+              number: 7070
   tcp:
     - match:
         - port: 10334
