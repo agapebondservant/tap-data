@@ -203,3 +203,5 @@ other/resources/gemfire/python-source/app/config.py
 /Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/gemfire/java-source/src/main/resources/primary/db.properties
 /Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/gemfire/java-source/src/main/resources/secondary/db.properties
 /Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/gemfire/python-source/app/config.py
+other/resources/gemfire/java-source/src/main/resources/primary/db.properties
+other/resources/gemfire/java-source/src/main/resources/secondary/db.properties

@@ -88,15 +88,17 @@ sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/ge
 ```
 
 #### Deploy the secondary cluster with the Gateway Receiver, Istio Gateway and up-to-date remote locator information
-Next, we will create a Gemfire Cluster in our secondary site <font color="red">(NOTE: Wait for the **gemfire0** cluster to show all pods as "Ready" before proceeding:)</font>
+Next, we will create a Gemfire Cluster in our secondary site:
 ```editor:select-matching-text
 file: ~/other/resources/gemfire/gemfire-cluster-with-gateway-receiver-secondary.yaml
 text: "remote-locators"
 ```
 
 Notice the line with the **remote-locators** field. This will provide the locators for the Primary region, which the Secondary site will query to find out about 
-connected Gateway Sender, Async Event Queues etc. Update the **remote-locators** field with the locator info for the Primary site, using the newly generated 
-Istio Gateway:
+connected Gateway Sender, Async Event Queues etc. 
+
+Update the **remote-locators** field with the locator info for the Primary site, using the newly generated 
+Istio Gateway. <font color="red">(NOTE: Wait for the **gemfire0** cluster to show all pods as "Ready" before proceeding:)</font>
 ```execute
 sed -i "s/#remote-locators:/remote-locators: $ISTIO_INGRESS_HOST_PRIMARY[10334]/g" ~/other/resources/gemfire/gemfire-cluster-with-gateway-receiver-secondary.yaml
 ```

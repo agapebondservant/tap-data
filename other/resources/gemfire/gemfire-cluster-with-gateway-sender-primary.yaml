@@ -11,7 +11,7 @@ spec:
     overrides:
       jvmOptions:
         - "-Dgemfire.conserve-sockets=false"
-        - "-Dgemfire.jmx-manager-hostname-for-clients=PRIMARY_ISTIO_INGRESS_HOSTNAME"
+        - "-Dgemfire.jmx-manager-hostname-for-clients=http://PRIMARY_ISTIO_INGRESS_HOSTNAME/gemfire/v1"
       gemfireProperties:
         mcast-port: "0"
         distributed-system-id: "1"
