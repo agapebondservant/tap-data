@@ -15,6 +15,7 @@ RUN apt-get update \
     pip3 install -r requirements.txt && \
     mkdir -p /root/.streamlit && \
     mkdir -p /root/.streamlit && \
+    cp .streamlit/config.toml /root/.streamlit && \
     bash -c 'echo -e "\
     [general]\n\
     email = \"\"\n\

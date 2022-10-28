@@ -1,0 +1,2 @@
+[istio.ingress.host]
+primary = "afdb78e213e0b4b6593cc215f247fbfc-405000246.us-east-1.elb.amazonaws.com"

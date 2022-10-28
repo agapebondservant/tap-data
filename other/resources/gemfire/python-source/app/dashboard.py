@@ -4,7 +4,6 @@ import time
 import pandas as pd
 import numpy as np
 from streamlit_autorefresh import st_autorefresh
-import random_claim_generator
 import subprocess
 import os
 import config
@@ -14,11 +13,12 @@ from sqlalchemy.engine import create_engine
 
 # Initializations
 st.set_option('deprecation.showPyplotGlobalUse', False)
-gemfire_url = f"http://{os.environ['ISTIO_INGRESS_HOST_' + sys.argv[1].upper()]}:7070/gemfire-api/v1/claims"
+gemfire_url = f"http://{os.environ['STREAMLIT_ISTIO_INGRESS_HOST_' + sys.argv[1].upper()]}:7070/gemfire-api/v1/claims"
 top10query = "select * from /claims c limit 10"
 totalPrimaryCountQuery = "select count(*) from /claims c where c.region = 'primary'"
 totalSecondaryCountQuery = "select count(*) from /claims c where c.region = 'secondary'"
-engine = create_engine(config[sys.argv[1]][sys.argv[2]])
+print(getattr(config, sys.argv[1])[sys.argv[2]])
+engine = create_engine(getattr(config, sys.argv[1])[sys.argv[2]])
 
 st.write("""
 <style>

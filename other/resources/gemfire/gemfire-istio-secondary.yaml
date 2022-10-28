@@ -16,6 +16,40 @@ spec:
       protocol: TCP
   type: ClusterIP
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gemfire0-server-0-svc
+spec:
+  selector:
+    app: gemfire0-server
+  ports:
+    - name: exposed-13000
+      port: 13000
+      targetPort: 13000
+      protocol: TCP
+    - name: exposed-13001
+      port: 13001
+      targetPort: 13001
+      protocol: TCP
+    - name: exposed-13002
+      port: 13002
+      targetPort: 13002
+      protocol: TCP
+    - name: exposed-13003
+      port: 13003
+      targetPort: 13003
+      protocol: TCP
+    - name: exposed-13004
+      port: 13004
+      targetPort: 13004
+      protocol: TCP
+    - name: exposed-13005
+      port: 13005
+      targetPort: 13005
+      protocol: TCP
+  type: ClusterIP
+---
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
@@ -52,6 +86,42 @@ spec:
         number: 1099
         protocol: TCP
         name: tcp-gemfire-jmx
+      hosts:
+        - "*"
+    - port:
+        number: 13000
+        protocol: TCP
+        name: tcp-gemfire-exposed-13000
+      hosts:
+        - "*"
+    - port:
+        number: 13001
+        protocol: TCP
+        name: tcp-gemfire-exposed-13001
+      hosts:
+        - "*"
+    - port:
+        number: 13002
+        protocol: TCP
+        name: tcp-gemfire-exposed-13002
+      hosts:
+        - "*"
+    - port:
+        number: 13003
+        protocol: TCP
+        name: tcp-gemfire-exposed-13003
+      hosts:
+        - "*"
+    - port:
+        number: 13004
+        protocol: TCP
+        name: tcp-gemfire-exposed-13004
+      hosts:
+        - "*"
+    - port:
+        number: 13005
+        protocol: TCP
+        name: tcp-gemfire-exposed-13005
       hosts:
         - "*"
 ---
@@ -126,3 +196,46 @@ spec:
             host: gemfire0-locator-0-svc.YOUR_SESSION_NAMESPACE.svc.cluster.local
             port:
               number: 1099
+        # Exposed ports for Gemfire Gateway Receiver
+        - match:
+            - port: 13000
+            route:
+              - destination:
+                  host: gemfire0-server-0-svc.YOUR_SESSION_NAMESPACE.svc.cluster.local
+                  port:
+                    number: 13000
+        - match:
+            - port: 13001
+            route:
+              - destination:
+                  host: gemfire0-server-0-svc.YOUR_SESSION_NAMESPACE.svc.cluster.local
+                  port:
+                    number: 13001
+        - match:
+            - port: 13002
+            route:
+              - destination:
+                  host: gemfire0-server-0-svc.YOUR_SESSION_NAMESPACE.svc.cluster.local
+                  port:
+                    number: 13002
+        - match:
+            - port: 13003
+            route:
+              - destination:
+                  host: gemfire0-server-0-svc.YOUR_SESSION_NAMESPACE.svc.cluster.local
+                  port:
+                    number: 13003
+        - match:
+            - port: 13004
+            route:
+              - destination:
+                  host: gemfire0-server-0-svc.YOUR_SESSION_NAMESPACE.svc.cluster.local
+                  port:
+                    number: 13004
+        - match:
+            - port: 13005
+            route:
+              - destination:
+                  host: gemfire0-server-0-svc.YOUR_SESSION_NAMESPACE.svc.cluster.local
+                  port:
+                    number: 13005
