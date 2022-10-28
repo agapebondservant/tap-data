@@ -37,6 +37,12 @@ spec:
       hosts:
         - "*"
     - port:
+        number: 4321
+        protocol: TCP
+        name: tcp-gemfire-server-metrics
+      hosts:
+        - "*"
+    - port:
         number: 7070
         protocol: HTTP
         name: http-gemfire-api
@@ -106,6 +112,13 @@ spec:
             host: gemfire0-server.YOUR_SESSION_NAMESPACE.svc.cluster.local
             port:
               number: 40404
+    - match:
+        - port: 4321
+      route:
+        - destination:
+            host: gemfire0-server.YOUR_SESSION_NAMESPACE.svc.cluster.local
+            port:
+              number: 4321
     - match:
         - port: 1099
       route:

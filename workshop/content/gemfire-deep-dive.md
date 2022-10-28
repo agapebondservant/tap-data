@@ -163,7 +163,7 @@ after: 26
 
 Build the **CacheListener** jar file for the **primary** site, and deploy it to the primary cluster:
 ```execute
-cd ~/other/resources/gemfire/java-source; ./mvnw -s settings.xml clean package -Ddemo.resources.dir=src/main/resources/primary; cd ~; kubectl cp ~/other/resources/gemfire/java-source/target/gemfire-multisite-poc-1.0-SNAPSHOT.jar  {{session_namespace}}/gemfire0-locator-0:/tmp; kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 -- gfsh -e connect -e "deploy --jars=/tmp/gemfire-multisite-poc-1.0-SNAPSHOT.jar"
+cd ~/other/resources/gemfire/java-source; ./mvnw -s settings.xml clean package -Ddemo.resources.dir=src/main/resources/primary; cd -; kubectl cp ~/other/resources/gemfire/java-source/target/gemfire-multisite-poc-1.0-SNAPSHOT.jar  {{session_namespace}}/gemfire0-locator-0:/tmp; kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 -- gfsh -e connect -e "deploy --jars=/tmp/gemfire-multisite-poc-1.0-SNAPSHOT.jar"
 ```
 
 Now that the **CacheListener** is in the cluster's classpath, we can register it with the **claims** region:
@@ -173,7 +173,7 @@ kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 -- gfsh -e connec
 
 Similarly, build the **CacheListener** jar file for the **secondary** site and deploy to the secondary cluster:
 ```execute
-cd ~/other/resources/gemfire/java-source; ./mvnw -s settings.xml clean package -Ddemo.resources.dir=src/main/resources/secondary; cd ~kubectl cp ~/other/resources/gemfire/java-source/target/gemfire-multisite-poc-1.0-SNAPSHOT.jar  {{session_namespace}}/gemfire0-locator-0:/tmp --kubeconfig mykubeconfig; kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 --kubeconfig mykubeconfig -- gfsh -e connect -e "deploy --jars=/tmp/gemfire-multisite-poc-1.0-SNAPSHOT.jar"; kubectl config use-context eduk8s
+cd ~/other/resources/gemfire/java-source; ./mvnw -s settings.xml clean package -Ddemo.resources.dir=src/main/resources/secondary; cd -; kubectl cp ~/other/resources/gemfire/java-source/target/gemfire-multisite-poc-1.0-SNAPSHOT.jar  {{session_namespace}}/gemfire0-locator-0:/tmp --kubeconfig mykubeconfig; kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 --kubeconfig mykubeconfig -- gfsh -e connect -e "deploy --jars=/tmp/gemfire-multisite-poc-1.0-SNAPSHOT.jar"; kubectl config use-context eduk8s
 ```
 
 Register the **CacheListener** with the **claims** region in the **secondary** site:

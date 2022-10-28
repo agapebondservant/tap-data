@@ -33,3 +33,11 @@ kubectl expose deployment mysql-secondary-dashboard --port=8080 --target-port=85
 watch kubectl get deployment -l dashboard
 # (NOTE: If on AWS, change the timeout settings for the LoadBalancers to 3600)
 ```
+
+#### Test Dashboard locally
+```
+# pipenv lock
+pipenv install
+pipenv shell
+python -m streamlit run app/dashboard.py 'primary' 'oracle'
+```
