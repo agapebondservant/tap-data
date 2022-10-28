@@ -15,7 +15,7 @@ spec:
       gemfireProperties:
         mcast-port: "0"
         distributed-system-id: "2"
-        log-level: "debug"
+        #log-level: "debug"
         #remote-locators:
   servers:
     overrides:

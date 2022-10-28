@@ -200,43 +200,43 @@ spec:
     # Exposed ports for Gemfire Gateway Receiver
     - match:
         - port: 13000
-        route:
-          - destination:
-              host: gemfire0-server-0-svc.YOUR_SESSION_NAMESPACE.svc.cluster.local
-              port:
-                number: 13000
+      route:
+        - destination:
+            host: gemfire0-server-0-svc.YOUR_SESSION_NAMESPACE.svc.cluster.local
+            port:
+              number: 13000
     - match:
         - port: 13001
-        route:
-          - destination:
-              host: gemfire0-server-0-svc.YOUR_SESSION_NAMESPACE.svc.cluster.local
-              port:
-                number: 13001
+      route:
+        - destination:
+            host: gemfire0-server-0-svc.YOUR_SESSION_NAMESPACE.svc.cluster.local
+            port:
+              number: 13001
     - match:
         - port: 13002
-        route:
-          - destination:
-              host: gemfire0-server-0-svc.YOUR_SESSION_NAMESPACE.svc.cluster.local
-              port:
-                number: 13002
+      route:
+        - destination:
+            host: gemfire0-server-0-svc.YOUR_SESSION_NAMESPACE.svc.cluster.local
+            port:
+              number: 13002
     - match:
         - port: 13003
-        route:
-          - destination:
-              host: gemfire0-server-0-svc.YOUR_SESSION_NAMESPACE.svc.cluster.local
-              port:
-                number: 13003
+      route:
+        - destination:
+            host: gemfire0-server-0-svc.YOUR_SESSION_NAMESPACE.svc.cluster.local
+            port:
+              number: 13003
     - match:
         - port: 13004
-        route:
-          - destination:
-              host: gemfire0-server-0-svc.YOUR_SESSION_NAMESPACE.svc.cluster.local
-              port:
-                number: 13004
+      route:
+        - destination:
+            host: gemfire0-server-0-svc.YOUR_SESSION_NAMESPACE.svc.cluster.local
+            port:
+              number: 13004
     - match:
         - port: 13005
-        route:
-          - destination:
-              host: gemfire0-server-0-svc.YOUR_SESSION_NAMESPACE.svc.cluster.local
-              port:
-                number: 13005
+      route:
+        - destination:
+            host: gemfire0-server-0-svc.YOUR_SESSION_NAMESPACE.svc.cluster.local
+            port:
+              number: 13005

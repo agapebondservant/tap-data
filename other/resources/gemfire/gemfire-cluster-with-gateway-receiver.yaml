@@ -12,7 +12,7 @@ spec:
       gemfireProperties:
         mcast-port: "0"
         distributed-system-id: "2"
-        remote-locators: "gemfire1-locator-0.gemfire1-locator.YOUR_SESSION_NAMESPACE.svc.cluster.local[10334]"
+        remote-locators: "gemfire1-locator-0.YOUR_SESSION_NAMESPACE.svc.cluster.local[10334]"
   servers:
     overrides:
       gemfireProperties:
