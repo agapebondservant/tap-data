@@ -24,7 +24,7 @@ sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/ge
 
 Create the **GatewayReceiver** <font color="red">(NOTE: Wait for the **gemfire2** cluster to show all pods as "Ready" before proceeding:)</font>
 ```execute
-kubectl -n {{ session_namespace }} exec -it gemfire2-locator-0 -- gfsh -e connect -e "create gateway-receiver --start-port=13000 --end-port=14000 --hostname-for-senders=gemfire2-server.{{ session_namespace }}.svc.cluster.local"
+kubectl -n {{ session_namespace }} exec -it gemfire2-locator-0 -- gfsh -e connect -e "create gateway-receiver --start-port=13000 --end-port=13020 --hostname-for-senders=gemfire2-server.{{ session_namespace }}.svc.cluster.local"
 ```
 
 Create a new region, *customers*, which will match the producing region on the sending side:
@@ -119,7 +119,7 @@ kubectl config use-context secondary-ctx --kubeconfig mykubeconfig; kubectl dele
 
 Create the **GatewayReceiver**:
 ```execute
-kubectl config use-context secondary-ctx --kubeconfig mykubeconfig; kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 --kubeconfig mykubeconfig -- gfsh -e connect -e "destroy gateway-receiver" || true; kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 --kubeconfig mykubeconfig -- gfsh -e connect -e "create gateway-receiver --start-port=13000 --end-port=14000 --hostname-for-senders=$ISTIO_INGRESS_HOST_SECONDARY" -e "set variable --name=APP_RESULT_VIEWER --value=90000"; kubectl config use-context eduk8s
+kubectl config use-context secondary-ctx --kubeconfig mykubeconfig; kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 --kubeconfig mykubeconfig -- gfsh -e connect -e "destroy gateway-receiver" || true; kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 --kubeconfig mykubeconfig -- gfsh -e connect -e "create gateway-receiver --start-port=13000 --end-port=13020 --hostname-for-senders=$ISTIO_INGRESS_HOST_SECONDARY" -e "set variable --name=APP_RESULT_VIEWER --value=90000"; kubectl config use-context eduk8s
 ```
 
 Show the list of configured gateways:

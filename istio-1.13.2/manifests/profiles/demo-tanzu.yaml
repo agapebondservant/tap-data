@@ -1,0 +1,153 @@
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+spec:
+  meshConfig:
+    accessLogFile: /dev/stdout
+  components:
+    egressGateways:
+    - name: istio-egressgateway
+      enabled: true
+      k8s:
+        resources:
+          requests:
+            cpu: 10m
+            memory: 40Mi
+
+    ingressGateways:
+    - name: istio-ingressgateway
+      enabled: true
+      k8s:
+        resources:
+          requests:
+            cpu: 10m
+            memory: 40Mi
+        #readinessProbe:
+        #  initialDelaySeconds: 30
+        service:
+          ports:
+            ## You can add custom gateway ports in user values overrides, but it must include those ports since helm replaces.
+            # Note that AWS ELB will by default perform health checks on the first port
+            # on this list. Setting this to the health check port will ensure that health
+            # checks always work. https://github.com/istio/istio/issues/12503
+            - port: 15021
+              targetPort: 15021
+              name: status-port
+            - port: 80
+              targetPort: 8080
+              name: http2
+            - port: 443
+              targetPort: 8443
+              name: https
+            - port: 31400
+              targetPort: 31400
+              name: tcp
+            - port: 10334
+              targetPort: 10334
+              name: tcp-gemfire-locator
+            - port: 40404
+              targetPort: 40404
+              name: tcp-gemfire-server
+            - port: 4321
+              targetPort: 4321
+              name: tcp-gemfire-server-metrics
+            - port: 7070
+              targetPort: 7070
+              name: http-gemfire-api
+            - port: 1099
+              targetPort: 1099
+              name: tcp-gemfire-jmx
+            # Gemfire Gateway Receiver Ports
+            - port: 13000
+              targetPort: 13000
+              name: tcp-gemfire-exposed-port-13000
+            - port: 13001
+              targetPort: 13001
+              name: tcp-gemfire-exposed-port-13001
+            - port: 13002
+              targetPort: 13002
+              name: tcp-gemfire-exposed-port-13002
+            - port: 13002
+              targetPort: 13003
+              name: tcp-gemfire-exposed-port-13003
+            - port: 13004
+              targetPort: 13004
+              name: tcp-gemfire-exposed-port-13004
+            - port: 13005
+              targetPort: 13005
+              name: tcp-gemfire-exposed-port-13005
+            - port: 13006
+              targetPort: 13006
+              name: tcp-gemfire-exposed-port-13006
+            - port: 13007
+              targetPort: 13007
+              name: tcp-gemfire-exposed-port-13007
+            - port: 13008
+              targetPort: 13008
+              name: tcp-gemfire-exposed-port-13008
+            - port: 13009
+              targetPort: 13009
+              name: tcp-gemfire-exposed-port-13009
+            - port: 13010
+              targetPort: 13010
+              name: tcp-gemfire-exposed-port-13010
+            - port: 13011
+              targetPort: 13011
+              name: tcp-gemfire-exposed-port-13011
+            - port: 13012
+              targetPort: 13012
+              name: tcp-gemfire-exposed-port-13012
+            - port: 13013
+              targetPort: 13013
+              name: tcp-gemfire-exposed-port-13013
+            - port: 13014
+              targetPort: 13014
+              name: tcp-gemfire-exposed-port-13014
+            - port: 13015
+              targetPort: 13015
+              name: tcp-gemfire-exposed-port-13015
+            - port: 13016
+              targetPort: 13016
+              name: tcp-gemfire-exposed-port-13016
+            - port: 13017
+              targetPort: 13017
+              name: tcp-gemfire-exposed-port-13017
+            - port: 13018
+              targetPort: 13018
+              name: tcp-gemfire-exposed-port-13018
+            - port: 13019
+              targetPort: 13019
+              name: tcp-gemfire-exposed-port-13019
+            - port: 13020
+              targetPort: 13020
+              name: tcp-gemfire-exposed-port-13020
+              # This is the port where sni routing happens
+            - port: 15443
+              targetPort: 15443
+              name: tls
+
+    pilot:
+      k8s:
+        env:
+          - name: PILOT_TRACE_SAMPLING
+            value: "100"
+        resources:
+          requests:
+            cpu: 10m
+            memory: 100Mi
+
+  values:
+    global:
+      proxy:
+        resources:
+          requests:
+            cpu: 10m
+            memory: 40Mi
+
+    pilot:
+      autoscaleEnabled: false
+
+    gateways:
+      istio-egressgateway:
+        autoscaleEnabled: false
+      istio-ingressgateway:
+        autoscaleEnabled: false

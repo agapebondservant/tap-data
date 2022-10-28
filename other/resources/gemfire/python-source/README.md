@@ -36,7 +36,7 @@ watch kubectl get deployment -l dashboard
 
 #### Test Dashboard locally
 ```
-# pipenv lock
+rm -rf $(pipenv --venv)
 pipenv install
 pipenv shell
 python -m streamlit run app/dashboard.py 'primary' 'oracle'

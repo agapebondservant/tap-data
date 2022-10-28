@@ -23,6 +23,7 @@ pillow = "*"
 streamlit-autorefresh = "*"
 protobuf = "==3.19.5"
 fastapi = "*"
+faker = "*"
 modin = {extras = ["ray"], version = "*"}
 
 [dev-packages]
