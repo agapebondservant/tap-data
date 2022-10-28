@@ -84,7 +84,7 @@ file: ~/other/resources/gemfire/gemfire-istio-primary.yaml
 
 Deploy the Primary site with the Istio Gateway:
 ```execute
-sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/gemfire/gemfire-istio-primary.yaml && kubectl apply -f ~/other/resources/gemfire/gemfire-istio-primary.yaml -n {{ session_namespace }} && export ISTIO_INGRESS_HOST_PRIMARY=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].hostname}') &&  sed -i "s/PRIMARY_ISTIO_INGRESS_HOSTNAME/${ISTIO_INGRESS_HOST_PRIMARY}/g" ~/other/resources/gemfire/gemfire-cluster-with-gateway-sender-primary.yaml && export ISTIO_INGRESS_HOST_SECONDARY=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].hostname}' --kubeconfig=mykubeconfig)  && sed -i "s/#remote-locators:/remote-locators: $ISTIO_INGRESS_HOST_SECONDARY[10334]/g" ~/other/resources/gemfire/gemfire-cluster-with-gateway-sender-primary.yaml && kubectl apply -f ~/other/resources/gemfire/gemfire-cluster-with-gateway-sender-primary.yaml 
+(kubectl get secret kconfig -n default -o jsonpath="{.data.myfile}" | base64 --decode) > mykubeconfig; sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/gemfire/gemfire-istio-primary.yaml && kubectl apply -f ~/other/resources/gemfire/gemfire-istio-primary.yaml -n {{ session_namespace }} && export ISTIO_INGRESS_HOST_PRIMARY=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].hostname}') &&  sed -i "s/PRIMARY_ISTIO_INGRESS_HOSTNAME/${ISTIO_INGRESS_HOST_PRIMARY}/g" ~/other/resources/gemfire/gemfire-cluster-with-gateway-sender-primary.yaml && kubectl config use-context secondary-ctx --kubeconfig mykubeconfig; export ISTIO_INGRESS_HOST_SECONDARY=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].hostname}' --kubeconfig=mykubeconfig)  && sed -i "s/#remote-locators:/remote-locators: $ISTIO_INGRESS_HOST_SECONDARY[10334]/g" ~/other/resources/gemfire/gemfire-cluster-with-gateway-sender-primary.yaml; kubectl config use-context eduk8s; kubectl apply -f ~/other/resources/gemfire/gemfire-cluster-with-gateway-sender-primary.yaml 
 ```
 
 View the update:
@@ -114,22 +114,22 @@ file: ~/other/resources/gemfire/gemfire-cluster-with-gateway-receiver-secondary.
 
 Deploy the Secondary site. (<font color="red">NOTE: Click **Ctrl-C** after the locator and server nodes show up as Ready:</font>)
 ```execute
-(kubectl get secret kconfig -n default -o jsonpath="{.data.myfile}" | base64 --decode) > mykubeconfig; kubectl delete gemfirecluster gemfire0 -n {{session_namespace}} --kubeconfig=mykubeconfig || true; kubectl delete gateway --all -A --kubeconfig=mykubeconfig || true; kubectl delete virtualservice --all -A --kubeconfig=mykubeconfig || true; kubectl create ns {{session_namespace}} --kubeconfig mykubeconfig || true;  sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/gemfire/gemfire-istio-secondary.yaml && kubectl apply -f ~/other/resources/gemfire/gemfire-istio-secondary.yaml  --namespace={{session_namespace}} --kubeconfig=mykubeconfig;  kubectl create secret docker-registry image-pull-secret --namespace={{ session_namespace }} --docker-server=registry.pivotal.io --docker-username='{{ DATA_E2E_PIVOTAL_REGISTRY_USERNAME }}' --docker-password='{{ DATA_E2E_PIVOTAL_REGISTRY_PASSWORD }}' --dry-run -o yaml | kubectl apply --kubeconfig=mykubeconfig -f - && kubectl apply -f ~/other/resources/gemfire/gemfire-cluster-with-gateway-receiver-secondary.yaml --namespace={{session_namespace}} --kubeconfig=mykubeconfig; watch kubectl get pods -n {{session_namespace}} --kubeconfig=mykubeconfig
+kubectl config use-context secondary-ctx --kubeconfig mykubeconfig; kubectl delete gemfirecluster gemfire0 -n {{session_namespace}} --kubeconfig=mykubeconfig || true; kubectl delete gateway --all -A --kubeconfig=mykubeconfig || true; kubectl delete virtualservice --all -A --kubeconfig=mykubeconfig || true; kubectl create ns {{session_namespace}} --kubeconfig mykubeconfig || true;  sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/gemfire/gemfire-istio-secondary.yaml && kubectl apply -f ~/other/resources/gemfire/gemfire-istio-secondary.yaml  --namespace={{session_namespace}} --kubeconfig=mykubeconfig;  kubectl create secret docker-registry image-pull-secret --namespace={{ session_namespace }} --docker-server=registry.pivotal.io --docker-username='{{ DATA_E2E_PIVOTAL_REGISTRY_USERNAME }}' --docker-password='{{ DATA_E2E_PIVOTAL_REGISTRY_PASSWORD }}' --dry-run -o yaml | kubectl apply --kubeconfig=mykubeconfig -f - && kubectl apply -f ~/other/resources/gemfire/gemfire-cluster-with-gateway-receiver-secondary.yaml --namespace={{session_namespace}} --kubeconfig=mykubeconfig; watch kubectl get pods -n {{session_namespace}} --kubeconfig=mykubeconfig; kubectl config use-context eduk8s
 ```
 
 Create the **GatewayReceiver**:
 ```execute
-kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 --kubeconfig mykubeconfig -- gfsh -e connect -e "destroy gateway-receiver" || true; kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 --kubeconfig mykubeconfig -- gfsh -e connect -e "create gateway-receiver --start-port=13000 --end-port=14000 --hostname-for-senders=$ISTIO_INGRESS_HOST_SECONDARY" -e "set variable --name=APP_RESULT_VIEWER --value=90000"
+kubectl config use-context secondary-ctx --kubeconfig mykubeconfig; kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 --kubeconfig mykubeconfig -- gfsh -e connect -e "destroy gateway-receiver" || true; kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 --kubeconfig mykubeconfig -- gfsh -e connect -e "create gateway-receiver --start-port=13000 --end-port=14000 --hostname-for-senders=$ISTIO_INGRESS_HOST_SECONDARY" -e "set variable --name=APP_RESULT_VIEWER --value=90000"; kubectl config use-context eduk8s
 ```
 
 Show the list of configured gateways:
 ```execute
-kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 --kubeconfig mykubeconfig -- gfsh -e connect -e "set variable --name=APP_RESULT_VIEWER --value=90000" -e "list gateways"
+kubectl config use-context secondary-ctx --kubeconfig mykubeconfig; kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 --kubeconfig mykubeconfig -- gfsh -e connect -e "set variable --name=APP_RESULT_VIEWER --value=90000" -e "list gateways"; kubectl config use-context eduk8s
 ```
 
 Create a new region, *claims*, which will match the producing region on the sending side:
 ```execute
-kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 --kubeconfig mykubeconfig -- gfsh -e connect -e "create region --name=claims --type=PARTITION"
+kubectl config use-context secondary-ctx --kubeconfig mykubeconfig; kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 --kubeconfig mykubeconfig -- gfsh -e connect -e "create region --name=claims --type=PARTITION"; kubectl config use-context eduk8s
 ```
 
 #### Configure the Gateway Sender with up-to-date remote locator information 
@@ -173,12 +173,12 @@ kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 -- gfsh -e connec
 
 Similarly, build the **CacheListener** jar file for the **secondary** site and deploy to the secondary cluster:
 ```execute
-cd ~/other/resources/gemfire/java-source; ./mvnw -s settings.xml clean package -Ddemo.resources.dir=src/main/resources/secondary; cd ~kubectl cp ~/other/resources/gemfire/java-source/target/gemfire-multisite-poc-1.0-SNAPSHOT.jar  {{session_namespace}}/gemfire0-locator-0:/tmp --kubeconfig mykubeconfig; kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 --kubeconfig mykubeconfig -- gfsh -e connect -e "deploy --jars=/tmp/gemfire-multisite-poc-1.0-SNAPSHOT.jar"
+cd ~/other/resources/gemfire/java-source; ./mvnw -s settings.xml clean package -Ddemo.resources.dir=src/main/resources/secondary; cd ~kubectl cp ~/other/resources/gemfire/java-source/target/gemfire-multisite-poc-1.0-SNAPSHOT.jar  {{session_namespace}}/gemfire0-locator-0:/tmp --kubeconfig mykubeconfig; kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 --kubeconfig mykubeconfig -- gfsh -e connect -e "deploy --jars=/tmp/gemfire-multisite-poc-1.0-SNAPSHOT.jar"; kubectl config use-context eduk8s
 ```
 
 Register the **CacheListener** with the **claims** region in the **secondary** site:
 ```execute
-kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 --kubeconfig mykubeconfig -- gfsh -e connect -e "alter region --name=claims --cache-listener=com.vmware.multisite.SyncOracleCacheListener"
+kubectl config use-context secondary-ctx --kubeconfig mykubeconfig; kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 --kubeconfig mykubeconfig -- gfsh -e connect -e "alter region --name=claims --cache-listener=com.vmware.multisite.SyncOracleCacheListener"; kubectl config use-context eduk8s
 ```
 
 ### Gemfire and NoSQL
