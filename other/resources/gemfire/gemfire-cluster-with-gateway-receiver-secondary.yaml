@@ -15,6 +15,7 @@ spec:
       gemfireProperties:
         mcast-port: "0"
         distributed-system-id: "11"
+        bind-address: SECONDARY_ISTIO_INGRESS_HOSTNAME
         #log-level: "debug"
         #remote-locators:
   servers:
