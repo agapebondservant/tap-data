@@ -29,9 +29,6 @@ spec:
             # Note that AWS ELB will by default perform health checks on the first port
             # on this list. Setting this to the health check port will ensure that health
             # checks always work. https://github.com/istio/istio/issues/12503
-            - port: 53
-              targetPort: 53
-              name: dns-port
             - port: 15021
               targetPort: 15021
               name: status-port

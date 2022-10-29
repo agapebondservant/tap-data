@@ -35,13 +35,13 @@ spec:
       targetPort: 7070
   type: NodePort
 ---
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: kube-dns
-  namespace: kube-system
-data:
-  stubDomains: |
-    {
-      "YOUR_SESSION_NAMESPACE.svc.cluster.local": ["PRIMARY_ISTIO_INGRESS_HOSTNAME"]
-    }
+#apiVersion: v1
+#kind: ConfigMap
+#metadata:
+#  name: kube-dns
+#  namespace: kube-system
+#data:
+#  stubDomains: |
+#    {
+#      "YOUR_SESSION_NAMESPACE.svc.cluster.local": ["PRIMARY_ISTIO_INGRESS_HOSTNAME"]
+#    }
