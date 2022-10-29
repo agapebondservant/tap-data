@@ -199,7 +199,7 @@ spec:
         - port: 10334
       route:
         - destination:
-            host: gemfire0-locator-0.gemfire0-locator.YOUR_SESSION_NAMESPACE.svc.cluster.local
+            host: gemfire0-locator.YOUR_SESSION_NAMESPACE.svc.cluster.local
             port:
               number: 10334
     - match:
