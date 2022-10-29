@@ -1,4 +1,4 @@
-Now we will cover the following:
+xNow we will cover the following:
 
 ### Multi-Site Replication
 **Tanzu Gemfire** supports low-latency, consistent multi-site replication across geographically distributed data centers or regions.

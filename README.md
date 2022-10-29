@@ -397,14 +397,16 @@ kubectl create secret docker-registry app-image-pull-secret --namespace=gemfire-
 kubectl apply -f other/resources/gemfire/gemfire-cluster-with-gateway-receiver-ny.yaml -n gemfire-system
 ```   
 * Install Istio:
-(In primary cluster)
+- (In primary cluster)
 ```
 istio-1.13.2/bin/istioctl install --set profile=demo-tanzu --set installPackagePath=istio-1.13.2/manifests -y
 ```
-(In secondary cluster)
+- In the *Loadbalancer* created, add a new port 53 with an instance port that has not already been generated between 30000-32767.
+- (In secondary cluster)
 ```
 istio-1.13.2/bin/istioctl install --set profile=demo-tanzu --set installPackagePath=istio-1.13.2/manifests -y
 ```
+- In the *Loadbalancer* created, add a new port 53 with an instance port that has not already been generated between 30000-32767.
   
 * Generate kubeconfig for accessing secondary cluster: (Must install kubeseal: https://github.com/bitnami-labs/sealed-secrets)
 (On secondary cluster:)
