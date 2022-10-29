@@ -50,6 +50,26 @@ spec:
       protocol: TCP
   type: ClusterIP
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+  labels:
+    k8s-app: kube-dns
+  name: kube-dns-lb
+  namespace: kube-system
+spec:
+  ports:
+    - name: dns
+      port: 53
+      protocol: UDP
+      targetPort: 53
+      nodePort: 32000
+  selector:
+    k8s-app: kube-dns
+  sessionAffinity: None
+  type: NodePort
+---
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
@@ -86,6 +106,12 @@ spec:
         number: 1099
         protocol: TCP
         name: tcp-gemfire-jmx
+      hosts:
+        - "*"
+    - port:
+        number: 32000
+        protocol: UDP
+        name: tcp-dns
       hosts:
         - "*"
     # Exposed ports for Gemfire Gateway Receiver
@@ -197,6 +223,13 @@ spec:
             host: gemfire0-locator-0-svc.YOUR_SESSION_NAMESPACE.svc.cluster.local
             port:
               number: 1099
+    - match:
+        - port: 53
+      route:
+        - destination:
+            host: kube-dns-lb
+            port:
+              number: 32000
     # Exposed ports for Gemfire Gateway Receiver
     - match:
         - port: 13000
