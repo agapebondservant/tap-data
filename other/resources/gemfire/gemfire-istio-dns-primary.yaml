@@ -18,3 +18,14 @@ spec:
     k8s-app: kube-dns
   sessionAffinity: None
   type: NodePort
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kube-dns
+  namespace: kube-system
+data:
+  stubDomains: |
+    {
+      "YOUR_SESSION_NAMESPACE-remote.svc.cluster.local": ["SECONDARY_ISTIO_INGRESS_HOSTNAME"]
+    }
