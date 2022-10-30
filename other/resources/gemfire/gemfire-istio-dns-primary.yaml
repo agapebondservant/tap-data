@@ -7,5 +7,5 @@ metadata:
 data:
   stubDomains: |
     {
-      "YOUR_SESSION_NAMESPACE-remote.svc.cluster.local": ["SECONDARY_ISTIO_INGRESS_HOSTNAME"]
+      "gemfire-remote.svc.cluster.local": ["SECONDARY_ISTIO_INGRESS_HOSTNAME"]
     }

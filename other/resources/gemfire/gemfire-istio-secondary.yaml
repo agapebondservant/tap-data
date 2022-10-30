@@ -147,7 +147,7 @@ spec:
             prefix: /gemfire-api/
       route:
         - destination:
-            host: gemfire0remote-dev-api.YOUR_SESSION_NAMESPACE-remote.svc.cluster.local
+            host: gemfire0remote-dev-api.gemfire-remote.svc.cluster.local
             port:
               number: 7070
     - match:
@@ -155,7 +155,7 @@ spec:
             prefix: /gemfire/
       route:
         - destination:
-            host: gemfire0remote-locator-0-svc.YOUR_SESSION_NAMESPACE-remote.svc.cluster.local
+            host: gemfire0remote-locator-0-svc.gemfire-remote.svc.cluster.local
             port:
               number: 7070
     - match:
@@ -163,7 +163,7 @@ spec:
             prefix: /management/
       route:
         - destination:
-            host: gemfire0remote-locator-0-svc.YOUR_SESSION_NAMESPACE-remote.svc.cluster.local
+            host: gemfire0remote-locator-0-svc.gemfire-remote.svc.cluster.local
             port:
               number: 7070
     - match:
@@ -171,7 +171,7 @@ spec:
             prefix: /pulse/
       route:
         - destination:
-            host: gemfire0remote-locator-0-svc.YOUR_SESSION_NAMESPACE-remote.svc.cluster.local
+            host: gemfire0remote-locator-0-svc.gemfire-remote.svc.cluster.local
             port:
               number: 7070
   tcp:
@@ -179,28 +179,28 @@ spec:
         - port: 10334
       route:
         - destination:
-            host: gemfire0remote-locator.YOUR_SESSION_NAMESPACE-remote.svc.cluster.local
+            host: gemfire0remote-locator.gemfire-remote.svc.cluster.local
             port:
               number: 10334
     - match:
         - port: 40404
       route:
         - destination:
-            host: gemfire0remote-server.YOUR_SESSION_NAMESPACE-remote.svc.cluster.local
+            host: gemfire0remote-server.gemfire-remote.svc.cluster.local
             port:
               number: 40404
     - match:
         - port: 4321
       route:
         - destination:
-            host: gemfire0remote-server.YOUR_SESSION_NAMESPACE-remote.svc.cluster.local
+            host: gemfire0remote-server.gemfire-remote.svc.cluster.local
             port:
               number: 4321
     - match:
         - port: 1099
       route:
         - destination:
-            host: gemfire0remote-locator-0-svc.YOUR_SESSION_NAMESPACE-remote.svc.cluster.local
+            host: gemfire0remote-locator-0-svc.gemfire-remote.svc.cluster.local
             port:
               number: 1099
     - match:
@@ -215,41 +215,41 @@ spec:
         - port: 13000
       route:
         - destination:
-            host: gemfire0remote-server-0-svc.YOUR_SESSION_NAMESPACE-remote.svc.cluster.local
+            host: gemfire0remote-server-0-svc.gemfire-remote.svc.cluster.local
             port:
               number: 13000
     - match:
         - port: 13001
       route:
         - destination:
-            host: gemfire0remote-server-0-svc.YOUR_SESSION_NAMESPACE-remote.svc.cluster.local
+            host: gemfire0remote-server-0-svc.gemfire-remote.svc.cluster.local
             port:
               number: 13001
     - match:
         - port: 13002
       route:
         - destination:
-            host: gemfire0remote-server-0-svc.YOUR_SESSION_NAMESPACE-remote.svc.cluster.local
+            host: gemfire0remote-server-0-svc.gemfire-remote.svc.cluster.local
             port:
               number: 13002
     - match:
         - port: 13003
       route:
         - destination:
-            host: gemfire0remote-server-0-svc.YOUR_SESSION_NAMESPACE-remote.svc.cluster.local
+            host: gemfire0remote-server-0-svc.gemfire-remote.svc.cluster.local
             port:
               number: 13003
     - match:
         - port: 13004
       route:
         - destination:
-            host: gemfire0remote-server-0-svc.YOUR_SESSION_NAMESPACE-remote.svc.cluster.local
+            host: gemfire0remote-server-0-svc.gemfire-remote.svc.cluster.local
             port:
               number: 13004
     - match:
         - port: 13005
       route:
         - destination:
-            host: gemfire0remote-server-0-svc.YOUR_SESSION_NAMESPACE-remote.svc.cluster.local
+            host: gemfire0remote-server-0-svc.gemfire-remote.svc.cluster.local
             port:
               number: 13005
