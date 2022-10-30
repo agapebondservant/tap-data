@@ -13,11 +13,10 @@ spec:
       port: 53
       protocol: UDP
       targetPort: 53
-      nodePort: 32000
   selector:
     k8s-app: kube-dns
   sessionAffinity: None
-  type: NodePort
+  type: LoadBalancer
 ---
 apiVersion: v1
 kind: ConfigMap
