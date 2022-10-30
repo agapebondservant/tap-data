@@ -119,34 +119,34 @@ kubectl config use-context secondary-ctx --kubeconfig mykubeconfig; kubectl dele
 
 Create the **GatewayReceiver**:
 ```execute
-kubectl config use-context secondary-ctx --kubeconfig mykubeconfig; kubectl -n {{ session_namespace }} exec -it gemfire0remote-locator-0 --kubeconfig mykubeconfig -- gfsh -e connect -e "destroy gateway-receiver" || true; kubectl -n {{ session_namespace }} exec -it gemfire0remote-locator-0 --kubeconfig mykubeconfig -- gfsh -e connect -e "create gateway-receiver --start-port=13000 --end-port=13005 --hostname-for-senders=$ISTIO_INGRESS_HOST_SECONDARY" -e "set variable --name=APP_RESULT_VIEWER --value=90000"; kubectl config use-context eduk8s
+kubectl config use-context secondary-ctx --kubeconfig mykubeconfig; kubectl -n {{ session_namespace }} exec -it gemfire0remote-locator-0 --kubeconfig mykubeconfig -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_SECONDARY:7070/gemfire/v1" -e "destroy gateway-receiver" || true; kubectl -n {{ session_namespace }} exec -it gemfire0remote-locator-0 --kubeconfig mykubeconfig -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_SECONDARY:7070/gemfire/v1" -e "create gateway-receiver --start-port=13000 --end-port=13005 --hostname-for-senders=$ISTIO_INGRESS_HOST_SECONDARY" -e "set variable --name=APP_RESULT_VIEWER --value=90000"; kubectl config use-context eduk8s
 ```
 
 Show the list of configured gateways:
 ```execute
-kubectl config use-context secondary-ctx --kubeconfig mykubeconfig; kubectl -n {{ session_namespace }} exec -it gemfire0remote-locator-0 --kubeconfig mykubeconfig -- gfsh -e connect -e "set variable --name=APP_RESULT_VIEWER --value=90000" -e "list gateways"; kubectl config use-context eduk8s
+kubectl config use-context secondary-ctx --kubeconfig mykubeconfig; kubectl -n {{ session_namespace }} exec -it gemfire0remote-locator-0 --kubeconfig mykubeconfig -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_SECONDARY:7070/gemfire/v1" -e "set variable --name=APP_RESULT_VIEWER --value=90000" -e "list gateways"; kubectl config use-context eduk8s
 ```
 
 Create a new region, *claims*, which will match the producing region on the sending side:
 ```execute
-kubectl config use-context secondary-ctx --kubeconfig mykubeconfig; kubectl -n {{ session_namespace }} exec -it gemfire0remote-locator-0 --kubeconfig mykubeconfig -- gfsh -e connect -e "create region --name=claims --type=PARTITION"; kubectl config use-context eduk8s
+kubectl config use-context secondary-ctx --kubeconfig mykubeconfig; kubectl -n {{ session_namespace }} exec -it gemfire0remote-locator-0 --kubeconfig mykubeconfig -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_SECONDARY:7070/gemfire/v1" -e "create region --name=claims --type=PARTITION"; kubectl config use-context eduk8s
 ```
 
 #### Configure the Gateway Sender with up-to-date remote locator information 
 #### **NOTE: as a best practice, should start after Gateway Receiver**
 Configure the **GatewaySender** in the **Primary** site:
 ```execute
-kubectl -n {{ session_namespace }} exec -it gemfire0remote-locator-0 -- gfsh -e connect -e "create gateway-sender --id=sender1 --parallel=true --remote-distributed-system-id=2"
+kubectl -n {{ session_namespace }} exec -it gemfire0remote-locator-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "create gateway-sender --id=sender1 --parallel=true --remote-distributed-system-id=11"
 ```
 
 Create a new region, *claims*, which will stream events to the GatewaySender's queue:
 ```execute
-kubectl -n {{ session_namespace }} exec -it gemfire0remote-locator-0 -- gfsh -e connect -e "create region --name=claims --type=PARTITION --gateway-sender-id=sender1"
+kubectl -n {{ session_namespace }} exec -it gemfire0remote-locator-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "create region --name=claims --type=PARTITION --gateway-sender-id=sender1"
 ```
 
 Show the list of configured gateways:
 ```execute
-kubectl -n {{ session_namespace }} exec -it gemfire0remote-locator-0 -- gfsh -e connect -e "set variable --name=APP_RESULT_VIEWER --value=90000" -e "list gateways"
+kubectl -n {{ session_namespace }} exec -it gemfire0remote-locator-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "set variable --name=APP_RESULT_VIEWER --value=90000" -e "list gateways"
 ```
 
 #### Deploy the CacheListener for Oracle Write-Through

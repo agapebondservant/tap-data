@@ -11,11 +11,10 @@ spec:
     overrides:
       jvmOptions:
         - "-Dgemfire.conserve-sockets=false"
-        #- "-Dgemfire.jmx-manager-hostname-for-clients=PRIMARY_ISTIO_INGRESS_HOSTNAME"
+        - "-Dgemfire.jmx-manager-hostname-for-clients=PRIMARY_ISTIO_INGRESS_HOSTNAME"
       gemfireProperties:
         mcast-port: "0"
         distributed-system-id: "10"
-        bind-address: SECONDARY_ISTIO_INGRESS_HOSTNAME
         #log-level: "debug"
         #remote-locators:
   servers:
