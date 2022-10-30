@@ -14,7 +14,7 @@ spec:
         - "-Dgemfire.jmx-manager-hostname-for-clients=SECONDARY_ISTIO_INGRESS_HOSTNAME"
       gemfireProperties:
         mcast-port: "0"
-        distributed-system-id: "11"
+        distributed-system-id: "21"
         #log-level: "debug"
         #remote-locators:
   servers:
