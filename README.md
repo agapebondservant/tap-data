@@ -396,6 +396,11 @@ kubectl apply -f resources/cert-manager-issuer.yaml
 kubectl create secret docker-registry app-image-pull-secret --namespace=gemfire-system --docker-server=registry.pivotal.io --docker-username="$DATA_E2E_REGISTRY_USERNAME" --docker-password="$DATA_E2E_REGISTRY_PASSWORD" --dry-run -o yaml | kubectl apply -f -
 kubectl apply -f other/resources/gemfire/gemfire-cluster-with-gateway-receiver-ny.yaml -n gemfire-system
 ```   
+* Install AWS LoadBalancer Controller:
+```
+helm repo add eks https://aws.github.io/eks-charts
+```
+
 * Install Istio:
 - (In primary cluster)
 ```

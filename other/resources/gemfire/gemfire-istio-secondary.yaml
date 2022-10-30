@@ -90,7 +90,7 @@ spec:
         - "*"
     - port:
         number: 32000
-        protocol: UDP
+        protocol: TCP
         name: tcp-dns
       hosts:
         - "*"
@@ -209,7 +209,7 @@ spec:
         - destination:
             host: kube-dns-lb
             port:
-              number: 53
+              number: 32000
     # Exposed ports for Gemfire Gateway Receiver
     - match:
         - port: 13000

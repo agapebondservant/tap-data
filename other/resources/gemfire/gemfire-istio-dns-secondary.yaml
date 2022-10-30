@@ -11,7 +11,7 @@ spec:
   ports:
     - name: dns
       port: 53
-      protocol: UDP
+      protocol: TCP
       targetPort: 53
   selector:
     k8s-app: kube-dns
