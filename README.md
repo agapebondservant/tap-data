@@ -121,6 +121,11 @@ kubectl apply -f resources/cert-manager-issuer.yaml
 kubectl apply -f https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.17.4/controller.yaml
 ```
 
+* Expose Kube-DNS service:
+```
+kubectl apply -f resources/kube-dns.yaml
+```
+
 * Install Istio: (used by Multi-site workshops, Gemfire workshops)
 ```
 istio-1.13.2/bin/istioctl install --set profile=demo -y; 
@@ -396,9 +401,10 @@ kubectl apply -f resources/cert-manager-issuer.yaml
 kubectl create secret docker-registry app-image-pull-secret --namespace=gemfire-system --docker-server=registry.pivotal.io --docker-username="$DATA_E2E_REGISTRY_USERNAME" --docker-password="$DATA_E2E_REGISTRY_PASSWORD" --dry-run -o yaml | kubectl apply -f -
 kubectl apply -f other/resources/gemfire/gemfire-cluster-with-gateway-receiver-ny.yaml -n gemfire-system
 ```   
-* Install AWS LoadBalancer Controller:
+
+* Expose Kube-DNS service:
 ```
-helm repo add eks https://aws.github.io/eks-charts
+kubectl apply -f resources/kube-dns.yaml
 ```
 
 * Install Istio:
