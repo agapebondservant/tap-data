@@ -80,7 +80,7 @@ kubectl config use-context secondary-ctx --kubeconfig mykubeconfig; kubectl -n g
 #### **NOTE: as a best practice, should start after Gateway Receiver**
 Configure the **GatewaySender** in the **Primary** site:
 ```execute
-kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "create gateway-sender --id=sender1 --parallel=true --remote-distributed-system-id=11"
+kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "create gateway-sender --id=sender1 --parallel=true --remote-distributed-system-id=21"
 ```
 
 Create a new region, *claims*, which will stream events to the GatewaySender's queue:
