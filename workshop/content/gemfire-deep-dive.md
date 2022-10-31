@@ -119,7 +119,7 @@ kubectl config use-context secondary-ctx --kubeconfig mykubeconfig; kubectl dele
 
 Create the **GatewayReceiver**:
 ```execute
-kubectl config use-context secondary-ctx --kubeconfig mykubeconfig; kubectl -n gemfire-remote exec -it gemfire0remote-locator-0 --kubeconfig mykubeconfig -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_SECONDARY:7070/gemfire/v1" -e "destroy gateway-receiver" || true; kubectl -n gemfire-remote exec -it gemfire0remote-locator-0 --kubeconfig mykubeconfig -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_SECONDARY:7070/gemfire/v1" -e "create gateway-receiver --start-port=13000 --end-port=13005 --hostname-for-senders=gemfire0remote-server.gemfire-remote.svc.cluster.local" -e "set variable --name=APP_RESULT_VIEWER --value=900000"; kubectl config use-context eduk8s
+kubectl config use-context secondary-ctx --kubeconfig mykubeconfig; kubectl -n gemfire-remote exec -it gemfire0remote-locator-0 --kubeconfig mykubeconfig -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_SECONDARY:7070/gemfire/v1" -e "destroy gateway-receiver" || true; kubectl -n gemfire-remote exec -it gemfire0remote-locator-0 --kubeconfig mykubeconfig -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_SECONDARY:7070/gemfire/v1" -e "create gateway-receiver --start-port=13000 --end-port=13005 --hostname-for-senders=$ISTIO_INGRESS_HOST_SECONDARY" -e "set variable --name=APP_RESULT_VIEWER --value=900000"; kubectl config use-context eduk8s
 ```
 
 Show the list of configured gateways:

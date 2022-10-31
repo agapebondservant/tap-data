@@ -11,8 +11,8 @@ spec:
     overrides:
       jvmOptions:
         - "-Dgemfire.conserve-sockets=false"
-        #- "-Dgemfire.jmx-manager-hostname-for-clients=SECONDARY_ISTIO_INGRESS_HOSTNAME"
-        - "-Dgemfire.jmx-manager-hostname-for-clients=gemfire0remote-server.gemfire-remote.svc.cluster.local"
+        - "-Dgemfire.jmx-manager-hostname-for-clients=SECONDARY_ISTIO_INGRESS_HOSTNAME"
+        #- "-Dgemfire.jmx-manager-hostname-for-clients=gemfire0remote-server.gemfire-remote.svc.cluster.local"
       gemfireProperties:
         mcast-port: "0"
         distributed-system-id: "21"
