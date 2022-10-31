@@ -37,6 +37,8 @@ modules:
       name: Anomaly Detection with RabbitMQ pipelines
     deploy-operatorui:
       name: Using the Operator UI
+    gemfire-wan-replication:
+      name: WAN Replication with Gemfire
 config:
     vars:
     - name: DATA_E2E_REGISTRY_USERNAME

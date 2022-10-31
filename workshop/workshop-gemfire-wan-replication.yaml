@@ -1,0 +1,5 @@
+name: Tanzu Gemfire - Kubernetes Deep Dive
+
+modules:
+    activate:
+    - gemfire-wan-replication

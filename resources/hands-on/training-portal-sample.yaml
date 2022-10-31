@@ -1,10 +1,10 @@
 apiVersion: learningcenter.tanzu.vmware.com/v1beta1
 kind: TrainingPortal
 metadata:
-  name: capitalgroup
+  name: wi-doj
 spec:
   workshops:
-  - name: data-rabbitmq-commercial-features
+  - name: data-gemfire-wan-replication
     capacity: 5
     expires: 120m
     orphaned: 5m
