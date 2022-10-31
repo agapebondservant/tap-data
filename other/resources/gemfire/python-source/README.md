@@ -41,3 +41,8 @@ pipenv install
 pipenv shell
 python -m streamlit run app/dashboard.py 'primary' 'oracle'
 ```
+
+#### Sample Test Gemfire Adhoc query
+```
+python -m app.random_claim_generator -1 -1 http://35.227.104.221:7070/gemfire-api/v1/claims
+```
