@@ -206,3 +206,4 @@ other/resources/gemfire/python-source/app/config.py
 other/resources/gemfire/java-source/src/main/resources/primary/db.properties
 other/resources/gemfire/java-source/src/main/resources/secondary/db.properties
 other/resources/gemfire/python-source/app/__pycache__/
+other/resources/gemfire/java-source/target/
