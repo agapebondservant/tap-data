@@ -31,11 +31,16 @@ public class SyncOracleCacheAsyncListener implements AsyncEventListener {
             Region region = event.getRegion();
             Object value = region.get(event.getKey());
 
+            LOG.error("{} :: {} :: {}", op, region, value);
+
             if (op.isCreate()) {
+                LOG.error("In create...");
                 DataSourceUtils.executeInsertQuery(RUNNER, (PdxInstance)value);
             } else if (op.isUpdate()) {
+                LOG.error("In update...");
                 DataSourceUtils.executeUpdateQuery(RUNNER, (PdxInstance)value);
             } else if (op.isDestroy()) {
+                LOG.error("In delete...");
                 DataSourceUtils.executeDeleteQuery(RUNNER, (PdxInstance)event.getKey());
             }
 
