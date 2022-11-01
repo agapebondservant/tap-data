@@ -207,3 +207,4 @@ other/resources/gemfire/java-source/src/main/resources/primary/db.properties
 other/resources/gemfire/java-source/src/main/resources/secondary/db.properties
 other/resources/gemfire/python-source/app/__pycache__/
 other/resources/gemfire/java-source/target/
+/Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/gemfire/java-source/target/classes/db.properties

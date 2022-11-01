@@ -112,7 +112,7 @@ after: 19
 
 Build the **CacheAsyncListener** jar file for the **primary** site, and deploy it to the primary cluster:
 ```execute
-cd ~/other/resources/gemfire/java-source; ./mvnw -s settings.xml clean dependency:copy-dependencies -DoutputDirectory=target/lib -DexcludeGroupIds=io.pivotal.gemfire package -Ddemo.resources.dir=src/main/resources/primary; cd -; kubectl cp ~/other/resources/gemfire/java-source/target/lib  gemfire-remote/gemfire0remote-locator-0:/tmp; kubectl cp ~/other/resources/gemfire/java-source/target/gemfire-multisite-poc-1.0-SNAPSHOT.jar  gemfire-remote/gemfire0remote-locator-0:/tmp/lib; kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "deploy --jars=/tmp/lib"
+cd ~/other/resources/gemfire/java-source; ./mvnw -s settings.xml clean dependency:copy-dependencies -DoutputDirectory=target/lib -DexcludeGroupIds=io.pivotal.gemfire package -Ddemo.resources.dir=src/main/resources/primary; cd -; kubectl cp ~/other/resources/gemfire/java-source/target/lib  {{ session_namespace }}/gemfire0-locator-0:/tmp; kubectl cp ~/other/resources/gemfire/java-source/target/gemfire-multisite-poc-1.0-SNAPSHOT.jar  {{ session_namespace }}/gemfire0-locator-0:/tmp/lib; kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "deploy --jars=/tmp/lib"
 ```
 
 After adding the **CacheAsyncListener** to the cluster's classpath, let's create an **async queue** - the listener will process events from this queue:
