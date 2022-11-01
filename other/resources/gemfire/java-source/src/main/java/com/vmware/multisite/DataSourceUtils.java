@@ -12,8 +12,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
-import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLException;
+import java.util.Properties;
 
 public class DataSourceUtils {
 
@@ -126,5 +128,25 @@ public class DataSourceUtils {
             log.info(ExceptionUtils.getStackTrace(e));
             return false;
         }
+    }
+
+    static final Properties loadProperties(String propertiesFile) {
+
+        Properties prop = new Properties();
+
+        try (InputStream input = DataSourceUtils.class.getClassLoader().getResourceAsStream(propertiesFile)) {
+
+            if (input == null) {
+                log.error("Unable to find {}", propertiesFile);
+                return prop;
+            }
+
+            prop.load(input);
+
+        } catch (IOException ex) {
+            log.error(ExceptionUtils.getStackTrace(ex));
+        }
+
+        return prop;
     }
 }

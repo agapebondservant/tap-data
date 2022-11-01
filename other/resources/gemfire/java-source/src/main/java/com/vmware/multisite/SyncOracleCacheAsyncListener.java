@@ -34,9 +34,9 @@ public class SyncOracleCacheAsyncListener implements AsyncEventListener {
             if (op.isCreate()) {
                 DataSourceUtils.executeInsertQuery(RUNNER, (PdxInstance)value);
             } else if (op.isUpdate()) {
-                DataSourceUtils.executeDeleteQuery(RUNNER, (PdxInstance)event.getKey());
-            } else if (op.isDestroy()) {
                 DataSourceUtils.executeUpdateQuery(RUNNER, (PdxInstance)value);
+            } else if (op.isDestroy()) {
+                DataSourceUtils.executeDeleteQuery(RUNNER, (PdxInstance)event.getKey());
             }
 
         }
