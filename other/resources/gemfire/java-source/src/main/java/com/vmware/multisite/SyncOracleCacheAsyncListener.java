@@ -2,6 +2,7 @@ package com.vmware.multisite;
 
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.geode.cache.Operation;
+import org.apache.geode.cache.Region;
 import org.apache.geode.cache.asyncqueue.AsyncEvent;
 import org.apache.geode.cache.asyncqueue.AsyncEventListener;
 import org.apache.geode.pdx.PdxInstance;
@@ -27,13 +28,15 @@ public class SyncOracleCacheAsyncListener implements AsyncEventListener {
             AsyncEvent event = (AsyncEvent) i.next();
 
             final Operation op = event.getOperation();
+            Region region = event.getRegion();
+            Object value = region.get(event.getKey());
 
             if (op.isCreate()) {
-                DataSourceUtils.executeInsertQuery(RUNNER, (PdxInstance)event.getDeserializedValue());
+                DataSourceUtils.executeInsertQuery(RUNNER, (PdxInstance)value);
             } else if (op.isUpdate()) {
-                DataSourceUtils.executeDeleteQuery(RUNNER, (PdxInstance)event.getDeserializedValue());
+                DataSourceUtils.executeDeleteQuery(RUNNER, (PdxInstance)event.getKey());
             } else if (op.isDestroy()) {
-                DataSourceUtils.executeUpdateQuery(RUNNER, (PdxInstance)event.getDeserializedValue());
+                DataSourceUtils.executeUpdateQuery(RUNNER, (PdxInstance)value);
             }
 
         }
