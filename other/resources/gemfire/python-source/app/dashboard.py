@@ -10,15 +10,13 @@ import config
 import sys
 import requests
 from sqlalchemy.engine import create_engine
+import json
 
 # Initializations
 st.set_option('deprecation.showPyplotGlobalUse', False)
-gemfire_url = f"http://{os.environ['STREAMLIT_ISTIO_INGRESS_HOST_' + sys.argv[1].upper()]}:7070/gemfire-api/v1/claims"
-top10query = "select * from /claims c limit 10"
+top1000query = "select * from /claims c limit 1000"
 totalPrimaryCountQuery = "select count(*) from /claims c where c.region = 'primary'"
 totalSecondaryCountQuery = "select count(*) from /claims c where c.region = 'secondary'"
-print(getattr(config, sys.argv[1])[sys.argv[2]])
-engine = create_engine(getattr(config, sys.argv[1])[sys.argv[2]])
 
 st.write("""
 <style>
@@ -40,9 +38,18 @@ html, body, [class*="css"]{
 }
 .oracle {
   background: url('https://raw.githubusercontent.com/agapebondservant/tanzu-realtime-anomaly-detetction/main/assets/oracle.png') no-repeat right;
+  background-size: 150px;
+  width: 150px;
+  height: 100px;
 }
 .mysql {
   background: url('https://raw.githubusercontent.com/agapebondservant/tanzu-realtime-anomaly-detetction/main/assets/mysql.png') no-repeat right;
+  background-size: 150px;
+  width: 150px;
+  height: 100px;
+}
+.user-site {
+  font-size: 1.6em;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -51,43 +58,59 @@ st.header('Realtime Dashboard')
 
 st.text('Showcases WAN Replication with VMware Gemfire')
 
-st.markdown(f"<div class='{sys.argv[2]}'>&nbsp;</div><div>{sys.argv[2]}</div>", unsafe_allow_html=True)
-
 # Tables
 # base_key = time.time()
 
 if 'msg_rate' not in st.session_state:
     st.session_state['msg_rate'] = 1000
 
-logging.info("Refreshing dashboard...")
+tab1, tab2 = st.tabs(["Oracle", "MySQL"])
 
-st.number_input('Message Rate', '''''', key='msg_rate', format='%i')
 
-st.markdown("<div class='blinking'>&nbsp;</div>", unsafe_allow_html=True)
+def show_counts():
+    logging.info("Refreshing dashboard...")
 
-# subprocess.call(f"random_claim_generator {int(st.session_state['msg_rate'])} -1 {gemfire_url}")
+    lb_url = os.environ[f"{sys.argv[1].upper()}_URL"]
 
-data = requests.get(f"{gemfire_url}/queries/adhoc'", params={"q": top10query}).json()
+    sticky_bit = requests.get(f"{lb_url}:7070/gemfire_api/v1/sticky/bit").text() or 'PRIMARY_URL'
 
-totalPrimary = requests.get(f"{gemfire_url}/queries/adhoc'", params={"q": totalPrimaryCountQuery}).text
+    gemfire_url = f"http://{os.environ[sticky_bit]}:7070/gemfire-api/v1"
 
-totalSecondary = requests.get(f"{gemfire_url}/queries/adhoc'", params={"q": totalSecondaryCountQuery}).text
+    print(f'URL: {gemfire_url}')
 
-logging.info(f"Top 10:\n{data}\nTotal Primary:\n{totalPrimary}\nTotal Secondary:\n{totalSecondary}")
+    st.markdown("<div class='blinking'>&nbsp;</div>", unsafe_allow_html=True)
 
-col1, col2 = st.columns()
+    # data = requests.get(f"{gemfire_url}/claims", params={"q": top1000query}).json()
 
-col1.metric("Total Primary", np.random.randint(100, 1000))
+    total_primary = requests.get(f"{gemfire_url}/queries/adhoc", params={"q": totalPrimaryCountQuery}).text
 
-col2.metric("Total Secondary", np.random.randint(100, 1000))
+    total_secondary = requests.get(f"{gemfire_url}/queries/adhoc", params={"q": totalSecondaryCountQuery}).text
 
-# df = pd.DataFrame(np.random.randn(50, 5), columns=data.keys())
+    logging.info(f"\nTotal Primary:\n{total_primary}\nTotal Secondary:\n{total_secondary}")
 
-# df = pd.DataFrame(np.random.randn(50, 5), columns=['Claim ID', 'Name', 'Address', 'Date', 'Region'])
+    col1, col2 = st.columns(2)
 
-df = pd.read_sql_query('SELECT * FROM claims', engine)
+    col1.metric("Total Primary", total_primary)
 
-st.dataframe(df)
+    col2.metric("Total Secondary", total_secondary)
+
+    # df = pd.json_normalize(data)
+
+    # st.dataframe(df)
+
+
+with tab1:
+    st.markdown(
+        f"<div class='oracle'>&nbsp;</div><div class='user-site'>User Site: <font color=blue>{sys.argv[1]}</font></div>",
+        unsafe_allow_html=True)
+
+    show_counts()
+
+with tab2:
+    st.markdown(
+        f"<div class='mysql'>&nbsp;</div><div class='user-site'>User Site: <font color=blue>{sys.argv[1]}</font></div>",
+        unsafe_allow_html=True)
+    show_counts()
 
 # Refresh the screen at a configured interval
 st_autorefresh(interval=5 * 1000, key="refresher")

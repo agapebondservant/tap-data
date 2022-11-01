@@ -20,4 +20,4 @@ protobuf==3.19.5
 fastapi
 faker
 modin[ray]
-cx_oracle
+cx_Oracle

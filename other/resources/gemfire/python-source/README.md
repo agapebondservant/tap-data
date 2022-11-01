@@ -14,21 +14,20 @@ python -m streamlit run app/dashboard.py --logger.level=info
 
 ### Build Docker Containers for Apps
 ```
-docker build -t oawofolu/demo-dashboard other/resources/gemfire/python-source
+docker build -t oawofolu/demo-dashboard .
 docker push oawofolu/demo-dashboard
 ```
 
+#### Install Oracle Client Libraries
+https://www.oracle.com/database/technologies/instant-client/macos-intel-x86-downloads.html
+
 ### Deploy Apps to Kubernetes
 ```
-kubectl create deployment oracle-primary-dashboard -l dashboard=oracle --image=oawofolu/demo-dashboard  -- streamlit run app/dashboard.py primary oracle
-kubectl expose deployment oracle-primary-dashboard --port=8080 --target-port=8501 --name=oracle-primary-dashboard-svc --type=LoadBalancer
-kubectl create deployment oracle-secondary-dashboard -l dashboard=oracle --image=oawofolu/demo-dashboard  -- streamlit run app/dashboard.py secondary oracle
-kubectl expose deployment oracle-secondary-dashboard --port=8080 --target-port=8501 --name=oracle-secondary-dashboard-svc --type=LoadBalancer
+kubectl create deployment primary-dashboard -l dashboard=primary --image=oawofolu/demo-dashboard  -- streamlit run app/dashboard.py primary --logger.level=info
+kubectl expose deployment primary-dashboard --port=8080 --target-port=8501 --name=primary-dashboard-svc --type=LoadBalancer
+kubectl create deployment secondary-dashboard -l dashboard=secondary --image=oawofolu/demo-dashboard  -- streamlit run app/dashboard.py secondary --logger.level=info
+kubectl expose deployment secondary-dashboard --port=8080 --target-port=8501 --name=secondary-dashboard-svc --type=LoadBalaner
 
-kubectl create deployment mysql-primary-dashboard -l dashboard=mysql --image=oawofolu/demo-dashboard  -- streamlit run app/dashboard.py primary mysql
-kubectl expose deployment mysql-primary-dashboard --port=8080 --target-port=8501 --name=mysql-primary-dashboard-svc --type=LoadBalancer
-kubectl create deployment mysql-secondary-dashboard -l dashboard=mysql --image=oawofolu/demo-dashboard  -- streamlit run app/dashboard.py secondary mysql
-kubectl expose deployment mysql-secondary-dashboard --port=8080 --target-port=8501 --name=mysql-secondary-dashboard-svc --type=LoadBalancer
 
 watch kubectl get deployment -l dashboard
 # (NOTE: If on AWS, change the timeout settings for the LoadBalancers to 3600)
@@ -37,9 +36,10 @@ watch kubectl get deployment -l dashboard
 #### Test Dashboard locally
 ```
 rm -rf $(pipenv --venv)
+python3 -m pip install cx_Oracle --upgrade --user
 pipenv install
 pipenv shell
-python -m streamlit run app/dashboard.py 'primary' 'oracle'
+ISTIO_HOST=35.227.104.221 python -m streamlit run app/dashboard.py 'primary'
 ```
 
 #### Sample Test Gemfire Adhoc query

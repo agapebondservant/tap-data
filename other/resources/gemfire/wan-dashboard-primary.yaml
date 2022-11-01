@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+  labels:
+    app: primary-dashboard
+  name: primary-dashboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: primary-dashboard
+  template:
+    metadata:
+      labels:
+        app: primary-dashboard
+    spec:
+      containers:
+      - env:
+        - name: PRIMARY_URL
+          value: PRIMARY_ISTIO_INGRESS_HOSTNAME
+        - name: SECONDARY_URL
+          value: SECONDARY_ISTIO_INGRESS_HOSTNAME
+      - command:
+        - streamlit
+        - run
+        - app/dashboard.py
+        - primary
+        - --logger.level=info
+        image: oawofolu/demo-dashboard
+        imagePullPolicy: Always
+        name: streamlit
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: primary-dashboard-svc
+spec:
+  selector:
+    app: primary-dashboard
+  ports:
+    - name: rest-api
+      port: 8080
+      targetPort: 8051
+  type: LoadBalancer
+
+

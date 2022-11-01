@@ -28,25 +28,25 @@ cities = ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix', 'Philadelp
           'Dallas', 'San Jose', 'Austin',
           'Jacksonville', 'Fort Worth', 'Columbus', 'Indianapolis', 'Charlotte', 'San Francisco', 'Seattle', 'Denver',
           'Washington']
-regions = ['primary', 'secondary', 'primary', 'secondary', 'secondary', 'primary', 'secondary', 'secondary',
-           'secondary', 'secondary', 'secondary',
-           'primary', 'secondary', 'primary', 'primary', 'primary', 'secondary', 'secondary', 'primary',
-           'primary']
+regions = ['east', 'west', 'east', 'west', 'west', 'east', 'west', 'west',
+           'west', 'west', 'west',
+           'east', 'west', 'east', 'east', 'east', 'west', 'west', 'east',
+           'east']
 
 # Generate random data
 for i in range(sys.maxsize if int(sys.argv[1]) == -1 else int(sys.argv[1])):
-    city = sys.argv[4] if len(sys.argv) > 4 else cities[random.randint(0, 19)]
+    city = cities[random.randint(0, 19)]
+    region = sys.argv[4] if len(sys.arg) > 4 else regions[cities.index(city)]
     my_dict = {'id': i,
                '@type': 'org.apache.geode.web.rest.domain.Claim',
                'name': fake.name(),
                'dob': fake.date_of_birth().strftime("%m-%d-%Y"),
                'address': fake.address(),
                'phone': fake.phone_number(),
-               'claimdate': datetime.now().strftime("%m-%d-%Y %H:%M:%S"),
+               'claimdate': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                'city': city,
-               'region': regions[cities.index(city)],
+               'region': region,
                'amount': random.randint(200, 1000)}
 
     print(json.dumps(my_dict, indent=2))
-    # time.sleep(int(sys.argv[2])) if int(sys.argv)>-1
     put_content(my_dict, sys.argv[3])
