@@ -2,9 +2,6 @@ package com.vmware.multisite;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import oracle.jdbc.pool.OracleDataSource;
-import org.apache.commons.configuration2.Configuration;
-import org.apache.commons.configuration2.builder.fluent.Configurations;
-import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.geode.pdx.PdxInstance;
@@ -20,11 +17,10 @@ import java.util.Properties;
 public class DataSourceUtils {
 
     private static Logger log = LoggerFactory.getLogger(DataSourceUtils.class);
-    private static Configurations configs = new Configurations();
     private static String URL = "url";
     private static String USERNAME = "username";
     private static String PASSWORD = "password";
-    private static Configuration PROPERTIES = null;
+    private static Properties PROPERTIES = null;
     private static String INSERTQUERY = "insertquery";
     private static String UPDATEQUERY = "updatequery";
     private static String DELETEQUERY = "deletequery";
@@ -32,8 +28,8 @@ public class DataSourceUtils {
     static {
         try {
             log.error("In DataSourceUtils...");
-            PROPERTIES = configs.properties("db.properties");
-        } catch (ConfigurationException e) {
+            PROPERTIES = loadProperties("db.properties");
+        } catch (Exception e) {
             log.error(ExceptionUtils.getStackTrace(e));
         }
     }
@@ -43,9 +39,9 @@ public class DataSourceUtils {
 
         try {
             ds = new OracleDataSource();
-            ((OracleDataSource)ds).setURL(PROPERTIES.getString(URL));
-            ((OracleDataSource)ds).setUser(PROPERTIES.getString(USERNAME));
-            ((OracleDataSource)ds).setPassword(PROPERTIES.getString(PASSWORD));
+            ((OracleDataSource)ds).setURL(PROPERTIES.getProperty(URL));
+            ((OracleDataSource)ds).setUser(PROPERTIES.getProperty(USERNAME));
+            ((OracleDataSource)ds).setPassword(PROPERTIES.getProperty(PASSWORD));
 
         } catch (Exception e) {
             log.error(ExceptionUtils.getStackTrace(e));
@@ -56,7 +52,7 @@ public class DataSourceUtils {
 
     static final boolean executeInsertQuery(QueryRunner queryRunner, PdxInstance pdxEntry) {
         try {
-            String sql = PROPERTIES.getString(INSERTQUERY);
+            String sql = PROPERTIES.getProperty(INSERTQUERY);
             queryRunner.execute(sql,
                     pdxEntry.getField("id"),
                     pdxEntry.getField("name"),
@@ -76,7 +72,7 @@ public class DataSourceUtils {
 
     static final boolean executeUpdateQuery(QueryRunner queryRunner, PdxInstance entry) {
         try {
-            String sql = PROPERTIES.getString(UPDATEQUERY);
+            String sql = PROPERTIES.getProperty(UPDATEQUERY);
             queryRunner.execute(sql,
                     entry.getField("name"),
                     entry.getField("dob"),
@@ -96,7 +92,7 @@ public class DataSourceUtils {
 
     static final boolean executeDeleteQuery(QueryRunner queryRunner, PdxInstance entry) {
         try {
-            String sql = PROPERTIES.getString(DELETEQUERY);
+            String sql = PROPERTIES.getProperty(DELETEQUERY);
             queryRunner.execute(sql,
                     entry.getField("id"));
             return true;
@@ -108,7 +104,7 @@ public class DataSourceUtils {
 
     static final boolean test(QueryRunner queryRunner, JsonNode pdxEntry) {
         try {
-            String sql = PROPERTIES.getString(INSERTQUERY);
+            String sql = PROPERTIES.getProperty(INSERTQUERY);
             queryRunner.execute(sql,
                     pdxEntry.get("id").asInt(),
                     pdxEntry.get("name").asText(),
