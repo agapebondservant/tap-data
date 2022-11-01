@@ -138,6 +138,10 @@ name: CloudBeaver
 url: https://demo.cloudbeaver.io/#/
 ```
 
+In CloudBeaver, launch the **SQL** tab and execute the following:
+```copy
+TRUNCATE TABLE ADMIN.claims;
+```
 
 <b>Observe that the relevant tables are empty.</b>
 
