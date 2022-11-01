@@ -33,11 +33,16 @@ html, body, [class*="css"]{
   animation: blinker 1s linear infinite;
   background: url('https://github.com/agapebondservant/tanzu-realtime-anomaly-detetction/blob/main/app/assets/clock.png?raw=true') no-repeat right;
 }
-
 @keyframes blinker {
   50% {
     opacity: 0;
   }
+}
+.oracle {
+  background: url('https://raw.githubusercontent.com/agapebondservant/tanzu-realtime-anomaly-detetction/main/assets/oracle.png') no-repeat right;
+}
+.mysql {
+  background: url('https://raw.githubusercontent.com/agapebondservant/tanzu-realtime-anomaly-detetction/main/assets/mysql.png') no-repeat right;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -45,6 +50,8 @@ html, body, [class*="css"]{
 st.header('Realtime Dashboard')
 
 st.text('Showcases WAN Replication with VMware Gemfire')
+
+st.markdown(f"<div class='{sys.argv[2]}'>&nbsp;</div><div>{sys.argv[2]}</div>", unsafe_allow_html=True)
 
 # Tables
 # base_key = time.time()
@@ -58,7 +65,7 @@ st.number_input('Message Rate', '''''', key='msg_rate', format='%i')
 
 st.markdown("<div class='blinking'>&nbsp;</div>", unsafe_allow_html=True)
 
-subprocess.call(f"random_claim_generator {int(st.session_state['msg_rate'])} -1 {gemfire_url}")
+# subprocess.call(f"random_claim_generator {int(st.session_state['msg_rate'])} -1 {gemfire_url}")
 
 data = requests.get(f"{gemfire_url}/queries/adhoc'", params={"q": top10query}).json()
 
