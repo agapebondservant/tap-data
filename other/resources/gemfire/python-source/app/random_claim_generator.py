@@ -36,7 +36,7 @@ regions = ['east', 'west', 'east', 'west', 'west', 'east', 'west', 'west',
 # Generate random data
 for i in range(sys.maxsize if int(sys.argv[1]) == -1 else int(sys.argv[1])):
     city = cities[random.randint(0, 19)]
-    region = sys.argv[4] if len(sys.arg) > 4 else regions[cities.index(city)]
+    region = regions[cities.index(city)]
     my_dict = {'id': i,
                '@type': 'org.apache.geode.web.rest.domain.Claim',
                'name': fake.name(),

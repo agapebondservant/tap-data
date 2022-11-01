@@ -72,7 +72,7 @@ def show_counts():
 
     lb_url = os.environ[f"{sys.argv[1].upper()}_URL"]
 
-    sticky_bit = requests.get(f"{lb_url}:7070/gemfire_api/v1/sticky/bit").text() or 'PRIMARY_URL'
+    sticky_bit = requests.get(f"http://{lb_url}:7070/gemfire_api/v1/sticky/bit").text() or 'PRIMARY_URL'
 
     gemfire_url = f"http://{os.environ[sticky_bit]}:7070/gemfire-api/v1"
 

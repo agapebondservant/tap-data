@@ -16,22 +16,20 @@ spec:
         app: primary-dashboard
     spec:
       containers:
-      - env:
+      - image: oawofolu/demo-dashboard
+        imagePullPolicy: Always
+        name: streamlit
+        env:
         - name: PRIMARY_URL
           value: PRIMARY_ISTIO_INGRESS_HOSTNAME
         - name: SECONDARY_URL
           value: SECONDARY_ISTIO_INGRESS_HOSTNAME
-      - command:
+        command:
         - streamlit
         - run
         - app/dashboard.py
         - primary
         - --logger.level=info
-        image: oawofolu/demo-dashboard
-        imagePullPolicy: Always
-        name: streamlit
-      dnsPolicy: ClusterFirst
-      restartPolicy: Always
 ---
 apiVersion: v1
 kind: Service
@@ -43,7 +41,7 @@ spec:
   ports:
     - name: rest-api
       port: 8080
-      targetPort: 8051
+      targetPort: 8501
   type: LoadBalancer
 
 
