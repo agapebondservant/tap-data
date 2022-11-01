@@ -138,6 +138,11 @@ name: CloudBeaver
 url: https://demo.cloudbeaver.io/#/
 ```
 
+In CloudBeaver, first set up the data sources for each site:
+```execute
+echo Primary DB URL: ${DATA_E2E_ORACLE_DB_PRIMARY_URL} \nSecondary DB URL: ${DATA_E2E_ORACLE_DB_SECONDARY_URL}
+```
+
 In CloudBeaver, launch the **SQL** tab and execute the following:
 ```copy
 TRUNCATE TABLE ADMIN.claims;
@@ -150,7 +155,7 @@ Deploy the Dashboard apps:
 sed -i "s/PRIMARY_ISTIO_INGRESS_HOSTNAME/${ISTIO_INGRESS_HOST_PRIMARY}/g; s/SECONDARY_ISTIO_INGRESS_HOSTNAME/${ISTIO_INGRESS_HOST_SECONDARY}/g" ~/other/resources/gemfire/wan-dashboard-primary.yaml; sed -i "s/PRIMARY_ISTIO_INGRESS_HOSTNAME/${ISTIO_INGRESS_HOST_PRIMARY}/g; s/SECONDARY_ISTIO_INGRESS_HOSTNAME/${ISTIO_INGRESS_HOST_SECONDARY}/g" ~/other/resources/gemfire/wan-dashboard-secondary.yaml; kubectl -n {{ session_namespace }} exec -it gemfire0-server-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "create region --name=sticky --type=REPLICATE" -e "put --key='bit' --value='PRIMARY_URL' --region=sticky"; kubectl delete deployment primary-dashboard || true; kubectl apply -f ~/other/resources/gemfire/wan-dashboard-primary.yaml; export DASHBOARD_PRIMARY=$(kubectl get service primary-dashboard-svc -o jsonpath='{.status.loadBalancer.ingress[0].ip}'); kubectl config use-context secondary-ctx --kubeconfig mykubeconfig; kubectl delete deployment secondary-dashboard -n gemfire-remote --kubeconfig mykubeconfig || true; kubectl apply -f ~/other/resources/gemfire/wan-dashboard-secondary.yaml -n gemfire-remote  --kubeconfig mykubeconfig; kubectl exec -it gemfire0remote-server-0 -n gemfire-remote --kubeconfig mykubeconfig -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_SECONDARY:7070/gemfire/v1" -e "create region --name=sticky --type=REPLICATE" -e "put --key='bit' --value='SECONDARY_URL' --region=sticky" --kubeconfig mykubeconfig; export DASHBOARD_SECONDARY=$(kubectl get service secondary-dashboard-svc -n gemfire-remote  -o jsonpath='{.status.loadBalancer.ingress[0].ip}' --kubeconfig mykubeconfig); kubectl config use-context eduk8s
 ```
 
-Launch the random data generator for the **primary** side. <font color="red">NOTE: Click CTRL-C after a few seconds.</font>
+Launch the random data generator for the **primary** side.
 ```execute
 cd ~/other/resources/gemfire/python-source/; python -m app.random_claim_generator -1 -1 http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire-api/v1/claims 'primary'; cd -
 ```
@@ -164,6 +169,8 @@ Launch the Pulse app for the **primary** side:
 ```execute
 echo http://${ISTIO_INGRESS_HOST_PRIMARY}:7070/pulse/
 ```
+
+<font color="red">NOTE: Click CTRL-C after a few seconds.</font>
 
 View the associated Oracle database (can use DBeaver).
 
@@ -181,10 +188,10 @@ View the associated oracle database (can use DBeaver or CloudBeaver).
 
 Now, kill one of the gemfire pods on the secondary side and switch the secondary dashboard over to the primary site:
 ```execute
-kubectl config use-context secondary-ctx --kubeconfig mykubeconfig; kubectl exec -it gemfire0remote-server-0 -n gemfire-remote --kubeconfig mykubeconfig -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_SECONDARY:7070/gemfire/v1" -e "put --key='bit' --value='PRIMARY_URL' --region=sticky" --kubeconfig mykubeconfig; kubectl delete pod gemfire0remote-server-0 -ngemfire-remote --kubeconfig mykubeconfig; kubectl config use-context eduk8s
+kubectl config use-context secondary-ctx --kubeconfig mykubeconfig; kubectl exec -it gemfire0remote-server-0 -n gemfire-remote --kubeconfig mykubeconfig -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_SECONDARY:7070/gemfire/v1" -e "put --key='bit' --value='PRIMARY_URL' --region=sticky"; kubectl delete pod gemfire0remote-server-0 -ngemfire-remote --kubeconfig mykubeconfig; kubectl config use-context eduk8s
 ```
 
 After a few moments, switch back to the secondary site - observe no data loss:
 ```execute
-kubectl config use-context secondary-ctx --kubeconfig mykubeconfig; kubectl exec -it gemfire0remote-server-0 -n gemfire-remote --kubeconfig mykubeconfig -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_SECONDARY:7070/gemfire/v1" -e "put --key='bit' --value='SECONDARY_URL' --region=sticky" --kubeconfig mykubeconfig; kubectl config use-context eduk8s
+kubectl config use-context secondary-ctx --kubeconfig mykubeconfig; kubectl exec -it gemfire0remote-server-0 -n gemfire-remote --kubeconfig mykubeconfig -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_SECONDARY:7070/gemfire/v1" -e "put --key='bit' --value='SECONDARY_URL' --region=sticky"; kubectl config use-context eduk8s
 ```
