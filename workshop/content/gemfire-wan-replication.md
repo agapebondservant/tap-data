@@ -132,7 +132,14 @@ kubectl config use-context secondary-ctx --kubeconfig mykubeconfig; kubectl -n g
 ```
 
 #### Demo: Unidirectional write
-View the associated Oracle database (can use DBeaver). <b>Observe that the relevant tables are empty.</b>
+View the associated Oracle database (can use DBeaver, or launch CloudBeaver here:).
+```dashboard:open-url
+name: CloudBeaver
+url: https://demo.cloudbeaver.io/#/
+```
+
+
+<b>Observe that the relevant tables are empty.</b>
 
 Deploy the Dashboard apps:
 ```execute
