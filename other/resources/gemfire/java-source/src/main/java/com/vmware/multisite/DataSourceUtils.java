@@ -29,9 +29,10 @@ public class DataSourceUtils {
 
     static {
         try {
+            log.error("In DataSourceUtils...");
             PROPERTIES = configs.properties("db.properties");
         } catch (ConfigurationException e) {
-            e.printStackTrace();
+            log.error(ExceptionUtils.getStackTrace(e));
         }
     }
 
