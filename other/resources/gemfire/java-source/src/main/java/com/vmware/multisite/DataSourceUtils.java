@@ -35,6 +35,8 @@ public class DataSourceUtils {
     }
 
     static final DataSource buildDataSource(){
+
+        log.error("In buildDataSource()...");
         DataSource ds = null;
 
         try {

@@ -31,7 +31,7 @@ public class SyncOracleCacheAsyncListener implements AsyncEventListener {
             Region region = event.getRegion();
             Object value = region.get(event.getKey());
 
-            LOG.error("{} :: {} :: {}", op, region, value);
+            LOG.error("In processEvents: {} :: {} :: {}", op, region, value);
 
             if (op.isCreate()) {
                 LOG.error("In create...");
