@@ -71,21 +71,11 @@ Show the list of configured gateways:
 kubectl config use-context secondary-ctx --kubeconfig mykubeconfig; kubectl -n gemfire-remote exec -it gemfire0remote-locator-0 --kubeconfig mykubeconfig -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_SECONDARY:7070/gemfire/v1" -e "set variable --name=APP_RESULT_VIEWER --value=900000" -e "list gateways"; kubectl config use-context eduk8s
 ```
 
-Create a new region, *claims*, which will match the producing region on the sending side:
-```execute
-kubectl config use-context secondary-ctx --kubeconfig mykubeconfig; kubectl -n gemfire-remote exec -it gemfire0remote-locator-0 --kubeconfig mykubeconfig -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_SECONDARY:7070/gemfire/v1" -e "create region --name=claims --type=PARTITION"; kubectl config use-context eduk8s
-```
-
 #### Configure the Gateway Sender with up-to-date remote locator information 
 #### **NOTE: as a best practice, should start after Gateway Receiver**
 Configure the **GatewaySender** in the **Primary** site:
 ```execute
 kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "create gateway-sender --id=sender1 --parallel=true --remote-distributed-system-id=21"
-```
-
-Create a new region, *claims*, which will stream events to the GatewaySender's queue:
-```execute
-kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "create region --name=claims --type=PARTITION --gateway-sender-id=sender1"
 ```
 
 Show the list of configured gateways on the sender side:
@@ -117,13 +107,13 @@ cd ~/other/resources/gemfire/java-source; ./mvnw -s settings.xml clean dependenc
 
 After adding the **CacheAsyncListener** to the cluster's classpath, let's create an **async queue** - the listener will process events from this queue:
 ```execute
-kubectl -n {{ session_namespace }} exec -it gemfire0-server-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "create async-event-queue --id=sampleAsyncQueue --persistent --listener=com.vmware.multisite.SyncOracleCacheAsyncListener"; kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "list async-event-queues"
+kubectl -n {{ session_namespace }} exec -it gemfire0-server-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "create async-event-queue --id=primaryAsyncQueue --persistent --listener=com.vmware.multisite.SyncOracleCacheAsyncListener"; kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "set variable --name=APP_RESULT_VIEWER --value=900000" -e "list async-event-queues"
 ```
 
 
 Now, we can register it with the **claims** region:
 ```execute
-kubectl -n {{ session_namespace }} exec -it gemfire0-server-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "alter region --name=claims --async-event-queue-id=sampleAsyncQueue"
+kubectl -n {{ session_namespace }} exec -it gemfire0-server-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "create region --name=claims --type=PARTITION --async-event-queue-id=primaryAsyncQueue --gateway-sender-id=sender1"
 ```
 
 Similarly, build the **CacheListener** jar file for the **secondary** site and deploy to the secondary cluster:
@@ -133,10 +123,10 @@ cd ~/other/resources/gemfire/java-source; ./mvnw -s settings.xml clean dependenc
 
 Create an **async queue** for the listener:
 ```execute
-kubectl config use-context secondary-ctx --kubeconfig mykubeconfig; kubectl -n gemfire-remote exec -it gemfire0remote-server-0 --kubeconfig mykubeconfig -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_SECONDARY:7070/gemfire/v1" -e "create async-event-queue --id=sampleAsyncQueue --persistent --listener=com.vmware.multisite.SyncOracleCacheAsyncListener"; kubectl -n gemfire-remote exec -it gemfire0remote-locator-0 --kubeconfig mykubeconfig -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_SECONDARY:7070/gemfire/v1" -e "list async-event-queues"; kubectl config use-context eduk8s
+kubectl config use-context secondary-ctx --kubeconfig mykubeconfig; kubectl -n gemfire-remote exec -it gemfire0remote-server-0 --kubeconfig mykubeconfig -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_SECONDARY:7070/gemfire/v1" -e "create async-event-queue --id=secondaryAsyncQueue --persistent --listener=com.vmware.multisite.SyncOracleCacheAsyncListener"; kubectl -n gemfire-remote exec -it gemfire0remote-locator-0 --kubeconfig mykubeconfig -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_SECONDARY:7070/gemfire/v1" -e "set variable --name=APP_RESULT_VIEWER --value=900000" -e "list async-event-queues"; kubectl config use-context eduk8s
 ```
 
 Register the **CacheListener** with the **claims** region in the **secondary** site:
 ```execute
-kubectl config use-context secondary-ctx --kubeconfig mykubeconfig; kubectl -n gemfire-remote exec -it gemfire0remote-server-0 --kubeconfig mykubeconfig -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_SECONDARY:7070/gemfire/v1" -e "alter region --name=claims --async-event-queue-id=sampleAsyncQueue"; kubectl config use-context eduk8s
+kubectl config use-context secondary-ctx --kubeconfig mykubeconfig; kubectl -n gemfire-remote exec -it gemfire0remote-server-0 --kubeconfig mykubeconfig -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_SECONDARY:7070/gemfire/v1" -e "create region --name=claims --type=PARTITION --async-event-queue-id=secondaryAsyncQueue"; kubectl config use-context eduk8s
 ```

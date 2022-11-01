@@ -36,7 +36,7 @@ regions = ['primary', 'secondary', 'primary', 'secondary', 'secondary', 'primary
 # Generate random data
 for i in range(sys.maxsize if int(sys.argv[1]) == -1 else int(sys.argv[1])):
     city = sys.argv[4] if len(sys.argv) > 4 else cities[random.randint(0, 19)]
-    my_dict = {'id': f'{city}{i}',
+    my_dict = {'id': i,
                '@type': 'org.apache.geode.web.rest.domain.Claim',
                'name': fake.name(),
                'dob': fake.date_of_birth().strftime("%m-%d-%Y"),

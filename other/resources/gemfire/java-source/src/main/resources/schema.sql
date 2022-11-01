@@ -17,5 +17,6 @@ CREATE TABLE claims (
     claimdate varchar2(20),
     city varchar2(50),
     region varchar2(50),
-    amount number(9,0)
+    amount number(9,0),
+    receiveddate varchar2(50) default TO_CHAR(current_timestamp,'YYYY-MM-DD HH24:MI:SS')
 );
