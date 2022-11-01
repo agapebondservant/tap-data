@@ -51,6 +51,10 @@ html, body, [class*="css"]{
 .user-site {
   font-size: 1.6em;
 }
+span.secondary {
+    color: red;
+    font-weight: bold;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -72,7 +76,7 @@ def show_counts():
 
     lb_url = os.environ[f"{sys.argv[1].upper()}_URL"]
 
-    sticky_bit = requests.get(f"http://{lb_url}:7070/gemfire_api/v1/sticky/bit").text() or 'PRIMARY_URL'
+    sticky_bit = requests.get(f"http://{lb_url}:7070/gemfire_api/v1/sticky/bit").text or 'PRIMARY_URL'
 
     gemfire_url = f"http://{os.environ[sticky_bit]}:7070/gemfire-api/v1"
 
@@ -101,14 +105,14 @@ def show_counts():
 
 with tab1:
     st.markdown(
-        f"<div class='oracle'>&nbsp;</div><div class='user-site'>User Site: <font color=blue>{sys.argv[1]}</font></div>",
+        f"<div class='oracle'>&nbsp;</div><div class='user-site'>User Site: <font color=blue><span class='{sys.argv[1]}'>{sys.argv[1]}</span></font></div>",
         unsafe_allow_html=True)
 
     show_counts()
 
 with tab2:
     st.markdown(
-        f"<div class='mysql'>&nbsp;</div><div class='user-site'>User Site: <font color=blue>{sys.argv[1]}</font></div>",
+        f"<div class='mysql'>&nbsp;</div><div class='user-site'>User Site: <font color=blue><span class='{sys.argv[1]}'>{sys.argv[1]}</span></font></div>",
         unsafe_allow_html=True)
     show_counts()
 
