@@ -13,9 +13,9 @@ resources:
 - resources/workshop-rabbitmq-deepdive.yaml
 #!- resources/workshop-data-vmservice.yaml
 - resources/workshop-rabbitmq-commercial-features.yaml
-- resources/workshop-rabbitmq-realtime-analytics.yaml
+#!- resources/workshop-rabbitmq-realtime-analytics.yaml
 - resources/workshop-data-with-tap.yaml
 - resources/workshop-operatorui.yaml
 - resources/training-portal.yaml
 - resources/system-profile.yaml
-#- resources/workshop-gemfire-wan-replication.yaml
+- resources/workshop-gemfire-wan-replication.yaml
