@@ -13,7 +13,7 @@ import javax.sql.DataSource;
 public class SyncOracleCacheListener extends CacheListenerAdapter {
 
     private static Logger LOG = LoggerFactory.getLogger(SyncOracleCacheListener.class);
-    private DataSource DS = DataSourceUtils.buildDataSource();
+    private DataSource DS = DataSourceUtils.buildOracleDataSource();
     private QueryRunner RUNNER = new QueryRunner(DS);
 
     @Override

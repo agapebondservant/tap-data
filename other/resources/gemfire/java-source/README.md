@@ -1,6 +1,8 @@
 To set up:
 
-* Run other/resources/gemfire/java-source/src/main/resources/schema.sql
+* (In Oracle DB) Run other/resources/gemfire/java-source/src/main/resources/oracle-schema.sql
+
+* (In MySQL DB) Run other/resources/gemfire/java-source/src/main/resources/mysql-schema.sql
 
 * Build CacheListener jar for Primary site: 
 ```

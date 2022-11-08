@@ -88,14 +88,22 @@ Similarly, re-display the list of configured gateways on the receiver side:
 kubectl config use-context secondary-ctx --kubeconfig mykubeconfig; kubectl -n gemfire-remote exec -it gemfire0remote-locator-0 --kubeconfig mykubeconfig -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_SECONDARY:7070/gemfire/v1" -e "set variable --name=APP_RESULT_VIEWER --value=900000" -e "list gateways"; kubectl config use-context eduk8s
 ```
 
-#### Deploy the CacheListener for Oracle Write-Behind
+#### Deploy the CacheListener for Oracle/MySQL Write-Behind
 Tanzu Gemfire supports event handling for various event-generating operations: region updates, new cache entries, etc.
 Here, we will implement the **CacheAsyncListener** adapter to asynchronously update a backend Oracle database when the **claims** region is updated.
 This will occur in both the primary and secondary sites, hence enabling an active-active Oracle setup. 
+Similarly, we will also implement the **CacheAsyncListener** adapter to handle asynchronous updates to a backend MySQL database.
 
-Here is the **CacheAsyncListener** to be deployed:
+Here is the **CacheAsyncListener** to be deployed for the Oracle backend:
 ```editor:select-matching-text
 file: ~/other/resources/gemfire/java-source/src/main/java/com/vmware/multisite/SyncOracleCacheAsyncListener.java
+text: "@Override"
+after: 19
+```
+
+Similarly, here is the **CacheAsyncListener** to be deployed for the MySQL backend:
+```editor:select-matching-text
+file: ~/other/resources/gemfire/java-source/src/main/java/com/vmware/multisite/SyncMySQLCacheAsyncListener.java
 text: "@Override"
 after: 19
 ```
@@ -105,15 +113,15 @@ Build the **CacheAsyncListener** jar file for the **primary** site, and deploy i
 cd ~/other/resources/gemfire/java-source; ./mvnw -s settings.xml clean dependency:copy-dependencies -DoutputDirectory=target/lib -DincludeGroupIds=org.apache.commons,com.google.code.gson,org.apache.logging.log4j,org.slf4j,com.oracle.ojdbc,commons-dbutils package -Ddemo.resources.dir=src/main/resources/primary; cd -; kubectl cp ~/other/resources/gemfire/java-source/target/lib  {{ session_namespace }}/gemfire0-locator-0:/tmp; kubectl cp ~/other/resources/gemfire/java-source/target/gemfire-multisite-poc-1.0-SNAPSHOT.jar  {{ session_namespace }}/gemfire0-locator-0:/tmp/lib; kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "deploy --dir=/tmp/lib"
 ```
 
-After adding the **CacheAsyncListener** to the cluster's classpath, let's create an **async queue** - the listener will process events from this queue:
+After adding the **CacheAsyncListeners** to the cluster's classpath, let's create an **async queue** - the listener will process events from this queue:
 ```execute
-kubectl -n {{ session_namespace }} exec -it gemfire0-server-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "create async-event-queue --id=primaryAsyncQueue --persistent --listener=com.vmware.multisite.SyncOracleCacheAsyncListener"; kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "set variable --name=APP_RESULT_VIEWER --value=900000" -e "list async-event-queues"
+kubectl -n {{ session_namespace }} exec -it gemfire0-server-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "create async-event-queue --id=primaryAsyncOracleQueue --persistent --listener=com.vmware.multisite.SyncOracleCacheAsyncListener"; "create async-event-queue --id=primaryAsyncMySQLQueue --persistent --listener=com.vmware.multisite.SyncMySQLCacheAsyncListener"; kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "set variable --name=APP_RESULT_VIEWER --value=900000" -e "list async-event-queues"
 ```
 
 
-Now, we can register it with the **claims** region:
+Now, we can register them with the **claims** region:
 ```execute
-kubectl -n {{ session_namespace }} exec -it gemfire0-server-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "create region --name=claims --type=PARTITION --async-event-queue-id=primaryAsyncQueue --gateway-sender-id=sender1"
+kubectl -n {{ session_namespace }} exec -it gemfire0-server-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "create region --name=claims --type=PARTITION --async-event-queue-id=primaryAsyncOracleQueue,primaryAsyncMySQLQueue --gateway-sender-id=sender1"
 ```
 
 Similarly, build the **CacheListener** jar file for the **secondary** site and deploy to the secondary cluster:
@@ -123,16 +131,16 @@ cd ~/other/resources/gemfire/java-source; ./mvnw -s settings.xml clean dependenc
 
 Create an **async queue** for the listener:
 ```execute
-kubectl config use-context secondary-ctx --kubeconfig mykubeconfig; kubectl -n gemfire-remote exec -it gemfire0remote-server-0 --kubeconfig mykubeconfig -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_SECONDARY:7070/gemfire/v1" -e "create async-event-queue --id=secondaryAsyncQueue --persistent --listener=com.vmware.multisite.SyncOracleCacheAsyncListener"; kubectl -n gemfire-remote exec -it gemfire0remote-locator-0 --kubeconfig mykubeconfig -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_SECONDARY:7070/gemfire/v1" -e "set variable --name=APP_RESULT_VIEWER --value=900000" -e "list async-event-queues"; kubectl config use-context eduk8s
+kubectl config use-context secondary-ctx --kubeconfig mykubeconfig; kubectl -n gemfire-remote exec -it gemfire0remote-server-0 --kubeconfig mykubeconfig -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_SECONDARY:7070/gemfire/v1" -e "create async-event-queue --id=secondaryAsyncOracleQueue --persistent --listener=com.vmware.multisite.SyncOracleCacheAsyncListener" -e "create async-event-queue --id=secondaryAsyncMySQLQueue --persistent --listener=com.vmware.multisite.SyncMySQLCacheAsyncListener"; kubectl -n gemfire-remote exec -it gemfire0remote-locator-0 --kubeconfig mykubeconfig -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_SECONDARY:7070/gemfire/v1" -e "set variable --name=APP_RESULT_VIEWER --value=900000" -e "list async-event-queues"; kubectl config use-context eduk8s
 ```
 
 Register the **CacheListener** with the **claims** region in the **secondary** site:
 ```execute
-kubectl config use-context secondary-ctx --kubeconfig mykubeconfig; kubectl -n gemfire-remote exec -it gemfire0remote-server-0 --kubeconfig mykubeconfig -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_SECONDARY:7070/gemfire/v1" -e "create region --name=claims --type=PARTITION --async-event-queue-id=secondaryAsyncQueue"; kubectl config use-context eduk8s
+kubectl config use-context secondary-ctx --kubeconfig mykubeconfig; kubectl -n gemfire-remote exec -it gemfire0remote-server-0 --kubeconfig mykubeconfig -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_SECONDARY:7070/gemfire/v1" -e "create region --name=claims --type=PARTITION --async-event-queue-id=secondaryAsyncOracleQueue,secondaryAsyncMySQLQueue"; kubectl config use-context eduk8s
 ```
 
 #### Demo: Unidirectional write
-View the associated Oracle database (can use DBeaver, or launch CloudBeaver here:).
+View the associated Oracle and MySQL databases (can use DBeaver, or launch CloudBeaver here:).
 ```dashboard:open-url
 name: CloudBeaver
 url: https://demo.cloudbeaver.io/#/
@@ -140,15 +148,23 @@ url: https://demo.cloudbeaver.io/#/
 
 In CloudBeaver, first set up the data sources for each site:
 ```execute
-echo Primary DB URL: ${DATA_E2E_ORACLE_DB_PRIMARY_URL} \nSecondary DB URL: ${DATA_E2E_ORACLE_DB_SECONDARY_URL}
+echo Primary Oracle DB URL: ${DATA_E2E_ORACLE_DB_PRIMARY_URL} \nSecondary Oracle DB URL: ${DATA_E2E_ORACLE_DB_SECONDARY_URL}
+echo Primary MySQL DB URL: ${DATA_E2E_MYSQL_DB_PRIMARY_URL} \nSecondary MySQL DB URL: ${DATA_E2E_MYSQL_DB_SECONDARY_URL}
 ```
 
-In CloudBeaver, launch the **SQL** tab and execute the following:
+In CloudBeaver, launch the **SQL** tab for Oracle and execute the following:
 ```copy
-TRUNCATE TABLE ADMIN.claims;
+TRUNCATE TABLE ADMIN.CLAIMS;
 ```
 
-<b>Observe that the relevant tables are empty.</b>
+<b>Observe that the relevant Oracle table are empty.</b>
+
+Similarly, launch the **SQL** tab for MySQL and execute the following:
+```copy
+TRUNCATE TABLE ADMIN.CLAIMS;
+```
+
+<b>Observe that the relevant MySQL table is empty.</b>
 
 Deploy the Dashboard apps:
 ```execute
@@ -172,7 +188,10 @@ echo http://${ISTIO_INGRESS_HOST_PRIMARY}:7070/pulse/
 
 <font color="red">NOTE: Click CTRL-C after a few seconds.</font>
 
-View the associated Oracle database (can use DBeaver).
+View the associated Oracle and MySQL databases (can use DBeaver or CloudBeaver) - execute the following query:
+```copy
+select count(*) from ADMIN.CLAIMS;
+```
 
 Launch the Dashboard app for the **secondary** side:
 ```execute
@@ -184,7 +203,10 @@ Launch the Pulse app for the **secondary** side:
 echo http://${ISTIO_INGRESS_HOST_SECONDARY}:7070/pulse/
 ```
 
-View the associated oracle database (can use DBeaver or CloudBeaver).
+View the associated Oracle and MySQL databases (can use DBeaver or CloudBeaver) - execute the following query:
+```copy
+select count(*) from ADMIN.CLAIMS;
+```
 
 Now, kill one of the gemfire pods on the secondary side and switch the secondary dashboard over to the primary site:
 ```execute

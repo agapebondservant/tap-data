@@ -4,6 +4,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import oracle.jdbc.pool.OracleDataSource;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.geode.cache.Operation;
+import org.apache.geode.cache.Region;
+import org.apache.geode.cache.asyncqueue.AsyncEvent;
 import org.apache.geode.pdx.PdxInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,40 +19,23 @@ import java.util.Properties;
 
 public class DataSourceUtils {
 
-    private static Logger log = LoggerFactory.getLogger(DataSourceUtils.class);
+    private static Logger LOG = LoggerFactory.getLogger(DataSourceUtils.class);
     private static String URL = "url";
     private static String USERNAME = "username";
     private static String PASSWORD = "password";
     private static Properties PROPERTIES = null;
+    private static Properties MYSQL_PROPERTIES = null;
     private static String INSERTQUERY = "insertquery";
     private static String UPDATEQUERY = "updatequery";
     private static String DELETEQUERY = "deletequery";
 
     static {
         try {
-            log.error("In DataSourceUtils...");
-            PROPERTIES = loadProperties("db.properties");
+            LOG.error("In DataSourceUtils...");
+            PROPERTIES = loadProperties("main.properties");
         } catch (Exception e) {
-            log.error(ExceptionUtils.getStackTrace(e));
+            LOG.error(ExceptionUtils.getStackTrace(e));
         }
-    }
-
-    static final DataSource buildDataSource(){
-
-        log.error("In buildDataSource()...");
-        DataSource ds = null;
-
-        try {
-            ds = new OracleDataSource();
-            ((OracleDataSource)ds).setURL(PROPERTIES.getProperty(URL));
-            ((OracleDataSource)ds).setUser(PROPERTIES.getProperty(USERNAME));
-            ((OracleDataSource)ds).setPassword(PROPERTIES.getProperty(PASSWORD));
-
-        } catch (Exception e) {
-            log.error(ExceptionUtils.getStackTrace(e));
-        }
-
-        return ds;
     }
 
     static final boolean executeInsertQuery(QueryRunner queryRunner, PdxInstance pdxEntry) {
@@ -67,7 +53,7 @@ public class DataSourceUtils {
                     pdxEntry.getField("amount"));
             return true;
         } catch (Exception e) {
-            log.error(ExceptionUtils.getStackTrace(e));
+            LOG.error(ExceptionUtils.getStackTrace(e));
             return false;
         }
     }
@@ -87,7 +73,7 @@ public class DataSourceUtils {
                     entry.getField("id"));
             return true;
         } catch (Exception e) {
-            log.error(ExceptionUtils.getStackTrace(e));
+            LOG.error(ExceptionUtils.getStackTrace(e));
             return false;
         }
     }
@@ -99,7 +85,7 @@ public class DataSourceUtils {
                     entry.getField("id"));
             return true;
         } catch (Exception e) {
-            log.error(ExceptionUtils.getStackTrace(e));
+            LOG.error(ExceptionUtils.getStackTrace(e));
             return false;
         }
     }
@@ -123,7 +109,7 @@ public class DataSourceUtils {
             System.out.println(ExceptionUtils.getStackTrace(e));
             System.out.println(e.getErrorCode());
             System.out.println(e.getSQLState());
-            log.info(ExceptionUtils.getStackTrace(e));
+            LOG.info(ExceptionUtils.getStackTrace(e));
             return false;
         }
     }
@@ -135,16 +121,35 @@ public class DataSourceUtils {
         try (InputStream input = DataSourceUtils.class.getClassLoader().getResourceAsStream(propertiesFile)) {
 
             if (input == null) {
-                log.error("Unable to find {}", propertiesFile);
+                LOG.error("Unable to find {}", propertiesFile);
                 return prop;
             }
 
             prop.load(input);
 
         } catch (IOException ex) {
-            log.error(ExceptionUtils.getStackTrace(ex));
+            LOG.error(ExceptionUtils.getStackTrace(ex));
         }
 
         return prop;
+    }
+
+    static final void updateDb(AsyncEvent event, QueryRunner runner){
+        final Operation op = event.getOperation();
+        Region region = event.getRegion();
+        Object value = region.get(event.getKey());
+
+        LOG.error("In updateDb: {} :: {} :: {}", op, region, value);
+
+        if (op.isCreate()) {
+            LOG.error("In create...");
+            executeInsertQuery(runner, (PdxInstance)value);
+        } else if (op.isUpdate()) {
+            LOG.error("In update...");
+            executeUpdateQuery(runner, (PdxInstance)value);
+        } else if (op.isDestroy()) {
+            LOG.error("In delete...");
+            executeDeleteQuery(runner, (PdxInstance)event.getKey());
+        }
     }
 }
