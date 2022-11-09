@@ -160,23 +160,16 @@ url: https://demo.cloudbeaver.io/#/
 
 In CloudBeaver, first set up the data sources for each site:
 ```execute
-echo "Primary Oracle DB URL: {{DATA_E2E_ORACLE_DB_PRIMARY_URL}}\nSecondary Oracle DB URL: {{DATA_E2E_ORACLE_DB_SECONDARY_URL}}";
-echo "Primary MySQL DB HOST: {{DATA_E2E_MYSQL_DB_PRIMARY_HOST}}\nSecondary MySQL DB URL: {{DATA_E2E_MYSQL_DB_SECONDARY_HOST}}"
+echo "Primary Oracle DB URL: {{DATA_E2E_ORACLE_DB_PRIMARY_URL}}; Secondary Oracle DB URL: {{DATA_E2E_ORACLE_DB_SECONDARY_URL}}";
+echo "Primary MySQL DB HOST: {{DATA_E2E_MYSQL_DB_PRIMARY_HOST}}; Secondary MySQL DB URL: {{DATA_E2E_MYSQL_DB_SECONDARY_HOST}}"
 ```
 
-In CloudBeaver, launch the **SQL** tab for Oracle and execute the following:
+In CloudBeaver, launch the **SQL** tab for each database and execute the following:
 ```copy
 TRUNCATE TABLE ADMIN.CLAIMS;
 ```
 
 <b>Observe that the relevant Oracle table are empty.</b>
-
-Similarly, launch the **SQL** tab for MySQL and execute the following:
-```copy
-TRUNCATE TABLE ADMIN.claims;
-```
-
-<b>Observe that the relevant MySQL table is empty.</b>
 
 Deploy the Dashboard apps:
 ```execute
@@ -198,13 +191,6 @@ Launch the Pulse app for the **primary** side:
 echo http://${ISTIO_INGRESS_HOST_PRIMARY}:7070/pulse/
 ```
 
-<font color="red">NOTE: Click CTRL-C after a few seconds.</font>
-
-View the associated Oracle and MySQL databases (can use DBeaver or CloudBeaver) - execute the following query:
-```copy
-select count(*) from ADMIN.claims;
-```
-
 Launch the Dashboard app for the **secondary** side:
 ```execute
 echo http://${DASHBOARD_SECONDARY}:8080/
@@ -215,9 +201,16 @@ Launch the Pulse app for the **secondary** side:
 echo http://${ISTIO_INGRESS_HOST_SECONDARY}:7070/pulse/
 ```
 
+<font color="red">NOTE: Click CTRL-C after a few seconds.</font>
+
 View the associated Oracle and MySQL databases (can use DBeaver or CloudBeaver) - execute the following query:
 ```copy
 select count(*) from ADMIN.claims;
+```
+
+Compare to the Gemfire count in Pulse. Click on "Data Browser" and enter the following in the Query Editor:
+```copy
+select * from /claims
 ```
 
 Now, kill one of the gemfire pods on the secondary side and switch the secondary dashboard over to the primary site:
@@ -225,7 +218,37 @@ Now, kill one of the gemfire pods on the secondary side and switch the secondary
 kubectl config use-context secondary-ctx --kubeconfig mykubeconfig; kubectl exec -it gemfire0remote-server-0 -n gemfire-remote --kubeconfig mykubeconfig -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_SECONDARY:7070/gemfire/v1" -e "put --key='bit' --value='PRIMARY_URL' --region=sticky"; kubectl delete pod gemfire0remote-server-0 -ngemfire-remote --kubeconfig mykubeconfig; kubectl config use-context eduk8s
 ```
 
+Re-launch the random data generator for the **primary** side - click *Ctrl-C* after a few seconds:
+```execute
+cd ~/other/resources/gemfire/python-source/; python -m app.random_claim_generator -1 -1 http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire-api/v1/claims 'primary'; cd -
+```
+
 After a few moments, switch back to the secondary site - observe no data loss:
 ```execute
 kubectl config use-context secondary-ctx --kubeconfig mykubeconfig; kubectl exec -it gemfire0remote-server-0 -n gemfire-remote --kubeconfig mykubeconfig -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_SECONDARY:7070/gemfire/v1" -e "put --key='bit' --value='SECONDARY_URL' --region=sticky"; kubectl config use-context eduk8s
+```
+
+### Object-Oriented Queries
+Gemfire supports complex object queries, including queries for nested objects.
+
+Set up a new claim, **claims2**:
+```execute
+kubectl -n {{ session_namespace }} exec -it gemfire0-server-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "create region --name=claims2"
+```
+
+Generate JSON entries whose schema is shown here (it represents a **Claim object** with a nested **Insurance** object):
+```editor:select-matching-text
+file: ~/other/resources/gemfire/python-source/app/random_claim_generator_nested.py
+text: "for i in range(sys.maxsize"
+after: 15
+```
+
+Now, launch the random generator - click *Ctrl-C* after a few seconds:
+```execute
+cd ~/other/resources/gemfire/python-source/; python -m app.random_claim_generator_nested -1 -1 http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire-api/v1/claims2 'primary'; cd -
+```
+
+On the primary Pulse site, perform a nested query: Click on "Data Browser" and enter the following in the Query Editor:
+```copy
+select w from /claims2 c, c.insurance i where i.city='Washington'
 ```
