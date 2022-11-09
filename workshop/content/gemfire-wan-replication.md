@@ -122,12 +122,12 @@ after: 18
 
 Build the **CacheAsyncListener** jar file for the **primary** site, and deploy it to the primary cluster:
 ```execute
-cd ~/other/resources/gemfire/java-source; ./mvnw -s settings.xml clean dependency:copy-dependencies -DoutputDirectory=target/lib -DincludeGroupIds=org.apache.commons,com.google.code.gson,org.apache.logging.log4j,org.slf4j,com.oracle.ojdbc,commons-dbutils package -Ddemo.resources.dir=src/main/resources/primary; cd -; kubectl cp ~/other/resources/gemfire/java-source/target/lib  {{ session_namespace }}/gemfire0-locator-0:/tmp; kubectl cp ~/other/resources/gemfire/java-source/target/gemfire-multisite-poc-1.0-SNAPSHOT.jar  {{ session_namespace }}/gemfire0-locator-0:/tmp/lib; kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "deploy --dir=/tmp/lib"
+cd ~/other/resources/gemfire/java-source; ./mvnw -s settings.xml clean dependency:copy-dependencies -DoutputDirectory=target/lib -DincludeGroupIds=org.apache.commons,com.google.code.gson,org.apache.logging.log4j,org.slf4j,com.oracle.ojdbc,commons-dbutils,mysql package -Ddemo.resources.dir=src/main/resources/primary; cd -; kubectl cp ~/other/resources/gemfire/java-source/target/lib  {{ session_namespace }}/gemfire0-locator-0:/tmp; kubectl cp ~/other/resources/gemfire/java-source/target/gemfire-multisite-poc-1.0-SNAPSHOT.jar  {{ session_namespace }}/gemfire0-locator-0:/tmp/lib; kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "deploy --dir=/tmp/lib"
 ```
 
 After adding the **CacheAsyncListeners** to the cluster's classpath, let's create **async queues** - the listeners will process events from these queues:
 ```execute
-kubectl -n {{ session_namespace }} exec -it gemfire0-server-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "create async-event-queue --id=primaryAsyncOracleQueue --persistent --listener=com.vmware.multisite.SyncOracleCacheAsyncListener"; "create async-event-queue --id=primaryAsyncMySQLQueue --persistent --listener=com.vmware.multisite.SyncMySQLCacheAsyncListener"; kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "set variable --name=APP_RESULT_VIEWER --value=900000" -e "list async-event-queues"
+kubectl -n {{ session_namespace }} exec -it gemfire0-server-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "create async-event-queue --id=primaryAsyncOracleQueue --persistent --listener=com.vmware.multisite.SyncOracleCacheAsyncListener" -e "create async-event-queue --id=primaryAsyncMySQLQueue --persistent --listener=com.vmware.multisite.SyncMySQLCacheAsyncListener"; kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "set variable --name=APP_RESULT_VIEWER --value=900000" -e "list async-event-queues"
 ```
 
 
@@ -138,7 +138,7 @@ kubectl -n {{ session_namespace }} exec -it gemfire0-server-0 -- gfsh -e "connec
 
 Similarly, build the **CacheListener** jar file for the **secondary** site and deploy to the secondary cluster:
 ```execute
-cd ~/other/resources/gemfire/java-source; ./mvnw -s settings.xml clean dependency:copy-dependencies -DoutputDirectory=target/lib -DincludeGroupIds=org.apache.commons,com.google.code.gson,org.apache.logging.log4j,org.slf4j,com.oracle.ojdbc,commons-dbutils package -Ddemo.resources.dir=src/main/resources/secondary; cd -; kubectl cp ~/other/resources/gemfire/java-source/target/lib  gemfire-remote/gemfire0remote-locator-0:/tmp --kubeconfig mykubeconfig; kubectl cp ~/other/resources/gemfire/java-source/target/gemfire-multisite-poc-1.0-SNAPSHOT.jar  gemfire-remote/gemfire0remote-locator-0:/tmp/lib --kubeconfig mykubeconfig; kubectl -n gemfire-remote exec -it gemfire0remote-locator-0 --kubeconfig mykubeconfig -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_SECONDARY:7070/gemfire/v1" -e "deploy --dir=/tmp/lib"; kubectl config use-context eduk8s
+cd ~/other/resources/gemfire/java-source; ./mvnw -s settings.xml clean dependency:copy-dependencies -DoutputDirectory=target/lib -DincludeGroupIds=org.apache.commons,com.google.code.gson,org.apache.logging.log4j,org.slf4j,com.oracle.ojdbc,commons-dbutils,mysql package -Ddemo.resources.dir=src/main/resources/secondary; cd -; kubectl cp ~/other/resources/gemfire/java-source/target/lib  gemfire-remote/gemfire0remote-locator-0:/tmp --kubeconfig mykubeconfig; kubectl cp ~/other/resources/gemfire/java-source/target/gemfire-multisite-poc-1.0-SNAPSHOT.jar  gemfire-remote/gemfire0remote-locator-0:/tmp/lib --kubeconfig mykubeconfig; kubectl -n gemfire-remote exec -it gemfire0remote-locator-0 --kubeconfig mykubeconfig -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_SECONDARY:7070/gemfire/v1" -e "deploy --dir=/tmp/lib"; kubectl config use-context eduk8s
 ```
 
 Create **async queues** for the listener:
@@ -160,8 +160,8 @@ url: https://demo.cloudbeaver.io/#/
 
 In CloudBeaver, first set up the data sources for each site:
 ```execute
-echo Primary Oracle DB URL: ${DATA_E2E_ORACLE_DB_PRIMARY_URL} \nSecondary Oracle DB URL: ${DATA_E2E_ORACLE_DB_SECONDARY_URL}
-echo Primary MySQL DB URL: ${DATA_E2E_MYSQL_DB_PRIMARY_URL} \nSecondary MySQL DB URL: ${DATA_E2E_MYSQL_DB_SECONDARY_URL}
+echo "Primary Oracle DB URL: {{DATA_E2E_ORACLE_DB_PRIMARY_URL}}\nSecondary Oracle DB URL: {{DATA_E2E_ORACLE_DB_SECONDARY_URL}}";
+echo "Primary MySQL DB HOST: {{DATA_E2E_MYSQL_DB_PRIMARY_HOST}}\nSecondary MySQL DB URL: {{DATA_E2E_MYSQL_DB_SECONDARY_HOST}}"
 ```
 
 In CloudBeaver, launch the **SQL** tab for Oracle and execute the following:
@@ -173,14 +173,14 @@ TRUNCATE TABLE ADMIN.CLAIMS;
 
 Similarly, launch the **SQL** tab for MySQL and execute the following:
 ```copy
-TRUNCATE TABLE ADMIN.CLAIMS;
+TRUNCATE TABLE ADMIN.claims;
 ```
 
 <b>Observe that the relevant MySQL table is empty.</b>
 
 Deploy the Dashboard apps:
 ```execute
-sed -i "s/PRIMARY_ISTIO_INGRESS_HOSTNAME/${ISTIO_INGRESS_HOST_PRIMARY}/g; s/SECONDARY_ISTIO_INGRESS_HOSTNAME/${ISTIO_INGRESS_HOST_SECONDARY}/g" ~/other/resources/gemfire/wan-dashboard-primary.yaml; sed -i "s/PRIMARY_ISTIO_INGRESS_HOSTNAME/${ISTIO_INGRESS_HOST_PRIMARY}/g; s/SECONDARY_ISTIO_INGRESS_HOSTNAME/${ISTIO_INGRESS_HOST_SECONDARY}/g" ~/other/resources/gemfire/wan-dashboard-secondary.yaml; kubectl -n {{ session_namespace }} exec -it gemfire0-server-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "create region --name=sticky --type=REPLICATE" -e "put --key='bit' --value='PRIMARY_URL' --region=sticky"; kubectl delete deployment primary-dashboard || true; kubectl apply -f ~/other/resources/gemfire/wan-dashboard-primary.yaml; export DASHBOARD_PRIMARY=$(kubectl get service primary-dashboard-svc -o jsonpath='{.status.loadBalancer.ingress[0].ip}'); kubectl config use-context secondary-ctx --kubeconfig mykubeconfig; kubectl delete deployment secondary-dashboard -n gemfire-remote --kubeconfig mykubeconfig || true; kubectl apply -f ~/other/resources/gemfire/wan-dashboard-secondary.yaml -n gemfire-remote  --kubeconfig mykubeconfig; kubectl exec -it gemfire0remote-server-0 -n gemfire-remote --kubeconfig mykubeconfig -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_SECONDARY:7070/gemfire/v1" -e "create region --name=sticky --type=REPLICATE" -e "put --key='bit' --value='SECONDARY_URL' --region=sticky"; export DASHBOARD_SECONDARY=$(kubectl get service secondary-dashboard-svc -n gemfire-remote  -o jsonpath='{.status.loadBalancer.ingress[0].ip}' --kubeconfig mykubeconfig); kubectl config use-context eduk8s
+sed -i "s/PRIMARY_ISTIO_INGRESS_HOSTNAME/${ISTIO_INGRESS_HOST_PRIMARY}/g; s/SECONDARY_ISTIO_INGRESS_HOSTNAME/${ISTIO_INGRESS_HOST_SECONDARY}/g" ~/other/resources/gemfire/wan-dashboard-primary.yaml; sed -i "s/PRIMARY_ISTIO_INGRESS_HOSTNAME/${ISTIO_INGRESS_HOST_PRIMARY}/g; s/SECONDARY_ISTIO_INGRESS_HOSTNAME/${ISTIO_INGRESS_HOST_SECONDARY}/g" ~/other/resources/gemfire/wan-dashboard-secondary.yaml; kubectl -n {{ session_namespace }} exec -it gemfire0-server-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "create region --name=sticky --type=REPLICATE" -e "put --key='bit' --value='PRIMARY_URL' --region=sticky"; kubectl delete deployment primary-dashboard || true; kubectl apply -f ~/other/resources/gemfire/wan-dashboard-primary.yaml; export DASHBOARD_PRIMARY=$(until kubectl get service primary-dashboard-svc -o jsonpath='{.status.loadBalancer.ingress[0].ip}' | grep "ingress"; do : ; done); kubectl config use-context secondary-ctx --kubeconfig mykubeconfig; kubectl delete deployment secondary-dashboard -n gemfire-remote --kubeconfig mykubeconfig || true; kubectl apply -f ~/other/resources/gemfire/wan-dashboard-secondary.yaml -n gemfire-remote  --kubeconfig mykubeconfig; kubectl exec -it gemfire0remote-server-0 -n gemfire-remote --kubeconfig mykubeconfig -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_SECONDARY:7070/gemfire/v1" -e "create region --name=sticky --type=REPLICATE" -e "put --key='bit' --value='SECONDARY_URL' --region=sticky"; export DASHBOARD_SECONDARY=$(until kubectl get service secondary-dashboard-svc -n gemfire-remote  -o jsonpath='{.status.loadBalancer.ingress[0].ip}' --kubeconfig mykubeconfig | grep "ingress"; do : ; done); kubectl config use-context eduk8s
 ```
 
 Launch the random data generator for the **primary** side.
@@ -202,7 +202,7 @@ echo http://${ISTIO_INGRESS_HOST_PRIMARY}:7070/pulse/
 
 View the associated Oracle and MySQL databases (can use DBeaver or CloudBeaver) - execute the following query:
 ```copy
-select count(*) from ADMIN.CLAIMS;
+select count(*) from ADMIN.claims;
 ```
 
 Launch the Dashboard app for the **secondary** side:
@@ -217,7 +217,7 @@ echo http://${ISTIO_INGRESS_HOST_SECONDARY}:7070/pulse/
 
 View the associated Oracle and MySQL databases (can use DBeaver or CloudBeaver) - execute the following query:
 ```copy
-select count(*) from ADMIN.CLAIMS;
+select count(*) from ADMIN.claims;
 ```
 
 Now, kill one of the gemfire pods on the secondary side and switch the secondary dashboard over to the primary site:
