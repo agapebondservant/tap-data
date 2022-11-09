@@ -83,6 +83,11 @@ Show the list of configured gateways on the sender side:
 kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "set variable --name=APP_RESULT_VIEWER --value=900000" -e "list gateways"
 ```
 
+<b><font color="red">NOTE: If any of the gateway senders does not display a status of "Running and Connected", you may need to recreate the gateway - destroy the gateway by running the script below, and then RECREATE BY REPEATING THE LAST 2 STEPS ABOVE:</font></b>
+```execute
+kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "set variable --name=APP_RESULT_VIEWER --value=900000" -e "destroy gateway-sender --id=sender1"
+```
+
 Similarly, re-display the list of configured gateways on the receiver side:
 ```execute
 kubectl config use-context secondary-ctx --kubeconfig mykubeconfig; kubectl -n gemfire-remote exec -it gemfire0remote-locator-0 --kubeconfig mykubeconfig -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_SECONDARY:7070/gemfire/v1" -e "set variable --name=APP_RESULT_VIEWER --value=900000" -e "list gateways"; kubectl config use-context eduk8s
@@ -108,12 +113,19 @@ text: "@Override"
 after: 19
 ```
 
+View the referenced code in the **DataSourcesUtil** utility class:
+```editor:select-matching-text
+file: ~/other/resources/gemfire/java-source/src/main/java/com/vmware/multisite/DataSourceUtils.java
+text: "static final void updateDb"
+after: 18
+```
+
 Build the **CacheAsyncListener** jar file for the **primary** site, and deploy it to the primary cluster:
 ```execute
 cd ~/other/resources/gemfire/java-source; ./mvnw -s settings.xml clean dependency:copy-dependencies -DoutputDirectory=target/lib -DincludeGroupIds=org.apache.commons,com.google.code.gson,org.apache.logging.log4j,org.slf4j,com.oracle.ojdbc,commons-dbutils package -Ddemo.resources.dir=src/main/resources/primary; cd -; kubectl cp ~/other/resources/gemfire/java-source/target/lib  {{ session_namespace }}/gemfire0-locator-0:/tmp; kubectl cp ~/other/resources/gemfire/java-source/target/gemfire-multisite-poc-1.0-SNAPSHOT.jar  {{ session_namespace }}/gemfire0-locator-0:/tmp/lib; kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "deploy --dir=/tmp/lib"
 ```
 
-After adding the **CacheAsyncListeners** to the cluster's classpath, let's create an **async queue** - the listener will process events from this queue:
+After adding the **CacheAsyncListeners** to the cluster's classpath, let's create **async queues** - the listeners will process events from these queues:
 ```execute
 kubectl -n {{ session_namespace }} exec -it gemfire0-server-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "create async-event-queue --id=primaryAsyncOracleQueue --persistent --listener=com.vmware.multisite.SyncOracleCacheAsyncListener"; "create async-event-queue --id=primaryAsyncMySQLQueue --persistent --listener=com.vmware.multisite.SyncMySQLCacheAsyncListener"; kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "set variable --name=APP_RESULT_VIEWER --value=900000" -e "list async-event-queues"
 ```

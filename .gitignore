@@ -208,3 +208,11 @@ other/resources/gemfire/java-source/src/main/resources/secondary/db.properties
 other/resources/gemfire/python-source/app/__pycache__/
 other/resources/gemfire/java-source/target/
 /Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/gemfire/java-source/target/classes/db.properties
+/Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/gemfire/java-source/target/classes/main/resources/primary/oracle-db.properties
+/Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/gemfire/java-source/target/classes/main/resources/primary/mysql-db.properties
+/Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/gemfire/java-source/target/classes/main/resources/secondary/oracle-db.properties
+/Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/gemfire/java-source/target/classes/main/resources/secondary/mysql-db.properties
+/Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/gemfire/java-source/src/main/resources/primary/oracle-db.properties
+/Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/gemfire/java-source/src/main/resources/primary/mysql-db.properties
+/Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/gemfire/java-source/src/main/resources/secondary/oracle-db.properties
+/Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/gemfire/java-source/src/main/resources/secondary/mysql-db.properties

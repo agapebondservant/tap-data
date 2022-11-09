@@ -10,4 +10,4 @@ spec:
     - name: tanzu-operator-ui-svc
       port: 8080
   virtualhost:
-    fqdn: operator-ui-YOUR_SESSION_NAMESPACE.tanzudatatap.ml
+    fqdn: operator-ui.tanzuwandemo.ml
