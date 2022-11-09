@@ -233,14 +233,14 @@ Gemfire supports complex object queries, including queries for nested objects.
 
 Set up a new claim, **claims2**:
 ```execute
-kubectl -n {{ session_namespace }} exec -it gemfire0-server-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "create region --name=claims2"
+kubectl -n {{ session_namespace }} exec -it gemfire0-server-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "create region --name=claims2  --type=PARTITION"
 ```
 
 Generate JSON entries whose schema is shown here (it represents a **Claim object** with a nested **Insurance** object):
 ```editor:select-matching-text
 file: ~/other/resources/gemfire/python-source/app/random_claim_generator_nested.py
 text: "for i in range(sys.maxsize"
-after: 15
+after: 19
 ```
 
 Now, launch the random generator - click *Ctrl-C* after a few seconds:
@@ -250,5 +250,5 @@ cd ~/other/resources/gemfire/python-source/; python -m app.random_claim_generato
 
 On the primary Pulse site, perform a nested query: Click on "Data Browser" and enter the following in the Query Editor:
 ```copy
-select w from /claims2 c, c.insurance i where i.city='Washington'
+select i from /claims2 c, c.insurance i where i.city='Washington'
 ```

@@ -76,13 +76,13 @@ def show_counts():
 
     lb_url = os.environ[f"{sys.argv[1].upper()}_URL"]
 
-    sticky_bit = requests.get(f"http://{lb_url}:7070/gemfire_api/v1/sticky/bit").text or 'PRIMARY_URL'
+    sticky_bit = eval(requests.get(f"http://{lb_url}:7070/gemfire-api/v1/sticky/bit").text) or 'PRIMARY_URL'
 
     gemfire_url = f"http://{os.environ[sticky_bit]}:7070/gemfire-api/v1"
 
     current_site = sticky_bit.lower().replace('_url', '') or sys.argv[1]
 
-    print(f'URL: {gemfire_url} Current Site: {current_site}')
+    print(f'Base URL: {lb_url} Gemfire URL: {gemfire_url} Sticky Bit: {sticky_bit} Current Site: {current_site}')
 
     st.markdown(
         f"<div class='user-site'>User Site: <font color=blue><span class='{current_site}'>{current_site}</span></font></div>",
