@@ -83,9 +83,9 @@ Show the list of configured gateways on the sender side:
 kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "set variable --name=APP_RESULT_VIEWER --value=900000" -e "list gateways"
 ```
 
-<b><font color="red">NOTE: If any of the gateway senders does not display a status of "Running and Connected", you may need to recreate the gateway - destroy the gateway by running the script below, and then RECREATE BY REPEATING THE LAST 2 STEPS ABOVE:</font></b>
+<b><font color="red">NOTE: If any of the gateway senders does not display a status of "Running and Connected", you may need to recreate the gateway by executing the script below - repeat until the "Running and Connected" status is shown:</font></b>
 ```execute
-kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "set variable --name=APP_RESULT_VIEWER --value=900000" -e "destroy gateway-sender --id=sender1"
+kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "set variable --name=APP_RESULT_VIEWER --value=900000" -e "destroy gateway-sender --id=sender1" -e "create gateway-sender --id=sender1 --parallel=true --remote-distributed-system-id=21"; kubectl -n {{ session_namespace }} exec -it gemfire0-locator-0 -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_PRIMARY:7070/gemfire/v1" -e "set variable --name=APP_RESULT_VIEWER --value=900000" -e "list gateways"
 ```
 
 Similarly, re-display the list of configured gateways on the receiver side:
@@ -141,12 +141,12 @@ Similarly, build the **CacheListener** jar file for the **secondary** site and d
 cd ~/other/resources/gemfire/java-source; ./mvnw -s settings.xml clean dependency:copy-dependencies -DoutputDirectory=target/lib -DincludeGroupIds=org.apache.commons,com.google.code.gson,org.apache.logging.log4j,org.slf4j,com.oracle.ojdbc,commons-dbutils package -Ddemo.resources.dir=src/main/resources/secondary; cd -; kubectl cp ~/other/resources/gemfire/java-source/target/lib  gemfire-remote/gemfire0remote-locator-0:/tmp --kubeconfig mykubeconfig; kubectl cp ~/other/resources/gemfire/java-source/target/gemfire-multisite-poc-1.0-SNAPSHOT.jar  gemfire-remote/gemfire0remote-locator-0:/tmp/lib --kubeconfig mykubeconfig; kubectl -n gemfire-remote exec -it gemfire0remote-locator-0 --kubeconfig mykubeconfig -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_SECONDARY:7070/gemfire/v1" -e "deploy --dir=/tmp/lib"; kubectl config use-context eduk8s
 ```
 
-Create an **async queue** for the listener:
+Create **async queues** for the listener:
 ```execute
 kubectl config use-context secondary-ctx --kubeconfig mykubeconfig; kubectl -n gemfire-remote exec -it gemfire0remote-server-0 --kubeconfig mykubeconfig -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_SECONDARY:7070/gemfire/v1" -e "create async-event-queue --id=secondaryAsyncOracleQueue --persistent --listener=com.vmware.multisite.SyncOracleCacheAsyncListener" -e "create async-event-queue --id=secondaryAsyncMySQLQueue --persistent --listener=com.vmware.multisite.SyncMySQLCacheAsyncListener"; kubectl -n gemfire-remote exec -it gemfire0remote-locator-0 --kubeconfig mykubeconfig -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_SECONDARY:7070/gemfire/v1" -e "set variable --name=APP_RESULT_VIEWER --value=900000" -e "list async-event-queues"; kubectl config use-context eduk8s
 ```
 
-Register the **CacheListener** with the **claims** region in the **secondary** site:
+Register the **CacheListeners** with the **claims** region in the **secondary** site:
 ```execute
 kubectl config use-context secondary-ctx --kubeconfig mykubeconfig; kubectl -n gemfire-remote exec -it gemfire0remote-server-0 --kubeconfig mykubeconfig -- gfsh -e "connect --url=http://$ISTIO_INGRESS_HOST_SECONDARY:7070/gemfire/v1" -e "create region --name=claims --type=PARTITION --async-event-queue-id=secondaryAsyncOracleQueue,secondaryAsyncMySQLQueue"; kubectl config use-context eduk8s
 ```

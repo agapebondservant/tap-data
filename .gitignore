@@ -216,3 +216,5 @@ other/resources/gemfire/java-source/target/
 /Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/gemfire/java-source/src/main/resources/primary/mysql-db.properties
 /Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/gemfire/java-source/src/main/resources/secondary/oracle-db.properties
 /Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/gemfire/java-source/src/main/resources/secondary/mysql-db.properties
+/Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/gemfire/java-source/target/classes/oracle-db.properties
+/Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/gemfire/java-source/target/classes/mysql-db.properties
