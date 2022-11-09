@@ -80,7 +80,13 @@ def show_counts():
 
     gemfire_url = f"http://{os.environ[sticky_bit]}:7070/gemfire-api/v1"
 
-    print(f'URL: {gemfire_url}')
+    current_site = sticky_bit.lower().replace('_url', '') or sys.argv[1]
+
+    print(f'URL: {gemfire_url} Current Site: {current_site}')
+
+    st.markdown(
+        f"<div class='user-site'>User Site: <font color=blue><span class='{current_site}'>{current_site}</span></font></div>",
+        unsafe_allow_html=True)
 
     st.markdown("<div class='blinking'>&nbsp;</div>", unsafe_allow_html=True)
 
@@ -104,15 +110,16 @@ def show_counts():
 
 
 with tab1:
+
     st.markdown(
-        f"<div class='oracle'>&nbsp;</div><div class='user-site'>User Site: <font color=blue><span class='{sys.argv[1]}'>{sys.argv[1]}</span></font></div>",
+        f"<div class='oracle'>&nbsp;</div>",
         unsafe_allow_html=True)
 
     show_counts()
 
 with tab2:
     st.markdown(
-        f"<div class='mysql'>&nbsp;</div><div class='user-site'>User Site: <font color=blue><span class='{sys.argv[1]}'>{sys.argv[1]}</span></font></div>",
+        f"<div class='mysql'>&nbsp;</div>",
         unsafe_allow_html=True)
     show_counts()
 
