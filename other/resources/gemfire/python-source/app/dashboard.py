@@ -15,8 +15,8 @@ import json
 # Initializations
 st.set_option('deprecation.showPyplotGlobalUse', False)
 top1000query = "select * from /claims c limit 1000"
-totalPrimaryCountQuery = "select count(*) from /claims c where c.region = 'primary'"
-totalSecondaryCountQuery = "select count(*) from /claims c where c.region = 'secondary'"
+totalPrimaryCountQuery = "select count(*) from /claims c where c.region = 'east'"
+totalSecondaryCountQuery = "select count(*) from /claims c where c.region = 'west'"
 
 st.write("""
 <style>
