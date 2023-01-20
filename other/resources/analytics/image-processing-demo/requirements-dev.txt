@@ -1,0 +1,39 @@
+matplotlib
+pmdarima
+prophet
+psycopg2-binary
+sqlalchemy
+python-dotenv
+pandas
+wheel
+scikit-learn
+nbconvert
+seaborn
+traitlets
+scipy
+plotly
+watchdog
+mpld3
+streamlit==1.12.0 # streamlit==1.11.1
+Pillow
+streamlit-autorefresh
+jupyterflow
+https://files.pythonhosted.org/packages/bd/1a/45fc8084873d58419b0b1b1f2f8303e84706adc8478c63d4ed19e9919445/ray-2.1.0-cp310-cp310-macosx_10_15_universal2.whl
+https://github.com/agapebondservant/ml-metrics-accelerator/zipball/main
+lz4
+pyyaml
+prometheus-client
+protobuf # protobuf==3.20.0 # protobuf==3.19.5
+fastapi
+#modin[ray]
+uvicorn[standard]
+gunicorn
+boto3
+tensorflow
+rsocket
+# asyncio
+python-snappy
+mlflow==2.0.1
+filelock==3.9.0
+pyarrow<7.0.0
+hickle
