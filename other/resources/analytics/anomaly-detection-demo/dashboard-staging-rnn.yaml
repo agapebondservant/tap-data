@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+  labels:
+    app: streamlit-dashboard-rnn
+  name: streamlit-dashboard-rnn
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: streamlit-dashboard-rnn
+  template:
+    metadata:
+      labels:
+        app: streamlit-dashboard-rnn
+    spec:
+      containers:
+      - command:
+        - streamlit
+        - run
+        - app/main/python/ui/dashboard.py
+        - --logger.level=info
+        - model_name=app.main.python.anomaly_detection_rnn
+        - model_type=rnn
+        - model_stage=Staging
+        image: oawofolu/streamlit
+        imagePullPolicy: Always
+        envFrom:
+        - configMapRef:
+            name: streamlit-env
+        name: streamlit
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      tolerations:
+        - key: "analytics"
+          operator: "Equal"
+          value: "anomaly"
+          effect: "NoSchedule"
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: analytics
+                    operator: In
+                    values:
+                      - anomaly
+
