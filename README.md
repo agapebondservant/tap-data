@@ -46,15 +46,14 @@ New entries will be populated as the install proceeds)
 
 * Create a Management Cluster (Optional - required only if management cluster does not exist) 
 ```
-AWS_REGION=<your-region> tanzu management-cluster permissions aws set && tanzu management-cluster create <your-management-cluster-name>  --file  -v 6
+AWS_REGION=<your-region> tanzu management-cluster permissions aws set && tanzu management-cluster create <your-management-cluster-name>  --file resources/tanzu-management-aws.yaml  -v 6
 ```
-(NOTE: Follow instructions for deploying a Tanzu Management cluster here: https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-index.html)
+(NOTE: Follow instructions for pre-requisites to deploy a Tanzu Management cluster here: https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-index.html)
 
 * Create new cluster for Educates platform: 
 ```
-tanzu login 
+tanzu login (select the management cluster when prompted)
 tanzu cluster create <your-cluster-name> --file resources/tanzu-aws.yaml
-watch tanzu cluster get <your-cluster-name>
 tanzu cluster kubeconfig get <your-cluster-name> --admin
 kubectl config use-context <your-cluster-name>-admin@<your-cluster-name>
 ```
@@ -265,7 +264,8 @@ helm install prometheus prometheus-community/kube-prometheus-stack --create-name
 --set prometheus.service.port=8000 --set prometheus.service.type=ClusterIP \
 --set grafana.enabled=false,alertmanager.enabled=false,nodeExporter.enabled=false \
 --set prometheus.prometheusSpec.podMonitorSelectorNilUsesHelmValues=false \
---set prometheus.prometheusSpec.serviceMonitorSelectorNilUsesHelmValues=false\
+--set prometheus.prometheusSpec.serviceMonitorSelectorNilUsesHelmValues=false \
+--set prometheus.prometheusSpec.shards=0 \
 --wait
 kubectl apply -f resources/prometheus-httpproxy.yaml
 ```
@@ -332,10 +332,11 @@ resources/scripts/setup.sh
 ```
 resources/scripts/setup-scdf-1.3.sh
 ```
-Register gemfire starter apps:
+Register additional starter apps:
 sink.gemfire=docker:springcloudstream/gemfire-sink-rabbit:2.1.6.RELEASE
 source.gemfire=docker:springcloudstream/gemfire-source-rabbit:2.1.6.RELEASE
 source.gemfire-cq=docker:springcloudstream/gemfire-cq-source-rabbit:2.1.6.RELEASE
+source.trigger=https://repo.spring.io/artifactory/release/org/springframework/cloud/stream/app/trigger-source-rabbit/2.1.4.RELEASE/trigger-source-rabbit-2.1.4.RELEASE.jar
 
 #### Deploy Kubeflow Pipelines <a name="kubeflowpipelines"/>
 * Deploy Kubeflow Pipelines:
@@ -557,34 +558,14 @@ kubectl label nodes <SECOND NODE TO LABEL> analytics=anomaly
 
 Deploy the Analytics apps and dependencies:
 ```
-kubectl get all -o name -n streamlit | xargs kubectl delete -n streamlit
-watch kubectl get all -n streamlit
+other/resources/analytics/anomaly-detection-demo/scripts/deploy-apps-and-rabbit-bindings.sh
+other/resources/analytics/anomaly-detection-demo/scripts/deploy-rabbit.sh
 
-kubectl apply -f other/resources/analytics/anomaly-detection-demo/rabbitmq-analytics-cluster.yaml -nstreamlit
-watch kubectl get all -n streamlit
-
-kubectl apply -f other/resources/analytics/anomaly-detection-demo/rabbitmq-analytics-topology.yaml -nstreamlit
-watch kubectl get all -n streamlit
-
-kubectl apply -f other/resources/analytics/anomaly-detection-demo/rabbitmq-analytics-bindings.yaml -nstreamlit
-watch kubectl get all -n streamlit
-
-kubectl apply -f other/resources/analytics/anomaly-detection-demo/dashboard.yaml -nstreamlit
-kubectl apply -f other/resources/analytics/anomaly-detection-demo/tracker.yaml -nstreamlit
-watch kubectl get all -n streamlit
-
-export ANOMALY_POD_NAME=$(kubectl get pods --namespace streamlit -l "app=streamlit-dashboard" -o jsonpath="{.items[0].metadata.name}")
-kubectl port-forward $ANOMALY_POD_NAME 8091:8501 -nstreamlit
-
-export ANOMALY_POD_NAME=$(kubectl get pods --namespace streamlit -l "app=streamlit-dashboard" -o jsonpath="{.items[0].metadata.name}")
-kubectl logs $ANOMALY_POD_NAME -nstreamlit --tail -1
+# For accessing endpoints locally:
+other/resources/analytics/anomaly-detection-demo/scripts/port-forward-apps.sh
 
 # For exposing externally accessible endpoints:
-kubectl apply -f other/resources/analytics/anomaly-detection-demo/dashboard-tracker-svc.yaml -nstreamlit
-watch kubectl get svc -n streamlit
-# (NOTE: If on AWS, change the timeout settings for the LoadBalancers to 3600)
-# (NOTE: Update your DNS: create CNAME records for anomaly-dashboard.<YOUR_BASE_URL> and anomaly-tracker.<YOUR_BASE_URL> 
-pointing to the dashboard and tracker apps respectively)
+kubectl apply -f other/resources/analytics/anomaly-detection-demo/dashboard-httpproxy.yaml -nstreamlit
 ```
 
 #### Deploy Tanzu Data Workshops<a name="buildanddeploy"/>

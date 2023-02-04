@@ -13,6 +13,7 @@ spec:
     name: rabbitanalytics4
 
 ---
+# For PROD
 apiVersion: rabbitmq.com/v1beta1
 kind: Binding
 metadata:
@@ -26,6 +27,35 @@ spec:
     name: rabbitanalytics4
 
 ---
+# For ARIMA
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: rabbitanalytics4-stats-binding-arima
+spec:
+  source: rabbitanalytics4-exchange
+  destination: rabbitanalytics4-stats-arima
+  destinationType: queue
+  routingKey: "anomaly.stats"
+  rabbitmqClusterReference:
+    name: rabbitanalytics4
+
+---
+# For RNN
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: rabbitanalytics4-stats-binding-rnn
+spec:
+  source: rabbitanalytics4-exchange
+  destination: rabbitanalytics4-stats-rnn
+  destinationType: queue
+  routingKey: "anomaly.stats"
+  rabbitmqClusterReference:
+    name: rabbitanalytics4
+
+---
+# For PROD
 apiVersion: rabbitmq.com/v1beta1
 kind: Binding
 metadata:
@@ -39,6 +69,35 @@ spec:
     name: rabbitanalytics4
 
 ---
+# For ARIMA
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: rabbitanalytics4-dashboard-binding-arima
+spec:
+  source: rabbitanalytics4-exchange
+  destination: rabbitanalytics4-dashboard-arima
+  destinationType: queue
+  routingKey: "anomaly.datapublished"
+  rabbitmqClusterReference:
+    name: rabbitanalytics4
+
+---
+# For RNN
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: rabbitanalytics4-dashboard-binding-rnn
+spec:
+  source: rabbitanalytics4-exchange
+  destination: rabbitanalytics4-dashboard-rnn
+  destinationType: queue
+  routingKey: "anomaly.datapublished"
+  rabbitmqClusterReference:
+    name: rabbitanalytics4
+
+---
+# For PROD
 apiVersion: rabbitmq.com/v1beta1
 kind: Binding
 metadata:
@@ -46,6 +105,34 @@ metadata:
 spec:
   source: rabbitanalytics4-exchange
   destination: rabbitanalytics4-inference
+  destinationType: queue
+  routingKey: "anomaly.datapublished"
+  rabbitmqClusterReference:
+    name: rabbitanalytics4
+
+---
+# For ARIMA
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: rabbitanalytics4-inference-binding-arima
+spec:
+  source: rabbitanalytics4-exchange
+  destination: rabbitanalytics4-inference-arima
+  destinationType: queue
+  routingKey: "anomaly.datapublished"
+  rabbitmqClusterReference:
+    name: rabbitanalytics4
+
+---
+# For RNN
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: rabbitanalytics4-inference-binding-rnn
+spec:
+  source: rabbitanalytics4-exchange
+  destination: rabbitanalytics4-inference-rnn
   destinationType: queue
   routingKey: "anomaly.datapublished"
   rabbitmqClusterReference:

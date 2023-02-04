@@ -1,0 +1,14 @@
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: argo-workflow-httpproxy
+  namespace: jupyterflow
+spec:
+  virtualhost:
+    fqdn: argo-workflows.tanzudatatap.ml
+    tls:
+      passthrough: true
+  tcpproxy:
+    services:
+      - name: argo-server
+        port: 2746

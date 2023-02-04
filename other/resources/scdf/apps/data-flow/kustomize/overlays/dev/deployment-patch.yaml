@@ -9,7 +9,7 @@ spec:
       - name: scdf-server
         env:
         - name: SPRING_PROFILES_ACTIVE
-          value: database,monitoring
+          value: database
         volumeMounts:
           - name: dockerconfig
             mountPath: /workspace/runtime/secrets/dockerconfig

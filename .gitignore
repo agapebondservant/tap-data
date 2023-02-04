@@ -218,3 +218,17 @@ other/resources/gemfire/java-source/target/
 /Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/gemfire/java-source/src/main/resources/secondary/mysql-db.properties
 /Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/gemfire/java-source/target/classes/oracle-db.properties
 /Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/gemfire/java-source/target/classes/mysql-db.properties
+./other/resources/gemfire/java-source/target/classes/main/resources/primary/oracle-db.properties
+./other/resources/gemfire/java-source/target/classes/main/resources/primary/mysql-db.properties
+./other/resources/gemfire/java-source/target/classes/main/resources/secondary/oracle-db.properties
+./other/resources/gemfire/java-source/target/classes/main/resources/secondary/mysql-db.properties
+./other/resources/gemfire/java-source/src/main/resources/primary/oracle-db.properties
+./other/resources/gemfire/java-source/src/main/resources/primary/mysql-db.properties
+./other/resources/gemfire/java-source/src/main/resources/secondary/oracle-db.properties
+./other/resources/gemfire/java-source/src/main/resources/secondary/mysql-db.properties
+./other/resources/gemfire/python-source/app/config.py
+bin/.DS_Store
+.DS_Store
+.env-properties
+other/resources/analytics/image-processing-demo/jupyter/cifar10
+other/resources/analytics/image-processing-demo/jupyter/cifar10.hkl

@@ -1,21 +1,31 @@
 ### Anomaly Detection Demo
 
-Now we will walk through a demo of **Realtime Analytics** with Tanzu RabbitMQ.
+First, run the Jupyter notebooks entitled **Airline Analytics (ARIMA)** and **Airline Analytics (RNN)**.
 
-Show the **User Experience** dashboard app:
-```dashboard:open-url
+Next, show the **User Experience** dashboard app:
+```dashboard:create-dashboard
 name: Anomalies
 url: {{ ingress_protocol }}://anomaly-dashboard.{{ DATA_E2E_BASE_URL }}:8080
 ```
 
-Show the **User Experience** tracker app:
-```dashboard:open-url
-name: Tracker
-url: {{ ingress_protocol }}://anomaly-tracker.{{ DATA_E2E_BASE_URL }}:8080
+Next, show the MLFlow site:
+
+Next, show the Spring Cloud DataFlow dashboard:
+```dashboard:create-dashboard
+name: SCDF
+url: {{ ingress_protocol }}://scdf.{{ ingress_domain }}/dashboard/#/streams/list
 ```
 
-Show the RabbitMQ Management dashboard -login with credentials **data-user/data-password**:
-```dashboard:open-url
-name: RabbitMQ
-url: {{ ingress_protocol }}://rmqui.{{ DATA_E2E_BASE_URL }}
+Next, show the Ray dashboard:
+```dashboard:create-dashboard
+name: Ray
+url: {{ ingress_protocol }}://ray.tanzudatadev.ml/
 ```
+
+Next, show GitHub Actions:
+```dashboard:create-dashboard
+name: GitHub
+url: {{ ingress_protocol }}://github.com/agapebondservant/sample-ml-step/actions
+```
+
+

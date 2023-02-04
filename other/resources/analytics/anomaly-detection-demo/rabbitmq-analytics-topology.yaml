@@ -82,6 +82,7 @@ spec:
 
 # Other Queues
 ---
+# For PROD deployment
 apiVersion: rabbitmq.com/v1beta1
 kind: Queue
 metadata:
@@ -95,6 +96,35 @@ spec:
     name: rabbitanalytics4
 
 ---
+# For ARIMA deployment
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: rabbitanalytics4-stats-arima
+spec:
+  name: rabbitanalytics4-stats-arima
+  autoDelete: false
+  durable: true
+  type: quorum
+  rabbitmqClusterReference:
+    name: rabbitanalytics4
+
+---
+# For RNN deployment
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: rabbitanalytics4-stats-rnn
+spec:
+  name: rabbitanalytics4-stats-rnn
+  autoDelete: false
+  durable: true
+  type: quorum
+  rabbitmqClusterReference:
+    name: rabbitanalytics4
+
+---
+# For PROD deployment
 apiVersion: rabbitmq.com/v1beta1
 kind: Queue
 metadata:
@@ -108,12 +138,70 @@ spec:
     name: rabbitanalytics4
 
 ---
+# For ARIMA deployment
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: rabbitanalytics4-dashboard-arima
+spec:
+  name: rabbitanalytics4-dashboard-arima
+  autoDelete: false
+  durable: true
+  type: quorum
+  rabbitmqClusterReference:
+    name: rabbitanalytics4
+
+---
+# For RNN deployment
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: rabbitanalytics4-dashboard-rnn
+spec:
+  name: rabbitanalytics4-dashboard-rnn
+  autoDelete: false
+  durable: true
+  type: quorum
+  rabbitmqClusterReference:
+    name: rabbitanalytics4
+
+
+---
+# For PROD deployment
 apiVersion: rabbitmq.com/v1beta1
 kind: Queue
 metadata:
   name: rabbitanalytics4-inference
 spec:
   name: rabbitanalytics4-inference
+  autoDelete: false
+  durable: true
+  type: quorum
+  rabbitmqClusterReference:
+    name: rabbitanalytics4
+
+---
+# For ARIMA deployment
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: rabbitanalytics4-inference-arima
+spec:
+  name: rabbitanalytics4-inference-arima
+  autoDelete: false
+  durable: true
+  type: quorum
+  rabbitmqClusterReference:
+    name: rabbitanalytics4
+
+---
+# For RNN deployment
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: rabbitanalytics4-inference-rnn
+spec:
+  name: rabbitanalytics4-inference-rnn
   autoDelete: false
   durable: true
   type: quorum

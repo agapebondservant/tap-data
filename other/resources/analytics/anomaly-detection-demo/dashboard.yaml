@@ -21,6 +21,9 @@ spec:
         - run
         - app/main/python/ui/dashboard.py
         - --logger.level=info
+        - model_name=app.main.python.anomaly_detection_arima
+        - model_type=arima
+        - model_stage=Production
         image: oawofolu/streamlit
         imagePullPolicy: Always
         name: streamlit
