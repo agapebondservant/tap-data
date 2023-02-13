@@ -9,7 +9,9 @@ tar -xzvf other/resources/helm*.tar.gz -C other/resources && \
     mv other/resources/k9s other/resources/bin/k9s &&
     chmod +x other/resources/bin/imgpkg && \
     mv other/resources/linux-amd64/helm other/resources/bin/helm &&
-    chmod +x workshop/terminal/*.sh
+    chmod +x workshop/terminal/*.sh &&
+    chmod +x other/resources/bin/kbld &&
+    chmod +x other/resources/bin/kapp
 
 docker build -t $DATA_E2E_REGISTRY_URL:$DATA_E2E_WORKSHOP_IMAGE_VERSION --build-arg BASE_IMAGE=oawofolu/learning-platform-image:v1 .
 docker tag $DATA_E2E_REGISTRY_URL:$DATA_E2E_WORKSHOP_IMAGE_VERSION $DATA_E2E_REGISTRY_URL
