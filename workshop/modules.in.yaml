@@ -39,6 +39,34 @@ modules:
       name: Using the Operator UI
     gemfire-wan-replication:
       name: WAN Replication with Gemfire
+    mlops-tap-overview:
+      name: Demo Overview
+    deploy-jupyterhub:
+      name: Deploy JupyterHub
+    deploy-mlflow:
+      name: Deploy MLFlow
+    deploy-ml-workflow:
+      name: Build and Train ML Model Workflow with Tensorflow
+    deploy-ml-pipeline-argo:
+      name: Build ML Pipeline with Argo Workflows
+    deploy-ml-inference-argo:
+      name: Create Predictive Apps
+    mlops-accelerators-overview:
+      name: Overview of Accelerators
+    deploy-greenplum-model-argo:
+      name: Deploy Greenplum Model
+    deploy-greenplum-ml-inference-argo:
+      name: Deploy Greenplum Model at the edge
+    mlops-gpu-overview:
+      name: Overview of GPUs
+    deploy-ml-pipeline-kubeflow:
+      name: Build ML Pipeline with Kubeflow Pipelines
+    deploy-ml-inference-kubeflow:
+      name: Create Predictive Apps
+    deploy-greenplum-model-kubeflow:
+      name: Deploy Greenplum Model
+    deploy-greenplum-ml-inference-kubeflow:
+      name: Deploy Greenplum Model at the edge
 config:
     vars:
     - name: DATA_E2E_REGISTRY_USERNAME
@@ -159,5 +187,7 @@ config:
       value: ${DATA_E2E_MYSQL_DB_PRIMARY_HOST}
     - name: DATA_E2E_MYSQL_DB_SECONDARY_HOST
       value: ${DATA_E2E_MYSQL_DB_SECONDARY_HOST}
+    - name: DATA_E2E_JUPYTERHUB_VERSION
+      value: ${DATA_E2E_JUPYTERHUB_VERSION}
 
 

@@ -1,0 +1,14 @@
+name: Tanzu Postgres - Kubernetes Deep Dive
+
+modules:
+    activate:
+    - mlops-tap-overview
+    - deploy-jupyterhub
+    - deploy-mlflow
+    - deploy-ml-workflow
+    - deploy-ml-pipeline-kubeflow
+    - deploy-ml-inference-kubeflow
+    - mlops-accelerators-overview
+    - deploy-greenplum-model-kubeflow
+    - deploy-greenplum-ml-inference-kubeflow
+    - mlops-gpu-overview

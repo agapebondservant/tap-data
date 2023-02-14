@@ -1,0 +1,14 @@
+name: MLOps with Argo Workflows, MLFlow and TAP
+
+modules:
+    activate:
+    - mlops-tap-overview
+    - deploy-jupyterhub
+    - deploy-mlflow
+    - deploy-ml-workflow
+    - deploy-ml-pipeline-argo
+    - deploy-ml-inference-argo
+    - mlops-accelerators-overview
+    - deploy-greenplum-model-argo
+    - deploy-greenplum-ml-inference-argo
+    - mlops-gpu-overview

@@ -477,13 +477,17 @@ docker login registry.tanzu.vmware.com
 export INSTALL_REGISTRY_USERNAME=$DATA_E2E_REGISTRY_USERNAME
 export INSTALL_REGISTRY_PASSWORD=$DATA_E2E_REGISTRY_PASSWORD
 #export TAP_VERSION=1.1.1
-export TAP_VERSION=1.2.0
+#export TAP_VERSION=1.2.0
+export TAP_VERSION=1.3.4
 export INSTALL_REGISTRY_HOSTNAME=index.docker.io
 imgpkg copy -b registry.tanzu.vmware.com/tanzu-application-platform/tap-packages:${TAP_VERSION} --to-repo ${INSTALL_REGISTRY_HOSTNAME}/${DATA_E2E_REGISTRY_USERNAME}/tap-packages
 imgpkg copy -b registry.tanzu.vmware.com/p-rabbitmq-for-kubernetes/tanzu-rabbitmq-package-repo:${DATA_E2E_RABBIT_OPERATOR_VERSION} --to-repo ${INSTALL_REGISTRY_HOSTNAME}/oawofolu/vmware-tanzu-rabbitmq
-
+export TBS_VERSION=1.9.0 # based on $(tanzu package available list buildservice.tanzu.vmware.com --namespace tap-install)
+imgpkg copy -b registry.tanzu.vmware.com/tanzu-application-platform/full-tbs-deps-package-repo:${TBS_VERSION} --to-repo index.docker.io/oawofolu/tbs-full-deps
+```
 
 #### Install TAP
+```
 kubectl create ns tap-install
 tanzu secret registry add tap-registry \
 --username ${INSTALL_REGISTRY_USERNAME} --password ${INSTALL_REGISTRY_PASSWORD} \
@@ -497,6 +501,13 @@ tanzu package available list --namespace tap-install
 tanzu package available list tap.tanzu.vmware.com --namespace tap-install
 tanzu package available get tap.tanzu.vmware.com/$TAP_VERSION --values-schema --namespace tap-install
 tanzu package install tap -p tap.tanzu.vmware.com -v $TAP_VERSION --values-file resources/tap-values.yaml -n tap-install
+
+tanzu package repository add tbs-full-deps-repository --url oawofolu/tbs-full-deps:${TBS_VERSION} --namespace tap-install
+tanzu package installed delete full-tbs-deps -n tap-install -y
+tanzu package install full-tbs-deps -p full-tbs-deps.tanzu.vmware.com -v ${TBS_VERSION}  -n tap-install
+tanzu package installed get full-tbs-deps   -n tap-install
+envsubst < resources/tap-values-tbsfull.in.yaml > resources/tap-values-tbsfull.yaml
+tanzu package installed update tap -p tap.tanzu.vmware.com --values-file resources/tap-values-tbsfull.yaml -n tap-install
 ```
 
 (Optional) To downgrade to TAP 1.1.1:
@@ -515,12 +526,10 @@ To check that all expected packages were installed successfully:
 tanzu package installed list -A -n tap-install
 ```
 
-* Install Learning Center:
+For any packages above that show "Reconciliation failed", try deleting and reinstalling - thus:
 ```
-tanzu package available list learningcenter.tanzu.vmware.com --namespace tap-install # To view available packages for learningcenter
-tanzu package install learning-center --package-name learningcenter.tanzu.vmware.com --version 0.2.1 -f resources/learning-center-config.yaml -n tap-install
-kubectl get all -n learningcenter
-tanzu package available list workshops.learningcenter.tanzu.vmware.com --namespace tap-install
+tanzu package installed delete <name of failed package> -n tap-install -y
+tanzu package install <name of failed package> -p <package metadata name> -v ${package version}  -n tap-install
 ```
 
 * (Optional) Deploy the sample Learning Center Workshop:
@@ -538,6 +547,7 @@ tanzu acc create jupyter --git-repository https://github.com/agapebondservant/ju
 tanzu acc create appcollator --git-repository https://github.com/agapebondservant/app-collator.git --git-branch main
 tanzu acc create mlmetrics --git-repository https://github.com/agapebondservant/ml-metrics-accelerator.git --git-branch main
 tanzu acc create scdf-mlmodel --git-repository https://github.com/agapebondservant/scdf-ml-model.git --git-branch main
+tanzu acc create kubeflow-pipelines --git-repository https://github.com/agapebondservant/kubeflow-pipelines-accelerator.git --git-branch main
 ```
 
 * Install Analytics Apps:
@@ -592,12 +602,15 @@ resources/scripts/deploy-workshop.sh
 * Make sure additional pre-requisites are set up for the workshop: <a href="#workshop-pre-reqs">Setup required pre-installations for workshop</a>
  Follow the instructions to add the desired workshop to your Learning Center as shown:
 
-  | Workshop Name                              | Link                                                       |
-  |--------------------------------------------|------------------------------------------------------------|
-  | Tanzu Data with TAP                        | <a href="#workshopa">View Instructions</a>                 |
-  | Tanzu Postgres - Kubernetes Deepdive       | <a href="#workshopb">View Instructions</a>                 |
-  | Tanzu RabbitMQ - Commercial Features       | <a href="#workshopc">View Instructions</a>                 |
-  | Tanzu RabbitMQ - Realtime Analytics Demo   | <a href="#workshopd">View Instructions</a>                 |
+  | Workshop Name                                  | Link                                                       |
+  |------------------------------------------------|------------------------------------------------------------|
+  | Tanzu Data with TAP                            | <a href="#workshopa">View Instructions</a>                 |
+  | Tanzu Postgres - Kubernetes Deepdive           | <a href="#workshopb">View Instructions</a>                 |
+  | Tanzu RabbitMQ - Commercial Features           | <a href="#workshopc">View Instructions</a>                 |
+  | Tanzu RabbitMQ - Realtime Analytics Demo       | <a href="#workshopd">View Instructions</a>                 |
+  | MLOps with Argo Workflows, MLFlow and TAP      | <a href="#workshope">View Instructions</a>                 |
+  | MLOps with Kubeflow Pipelines, MLFlow and TAP  | <a href="#workshopf">View Instructions</a>                 |
+  | Machine Learning with Greenplum and TAP        | <a href="#workshopg">View Instructions</a>                 |
 
 ##### Deploy "Tanzu Data With TAP"<a name="workshop-pre-reqs"/>
 Setup pre-reqs for various packages required by workshops with Tanzu cli:
@@ -686,16 +699,54 @@ kubectl apply -f resources/hands-on/workshop-rabbitmq-commercial-features-demo.y
 watch kubectl get learningcenter-training
 ```
 
-##### Deploy "Tanzu RabbitMQ - Realtime Analytics"<a name="workshopd"/>
+##### Deploy "MLOps with Argo Workflows, MLFlow and TAP"<a name="workshope"/>
 Add the following to your `training-portal.yaml` (under **spec.workshops**):
 ```
-- name: data-rabbitmq-realtime-analytics
+- name: data-mlops-argo-workflows
   capacity: 10 #Change the capacity to the number of expected participants
   reserved: 1
   expires: 120m
   orphaned: 5m
-- name: data-rabbitmq-realtime-analytics
-  capacity: 1
+```
+
+Run the following:
+```
+resources/scripts/deploy-handson-workshop.sh <path-to-your-env-file>
+resources/scripts/workshop-as-a-service/setup-postgres.sh
+kubectl delete --all learningcenter-training
+kubectl apply -f resources/hands-on/system-profile.yaml
+kubectl apply -f resources/workshop-mlops-argo-workflows.yaml
+kubectl apply -f <path-to-your-training-portal.yaml>
+watch kubectl get learningcenter-training
+```
+
+##### Deploy "MLOps with Kubeflow Pipelines, MLFlow and TAP"<a name="workshopf"/>
+Add the following to your `training-portal.yaml` (under **spec.workshops**):
+```
+- name: data-mlops-kubeflow-pipelines
+  capacity: 10 #Change the capacity to the number of expected participants
+  reserved: 1
+  expires: 120m
+  orphaned: 5m
+```
+
+Run the following:
+```
+resources/scripts/deploy-handson-workshop.sh <path-to-your-env-file>
+resources/scripts/workshop-as-a-service/setup-postgres.sh
+kubectl delete --all learningcenter-training
+kubectl apply -f resources/hands-on/system-profile.yaml
+kubectl apply -f resources/workshop-mlops-kubeflow-pipelines.yaml
+kubectl apply -f <path-to-your-training-portal.yaml>
+watch kubectl get learningcenter-training
+```
+
+##### Deploy "Machine Learning with Greenplum and TAP"<a name="workshopf"/>
+Add the following to your `training-portal.yaml` (under **spec.workshops**):
+```
+- name: data-ml-greenplum-and-tap
+  capacity: 10 #Change the capacity to the number of expected participants
+  reserved: 1
   expires: 120m
   orphaned: 5m
 ```
@@ -705,11 +756,8 @@ Run the following:
 resources/scripts/deploy-handson-workshop.sh <path-to-your-env-file>
 kubectl delete --all learningcenter-training
 kubectl apply -f resources/hands-on/system-profile.yaml
-kubectl apply -f resources/hands-on/workshop-rabbitmq-realtime-analytics.yaml
+kubectl apply -f resources/hands-on/workshop-ml-greenplum-and-tap.yaml
 kubectl apply -f <path-to-your-training-portal.yaml>
-watch kubectl get learningcenter-training
-(For Presenter Mode:)
-kubectl apply -f resources/hands-on/workshop-rabbitmq-realtime-analytics-demo.yaml
 watch kubectl get learningcenter-training
 ```
 

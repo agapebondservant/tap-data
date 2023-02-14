@@ -1,0 +1,20 @@
+apiVersion: learningcenter.tanzu.vmware.com/v1beta1
+kind: TrainingPortal
+metadata:
+  name: tanzu-mlops
+spec:
+  workshops:
+    - name: data-mlops-argo-workflows
+      capacity: 5
+      expires: 120m
+      orphaned: 5m
+    - name: data-mlops-kubeflow-pipelines
+      capacity: 5
+      reserved: 1
+      expires: 120m
+      orphaned: 5m
+    - name: data-ml-greenplum-and-tap
+      capacity: 5
+      reserved: 1
+      expires: 120m
+      orphaned: 5m
