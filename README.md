@@ -532,6 +532,14 @@ tanzu package installed delete <name of failed package> -n tap-install -y
 tanzu package install <name of failed package> -p <package metadata name> -v ${package version}  -n tap-install
 ```
 
+Deploy LearningCenter:
+```
+tanzu package available list learningcenter.tanzu.vmware.com --namespace tap-install # To view available packages for learningcenter
+tanzu package install learning-center --package-name learningcenter.tanzu.vmware.com --version 0.2.4 -f resources/learning-center-config.yaml -n tap-install
+kubectl get all -n learningcenter
+tanzu package available list workshops.learningcenter.tanzu.vmware.com --namespace tap-install
+```
+
 * (Optional) Deploy the sample Learning Center Workshop:
 ```
 kubectl apply -f resources/workshop-sample.yaml

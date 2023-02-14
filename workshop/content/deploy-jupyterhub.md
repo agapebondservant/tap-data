@@ -45,9 +45,16 @@ To do this, let's view our options by showing the **values schema**:
 tanzu package available get jupyter.tanzu.vmware.com/{{DATA_E2E_JUPYTERHUB_VERSION}} --values-schema
 ```
 
-In our case, we are ok with the defaults, so we can proceed to install the package:
+In our case, we'd like to update a couple of properties: **domain** and **namespace**. 
+We do this be preparing a **values.yaml** file with the schema properties we want to update.
+Let's generate the file:
 ```execute
-tanzu package install jupyterhub -p jupyter.tanzu.vmware.com -v {{DATA_E2E_JUPYTERHUB_VERSION}}
+export TMP_SESSION_NAMESPACE={{session_namespace}} && ~/other/resources/jupyterhub/scripts/generate-values-yaml.sh ~/other/resources/jupyterhub/jupyter-values.yaml
+```
+
+Now we can proceed to install the package:
+```execute
+tanzu package install jupyterhub -p jupyter.tanzu.vmware.com -v {{DATA_E2E_JUPYTERHUB_VERSION}} --values-file ~/other/resources/jupyterhub/jupyter-values.yaml
 ```
 
 Verify that the install was successful:
@@ -55,10 +62,10 @@ Verify that the install was successful:
 tanzu package installed get jupyterhub
 ```
 
-Next, we view it (login with the default username and password shown above - jupyter/jupyter):
+Next, we view it (login with the default username and password shown above - jupyter/jupyter123):
 ```dashboard:create-dashboard
 name: JupyterHub2
-url: {{ ingress_protocol }}://jupyter-default.{{ ingress_domain }}
+url: {{ ingress_protocol }}://jupyter-{{session_namespace}}.{{ ingress_domain }}
 ```
 
 We also need to be able to track our experiments, including properties like metrics and artifacts.

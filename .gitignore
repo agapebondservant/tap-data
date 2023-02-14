@@ -232,3 +232,12 @@ bin/.DS_Store
 .env-properties
 other/resources/analytics/image-processing-demo/jupyter/cifar10
 other/resources/analytics/image-processing-demo/jupyter/cifar10.hkl
+/Users/oawofolu/PIVOTAL/data/educates/tap/resources/tap-values-tbsfull.yaml
+/Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/analytics/jupyterhub/jupyterhub-http-proxy.yaml
+/Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/analytics/anomaly-detection-demo/dashboard-httpproxy.yaml
+/Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/analytics/argo/argo-workflow-http-proxy.yaml
+./resources/tap-values-tbsfull.yaml
+./other/resources/jupyterhub/scripts/generate-values-yaml.sh
+./other/resources/analytics/jupyterhub/jupyterhub-http-proxy.yaml
+./other/resources/analytics/anomaly-detection-demo/dashboard-httpproxy.yaml
+./other/resources/analytics/argo/argo-workflow-http-proxy.yaml

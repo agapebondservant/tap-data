@@ -5,7 +5,7 @@ metadata:
   namespace: jupyterflow
 spec:
   virtualhost:
-    fqdn: argo-workflows.tanzudatatap.ml
+    fqdn: argo-workflows.tanzumlai.com
     tls:
       passthrough: true
   tcpproxy:

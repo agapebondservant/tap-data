@@ -1,0 +1,59 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: streamlit-dashboard-arima-svc
+  name: streamlit-dashboard-arima-svc
+spec:
+  ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8501
+  selector:
+    app: streamlit-dashboard-arima
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: streamlit-dashboard-rnn-svc
+  name: streamlit-dashboard-rnn-svc
+spec:
+  ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8501
+  selector:
+    app: streamlit-dashboard-rnn
+
+---
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: streamlit-dashboard-arima-httpproxy
+spec:
+  routes:
+  - conditions:
+    - prefix: /
+    services:
+    - name: streamlit-dashboard-arima-svc
+      port: 8080
+  virtualhost:
+    fqdn: anomaly-dashboard-arima.tanzumlai.com
+
+---
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: streamlit-dashboard-rnn-httpproxy
+spec:
+  routes:
+    - conditions:
+        - prefix: /
+      services:
+        - name: streamlit-dashboard-rnn-svc
+          port: 8080
+  virtualhost:
+    fqdn: anomaly-dashboard-rnn.tanzumlai.com

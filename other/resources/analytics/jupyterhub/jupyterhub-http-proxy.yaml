@@ -11,4 +11,4 @@ spec:
     - name: proxy-public
       port: 80
   virtualhost:
-    fqdn: jupyterhub.tanzudatatap.ml
+    fqdn: jupyterhub.tanzumlai.com
