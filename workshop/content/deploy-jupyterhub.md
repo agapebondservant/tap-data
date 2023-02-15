@@ -46,7 +46,7 @@ tanzu package available get jupyter.tanzu.vmware.com/{{DATA_E2E_JUPYTERHUB_VERSI
 ```
 
 In our case, we'd like to update a few of the properties shown. 
-We do this be preparing a **values.yaml** file with the schema properties we want to update.
+We do this by preparing a **values.yaml** file with the schema properties we want to update.
 Let's generate the file:
 ```execute
 cat > ~/other/resources/jupyterhub/jupyter-values.yaml <<- EOF
@@ -56,6 +56,11 @@ version: {{DATA_E2E_JUPYTERHUB_VERSION}}
 base_domain: {{DATA_E2E_BASE_URL}}
 container_repo_user: {{DATA_E2E_REGISTRY_USERNAME}}
 EOF
+```
+
+Here's the final **values.yaml** file:
+```editor:open-file
+file: ~/other/resources/jupyterhub/jupyter-values.yaml
 ```
 
 Now we can proceed to install the package:
