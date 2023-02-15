@@ -248,3 +248,4 @@ resources/tap-values-1.3.yaml
 /Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/minio/minio-ml-http-proxy.yaml
 /Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/jupyterhub/scripts/generate-values-yaml.sh
 .env-mlai
+other/resources/jupyterhub/scripts/generate-values-yaml.sh

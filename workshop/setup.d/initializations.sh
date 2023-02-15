@@ -12,3 +12,4 @@ tanzu secret registry delete regsecret --namespace default -y || true
 tanzu secret registry add regsecret --username ${DATA_E2E_REGISTRY_USERNAME} \
       --password ${DATA_E2E_REGISTRY_PASSWORD} --server ${DATA_E2E_REGISTRY_USERNAME} \
       --export-to-all-namespaces --yes --namespace default
+echo ${DATA_E2E_REGISTRY_PASSWORD} | docker login registry-1.docker.io --username=${DATA_E2E_REGISTRY_USERNAME} --password-stdin
