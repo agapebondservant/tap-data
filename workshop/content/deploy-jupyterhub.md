@@ -31,12 +31,12 @@ We will reference the path to the registry for the install as our _url_ paramete
 
 Let's go ahead and install the JupyterHub Package Repository:
 ```execute
-echo {{ DATA_E2E_REGISTRY_PASSWORD }} | docker login registry-1.docker.io --username={{ DATA_E2E_REGISTRY_USERNAME }} --password-stdin; cd ~ && tanzu init && tanzu plugin install --local bin/cli secret && tanzu secret registry delete regsecret --namespace default -y || true; tanzu secret registry add regsecret --username {{ DATA_E2E_REGISTRY_USERNAME }} --password {{ DATA_E2E_REGISTRY_PASSWORD }} --server {{ DATA_E2E_REGISTRY_USERNAME }} --export-to-all-namespaces --yes --namespace default; tanzu package repository add jupyterhub-package-repository --url {{DATA_E2E_REGISTRY_USERNAME}}/jupyter-package-repo:{{DATA_E2E_JUPYTERHUB_VERSION}}
+echo {{ DATA_E2E_REGISTRY_PASSWORD }} | docker login registry-1.docker.io --username={{ DATA_E2E_REGISTRY_USERNAME }} --password-stdin; cd ~ && tanzu init && tanzu plugin install --local bin/cli secret && tanzu secret registry delete regsecret --namespace default -y || true; tanzu secret registry add regsecret --username {{ DATA_E2E_REGISTRY_USERNAME }} --password {{ DATA_E2E_REGISTRY_PASSWORD }} --server {{ DATA_E2E_REGISTRY_USERNAME }} --export-to-all-namespaces --yes --namespace default; tanzu package repository add jupyterhub-package-repository --url {{DATA_E2E_REGISTRY_USERNAME}}/jupyter-package-repo:{{DATA_E2E_JUPYTERHUB_VERSION}} -n {{session_namespace}}
 ```
 
 Next, let's verify that the Jupyterhub package is now available:
 ```execute
-tanzu package available list jupyter.tanzu.vmware.com
+tanzu package available list jupyter.tanzu.vmware.com -n {{session_namespace}}
 ```
 
 As a next step, we may want to update the default configuration values associated with the Jupyterhub package.
@@ -65,17 +65,16 @@ file: ~/other/resources/jupyterhub/jupyter-values.yaml
 
 Now we can proceed to install the package:
 ```execute
-tanzu package install jupyterhub -p jupyter.tanzu.vmware.com -v {{DATA_E2E_JUPYTERHUB_VERSION}} --values-file ~/other/resources/jupyterhub/jupyter-values.yaml
+tanzu package install jupyterhub -p jupyter.tanzu.vmware.com -v {{DATA_E2E_JUPYTERHUB_VERSION}} --values-file ~/other/resources/jupyterhub/jupyter-values.yaml -n {{session_namespace}}
 ```
 
 Verify that the install was successful:
 ```execute
-tanzu package installed get jupyterhub
+tanzu package installed get jupyterhub -n {{session_namespace}}
 ```
 
-Next, we view it (login with the default username and password shown above - jupyter/jupyter123):
-```dashboard:create-dashboard
-name: JupyterHub2
+Next, we view it (login with the default username and password used above - jupyter/jupyter123):
+```dashboard:open-url
 url: {{ ingress_protocol }}://jupyter-{{session_namespace}}.{{ ingress_domain }}
 ```
 
