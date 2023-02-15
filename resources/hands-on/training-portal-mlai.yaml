@@ -13,8 +13,8 @@ spec:
       reserved: 1
       expires: 120m
       orphaned: 5m
-    - name: data-ml-greenplum-and-tap
-      capacity: 5
-      reserved: 1
-      expires: 120m
-      orphaned: 5m
+    #- name: data-ml-greenplum-and-tap
+    #  capacity: 5
+    #  reserved: 1
+    #  expires: 120m
+    #  orphaned: 5m
