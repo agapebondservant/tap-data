@@ -45,11 +45,17 @@ To do this, let's view our options by showing the **values schema**:
 tanzu package available get jupyter.tanzu.vmware.com/{{DATA_E2E_JUPYTERHUB_VERSION}} --values-schema
 ```
 
-In our case, we'd like to update a couple of properties: **domain** and **namespace**. 
+In our case, we'd like to update a few of the properties shown. 
 We do this be preparing a **values.yaml** file with the schema properties we want to update.
 Let's generate the file:
 ```execute
-export TMP_SESSION_NAMESPACE={{session_namespace}} && ~/other/resources/jupyterhub/scripts/generate-values-yaml.sh ~/other/resources/jupyterhub/jupyter-values.yaml
+cat > ~/other/resources/jupyterhub/jupyter-values.yaml <<- EOF
+namespace: {{ session_namespace }}
+image: {{DATA_E2E_REGISTRY_USERNAME}}/jupyter-package-repo:{{DATA_E2E_JUPYTERHUB_VERSION}}
+version: {{DATA_E2E_JUPYTERHUB_VERSION}}
+base_domain: {{DATA_E2E_BASE_URL}}
+container_repo_user: {{DATA_E2E_REGISTRY_USERNAME}}
+EOF
 ```
 
 Now we can proceed to install the package:

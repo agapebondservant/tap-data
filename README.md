@@ -507,7 +507,14 @@ tanzu package installed delete full-tbs-deps -n tap-install -y
 tanzu package install full-tbs-deps -p full-tbs-deps.tanzu.vmware.com -v ${TBS_VERSION}  -n tap-install
 tanzu package installed get full-tbs-deps   -n tap-install
 envsubst < resources/tap-values-tbsfull.in.yaml > resources/tap-values-tbsfull.yaml
+
+#If installing TAP 1.2:
+envsubst < resources/tap-values-tbsfull.in.yaml > resources/tap-values-tbsfull.yaml
 tanzu package installed update tap -p tap.tanzu.vmware.com --values-file resources/tap-values-tbsfull.yaml -n tap-install
+
+#If installing TAP 1.3:
+envsubst < resources/tap-values-1.3.in.yaml > resources/tap-values-1.3.yaml
+tanzu package installed update tap -p tap.tanzu.vmware.com --values-file resources/tap-values-1.3.yaml -n tap-install
 ```
 
 (Optional) To downgrade to TAP 1.1.1:

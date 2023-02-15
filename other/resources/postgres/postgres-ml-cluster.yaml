@@ -1,0 +1,27 @@
+---
+apiVersion: sql.tanzu.vmware.com/v1
+kind: Postgres
+metadata:
+  name: pg-mlflow-app
+spec:
+  storageClassName: generic
+  monitorStorageClassName: generic
+  certificateSecretName: tls-ssl-postgres
+  highAvailability:
+    enabled: false
+  seccompProfile:
+    type: Unconfined
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pg-mlflow-app-lb-svc
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 5432
+      targetPort: 5432
+      protocol: TCP
+      name: tcp
+  selector:
+    postgres-instance: pg-mlflow-app
