@@ -775,7 +775,7 @@ Run the following:
 resources/scripts/deploy-handson-workshop.sh <path-to-your-env-file>
 kubectl delete --all learningcenter-training
 kubectl apply -f resources/hands-on/system-profile.yaml
-kubectl apply -f resources/hands-on/workshop-ml-greenplum-and-tap.yaml
+kubectl apply -f resources/workshop-mlops-greenplum-and-tap.yaml
 kubectl apply -f <path-to-your-training-portal.yaml>
 watch kubectl get learningcenter-training
 ```
