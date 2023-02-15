@@ -33,7 +33,8 @@ RUN mkdir -p $CONDA_DIR && \
     rm -rf /home/eduk8s/.cache/yarn && \
     fix-permissions $CONDA_DIR && \
     fix-permissions /home/eduk8s
-RUN conda install --quiet --yes \
+RUN pip install tqdm --upgrade && \
+    conda install --quiet --yes \
     'notebook=6.0.3' \
     'jupyterlab=2.0.1' && \
     conda clean --all -f -y && \

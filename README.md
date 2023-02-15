@@ -615,7 +615,11 @@ resources/scripts/deploy-workshop.sh
 * Make sure all relevant pre-requisites are set up in your cluster: <a href="#pre-reqs">Setup required pre-installations</a>
 * Make sure TAP is installed (including LearningCenter): <a href="#tap-install">Setup required pre-installations</a>
 * Make sure additional pre-requisites are set up for the workshop: <a href="#workshop-pre-reqs">Setup required pre-installations for workshop</a>
- Follow the instructions to add the desired workshop to your Learning Center as shown:
+* Build the workshop image (only required when new workshop files are added):
+```
+resources/scripts/deploy-image.sh
+```
+* Follow the instructions to add the desired workshop to your Learning Center as shown:
 
   | Workshop Name                                  | Link                                                       |
   |------------------------------------------------|------------------------------------------------------------|

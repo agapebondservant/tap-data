@@ -64,9 +64,11 @@ modules:
     deploy-ml-inference-kubeflow:
       name: Create Predictive Apps
     deploy-greenplum-model-kubeflow:
-      name: Deploy Greenplum Model
+      name: Deploy Greenplum Model using PL/Python
     deploy-greenplum-ml-inference-kubeflow:
       name: Deploy Greenplum Model at the edge
+    deploy-greenplum-model-madlib-kubeflow:
+      name: Deploy Greenplum Model using MADLib
 config:
     vars:
     - name: DATA_E2E_REGISTRY_USERNAME
