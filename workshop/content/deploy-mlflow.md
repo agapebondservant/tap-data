@@ -35,7 +35,7 @@ sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/po
 Next, we may want to update the default configuration values associated with the MLFlow package.
 To do this, let's view our options by showing the **values schema**:
 ```execute
-tanzu package available get mlflow.tanzu.vmware.com/1.0.0 --values-schema
+echo {{ DATA_E2E_REGISTRY_PASSWORD }} | docker login registry-1.docker.io --username={{ DATA_E2E_REGISTRY_USERNAME }} --password-stdin; cd ~ && tanzu init && tanzu plugin install --local bin/cli secret && tanzu secret registry delete regsecret --namespace default -y || true; tanzu secret registry add regsecret --username {{ DATA_E2E_REGISTRY_USERNAME }} --password {{ DATA_E2E_REGISTRY_PASSWORD }} --server {{ DATA_E2E_REGISTRY_USERNAME }} --export-to-all-namespaces --yes --namespace default; tanzu package available get mlflow.tanzu.vmware.com/1.0.0 --values-schema
 ```
 
 In our case, we'd like to update all the properties shown.

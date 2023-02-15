@@ -40,8 +40,6 @@ spec:
     dashboards:
     - name: Jupyter
       url: "$(ingress_protocol)://$(session_namespace)-jupyter.$(ingress_domain)/"
-    - name: TAP GUI
-      url: "$(ingress_protocol)://tap-gui.$(ingress_domain)"
     #! namespaces:
       #! Allow workshop to run containers as root (note: this is different from the workshop instances which will host deployments created during the course of the workshop)
       #! security:
