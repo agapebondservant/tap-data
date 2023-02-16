@@ -66,8 +66,8 @@ cp ~/other/resources/appcr/pipeline_app_main.yaml ~/sample-ml-app/pipeline_app.y
 ```
 
 Our directory now looks like this:
-```editor:open-file
-file: ~/sample-ml-app/pipeline_app.yaml
+```execute
+ls -ltr ~/sample-ml-app
 ```
 
 Let's deploy the App CR:

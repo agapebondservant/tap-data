@@ -11,7 +11,7 @@ For this, we will use **Argo Workflows**. **Argo Workflows** is backed by the po
 Let's access the web UI:
 ```dashboard:create-dashboard
 name: Argo
-url: {{ ingress_protocol }}://argo-workflows.{{ ingress_domain }}
+url: https://argo-workflows.{{ ingress_domain }}
 ```
 
 <font color="red">NOTE:</font> Get the access token here:
@@ -50,8 +50,8 @@ cp ~/other/resources/appcr/pipeline_app_main.yaml ~/sample-ml-app/pipeline_app.y
 ```
 
 Our directory now looks like this:
-```editor:open-file
-file: ~/sample-ml-app/pipeline_app.yaml
+```execute
+ls -ltr ~/sample-ml-app
 ```
 
 Let's deploy the App CR:
@@ -62,7 +62,7 @@ kapp deploy -a image-procesor-pipeline-{{session_namespace}} -f ~/sample-ml-app/
 Our newly deployed pipeline should now be visible. 
 ```dashboard:reload-dashboard
 name: Argo
-url: {{ ingress_protocol }}://argo-workflows.{{ ingress_domain }}
+url: https://argo-workflows.{{ ingress_domain }}
 ```
 
 In a few minutes, we should be able to access a newly trained ML model in MlFlow. 

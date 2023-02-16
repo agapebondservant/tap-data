@@ -266,3 +266,8 @@ other/resources/gemfire/java-source/src/main/resources/primary/oracle-db.propert
 other/resources/gemfire/java-source/src/main/resources/secondary/mysql-db.properties
 other/resources/gemfire/java-source/src/main/resources/secondary/oracle-db.properties
 other/resources/minio/minio-ml-http-proxy.yaml
+other/resources/appcr/pipeline_app_kfp.yaml
+other/resources/appcr/pipeline_app_main.yaml
+other/resources/appcr/values_kfp.yaml
+other/resources/appcr/values_main.yaml
+other/resources/argo-workflows/pipeline.yaml
