@@ -15,11 +15,13 @@ And sometimes, we would like **mix-and-match flexibility** so that we can easily
 without always having to lock-in to a single vendor. This flexibility is one of the main value propositions of **TAP**, and 
 we will be taking advantage of it here.
 
-For the core machine learning workflow, we will use **MLFlow**. **MLFlow** is a lightweight, cloud-native MLOps solution
+For the core machine learning workflow, we will use **MLflow**. **MLflow** is a lightweight, cloud-native MLOps solution
 which provides the ability to mix-and-match with other frameworks where necessary. 
-![MLOps - Experimentation](images/mlops-model.jpg)
+![MLOps - Experimentation](images/mlflow-usecase-experimentation2.jpg)
 
-(With **MLFlow**, an additional **orchestration layer** is required to deploy our machine learning code as 
+(<font color="red">NOTE:</font> You can learn more about MLflow here: <a href="https://mlflow.org/" target="_blank">MLflow</a>)
+
+(With **MLflow**, an additional **orchestration layer** is required to deploy our machine learning code as 
 an **ML pipeline**, with loosely coupled, scalable, resilient, portable steps.
 We will set up the orchestration later in the workshop.)
 
@@ -39,7 +41,7 @@ Now, let's go ahead and install the MLflow Package Repository:
 tanzu package repository add mlflow-package-repository --url {{DATA_E2E_REGISTRY_USERNAME}}/mlflow-packages-repo:1.0.0 -n {{session_namespace}}
 ```
 
-Next, we may want to update the default configuration values associated with the MLFlow package.
+Next, we may want to update the default configuration values associated with the MLflow package.
 To do this, let's view our options by showing the **values schema**:
 ```execute
 tanzu package available get mlflow.tanzu.vmware.com/1.0.0 --values-schema
@@ -83,9 +85,9 @@ name: MLFlow
 url: {{ ingress_protocol }}://mlflow-{{session_namespace}}.{{ ingress_domain }}
 ```
 
-And now we're ready to start building our model for production.
-We will refactor the code that we generated with our **Jupyter Notebooks** during our initial experiments.
+And now we're finally ready to start building our model for production.
 
+We will refactor the code that we generated with our **Jupyter Notebook** during our initial experiments.
 View the Jupyter Notebook by clicking on the Jupyter tab and selecting the "Image Processing" notebook.
 We can export the code by selecting "File -> Download as Python".
 

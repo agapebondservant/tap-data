@@ -31,12 +31,13 @@ Pre-requisites: A Kubernetes cluster with TAP installed - see [Install TAP](#tap
 8. [Install OperatorUI](#operatorui)
 9. [Pre-deploy Greenplum and Spring Cloud Data Flow](#predeploys)
 10. [Install Kubeflow Pipelines](#kubeflowpipelines)
-11. [Build secondary cluster (for multi-site demo)](#multisite)
-12. [Install TAP](#tap-install)
-13. [Deploy Tanzu Data Workshops](#buildanddeploy)
-14. [Deploy Single Workshop to Pre-Existing LearningCenter Portal](#buildsingle)
-15. [Create Carvel Packages for Dependencies](#carvelpackages)
-16. [Other: How-tos/General Info (not needed for setup)](#other)
+11. [Deploy Argo Workflows](#argoworkflows)
+12. [Build secondary cluster (for multi-site demo)](#multisite)
+13. [Install TAP](#tap-install)
+14. [Deploy Tanzu Data Workshops](#buildanddeploy)
+15. [Deploy Single Workshop to Pre-Existing LearningCenter Portal](#buildsingle)
+16. [Create Carvel Packages for Dependencies](#carvelpackages)
+17. [Other: How-tos/General Info (not needed for setup)](#other)
 
 #### Kubernetes Cluster Prep<a name="pre-reqs"/>
 * Create .env file in root directory (use .env-sample as a template - do NOT check into Git)
@@ -343,6 +344,16 @@ source.trigger=https://repo.spring.io/artifactory/release/org/springframework/cl
 
 See [this link](https://github.com/agapebondservant/kubeflow-pipelines-accelerator)
 
+#### Deploy Argo Workflows <a name="argoworkflows"/>
+* Deploy Argo Workflows:
+```
+kubectl create ns argo | true
+kubectl apply -f other/resources/argo-workflows/argo-workflow.yaml -nargo 
+kubectl apply -f other/resources/argo-workflows/argo-workflow-http-proxy.yaml -nargo
+kubectl create rolebinding default-admin --clusterrole=admin --serviceaccount=argo:default -n argo
+kubectl apply -f other/resources/argo-workflows/argo-workflow-rbac.yaml -nargo
+```
+
 
 #### Build secondary cluster (only required for multi-site demo)<a name="multisite"/>
 * Create new cluster:
@@ -563,6 +574,8 @@ tanzu acc create appcollator --git-repository https://github.com/agapebondservan
 tanzu acc create mlmetrics --git-repository https://github.com/agapebondservant/ml-metrics-accelerator.git --git-branch main
 tanzu acc create scdf-mlmodel --git-repository https://github.com/agapebondservant/scdf-ml-model.git --git-branch main
 tanzu acc create kubeflow-pipelines --git-repository https://github.com/agapebondservant/kubeflow-pipelines-accelerator.git --git-branch main
+tanzu acc create sample-cnn-app --git-repository https://github.com/tanzumlai/sample-ml-app.git --git-branch main
+tanzu acc create mlflowrunner --git-repository https://github.com/tanzumlai/mlcode-runner.git --git-branch main
 ```
 
 * Install Analytics Apps:

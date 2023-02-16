@@ -1,0 +1,22 @@
+apiVersion: kpack.io/v1alpha2
+kind: Image
+metadata:
+  name: imgprocessor
+spec:
+  tag: ${DATA_E2E_REGISTRY_USERNAME}/ml-image-processor-${SESSION_NAMESPACE}
+  builder:
+    kind: ClusterBuilder
+    name: full
+  source:
+    git:
+      url: https://github.com/${DATA_E2E_GIT_USER}/sample-ml-app.git
+      revision: main-${SESSION_NAMESPACE}
+  cache:
+    volume:
+      size: 8G
+  build:
+    env:
+      - name: "MLFLOW_TRACKING_URI"
+        value: http://mlflow-${SESSION_NAMESPACE}.${DATA_E2E_BASE_URL}
+      - name: "MLFLOW_S3_ENDPOINT_URL"
+        value: http://minio-${SESSION_NAMESPACE}.${DATA_E2E_BASE_URL}

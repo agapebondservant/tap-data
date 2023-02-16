@@ -1,0 +1,20 @@
+---
+apiVersion: carto.run/v1alpha1
+kind: Workload
+metadata:
+  name: image-processor
+  labels:
+    apps.tanzu.vmware.com/workload-type: web
+    app.kubernetes.io/part-of: image-processor
+spec:
+  params:
+    - name: clusterBuilder
+      value: full
+  env:
+    - name: MLFLOW_TRACKING_URI
+      value: http://mlflow-.tanzumlai.com
+  source:
+    git:
+      url: https://github.com/tanzumlai/mlcode-runner.git
+      ref:
+        branch: main-

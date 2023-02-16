@@ -1,0 +1,13 @@
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: argo-workflow-httpproxy
+spec:
+  virtualhost:
+    fqdn: argo-workflows.tanzumlai.com
+    tls:
+      passthrough: true
+  tcpproxy:
+    services:
+      - name: argo-server
+        port: 2746

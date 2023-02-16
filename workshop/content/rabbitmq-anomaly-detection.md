@@ -8,7 +8,7 @@ name: Anomalies
 url: {{ ingress_protocol }}://anomaly-dashboard.{{ DATA_E2E_BASE_URL }}:8080
 ```
 
-Next, show the MLFlow site:
+Next, show the MLflow site:
 
 Next, show the Spring Cloud DataFlow dashboard:
 ```dashboard:create-dashboard

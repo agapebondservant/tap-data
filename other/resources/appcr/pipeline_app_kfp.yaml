@@ -1,0 +1,19 @@
+apiVersion: kappctrl.k14s.io/v1alpha1
+kind: App
+metadata:
+  name: ml-image-processing-pipeline-app-kfp
+spec:
+  serviceAccountName: default
+  fetch:
+    - git:
+        url: https://github.com/${DATA_E2E_GIT_USER}/sample-ml-app
+        ref: origin/kfp-main-${SESSION_NAMESPACE}
+
+  template:
+    - ytt:
+        paths:
+          - config/cifar/pipeline.yaml
+          - config/cifar/values.yaml
+
+  deploy:
+    - kapp: {}

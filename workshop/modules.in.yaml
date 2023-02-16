@@ -191,5 +191,9 @@ config:
       value: ${DATA_E2E_MYSQL_DB_SECONDARY_HOST}
     - name: DATA_E2E_JUPYTERHUB_VERSION
       value: ${DATA_E2E_JUPYTERHUB_VERSION}
+    - name: DATA_E2E_GIT_TOKEN
+      value: ${DATA_E2E_GIT_TOKEN}
+    - name: DATA_E2E_GIT_USER
+      value: ${DATA_E2E_GIT_USER}
 
 
