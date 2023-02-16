@@ -254,3 +254,10 @@ other/resources/jupyterhub/scripts/generate-values-yaml.sh
 ./other/resources/tapworkloads/workload.yaml
 ./other/resources/tapworkloads/workload-api.yaml
 other/resources/argo-workflows/argo-workflow-http-proxy.in.yaml
+/Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/kpack/ml-image-processing-container.yaml
+/Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/tapworkloads/workload.yaml
+/Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/tapworkloads/workload-api.yaml
+/Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/argo-workflows/argo-workflow-http-proxy.yaml
+other/resources/tapworkloads/workload-api.yaml
+other/resources/tapworkloads/workload.yaml
+other/resources/kpack/ml-image-processing-container.yaml
