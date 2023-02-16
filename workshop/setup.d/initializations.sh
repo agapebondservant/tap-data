@@ -20,22 +20,25 @@ git config --global user.email "edukates-${SESSION_NAMESPACE}@example.com"
 git config --global user.name "Edukates-${SESSION_NAMESPACE}"
 
 # Set up git branches
+echo "Setting up git branches..."
+setupgitbranches()
+{
+    BRANCHNAME=$1
+    git push origin --delete ${BRANCHNAME}-${SESSION_NAMESPACE} | true
+    git branch ${BRANCHNAME}-${SESSION_NAMESPACE}; git checkout ${BRANCHNAME}-${SESSION_NAMESPACE}; git add .; git commit -m 'New commit'
+    git push origin ${BRANCHNAME}-${SESSION_NAMESPACE}
+}
+
 git clone https://${DATA_E2E_GIT_USER}:${DATA_E2E_GIT_TOKEN}@github.com/${DATA_E2E_GIT_USER}/sample-ml-app.git ~/sample-ml-app
 cd ~/sample-ml-app
-declare -a arr=('main', 'api-main', 'kfp-main')
-for i in "${arr[@]}"
-do
-  git push origin --delete $i-${SESSION_NAMESPACE} | true
-  git branch $i-${SESSION_NAMESPACE}; git checkout $i-${SESSION_NAMESPACE}; git add .; git commit -m 'New commit'
-  git push origin $i-${SESSION_NAMESPACE}
-done
+setupgitbranches main
+setupgitbranches api-main
+setupgitbranches kfp-main
 cd - && rm -rf ~/sample-ml-app
 
 git clone https://${DATA_E2E_GIT_USER}:${DATA_E2E_GIT_TOKEN}@github.com/${DATA_E2E_GIT_USER}/mlcode-runner.git ~/mlcode-runner
 cd ~/mlcode-runner
-git push origin --delete main-${SESSION_NAMESPACE} | true
-git branch main-${SESSION_NAMESPACE}; git checkout main-${SESSION_NAMESPACE}; git add .; git commit -m 'New commit'
-git push origin main-${SESSION_NAMESPACE}
+setupgitbranches main
 cd - && rm -rf ~/mlcode-runner
 
 
