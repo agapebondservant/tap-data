@@ -19,9 +19,10 @@ echo ${DATA_E2E_REGISTRY_PASSWORD} | docker login registry-1.docker.io --usernam
 git config --global user.email "edukates-${SESSION_NAMESPACE}@example.com"
 git config --global user.name "Edukates-${SESSION_NAMESPACE}"
 
+# Set up git branches
 git clone https://${DATA_E2E_GIT_USER}:${DATA_E2E_GIT_TOKEN}@github.com/${DATA_E2E_GIT_USER}/sample-ml-app.git ~/sample-ml-app
 cd ~/sample-ml-app
-declare -a arr=( 'main', 'api-main', 'kfp-main' )
+declare -a arr=('main', 'api-main', 'kfp-main')
 for i in "${arr[@]}"
 do
   git push origin --delete $i-${SESSION_NAMESPACE} | true
