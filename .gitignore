@@ -238,9 +238,10 @@ other/resources/analytics/image-processing-demo/jupyter/cifar10.hkl
 /Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/analytics/argo/argo-workflow-http-proxy.yaml
 ./resources/tap-values-tbsfull.yaml
 ./other/resources/jupyterhub/scripts/generate-values-yaml.sh
-./other/resources/analytics/jupyterhub/jupyterhub-http-proxy.yaml
-./other/resources/analytics/anomaly-detection-demo/dashboard-httpproxy.yaml
-./other/resources/analytics/argo/argo-workflow-http-proxy.yaml
+other/resources/analytics/jupyterhub/jupyterhub-http-proxy.yaml
+other/resources/analytics/anomaly-detection-demo/dashboard-httpproxy.yaml
+other/resources/analytics/argo/argo-workflow-http-proxy.yaml
+other/resources/argo-workflows/argo-workflow-http-proxy.yaml
 resources/tap-values-tbsfull.yaml
 ./resources/tap-values-1.3.yaml
 resources/tap-values-1.3.yaml
@@ -253,7 +254,6 @@ other/resources/jupyterhub/scripts/generate-values-yaml.sh
 ./other/resources/minio/minio-ml-http-proxy.yaml
 ./other/resources/tapworkloads/workload.yaml
 ./other/resources/tapworkloads/workload-api.yaml
-other/resources/argo-workflows/argo-workflow-http-proxy.in.yaml
 /Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/kpack/ml-image-processing-container.yaml
 /Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/tapworkloads/workload.yaml
 /Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/tapworkloads/workload-api.yaml
@@ -261,3 +261,8 @@ other/resources/argo-workflows/argo-workflow-http-proxy.in.yaml
 other/resources/tapworkloads/workload-api.yaml
 other/resources/tapworkloads/workload.yaml
 other/resources/kpack/ml-image-processing-container.yaml
+other/resources/gemfire/java-source/src/main/resources/primary/mysql-db.properties
+other/resources/gemfire/java-source/src/main/resources/primary/oracle-db.properties
+other/resources/gemfire/java-source/src/main/resources/secondary/mysql-db.properties
+other/resources/gemfire/java-source/src/main/resources/secondary/oracle-db.properties
+other/resources/minio/minio-ml-http-proxy.yaml
