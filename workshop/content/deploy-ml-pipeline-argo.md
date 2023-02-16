@@ -16,7 +16,7 @@ url: {{ ingress_protocol }}://argo-workflows.{{ ingress_domain }}
 
 <font color="red">NOTE:</font> Get the access token here:
 ```execute
-kubectl -n argo exec $(kubectl get pod -n argo -l 'app=argo-server' -o jsonpath='{.items[0].metadata.name}') -- argo auth token
+clear; kubectl -n argo exec $(kubectl get pod -n argo -l 'app=argo-server' -o jsonpath='{.items[0].metadata.name}') -- argo auth token
 ```
 
 Let's view the manifest for our Argo Workflow:
