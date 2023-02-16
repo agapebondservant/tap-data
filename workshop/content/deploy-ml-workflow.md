@@ -82,7 +82,7 @@ clear; GIT_PASSWORD={{DATA_E2E_GIT_TOKEN}} ~/other/resources/bin/kp secret creat
 
 Next, we deploy the secret with credentials for our **target** - the container registry:
 ```execute
-DOCKER_PASSWORD={{DATA_E2E_REGISTRY_PASSWORD}} ~/other/resources/bin/kp secret create tbs-demo-docker-secret --dockerhub {{DATA_E2E_REGISTRY_USERNAME}}
+clear; DOCKER_PASSWORD={{DATA_E2E_REGISTRY_PASSWORD}} ~/other/resources/bin/kp secret create tbs-demo-docker-secret --dockerhub {{DATA_E2E_REGISTRY_USERNAME}}
 ```
 
 Finally, we deploy our resource:

@@ -9,8 +9,7 @@ For this, we will use **Argo Workflows**. **Argo Workflows** is backed by the po
 (<font color="red">NOTE:</font> Learn more about Argo Workflows here: <a href="https://argoproj.github.io/argo-workflows/" target="_blank">Argo Workflows</a>)
 
 Let's access the web UI:
-```dashboard:create-dashboard
-name: Argo
+```dashboard:open-url
 url: https://argo-workflows.{{ ingress_domain }}
 ```
 
@@ -60,8 +59,7 @@ kapp deploy -a image-procesor-pipeline-{{session_namespace}} -f ~/sample-ml-app/
 ```
 
 Our newly deployed pipeline should now be visible. 
-```dashboard:reload-dashboard
-name: Argo
+```dashboard:open-url
 url: https://argo-workflows.{{ ingress_domain }}
 ```
 
