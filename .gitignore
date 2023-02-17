@@ -276,3 +276,5 @@ other/resources/argo-workflows/pipeline.yaml
 /Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/appcr/values_main.yaml
 /Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/appcr/values_kfp.yaml
 /Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/argo-workflows/pipeline.yaml
+/Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/kpack/ml-image-processing-container-kubeflow.yaml
+/Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/knative/kfp-pipeline.yaml

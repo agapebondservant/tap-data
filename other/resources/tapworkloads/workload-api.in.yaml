@@ -15,6 +15,6 @@ spec:
       value: http://mlflow-${SESSION_NAMESPACE}.${DATA_E2E_BASE_URL}
   source:
     git:
-      url: https://github.com/${DATA_E2E_GIT_USER}/mlcode-runner.git
+      url: https://github.com/${DATA_E2E_GIT_USER}/sample-ml-app.git
       ref:
         branch: api-main-${SESSION_NAMESPACE}

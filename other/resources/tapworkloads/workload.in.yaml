@@ -10,11 +10,17 @@ spec:
   params:
     - name: clusterBuilder
       value: full
+    - name: api_descriptor
+      value:
+        type: openapi
+        location:
+          path: "/v3/api-docs"
+        description: "A set of API endpoints for the ML Image Processing Demo App."
   env:
     - name: MLFLOW_TRACKING_URI
       value: http://mlflow-${SESSION_NAMESPACE}.${DATA_E2E_BASE_URL}
   source:
     git:
-      url: https://github.com/${DATA_E2E_GIT_USER}/mlcode-runner.git
+      url: https://github.com/${DATA_E2E_GIT_USER}/sample-ml-app.git
       ref:
         branch: main-${SESSION_NAMESPACE}

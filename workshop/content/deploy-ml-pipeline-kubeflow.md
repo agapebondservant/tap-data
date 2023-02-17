@@ -42,6 +42,7 @@ Now we can proceed to install the package:
 ```execute
 tanzu package install kubeflow-pipelines --package-name kubeflow-pipelines.tanzu.vmware.com --version $KUBEFLOW_PACKAGE_VERSION --values-file ~/other/resources/kubeflow/kubeflow-values.yaml -n {{session_namespace}}
 ```
+(<font color="red">NOTE:</font> The output currently includes an error which can be ignored.)
 
 With that, you should be able to access Kubeflow Pipelines:
 ```dashboard:create-dashboard
