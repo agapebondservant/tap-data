@@ -8,12 +8,12 @@ For this, we will use **Argo Workflows**. **Argo Workflows** is backed by the po
 
 (<font color="red">NOTE:</font> Learn more about Argo Workflows here: <a href="https://argoproj.github.io/argo-workflows/" target="_blank">Argo Workflows</a>)
 
-Let's access the web UI:
+Let's access the web UI (you may need to click on the topmost menu tab on the left to see the initial screen):
 ```dashboard:open-url
 url: https://argo-workflows.{{ ingress_domain }}
 ```
 
-<font color="red">NOTE:</font> Get the access token here:
+<font color="red">NOTE:</font> Copy the access token from here to the Login box:
 ```execute
 clear; kubectl -n argo exec $(kubectl get pod -n argo -l 'app=argo-server' -o jsonpath='{.items[0].metadata.name}') -- argo auth token
 ```
@@ -63,6 +63,7 @@ Our newly deployed pipeline should now be visible.
 url: https://argo-workflows.{{ ingress_domain }}
 ```
 
+Training a CNN model can take a while. 
 In a few minutes, we should be able to access a newly trained ML model in MlFlow. 
 Let's proceed to see what that looks like.
 

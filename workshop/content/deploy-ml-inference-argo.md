@@ -57,13 +57,12 @@ The selected candidate model should show up as **cifar_cnn**. The model can be p
 or programmatically (during the training).
 
 Navigate to a pre-existing sample app deployment:
-```dashboard:dashboard:create-dashboard
+```dashboard:create-dashboard
 name: Demo
 url: {{ ingress_protocol }}://image-processor.default.{{ ingress_domain }}
 ```
 
 Upload a few images to the app and observe the predictions it yields. 
-Also notice the metrics associated with the model used by the app.
 
 <font color="red">NOTE: If it shows "Training is in progress",
 then it means that it could not locate any ML model named **cifar_cnn** that is in the **Production** phase.

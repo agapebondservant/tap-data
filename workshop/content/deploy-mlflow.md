@@ -33,7 +33,7 @@ First, MLflow requires a few dependencies: a backend store and an artifact store
 We'll use Postgres and Minio respectively for our dependencies.
 Let's pre-install those:
 ```execute
-clear && sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/postgres/openssl.conf && openssl genrsa -out tls.key 2048 && openssl req -new -x509 -nodes -days 730 -key tls.key -out tls.crt -config ~/other/resources/postgres/openssl.conf && kubectl delete secret tls-ssl-postgres || true && kubectl create secret generic tls-ssl-postgres --from-file=tls.key --from-file=tls.crt --from-file=ca.crt=tls.crt --namespace {{session_namespace}} && kubectl wait --for=condition=Ready pod -l app=postgres-operator --timeout=120s; kubectl apply -f ~/other/resources/postgres/postgres-ml-cluster.yaml --namespace {{session_namespace}} && helm repo add minio-legacy https://helm.min.io/ && helm install --set resources.requests.memory=1.5Gi,tls.enabled=false --namespace {{session_namespace}} minio minio-legacy/minio --set service.type=LoadBalancer --set service.port=9000 && sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/minio/minio-ml-http-proxy.yaml && kubectl apply -f ~/other/resources/minio/minio-ml-http-proxy.yaml --namespace {{session_namespace}} && export AWS_ACCESS_KEY_ID=$(kubectl get secret minio -o jsonpath="{.data.accesskey}" -n {{session_namespace}}| base64 --decode) && export AWS_SECRET_ACCESS_KEY=$(kubectl get secret minio -o jsonpath="{.data.secretkey}" -n {{session_namespace}}| base64 --decode) && kubectl wait --for=condition=Ready pod -l app=minio --timeout=120s -n {{session_namespace}} && mc config host add --insecure data-e2e-minio-ml http://minio-{{session_namespace}}.{{ ingress_domain }} ${AWS_ACCESS_KEY_ID} ${AWS_SECRET_ACCESS_KEY} && mc mb --insecure -p data-e2e-minio-ml/mlflow && mc policy --insecure set public data-e2e-minio-ml/mlflow 
+clear && sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/postgres/openssl.conf && openssl genrsa -out tls.key 2048 && openssl req -new -x509 -nodes -days 730 -key tls.key -out tls.crt -config ~/other/resources/postgres/openssl.conf && kubectl delete secret tls-ssl-postgres || true && kubectl create secret generic tls-ssl-postgres --from-file=tls.key --from-file=tls.crt --from-file=ca.crt=tls.crt --namespace {{session_namespace}}; kubectl wait --for=condition=Ready pod -l app=postgres-operator --timeout=120s; kubectl apply -f ~/other/resources/postgres/postgres-ml-cluster.yaml --namespace {{session_namespace}} && helm repo add minio-legacy https://helm.min.io/ && helm install --set resources.requests.memory=1.5Gi,tls.enabled=false --namespace {{session_namespace}} minio minio-legacy/minio --set service.type=LoadBalancer --set service.port=9000 && sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/minio/minio-ml-http-proxy.yaml && kubectl apply -f ~/other/resources/minio/minio-ml-http-proxy.yaml --namespace {{session_namespace}} && export AWS_ACCESS_KEY_ID=$(kubectl get secret minio -o jsonpath="{.data.accesskey}" -n {{session_namespace}}| base64 --decode) && export AWS_SECRET_ACCESS_KEY=$(kubectl get secret minio -o jsonpath="{.data.secretkey}" -n {{session_namespace}}| base64 --decode) && kubectl wait --for=condition=Ready pod -l app=minio --timeout=120s -n {{session_namespace}} && mc config host add --insecure data-e2e-minio-ml http://minio-{{session_namespace}}.{{ ingress_domain }} ${AWS_ACCESS_KEY_ID} ${AWS_SECRET_ACCESS_KEY} && mc mb --insecure -p data-e2e-minio-ml/mlflow && mc policy --insecure set public data-e2e-minio-ml/mlflow 
 ```
 
 Now, let's go ahead and install the MLflow Package Repository:
@@ -79,16 +79,16 @@ Verify that the install was successful:
 tanzu package installed get mlflow -n {{session_namespace}}
 ```
 
-Next, we view it the Tracking Server:
+Next, we view the Tracking Server:
 ```dashboard:open-url
 url: {{ ingress_protocol }}://mlflow-{{session_namespace}}.{{ ingress_domain }}
 ```
 
-And now we're finally ready to start building our model for production.
+And now we're finally ready to start building our model for production. Congratulations!
 
 We will refactor the code that we generated with our **Jupyter Notebook** during our initial experiments.
-Enter "jupyter" in the Login screen, then view the Jupyter Notebook by clicking on the Jupyter tab and
-selecting the "Image Processing" notebook under the _jupyter_ folder.
+(<font color="red">NOTE:</font> To view the Jupyter notebook, enter "jupyter" in the Login screen, then view the Jupyter Notebook by clicking on the Jupyter tab and
+selecting the "Image Processing" notebook under the _jupyter_ folder.)
 
 Next, we will begin working with refactored code and modify it so that it can be deployed by a pipeline orchestrator.
 

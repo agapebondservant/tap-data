@@ -109,6 +109,7 @@ name: Kubeflow
 url: {{ ingress_protocol }}://kubeflow-pipelines-{{ session_namespace }}.{{ ingress_domain }}
 ```
 
+Training a CNN model can take a while.
 In a few minutes, we should be able to access a newly trained ML model in MlFlow.
 Let's proceed to see what that looks like.
 

@@ -752,6 +752,12 @@ kubectl apply -f <path-to-your-training-portal.yaml>
 watch kubectl get learningcenter-training
 ```
 
+Deploy sample apps:
+* git clone git@github.com:agapebondservant/ml-image-processing-app.git
+* cd to /ml-image-processing-app
+* follow the instructions to **Deploy the Analytics Apps**
+* follow the instructions to **Deploy the Training Pipelines**
+
 ##### Deploy "MLOps with Kubeflow Pipelines, MLFlow and TAP"<a name="workshopf"/>
 Add the following to your `training-portal.yaml` (under **spec.workshops**):
 ```
@@ -773,6 +779,12 @@ kubectl apply -f <path-to-your-training-portal.yaml>
 watch kubectl get learningcenter-training
 ```
 
+Deploy sample apps:
+* git clone git@github.com:agapebondservant/ml-image-processing-app.git 
+* cd to /ml-image-processing-app
+* follow the instructions to **Deploy the Analytics Apps**
+* follow the instructions to **Deploy the Training Pipelines**
+
 ##### Deploy "Machine Learning with Greenplum and TAP"<a name="workshopf"/>
 Add the following to your `training-portal.yaml` (under **spec.workshops**):
 ```
@@ -792,6 +804,12 @@ kubectl apply -f resources/workshop-mlops-greenplum-and-tap.yaml
 kubectl apply -f <path-to-your-training-portal.yaml>
 watch kubectl get learningcenter-training
 ```
+
+Deploy sample apps:
+* git clone git@github.com:agapebondservant/ml-image-processing-app.git
+* cd to /ml-image-processing-app
+* follow the instructions to **Deploy the Analytics Apps**
+* follow the instructions to **Deploy the Training Pipelines**
 
 #### Create Carvel Packages for Dependencies (not needed for setup)<a name="carvelpackages"/>
 * Run the script below:
