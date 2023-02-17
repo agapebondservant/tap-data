@@ -47,7 +47,7 @@ To do this, let's view our options by showing the **values schema**:
 tanzu package available get mlflow.tanzu.vmware.com/1.0.0 --values-schema -n {{session_namespace}}
 ```
 
-In our case, we'd like to update all the properties shown.
+In our case, we'd like to update the properties shown.
 We'll use this script to generate our **values.yaml** file:
 ```execute
 export MLFLOW_DB_HOST=$(kubectl get svc pg-mlflow-app-lb-svc -n {{session_namespace}} -o jsonpath="{.status.loadBalancer.ingress[0].hostname}") && export MLFLOW_DB_NAME=pg-mlflow-app && export MLFLOW_DB_HOST_LOCAL=${MLFLOW_DB_NAME}.{{session_namespace}}.svc.cluster.local && export MLFLOW_DB_USER=pgadmin && export MLFLOW_DB_PASSWORD=$(kubectl get secret pg-mlflow-app-db-secret -n {{session_namespace}} -o jsonpath="{.data.password}" | base64 --decode) && export MLFLOW_DB_URI=postgresql://${MLFLOW_DB_USER}:${MLFLOW_DB_PASSWORD}@${MLFLOW_DB_HOST_LOCAL}:5432/${MLFLOW_DB_NAME}?sslmode=require && export MLFLOW_S3_ENDPOINT_URL=http://minio-{{session_namespace}}.${DATA_E2E_BASE_URL} && export AWS_ACCESS_KEY_ID=$(kubectl get secret minio -o jsonpath="{.data.accesskey}" -n {{session_namespace}}| base64 --decode) && export AWS_SECRET_ACCESS_KEY=$(kubectl get secret minio -o jsonpath="{.data.secretkey}" -n {{session_namespace}}| base64 --decode) && export MLFLOW_INGRESS_DOMAIN={{DATA_E2E_BASE_URL}} && export MLFLOW_INGRESS_FQDN=mlflow-{{session_namespace}}.${MLFLOW_INGRESS_DOMAIN} && cat > ~/other/resources/mlflow/mlflow-values.yaml <<- EOF

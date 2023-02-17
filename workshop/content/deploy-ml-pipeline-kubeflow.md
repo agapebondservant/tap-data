@@ -19,30 +19,57 @@ Let's try it - first, we install the Kubeflow Package Repository:
 clear; export KUBEFLOW_PACKAGE_VERSION=0.0.1; tanzu package repository add kubeflow-pipelines --url ghcr.io/agapebondservant/kubeflow-pipelines:$KUBEFLOW_PACKAGE_VERSION -n {{session_namespace}}
 ```
 
-Next, we install the Kubeflow Package:
+Next, we may want to update the default configuration values associated with the Kubeflow package.
+To do this, let's view our options by showing the **values schema**:
 ```execute
-tanzu package install kubeflow-pipelines --package-name kubeflow-pipelines.tanzu.vmware.com --version $KUBEFLOW_PACKAGE_VERSION -n {{session_namespace}}
+clear; tanzu package available get kubeflow-pipelines.tanzu.vmware.com/${KUBEFLOW_PACKAGE_VERSION} --values-schema -n {{session_namespace}}
 ```
 
-*Verify that the installation was successful:
+In our case, we'd like to update the properties shown.
+We'll use this script to generate our **values.yaml** file:
+```execute
+cat > ~/other/resources/kubeflow/kubeflow-values.yaml <<- EOF
+full_url: kubeflow-pipelines-{{session_namespace}}.{{ ingress_domain }}
+EOF
 ```
-tanzu package installed get kubeflow-pipelines -n{{session_namespace}}
+
+Here's the final **values.yaml** file:
+```editor:open-file
+file: ~/other/resources/kubeflow/kubeflow-values.yaml
+```
+
+Now we can proceed to install the package:
+```execute
+tanzu package install kubeflow-pipelines --package-name kubeflow-pipelines.tanzu.vmware.com --version $KUBEFLOW_PACKAGE_VERSION --values-file ~/other/resources/kubeflow/kubeflow-values.yaml -n {{session_namespace}}
 ```
 
 With that, you should be able to access Kubeflow Pipelines:
 ```dashboard:create-dashboard
 name: Kubeflow
-url: {{ ingress_protocol }}://kubeflow-{{ session_namespace }}.{{ ingress_domain }}
+url: {{ ingress_protocol }}://kubeflow-pipelines-{{ session_namespace }}.{{ ingress_domain }}
 ```
 
-Let's view the source code for our Kubeflow Pipeline:
+Next, let's fetch the source code for our Kubeflow Pipeline:
+```execute
+export DATA_E2E_GIT_TOKEN={{DATA_E2E_GIT_TOKEN}} && export DATA_E2E_GIT_USER={{DATA_E2E_GIT_USER}} && git clone https://${DATA_E2E_GIT_USER}:${DATA_E2E_GIT_TOKEN}@github.com/${DATA_E2E_GIT_USER}/sample-kubeflow-pipeline.git ~/sample-kubeflow-pipeline
+```
+
+Let's view the code:
 ```editor:open-file
-file: ~/other/resources/argo-workflows/pipeline.yaml
+file: ~/sample-kubeflow-pipeline/app/main.py
 ```
 
 We can see that the workflow comprises of *4* steps -
 **upload_dataset**, **train-model**, **evaluate-model** and **promote-model-to-staging** -
 with a set of **parameters** for each step.
+
+We need to package this code as a task which will execute in a declarative, repeatable way.
+For this, we will use **Knative Services** to launch a serverless runtime environment which will run our task. 
+**Knative Services** have built-in support in TAP through the **Cloud Native Runtimes** component.
+```editor:open-file
+file: ~/other/resources/knative/kfp-pipeline.yaml
+```
+(<font color="red">NOTE:</font> Learn more about Cloud Native Runtimes here: <a href="https://docs.vmware.com/en/Cloud-Native-Runtimes-for-VMware-Tanzu/2.1/tanzu-cloud-native-runtimes/cnr-overview.html" target="_blank">Cloud Native Runtimes</a>)
 
 In keeping with our MLDevOps approach, we would like our pipeline deployment to be as automated as possible.
 With **TAP**, using a **GitOps**-ready deployment approach is easy. There are many supported flavors.
@@ -54,7 +81,7 @@ allowing us to use our git repository as the source of truth that takes care of 
 
 Let's view the manifest for our App CR:
 ```editor:open-file
-file: ~/other/resources/appcr/pipeline_app_main.yaml
+file: ~/other/resources/appcr/pipeline_app_kfp.yaml
 ```
 
 Once deployed, **TAP** will take care of monitoring the App's resources and tracking when there are changes to the git repo source.
@@ -62,7 +89,7 @@ Once deployed, **TAP** will take care of monitoring the App's resources and trac
 
 Let's copy the App CR and pipeline files to our ML code directory:
 ```execute
-cp ~/other/resources/appcr/pipeline_app_main.yaml ~/sample-ml-app/pipeline_app.yaml && cp ~/other/resources/appcr/values_main.yaml ~/sample-ml-app/values.yaml && cp ~/other/resources/argo-workflows/pipeline.yaml ~/sample-ml-app/pipeline.yaml
+cp ~/other/resources/appcr/pipeline_app_kfp.yaml ~/sample-kubeflow-pipeline/pipeline_app.yaml && cp ~/other/resources/appcr/values_kfp.yaml ~/sample-kubeflow-pipeline/values.yaml && cp ~/other/resources/knative/kfp-pipeline.yaml ~/sample-kubeflow-pipeline/pipeline.yaml
 ```
 
 Our directory now looks like this:
@@ -72,13 +99,13 @@ ls -ltr ~/sample-ml-app
 
 Let's deploy the App CR:
 ```execute
-kapp deploy -a image-procesor-pipeline-{{session_namespace}} -f ~/sample-ml-app/pipeline_app.yaml --logs -y  -n{{session_namespace}}
+kapp deploy -a image-procesor-pipeline-kfp-{{session_namespace}} -f ~/sample-kubeflow-pipeline/pipeline_app.yaml --logs -y  -n{{session_namespace}}
 ```
 
 Our newly deployed pipeline should now be visible.
 ```dashboard:reload-dashboard
 name: Kubeflow
-url: {{ ingress_protocol }}://kubeflow-{{ session_namespace }}.{{ ingress_domain }}
+url: {{ ingress_protocol }}://kubeflow-pipelines-{{ session_namespace }}.{{ ingress_domain }}
 ```
 
 In a few minutes, we should be able to access a newly trained ML model in MlFlow.

@@ -36,10 +36,18 @@ setupgitbranches api-main
 setupgitbranches kfp-main
 cd - && rm -rf ~/sample-ml-app
 
+git clone https://${DATA_E2E_GIT_USER}:${DATA_E2E_GIT_TOKEN}@github.com/${DATA_E2E_GIT_USER}/sample-kubeflow-pipeline.git ~/sample-kubeflow-pipeline
+cd ~/sample-kubeflow-pipeline
+setupgitbranches main
+setupgitbranches api-main
+setupgitbranches kfp-main
+cd - && rm -rf ~/sample-kubeflow-pipeline
+
 git clone https://${DATA_E2E_GIT_USER}:${DATA_E2E_GIT_TOKEN}@github.com/${DATA_E2E_GIT_USER}/mlcode-runner.git ~/mlcode-runner
 cd ~/mlcode-runner
 setupgitbranches main
 cd - && rm -rf ~/mlcode-runner
+echo "Git branches set up."
 
 
 

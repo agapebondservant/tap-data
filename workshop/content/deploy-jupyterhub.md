@@ -73,7 +73,7 @@ Verify that the install was successful:
 tanzu package installed get jupyterhub -n {{session_namespace}}
 ```
 
-Next, we view it (login with the default username and password used above - jupyter/jupyter123):
+Next, we view it (login with the default username and password used above - jupyter/Vmware1!):
 ```dashboard:open-url
 url: {{ ingress_protocol }}://jupyter-{{session_namespace}}.{{ ingress_domain }}
 ```
