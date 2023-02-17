@@ -34,7 +34,7 @@ Here's the manifest that we will use to deploy the app:
 file: ~/other/resources/tapworkloads/workload.yaml
 ```
 
-Note that it includes an "openapi" field, which will be used to render an OpenAPI-3 compatible interface.
+<font color="red">TODO:</font> Note that it includes an "openapi" field, which will be used to render an OpenAPI-3 compatible interface.
 
 Now, let's deploy the app:
 ```execute

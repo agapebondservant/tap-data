@@ -10,12 +10,12 @@ spec:
   params:
     - name: clusterBuilder
       value: full
-    - name: api_descriptor
-      value:
-        type: openapi
-        location:
-          path: "/v3/api-docs"
-        description: "A set of API endpoints for the ML Image Processing Demo App."
+    #- name: api_descriptor
+    #  value:
+    #    type: openapi
+    #    location:
+    #      path: "/v3/api-docs"
+    #    description: "A set of API endpoints for the ML Image Processing Demo App."
   env:
     - name: MLFLOW_TRACKING_URI
       value: http://mlflow-${SESSION_NAMESPACE}.${DATA_E2E_BASE_URL}
