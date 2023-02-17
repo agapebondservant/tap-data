@@ -62,7 +62,10 @@ name: Demo
 url: {{ ingress_protocol }}://image-processor.default.{{ ingress_domain }}
 ```
 
-Upload a few images to the app and observe the predictions it yields. 
+To test the app, download images from the **Jupyter** tab. Navigate to **/jupyter/test-images** from the left panel,
+right-click on an image and select "Download".
+Upload a few of these images to the app and observe the predictions it yields.
+
 
 <font color="red">NOTE: If it shows "Training is in progress",
 then it means that it could not locate any ML model named **cifar_cnn** that is in the **Production** phase.
