@@ -490,7 +490,7 @@ export INSTALL_REGISTRY_PASSWORD=$DATA_E2E_REGISTRY_PASSWORD
 #export TAP_VERSION=1.1.1
 #export TAP_VERSION=1.2.0
 export TAP_VERSION=1.3.4
-export INSTALL_REGISTRY_HOSTNAME=index.docker.io
+export INSTALL_REGISTRY_HOSTNAME=https://index.docker.io/v1/ # index.docker.io
 imgpkg copy -b registry.tanzu.vmware.com/tanzu-application-platform/tap-packages:${TAP_VERSION} --to-repo ${INSTALL_REGISTRY_HOSTNAME}/${DATA_E2E_REGISTRY_USERNAME}/tap-packages
 imgpkg copy -b registry.tanzu.vmware.com/p-rabbitmq-for-kubernetes/tanzu-rabbitmq-package-repo:${DATA_E2E_RABBIT_OPERATOR_VERSION} --to-repo ${INSTALL_REGISTRY_HOSTNAME}/oawofolu/vmware-tanzu-rabbitmq
 export TBS_VERSION=1.9.0 # based on $(tanzu package available list buildservice.tanzu.vmware.com --namespace tap-install)
@@ -500,10 +500,16 @@ imgpkg copy -b registry.tanzu.vmware.com/tanzu-application-platform/full-tbs-dep
 #### Install TAP
 ```
 kubectl create ns tap-install
-tanzu secret registry add tap-registry \
+# tanzu secret registry add tap-registry \
+#--username ${INSTALL_REGISTRY_USERNAME} --password ${INSTALL_REGISTRY_PASSWORD} \
+#--server ${INSTALL_REGISTRY_HOSTNAME} \
+#--export-to-all-namespaces --yes --namespace tap-install
+tanzu secret registry add registry-credentials \
 --username ${INSTALL_REGISTRY_USERNAME} --password ${INSTALL_REGISTRY_PASSWORD} \
 --server ${INSTALL_REGISTRY_HOSTNAME} \
 --export-to-all-namespaces --yes --namespace tap-install
+kubectl apply -f resources/tap-rbac.yaml -n default
+
 tanzu package repository add tanzu-tap-repository \
 --url ${INSTALL_REGISTRY_HOSTNAME}/${DATA_E2E_REGISTRY_USERNAME}/tap-packages:$TAP_VERSION \
 --namespace tap-install

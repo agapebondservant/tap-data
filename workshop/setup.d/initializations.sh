@@ -19,6 +19,15 @@ echo ${DATA_E2E_REGISTRY_PASSWORD} | docker login registry-1.docker.io --usernam
 git config --global user.email "edukates-${SESSION_NAMESPACE}@example.com"
 git config --global user.name "Edukates-${SESSION_NAMESPACE}"
 
+#RBAC
+echo "Setting up RBAC..."
+tanzu secret registry delete registry-credentials -n ${SESSION_NAMESPACE} | true
+tanzu secret registry add registry-credentials \
+--username ${DATA_E2E_REGISTRY_USERNAME} --password ${DATA_E2E_REGISTRY_PASSWORD} \
+--server ${DATA_E2E_GIT_SECRETGEN_SERVER} \
+--export-to-all-namespaces --yes --namespace ${SESSION_NAMESPACE} | true
+kubectl apply -f ~/resources/tap-rbac.yaml -n ${SESSION_NAMESPACE} | true
+
 # Set up git branches
 echo "Setting up git branches..."
 setupgitbranches()

@@ -71,6 +71,11 @@ Upload a few of these images to the app and observe the predictions it yields.
 then it means that it could not locate any ML model named **cifar_cnn** that is in the **Production** phase.
 Navigate to MLflow above to change the Model Stage from the Models tab.</font>
 
+Let's also view the **OpenAPI** interface for the model's serving API:
+```dashboard:open-url
+url: {{ ingress_protocol }}://image-processor-api.default.{{ ingress_domain }}
+```
+
 Last, view the pipeline that was used to build the model:
 ```dashboard:open-url
 url: https://argo-workflows.{{ ingress_domain }}
