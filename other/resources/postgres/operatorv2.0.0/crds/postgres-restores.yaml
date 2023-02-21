@@ -1,0 +1,110 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.10.0
+  creationTimestamp: null
+  name: postgresrestores.sql.tanzu.vmware.com
+  labels:
+    app: postgres-operator
+spec:
+  group: sql.tanzu.vmware.com
+  names:
+    categories:
+      - all
+    kind: PostgresRestore
+    listKind: PostgresRestoreList
+    plural: postgresrestores
+    singular: postgresrestore
+  scope: Namespaced
+  versions:
+    - additionalPrinterColumns:
+        - jsonPath: .status.phase
+          name: Status
+          type: string
+        - jsonPath: .spec.sourceBackup.name
+          name: Source Backup
+          type: string
+        - jsonPath: .spec.targetInstance.name
+          name: Target Instance
+          type: string
+        - jsonPath: .status.timeStarted
+          name: Time Started
+          type: string
+        - jsonPath: .status.timeCompleted
+          name: Time Completed
+          type: string
+      name: v1
+      schema:
+        openAPIV3Schema:
+          description: PostgresRestore is the Schema for the postgresrestores API
+          properties:
+            apiVersion:
+              description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+              type: string
+            kind:
+              description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+              type: string
+            metadata:
+              type: object
+            spec:
+              description: PostgresRestoreSpec defines the desired state of PostgresRestore
+              properties:
+                pointInTime:
+                  description: PointInTime specifies a point in time you want to restore to
+                  format: date-time
+                  type: string
+                sourceBackup:
+                  description: SourceBackup specifies the postgres backup name that you want to use for restore
+                  properties:
+                    name:
+                      description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names TODO: Add other useful fields. apiVersion, kind, uid?'
+                      type: string
+                  type: object
+                  x-kubernetes-map-type: atomic
+                targetInstance:
+                  description: TargetInstance specifies the postgres instance name that you restore to
+                  properties:
+                    name:
+                      description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names TODO: Add other useful fields. apiVersion, kind, uid?'
+                      type: string
+                  type: object
+                  x-kubernetes-map-type: atomic
+              required:
+                - sourceBackup
+                - targetInstance
+              type: object
+            status:
+              description: PostgresRestoreStatus defines the observed state of PostgresRestore
+              properties:
+                desiredHighAvailabilityConfig:
+                  description: DesiredHighAvailabilityConfig is an internal state field that indicates whether the final restored Postgres instance should be scaled up for HA.
+                  properties:
+                    enabled:
+                      description: Enabled specifies whether the Postgres instance is created in a single or cluster mode configuration. By default, false is used
+                      type: boolean
+                    readReplicas:
+                      description: ReadReplicas specifies the number of read replicas to create when HA mode is enabled
+                      type: integer
+                  type: object
+                message:
+                  description: Message contains additional information about the status of the restore.
+                  type: string
+                phase:
+                  description: Phase indicates the status of the restore
+                  type: string
+                timeCompleted:
+                  description: TimeCompleted indicates the time that this PostgresRestore completed or failed.
+                  format: date-time
+                  type: string
+                timeStarted:
+                  description: TimeStarted indicates the time that this PostgresRestore was started.
+                  format: date-time
+                  type: string
+              type: object
+          type: object
+      served: true
+      storage: true
+      subresources:
+        status: {}

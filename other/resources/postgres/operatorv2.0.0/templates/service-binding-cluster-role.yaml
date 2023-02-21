@@ -1,0 +1,15 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: postgres-operator-service-binding
+  labels:
+    #
+    # setup aggregating cluster role for service bindings
+    # https://servicebinding.io/spec/core/1.0.0/#considerations-for-role-based-access-control-rbac
+    #
+    servicebinding.io/controller: "true"
+rules:
+  - apiGroups: ["sql.tanzu.vmware.com"]
+    resources: ["postgres"]
+    verbs: ["get", "list", "watch"]

@@ -1,0 +1,24 @@
+# permissions for end users to edit postgresbackuplocations.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: postgresbackuplocation-editor-role
+rules:
+  - apiGroups:
+      - sql.tanzu.vmware.com
+    resources:
+      - postgresbackuplocations
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - sql.tanzu.vmware.com
+    resources:
+      - postgresbackuplocations/status
+    verbs:
+      - get
