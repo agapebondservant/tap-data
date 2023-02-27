@@ -8,3 +8,5 @@ greenplumImageRepository: greenplum-for-kubernetes
 greenplumImageTag: v2.3.0
 
 operatorWorkerSelector: {}
+
+logLevel: debug
