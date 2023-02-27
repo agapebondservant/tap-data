@@ -2,7 +2,7 @@ name: MLOps with Greenplum and TAP
 
 modules:
     activate:
-    - mlops-tap-overview
+    - mlops-tap-greenplum-overview
     - deploy-greenplum-model-kubeflow
     - deploy-greenplum-ml-inference-kubeflow
     - deploy-greenplum-model-madlib-kubeflow

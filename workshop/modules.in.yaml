@@ -69,6 +69,8 @@ modules:
       name: Deploy Greenplum Model at the edge
     deploy-greenplum-model-madlib-kubeflow:
       name: Deploy Greenplum Model using MADLib
+    mlops-tap-greenplum-overview:
+      name: Demo Overview
 config:
     vars:
     - name: DATA_E2E_REGISTRY_USERNAME
