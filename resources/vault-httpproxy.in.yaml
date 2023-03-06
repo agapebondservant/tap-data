@@ -1,0 +1,23 @@
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: vault-httpproxy
+#spec:
+#  routes:
+#  - conditions:
+#    - prefix: /
+#    services:
+#    - name: vault
+#      port: 8200
+#  virtualhost:
+#    fqdn: vault.${DATA_E2E_BASE_URL}
+##
+spec:
+  virtualhost:
+    fqdn: vault.${DATA_E2E_BASE_URL}
+    tls:
+      passthrough: true
+  tcpproxy:
+    services:
+      - name: vault
+        port: 8200

@@ -118,13 +118,32 @@ kubectl apply -f resources/cert-manager-issuer.yaml
 
 * Install SealedSecrets:
 ```
-kubectl apply -f https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.17.4/controller.yaml
+kubectl apply -f https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.19.5/controller.yaml
 ```
 
 * Expose Kube-DNS service:
 ```
 kubectl apply -f resources/kube-dns.yaml
 ```
+
+* Install External Secrets:
+```
+helm repo add external-secrets https://charts.external-secrets.io
+helm install external-secrets external-secrets/external-secrets -n external-secrets \
+    --create-namespace
+```
+
+* Install Vault: (First install Vault CLI locally: https://developer.hashicorp.com/vault/downloads)
+```
+helm repo add hashicorp https://helm.releases.hashicorp.com
+helm install vault hashicorp/vault --set='server.ha.enabled=true' --set='server.ha.raft.enabled=true' -n vault --create-namespace --wait
+
+resources/scripts/setup-vault.sh
+
+kubectl create secret generic vault-token --from-literal token=$(cat cluster-keys.json | jq -r ".root_token") -n vault
+kubectl apply -f other/resources/vault/vault-clustersecretstore.yaml
+```
+
 
 * Install Istio: (used by Multi-site workshops, Gemfire workshops)
 ```

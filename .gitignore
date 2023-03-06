@@ -280,3 +280,17 @@ other/resources/argo-workflows/pipeline.yaml
 /Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/knative/kfp-pipeline.yaml
 other/resources/knative/kfp-pipeline.yaml
 other/resources/kpack/ml-image-processing-container-kubeflow.yaml
+./other/resources/appcr/pipeline_app_main.yaml
+./other/resources/appcr/pipeline_app_kfp.yaml
+./other/resources/appcr/values_main.yaml
+./other/resources/appcr/values_kfp.yaml
+./other/resources/kpack/ml-image-processing-container-kubeflow.yaml
+./other/resources/knative/kfp-pipeline.yaml
+./other/resources/argo-workflows/pipeline.yaml
+./other/resources/argo-workflows/argo-workflow-http-proxy.yaml
+./other/resources/analytics/jupyterhub/jupyterhub-http-proxy.yaml
+./other/resources/analytics/anomaly-detection-demo/dashboard-httpproxy.yaml
+./other/resources/analytics/argo/argo-workflow-http-proxy.yaml
+resources/vault-httpproxy.yaml
+gpdemo.pem
+cluster-keys.json
