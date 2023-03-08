@@ -49,7 +49,7 @@ url: {{ ingress_protocol }}://mlflow.{{ ingress_domain }}
 ```
 
 Select the **convolutional_neural_network_team_main** experiment (on the left), 
-and enter **metrics.accuracy_score** in the search field, then select the run in the search results.
+and enter **metrics.accuracy_score > 0.5** in the search field, then select the run in the search results.
 Notice the tracked fields in the **Metrics** and **Artifacts** section; these were tracked and stored during the model training phase.
 
 Also, select **test.html** under the **Artifacts** section. This will display a report of performance metrics 
