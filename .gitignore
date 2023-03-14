@@ -293,4 +293,6 @@ other/resources/kpack/ml-image-processing-container-kubeflow.yaml
 ./other/resources/analytics/argo/argo-workflow-http-proxy.yaml
 resources/vault-httpproxy.yaml
 gpdemo.pem
-cluster-keys.json
+cluster-keys.json/Users/oawofolu/PIVOTAL/data/educates/tap/resources/vault-httpproxy.yaml
+./resources/vault-httpproxy.yaml
+/Users/oawofolu/PIVOTAL/data/educates/tap/resources/vault-httpproxy.yaml

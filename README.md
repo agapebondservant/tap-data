@@ -509,11 +509,9 @@ export INSTALL_REGISTRY_PASSWORD=$DATA_E2E_REGISTRY_PASSWORD
 #export TAP_VERSION=1.1.1
 #export TAP_VERSION=1.2.0
 export TAP_VERSION=1.3.4
-export INSTALL_REGISTRY_HOSTNAME=https://index.docker.io/v1/ # index.docker.io
+export INSTALL_REGISTRY_HOSTNAME=index.docker.io #https://index.docker.io/v1/ # index.docker.io
 imgpkg copy -b registry.tanzu.vmware.com/tanzu-application-platform/tap-packages:${TAP_VERSION} --to-repo ${INSTALL_REGISTRY_HOSTNAME}/${DATA_E2E_REGISTRY_USERNAME}/tap-packages
 imgpkg copy -b registry.tanzu.vmware.com/p-rabbitmq-for-kubernetes/tanzu-rabbitmq-package-repo:${DATA_E2E_RABBIT_OPERATOR_VERSION} --to-repo ${INSTALL_REGISTRY_HOSTNAME}/oawofolu/vmware-tanzu-rabbitmq
-export TBS_VERSION=1.9.0 # based on $(tanzu package available list buildservice.tanzu.vmware.com --namespace tap-install)
-imgpkg copy -b registry.tanzu.vmware.com/tanzu-application-platform/full-tbs-deps-package-repo:${TBS_VERSION} --to-repo index.docker.io/oawofolu/tbs-full-deps
 ```
 
 #### Install TAP
@@ -536,14 +534,16 @@ tanzu package repository get tanzu-tap-repository --namespace tap-install
 tanzu package available list --namespace tap-install
 tanzu package available list tap.tanzu.vmware.com --namespace tap-install
 tanzu package available get tap.tanzu.vmware.com/$TAP_VERSION --values-schema --namespace tap-install
-tanzu package install tap -p tap.tanzu.vmware.com -v $TAP_VERSION --values-file resources/tap-values.yaml -n tap-install
+tanzu package install tap -p tap.tanzu.vmware.com -v $TAP_VERSION --values-file resources/tap-values.yaml -n tap-install #ignore any errors at this stage
+
+export TBS_VERSION=1.9.0
+imgpkg copy -b registry.tanzu.vmware.com/tanzu-application-platform/full-tbs-deps-package-repo:${TBS_VERSION} --to-repo index.docker.io/oawofolu/tbs-full-deps
 
 tanzu package repository add tbs-full-deps-repository --url oawofolu/tbs-full-deps:${TBS_VERSION} --namespace tap-install
 tanzu package installed delete full-tbs-deps -n tap-install -y
 tanzu package install full-tbs-deps -p full-tbs-deps.tanzu.vmware.com -v ${TBS_VERSION}  -n tap-install
 tanzu package installed get full-tbs-deps   -n tap-install
 envsubst < resources/tap-values-tbsfull.in.yaml > resources/tap-values-tbsfull.yaml
-
 #If installing TAP 1.2:
 envsubst < resources/tap-values-tbsfull.in.yaml > resources/tap-values-tbsfull.yaml
 tanzu package installed update tap -p tap.tanzu.vmware.com --values-file resources/tap-values-tbsfull.yaml -n tap-install
@@ -551,12 +551,6 @@ tanzu package installed update tap -p tap.tanzu.vmware.com --values-file resourc
 #If installing TAP 1.3:
 envsubst < resources/tap-values-1.3.in.yaml > resources/tap-values-1.3.yaml
 tanzu package installed update tap -p tap.tanzu.vmware.com --values-file resources/tap-values-1.3.yaml -n tap-install
-```
-
-(Optional) To downgrade to TAP 1.1.1:
-```
-tanzu package installed update tap -p tap.tanzu.vmware.com -v 1.1.1-build.1  --values-file resources/tap-values.yaml -n tap-install
-tanzu package repository get tanzu-tap-repository --namespace tap-install
 ```
 
 To check on a package's install status:
@@ -569,7 +563,7 @@ To check that all expected packages were installed successfully:
 tanzu package installed list -A -n tap-install
 ```
 
-For any packages above that show "Reconciliation failed", try deleting and reinstalling - thus:
+For any packages above that still shows "Reconciliation failed", try deleting and reinstalling - thus:
 ```
 tanzu package installed delete <name of failed package> -n tap-install -y
 tanzu package install <name of failed package> -p <package metadata name> -v ${package version}  -n tap-install
@@ -601,6 +595,7 @@ tanzu acc create scdf-mlmodel --git-repository https://github.com/agapebondserva
 tanzu acc create kubeflow-pipelines --git-repository https://github.com/agapebondservant/kubeflow-pipelines-accelerator.git --git-branch main
 tanzu acc create sample-cnn-app --git-repository https://github.com/tanzumlai/sample-ml-app.git --git-branch main
 tanzu acc create mlflowrunner --git-repository https://github.com/tanzumlai/mlcode-runner.git --git-branch main
+tanzu acc create datahub --git-repository https://github.com/agapebondservant/datahub-accelerator.git --git-branch main
 ```
 
 * Install Analytics Apps:
