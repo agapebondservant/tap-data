@@ -598,6 +598,22 @@ tanzu acc create mlflowrunner --git-repository https://github.com/tanzumlai/mlco
 tanzu acc create datahub --git-repository https://github.com/agapebondservant/datahub-accelerator.git --git-branch main
 ```
 
+Install Auto API Registration:
+```
+tanzu package available list apis.apps.tanzu.vmware.com --namespace tap-install #retrieve available version
+API_REG_VERSION=0.1.2
+tanzu package install api-auto-registration \
+--package-name apis.apps.tanzu.vmware.com \
+--namespace tap-install \
+--version $API_REG_VERSION
+```
+
+Verify that installation was successful:
+```
+tanzu package installed get api-auto-registration -n tap-install
+kubectl get pods -n api-auto-registration
+```
+
 * Install Analytics Apps:
 Create a namespace for the analytics apps:
 ```

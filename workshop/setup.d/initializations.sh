@@ -41,14 +41,14 @@ setupgitbranches()
 git clone https://${DATA_E2E_GIT_USER}:${DATA_E2E_GIT_TOKEN}@github.com/${DATA_E2E_GIT_USER}/sample-ml-app.git ~/sample-ml-app
 cd ~/sample-ml-app
 setupgitbranches main
-setupgitbranches api-main
+setupgitbranches gp-main
 setupgitbranches kfp-main
 cd - && rm -rf ~/sample-ml-app
 
 git clone https://${DATA_E2E_GIT_USER}:${DATA_E2E_GIT_TOKEN}@github.com/${DATA_E2E_GIT_USER}/sample-kubeflow-pipeline.git ~/sample-kubeflow-pipeline
 cd ~/sample-kubeflow-pipeline
 setupgitbranches main
-setupgitbranches api-main
+setupgitbranches gp-main
 setupgitbranches kfp-main
 cd - && rm -rf ~/sample-kubeflow-pipeline
 

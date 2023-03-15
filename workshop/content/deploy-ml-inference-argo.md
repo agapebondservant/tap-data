@@ -34,7 +34,7 @@ Here's the manifest that we will use to deploy the app:
 file: ~/other/resources/tapworkloads/workload.yaml
 ```
 
-<font color="red">TODO:</font> Note that it includes an "openapi" field, which will be used to render an OpenAPI-3 compatible interface.
+Note that it includes an "openapi" field, which will be used to render an OpenAPI-3 compatible interface.
 
 Now, let's deploy the app:
 ```execute
@@ -74,9 +74,9 @@ Upload a few of these images to the app and observe the predictions it yields.
 then it means that it could not locate any ML model named **cifar_cnn** that is in the **Production** phase.
 Navigate to MLflow above to change the Model Stage from the Models tab.</font>
 
-Let's also view the **OpenAPI** interface for the model's serving API:
+Let's also view the **OpenAPI** interface for the model's serving API - click on the link for the app, then click on the **Definitions** tab:
 ```dashboard:open-url
-url: {{ ingress_protocol }}://image-processor-api.default.{{ ingress_domain }}
+url: {{ ingress_protocol }}://tap-gui.{{ ingress_domain }}/api-docs
 ```
 
 Last, view the pipeline that was used to build the model:

@@ -12,7 +12,7 @@ scipy
 plotly
 watchdog
 mpld3
-streamlit==1.11.1
+streamlit==1.18.1
 pika
 Pillow
 streamlit-autorefresh
