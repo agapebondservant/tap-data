@@ -534,22 +534,26 @@ tanzu package repository get tanzu-tap-repository --namespace tap-install
 tanzu package available list --namespace tap-install
 tanzu package available list tap.tanzu.vmware.com --namespace tap-install
 tanzu package available get tap.tanzu.vmware.com/$TAP_VERSION --values-schema --namespace tap-install
-tanzu package install tap -p tap.tanzu.vmware.com -v $TAP_VERSION --values-file resources/tap-values.yaml -n tap-install #ignore any errors at this stage
-
 export TBS_VERSION=1.9.0
 imgpkg copy -b registry.tanzu.vmware.com/tanzu-application-platform/full-tbs-deps-package-repo:${TBS_VERSION} --to-repo index.docker.io/oawofolu/tbs-full-deps
+
+#If installing TAP 1.2:
+tanzu package install tap -p tap.tanzu.vmware.com -v $TAP_VERSION --values-file resources/tap-values.yaml -n tap-install #ignore any errors at this stage
+envsubst < resources/tap-values-tbsfull.in.yaml > resources/tap-values-tbsfull.yaml
+
+#If installing TAP 1.3:
+envsubst < resources/tap-values-1.3.in.yaml > resources/tap-values-1.3.yaml
+tanzu package install tap -p tap.tanzu.vmware.com --values-file resources/tap-values-1.3.yaml -n tap-install
 
 tanzu package repository add tbs-full-deps-repository --url oawofolu/tbs-full-deps:${TBS_VERSION} --namespace tap-install
 tanzu package installed delete full-tbs-deps -n tap-install -y
 tanzu package install full-tbs-deps -p full-tbs-deps.tanzu.vmware.com -v ${TBS_VERSION}  -n tap-install
 tanzu package installed get full-tbs-deps   -n tap-install
-envsubst < resources/tap-values-tbsfull.in.yaml > resources/tap-values-tbsfull.yaml
+
 #If installing TAP 1.2:
-envsubst < resources/tap-values-tbsfull.in.yaml > resources/tap-values-tbsfull.yaml
 tanzu package installed update tap -p tap.tanzu.vmware.com --values-file resources/tap-values-tbsfull.yaml -n tap-install
 
 #If installing TAP 1.3:
-envsubst < resources/tap-values-1.3.in.yaml > resources/tap-values-1.3.yaml
 tanzu package installed update tap -p tap.tanzu.vmware.com --values-file resources/tap-values-1.3.yaml -n tap-install
 ```
 

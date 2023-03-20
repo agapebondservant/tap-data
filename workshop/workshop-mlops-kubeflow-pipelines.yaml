@@ -1,8 +1,9 @@
-name: Tanzu Postgres - Kubernetes Deep Dive
+name: MLOps - Kubeflow Pipelines
 
 modules:
     activate:
     - mlops-tap-overview
+    - mlops-tap-agenda
     - deploy-jupyterhub
     - deploy-mlflow
     - deploy-ml-workflow

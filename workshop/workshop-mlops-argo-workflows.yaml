@@ -3,6 +3,7 @@ name: MLOps with Argo Workflows, MLFlow and TAP
 modules:
     activate:
     - mlops-tap-overview
+    - mlops-tap-agenda
     - deploy-jupyterhub
     - deploy-mlflow
     - deploy-ml-workflow

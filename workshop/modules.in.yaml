@@ -41,6 +41,8 @@ modules:
       name: WAN Replication with Gemfire
     mlops-tap-overview:
       name: Demo Overview
+    mlops-tap-agenda:
+      name: Agenda
     deploy-jupyterhub:
       name: Deploy JupyterHub
     deploy-mlflow:
