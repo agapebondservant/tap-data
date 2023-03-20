@@ -21,7 +21,7 @@ View **DataHub** here (login: **datahub/datahub**), and search for "Greenplum CI
 url: {{ ingress_protocol }}://datahub-datahub.{{ DATA_E2E_BASE_URL }}
 ```
 
-To view the **Assets** associated with our datasource, click on "Details" under the data source,
+To view the **Assets** associated with our datasource, click on "Details" under the data source, 
 then click "View All" in the *Ingested Assets* section.
 
 <font color="red"><b>TODO:</b> Train model in Greenplum and migrate to Postgres sink via Liquibase.</font>
