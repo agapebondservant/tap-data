@@ -52,7 +52,7 @@ Select the **convolutional_neural_network_team_kfp** experiment (on the left),
 and enter **metrics.accuracy_score** in the search field, then select the run in the search results.
 Notice the tracked fields in the **Metrics** and **Artifacts** section; these were tracked and stored during the model training phase.
 
-Also, select **test.html** under the **Artifacts** section. This will display a report of performance metrics
+Also, select **test.html** under the **Artifacts** section. This will display a report of performance metrics, explainability, etc.
 that were captured during **Monitoring**. (The library used is called **Evidently**: <a href="https://docs.evidentlyai.com/" target="_blank">View Home Page</a>)
 
 Next, select the **Models** tab. There should be several candidate models shown.
