@@ -8,7 +8,7 @@ for orig in `find ~ -name "*.in.*" -type f`; do
 done
 
 # Secret initializations
-cd ~ && tanzu init && tanzu plugin install --local bin/cli secret
+cd ~ && tanzu init && tanzu plugin install --local bin/cli all
 tanzu secret registry delete regsecret --namespace default -y || true
 tanzu secret registry add regsecret --username ${DATA_E2E_REGISTRY_USERNAME} \
       --password ${DATA_E2E_REGISTRY_PASSWORD} --server ${DATA_E2E_REGISTRY_USERNAME} \
