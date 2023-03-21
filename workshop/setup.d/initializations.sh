@@ -26,7 +26,7 @@ tanzu secret registry add registry-credentials \
 --username ${DATA_E2E_REGISTRY_USERNAME} --password ${DATA_E2E_REGISTRY_PASSWORD} \
 --server ${DATA_E2E_GIT_SECRETGEN_SERVER} \
 --export-to-all-namespaces --yes --namespace ${SESSION_NAMESPACE} | true
-kubectl apply -f ~/resources/tap-rbac.yaml -n ${SESSION_NAMESPACE} | true
+kubectl apply -f ~/other/resources/tap/rbac-1.3.yaml -n ${SESSION_NAMESPACE} | true
 
 # Set up git branches
 echo "Setting up git branches..."
@@ -43,6 +43,9 @@ cd ~/sample-ml-app
 setupgitbranches main
 setupgitbranches gp-main
 setupgitbranches kfp-main
+setupgitbranches api-main
+setupgitbranches api-gp-main
+setupgitbranches api-kfp-main
 cd - && rm -rf ~/sample-ml-app
 
 git clone https://${DATA_E2E_GIT_USER}:${DATA_E2E_GIT_TOKEN}@github.com/${DATA_E2E_GIT_USER}/sample-kubeflow-pipeline.git ~/sample-kubeflow-pipeline

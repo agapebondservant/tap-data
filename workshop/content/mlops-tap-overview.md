@@ -13,9 +13,9 @@ or extend features from a single ML framework with DevOps-friendly built-ins.
 
 #### Our Agenda 
 
-We will use **Tanzu Application Platform** as the **command center** and **hub** for all of our machine learning workloads.
+In this workshop, we will use **Tanzu Application Platform** as the **command center** and **hub** for all of our machine learning workloads.
 We will bring a mix of ML frameworks, tools and workloads to **Tanzu Application Platform**, 
-and use **TAP** as our **command center** for plugging our ML artifacts into an end-to-end lifecycle.
+and use **TAP** as our **management plane** for plugging ML artifacts into an end-to-end lifecycle.
 
 Specifically, **Tanzu Application Platform** supports our machine learning process in the following phases:
 
@@ -29,6 +29,7 @@ Specifically, **Tanzu Application Platform** supports our machine learning proce
   In order to get started, we will need to set up our **training environment**. 
   For this, we need access to a slew of off-the-shelf **ML frameworks and tools**: products like **JupyterHub**, **MLFlow**, etc. 
   We can also include a hodgepodge of our favorite homegrown ML frameworks / tooling, as long as they are container native.
+  **Tanzu Application Platform** provides a discovery layer for these tools.
 
 
   _**Data Assets**_

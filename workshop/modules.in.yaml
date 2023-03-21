@@ -42,7 +42,7 @@ modules:
     mlops-tap-overview:
       name: Demo Overview
     mlops-tap-agenda:
-      name: Agenda
+      name: Problem Scoping
     deploy-jupyterhub:
       name: Deploy JupyterHub
     deploy-mlflow:

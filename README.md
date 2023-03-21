@@ -144,6 +144,10 @@ kubectl create secret generic vault-token --from-literal token=$(cat cluster-key
 kubectl apply -f other/resources/vault/vault-clustersecretstore.yaml
 ```
 
+* Set up RBAC for Service Bindings:
+```
+kubectl apply -f resources/service-binding-rbac.yaml
+```
 
 * Install Istio: (used by Multi-site workshops, Gemfire workshops)
 ```
@@ -600,6 +604,7 @@ tanzu acc create kubeflow-pipelines --git-repository https://github.com/agapebon
 tanzu acc create sample-cnn-app --git-repository https://github.com/tanzumlai/sample-ml-app.git --git-branch main
 tanzu acc create mlflowrunner --git-repository https://github.com/tanzumlai/mlcode-runner.git --git-branch main
 tanzu acc create datahub --git-repository https://github.com/agapebondservant/datahub-accelerator.git --git-branch main
+tanzu acc create servicebinding --git-repository https://github.com/agapebondservant/external-service-binding-accelerator.git --git-branch main
 ```
 
 Install Auto API Registration:
