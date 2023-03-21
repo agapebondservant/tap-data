@@ -67,5 +67,9 @@ cd - && rm -rf ~/sample-accelerator
 
 echo "Git branches set up."
 
+# Accelerators
+tanzu acc delete data-catalog-${SESSION_NAMESPACE} -n ${SESSION_NAMESPACE} || true
+echo "Pre-existing accelerators were deleted."
+
 
 

@@ -58,7 +58,7 @@ cd ~/sample-accelerator; git config --global user.email 'eduk8s@example.com'; gi
 
 Now, go ahead and register the accelerator using the **tanzu cli**:
 ```execute
-tanzu acc create data-catalog-{{session_namespace}} --git-repository https://${DATA_E2E_GIT_USER}:${DATA_E2E_GIT_TOKEN}@github.com/${DATA_E2E_GIT_USER}/sample-accelerator.git --git-branch main-{{session_namespace}}
+tanzu acc create data-catalog-{{session_namespace}} --git-repository https://${DATA_E2E_GIT_USER}:${DATA_E2E_GIT_TOKEN}@github.com/${DATA_E2E_GIT_USER}/sample-accelerator.git --git-branch main-{{session_namespace}} -n {{session_namespace}}
 ```
 
 Go to the **Accelerators** page in **TAP** and locate the new accelerator by entering "practise" in the Search Bar:
