@@ -14,7 +14,16 @@ Also, it is backed by the popular workflow orchestrator **Argo Workflows**, whos
 (<font color="red">NOTE:</font> Learn more about Kubeflow Pipelines here: <a href="https://www.kubeflow.org/docs/components/pipelines/v1/introduction/" target="_blank">Argo Workflows</a>)
 
 Similarly to how we deployed **MLflow**, we will deploy **Kubeflow Pipelines** on **TAP** using the **tanzu** cli.
-Let's try it - first, we install the Kubeflow Package Repository:
+
+<div style="text-align: left; justify-content: left; align-items: center; width: 80%; margin-bottom: 20px; font-size: small">
+    <img style="float: left; width: 20%; max-width: 20%; margin: 0 10px 0 0" src="images/mlops-tip.png"> 
+    Deploying the ML pipelines is usually the responsibility of the <b>ML engineer</b>.
+    A data scientist shouldn't have to worry about this task unless (s)he wears multiple hats on the project, 
+    or needs access to an ML pipeline orchestrator via <b>self-service provisioning</b>.
+</div>
+<div style="clear: left;"></div>
+
+First, we install the Kubeflow Package Repository:
 ```execute
 clear; export KUBEFLOW_PACKAGE_VERSION=0.0.1; tanzu package repository add kubeflow-pipelines --url ghcr.io/agapebondservant/kubeflow-pipelines:$KUBEFLOW_PACKAGE_VERSION -n {{session_namespace}}
 ```
