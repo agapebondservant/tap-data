@@ -1,6 +1,11 @@
 ### Building ML Model
 
-Our Jupyter notebook scripts have been converted into production-ready code hosted in a **Github repo**.
+Let's view the source Jupyter notebook for our exercise. 
+Click on the Jupyter tab, enter "jupyter" in the textbox, and 
+open the notebook by navigating to jupyter --> Image Processing.ipynb
+in the file explorer on the left.
+
+Our Jupyter notebook has been converted into production-ready code hosted in a **Github repo**.
 The code template has been registered as an **App Accelerator** in the TAP GUI.
 Navigate to the TAP GUI screen below to view the "Sample Tensorflow" accelerator:
 

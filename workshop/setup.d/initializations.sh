@@ -59,6 +59,12 @@ git clone https://${DATA_E2E_GIT_USER}:${DATA_E2E_GIT_TOKEN}@github.com/${DATA_E
 cd ~/mlcode-runner
 setupgitbranches main
 cd - && rm -rf ~/mlcode-runner
+
+git clone https://${DATA_E2E_GIT_USER}:${DATA_E2E_GIT_TOKEN}@github.com/${DATA_E2E_GIT_USER}/sample-accelerator.git ~/sample-accelerator
+cd ~/sample-accelerator
+setupgitbranches main
+cd - && rm -rf ~/sample-accelerator
+
 echo "Git branches set up."
 
 

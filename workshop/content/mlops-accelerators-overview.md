@@ -19,7 +19,54 @@ url: {{ ingress_protocol }}://tap-gui.{{ ingress_domain }}/create
 
 #### How to deploy
 
-Deploying an accelerator is pretty straightforward. 
+Deploying an accelerator is pretty straightforward. Let's test it out by starting an accelerator for **reference documentation**.
+
+First, let's set up the git repository that will host our accelerator:
+```execute
+export DATA_E2E_GIT_TOKEN={{DATA_E2E_GIT_TOKEN}} && export DATA_E2E_GIT_USER={{DATA_E2E_GIT_USER}} && git clone https://${DATA_E2E_GIT_USER}:${DATA_E2E_GIT_TOKEN}@github.com/${DATA_E2E_GIT_USER}/sample-accelerator.git ~/sample-accelerator
+```
+
+Let's generate the reference doc:
+```execute
+cat << EOF > ~/sample-accelerator/README.md
+## Data Catalog Best Practices
+EOF
+```
+
+We'll also include the optional **accelerator.yaml** file, so that we can add some custom options to our accelerator.
+In this, we will add "practise" as a tag to our accelerator.
+```execute
+cat << EOF > ~/sample-accelerator/accelerator.yaml
+accelerator:
+  displayName: Data Catalog Best Practices
+  description: Best Practices for Search and Discovery of Data Assets
+  iconUrl: https://upload.wikimedia.org/wikipedia/commons/1/1b/ML_Ops_Venn_Diagram.svg
+  tags:
+  - "practise"
+EOF
+```
+
+View the files that we just generated:
+```editor:open-file
+file: ~/sample-accelerator
+```
+
+Push the files to GitHub:
+```execute
+cd ~/sample-accelerator; git config --global user.email 'eduk8s@example.com'; git config --global user.name 'Educates'; git commit -a -m 'New commit'; git push origin main-{{session_namespace}}; cd -
+```
+
+Now, go ahead and register the accelerator using the **tanzu cli**:
+```execute
+tanzu acc create data-catalog-{{session_namespace}} --git-repository https://${DATA_E2E_GIT_USER}:${DATA_E2E_GIT_TOKEN}@github.com/${DATA_E2E_GIT_USER}/sample-accelerator.git --git-branch main-{{session_namespace}}
+```
+
+Go to the **Accelerators** page in **TAP** and locate the new accelerator by entering "practise" in the Search Bar:
+```dashboard:open-url
+url: {{ ingress_protocol }}://tap-gui.{{ ingress_domain }}/create
+```
+
+
 
 
 
