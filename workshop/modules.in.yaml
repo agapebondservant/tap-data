@@ -75,6 +75,8 @@ modules:
       name: Demo Overview
     mlops-greenplum-data-catalog-overview:
       name: Discovering Data Sets
+    mlops-data-catalog-overview:
+      name: Discovering Data Sets
 config:
     vars:
     - name: DATA_E2E_REGISTRY_USERNAME

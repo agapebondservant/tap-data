@@ -4,6 +4,7 @@ modules:
     activate:
     - mlops-tap-overview
     - mlops-tap-agenda
+    - mlops-data-catalog-overview
     - deploy-jupyterhub
     - deploy-mlflow
     - deploy-ml-workflow

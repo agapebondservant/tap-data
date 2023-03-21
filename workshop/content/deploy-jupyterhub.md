@@ -1,6 +1,7 @@
 ### Deploying JupyterHub
 
-Before we begin, we need to be able to perform **experiments** that will help us to understand how to build an optimized model for our problem statement.
+Before we begin, we need to set up a development environment that will allow us to perform **experiments** that will help us to understand how to build an optimized model for our problem statement.
+This is a part of the **Discovery** phase.
 
 ![MLOps - Experimentation](images/mlflow-usecase-experimentation.jpg)
 
