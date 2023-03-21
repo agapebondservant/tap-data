@@ -1,5 +1,13 @@
 ### Building ML Model Workflow
 
+<div style="text-align: left; justify-content: left; align-items: center; width: 80%; margin-bottom: 20px; font-size: small">
+    <img style="float: left; width: 20%; max-width: 20%; margin: 0 10px 0 0" src="images/mlops-tip.png"> 
+    Deploying the MLOps platform is usually the responsibility of the <b>ML engineer</b>.
+    A data scientist shouldn't have to worry about this task unless (s)he wears multiple hats on the project, 
+    or needs access to an MLOps platform via <b>self-service provisioning</b>.
+</div>
+<div style="clear: left;"></div>
+
 Building, training and deploying ML models requires several pre-conditions in order to be successful:
 * The ability to **deploy** ML models in a **repeatable**, **portable** and **agile** manner;
 * The ability to **track** changes to models, including their associated artifacts, metrics, parameters/hyperparameters, etc;

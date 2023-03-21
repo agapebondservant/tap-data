@@ -40,7 +40,17 @@ file: ~/sample-ml-app/app/analytics/cifar_cnn.py
 This is a refactored version of the experimental code from our **Jupyter Notebook**.
 However, refactoring the code was the first step. In order to inject our code into an automated pipeline,
 we need to package it in a **standardized**, **reusable** way. The package should run in any environment, 
-and it should include everything the environment needs to know in order to run it. To achieve this, we will use 2 things:
+and it should include everything the environment needs to know in order to run it. 
+
+#### Packaging the ML Code
+<div style="text-align: left; justify-content: left; align-items: center; width: 80%; margin-bottom: 20px; font-size: small">
+    <img style="float: left; width: 20%; max-width: 20%; margin: 0 10px 0 0" src="images/mlops-tip.png"> 
+    Building ML code packages is usually the responsibility of the <b>ML engineer</b>.
+    A data scientist shouldn't have to worry about this task unless (s)he wears multiple hats on the project.
+</div>
+<div style="clear: left;"></div>
+
+To package the code, we will use 2 things:
 
 1. **MLprojects** 
 **MLprojects** are self-contained **MLflow** projects which allow machine learning models to be packaged in a declarative, reusable, portable way.

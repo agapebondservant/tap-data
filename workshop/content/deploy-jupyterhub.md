@@ -3,9 +3,17 @@
 Before we begin, we need to set up a development environment that will allow us to perform **experiments** that will help us to understand how to build an optimized model for our problem statement.
 This is a part of the **Discovery** phase.
 
+<div style="text-align: left; justify-content: left; align-items: center; width: 80%; margin-bottom: 20px; font-size: small">
+    <img style="float: left; width: 20%; max-width: 20%; margin: 0 10px 0 0" src="images/mlops-tip.png"> 
+    Deploying the ML development environment is usually the responsibility of the <b>ML engineer</b>.
+    A data scientist shouldn't have to worry about this task unless (s)he wears multiple hats on the project, 
+    or needs access to a development environment via <b>self-service provisioning</b>.
+</div>
+<div style="clear: left;"></div>
+
 ![MLOps - Experimentation](images/mlflow-usecase-experimentation.jpg)
 
-This is an **iterative** process and requires the ability to perform **rapid model development**, **track** and **audit** experiment runs,
+Experimentation is an **iterative** process and requires the ability to perform **rapid model development**, **track** and **audit** experiment runs,
 and **collaborate** and **share** results with the team.
 
 **JupyterHub** is a popular tool that data scientists use for this purpose.
