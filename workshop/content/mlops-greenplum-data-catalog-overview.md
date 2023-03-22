@@ -33,15 +33,10 @@ Launch DataHub by clicking on the URL from the **tanzu** cli:
 tanzu apps workload get datahub-tap --namespace default
 ```
 
-View **DataHub** here (login: **datahub/datahub**), and search for "Greenplum CIFAR Data Source":
-```dashboard:open-url
-url: {{ ingress_protocol }}://datahub-datahub.{{ DATA_E2E_BASE_URL }}
-```
-
 Login to **DataHub** (credentials: **datahub/datahub**), and click on the DataHub icon (top-left).
 
 Next, in the **View** search bar towards the top (with the prompt text "Create a View"), 
-enter **ServiceBinding Sources** in the Search Bar (include the double quotes).
+enter **ServiceBinding Sources** in the Search Bar.
 These are the assets that have been previously tagged as **ServiceBinding** resources.
 **ServiceBindings** is a Kubernetes-standard specification for connecting apps with databases, API services and 
 other resources, and it is supported out of the box by **TAP**. More on **ServiceBindings** will be explored later in the session.

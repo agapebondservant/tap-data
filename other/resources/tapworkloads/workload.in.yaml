@@ -10,6 +10,9 @@ spec:
   params:
     - name: clusterBuilder
       value: full
+    - name: annotations
+      value:
+        autoscaling.knative.dev/minScale: "1"
     - name: api_descriptor
       value:
         type: openapi

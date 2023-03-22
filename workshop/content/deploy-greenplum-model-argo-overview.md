@@ -8,15 +8,11 @@ However, sometimes we may find that our ML models, data and/or features are too 
 We might use **machine learning curves** or similar to discover that we need to scale out our system so that we can 
 train and/or serve in a more **distributed** environment. This would result in an **out-of-core learner**.
 
-<font color="red">TODO:</font> Distributed ML environment diagram
-
 #### In-Database Analytics
 There are many different approaches for scaling an ML environment. 
 One popular approach is to use separate clusters for **training** and **inference**.
 **Training** is done on a highly parallelized cluster that is colocated where the **data** resides, while 
 **inference** occurs on a separate cluster that is colocated where the **apps/consumers** reside.
-
-<font color="red">TODO:</font> Separate training/serving environment diagram
 
 In this session, we will use **in-database analytics** to move the training compute where the **data** resides.
 This way, our training pipelines will actually run within the database itself.
@@ -33,107 +29,9 @@ In this exercise, we will use **VMware Greenplum** for in-database analytics.
 </div>
 <div style="clear: left;"></div>
 
-Let's go back to our datasets from the data catalog:
-```dashboard:open-url
-url: {{ ingress_protocol }}://datahub-datahub.{{ DATA_E2E_BASE_URL }}
-```
-
-Login (credentials: **datahub/datahub**) and select **ServiceBinding Sources** 
-in the **View** search bar towards the top (with the prompt text "Create a View").
-
-For **training**: Click on the **dev** Greenplum database in the search results.
-This will provide our **training environment**.
-We will take the same training code that we used for the in-memory learner 
+For **training**: We will take the same training code that we used for the in-memory learners 
 and deploy it to the **VMware Greenplum** training instance we found in the **Data Catalog** earlier.
 We will use Greenplum's **PL/Python** feature, which allows us to deploy Python code as a database **UDF** function.
-
-<font color="red">NOTE</font>: How do we access the training instance?
-Notice the tags that start with **servicebinding:** that have been associated with the **dev** instance.
-The specific names are **servicebinding:type:greenplum** and **servicebinding:provider:vmware**.
-Thanks to **ServiceBindings**, these are the only keys we will need to connect to our Greenplum instance.
-
-Navigate to the **TAP GUI** and click on the **pg-admin** instance:
-```dashboard:open-url
-url: {{ ingress_protocol }}://tap-gui.{{ ingress_domain }}/supply-chain
-```
-
-Launch pgAdmin by retrieving the URL from the **tanzu cli** (login credentials: test@test.com/alwaysbekind):
-```execute
-tanzu apps workload get datahub-tap --namespace pgadmin
-```
-
-Let's add a new Server connection for the Greenplum instance by creating a server import file:
-```execute
-export PGADMIN_POD=$(kubectl get pod -l "app.kubernetes.io/part-of=pgadmin-tap,app.kubernetes.io/component=run" -oname -n default
-kubectl exec -it $PGADMIN_POD -n default -- sh
-python -c "from pyservicebinding import binding; bindings = next(iter(binding.ServiceBinding().bindings('greenplum', 'vmware') or []), {}); \
-obj =\"\"\"{{ 
-    'Servers': {{ 
-        '1': {{ 
-            'Name': 'test@test.com', 
-            'Group': 'Default 123 Group 1', 
-            'Port': {0}, 
-            'Username': '{1}', 
-            'Host': '{2}', 
-            'SSLMode': 'require',
-            'PassFile': '/var/lib/pgadmin/pgpass',
-            'MaintenanceDB': '{3}'
-        }}}}}}\"\"\"; \
-obj = obj.replace('\'', '\"'); \
-obj = obj.format(bindings.get('port'), bindings.get('username'), bindings.get('host'), bindings.get('database'));\
-print(obj)"
-```
-
-Observe that we were able to passively generate a file with the necessary DB credentials by making calls with a ServiceBindings compatible library
-(**pyservicebindings**).
-
-Now we will import the server file:
-```execute
-export PGADMIN_POD=$(kubectl get pod -l "app.kubernetes.io/part-of=pgadmin-tap,app.kubernetes.io/component=run" -oname -n default
-kubectl exec -it $PGADMIN_POD -n default -- sh
-python -c "from pyservicebinding import binding; bindings = next(iter(binding.ServiceBinding().bindings('greenplum', 'vmware') or []), {}); \
-obj =\"\"\"{{ 
-    'Servers': {{ 
-        '1': {{ 
-            'Name': 'test@test.com', 
-            'Group': 'Default 123 Group 1', 
-            'Port': {0}, 
-            'Username': '{1}', 
-            'Host': '{2}', 
-            'SSLMode': 'require',
-            'PassFile': '/var/lib/pgadmin/pgpass',
-            'MaintenanceDB': '{3}'
-        }}}}}}\"\"\"; \
-obj = obj.replace('\'', '\"'); \
-obj = obj.format(bindings.get('port'), bindings.get('username'), bindings.get('host'), bindings.get('database'));\
-print(obj)" > /tmp/servers.json; \
-obj=\"{0}:{1}:{2}:{3}\".format(bindings.get('host'),bindings.get('database'),bindings.get('username'),bindings.get('password')); \
-print(obj)" > /var/lib/pgadmin/pgpass; \
-python -c "from pyservicebinding import binding; bindings = next(iter(binding.ServiceBinding().bindings('postgres', 'vmware') or []), {}); \
-obj =\"\"\"{{ 
-    'Servers': {{ 
-        '1': {{ 
-            'Name': 'test@test.com', 
-            'Group': 'Default 123 Group 1', 
-            'Port': {0}, 
-            'Username': '{1}', 
-            'Host': '{2}', 
-            'SSLMode': 'require',
-            'PassFile': '/var/lib/pgadmin/pgpass',
-            'MaintenanceDB': '{3}'
-        }}}}}}\"\"\"; \
-obj = obj.replace('\'', '\"'); \
-obj = obj.format(bindings.get('port'), bindings.get('username'), bindings.get('host'), bindings.get('database'));\
-print(obj)" >> /tmp/servers.json; \
-obj=\"{0}:{1}:{2}:{3}\".format(bindings.get('host'),bindings.get('database'),bindings.get('username'),bindings.get('password')); \
-print(obj)" >> /var/lib/pgadmin/pgpass; \
-/venv/bin/python3 setup.py --load-servers /tmp/servers.json --user test@test.com;
-```
-
-Now refresh pgAdmin - the new Server connection instances should be displayed:
-```dashboard:open-url
-url: {{ ingress_protocol }}://pgadmin-tap.default.{{ DATA_E2E_BASE_URL }}
-```
 
 For **inference**: We will take the same inference code that we used for the in-memory learners
 and deploy it to the **Postgres-on-Kubernetes** training instance we found in the **Data Catalog** earlier.

@@ -10,6 +10,9 @@ spec:
   params:
     - name: clusterBuilder
       value: full
+    - name: annotations
+      value:
+        autoscaling.knative.dev/minScale: "1"
   env:
     - name: MLFLOW_TRACKING_URI
       value: http://mlflow-${SESSION_NAMESPACE}.${DATA_E2E_BASE_URL}

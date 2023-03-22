@@ -605,6 +605,7 @@ tanzu acc create sample-cnn-app --git-repository https://github.com/tanzumlai/sa
 tanzu acc create mlflowrunner --git-repository https://github.com/tanzumlai/mlcode-runner.git --git-branch main
 tanzu acc create datahub --git-repository https://github.com/agapebondservant/datahub-accelerator.git --git-branch main
 tanzu acc create servicebinding --git-repository https://github.com/agapebondservant/external-service-binding-accelerator.git --git-branch main
+tanzu acc create pgadmin --git-repository https://github.com/agapebondservant/pgadmin-accelerator.git --git-branch main
 ```
 
 Install Auto API Registration:
@@ -869,7 +870,7 @@ RabbitMQ Dashboard: Dashboard ID 10991
 <br/>
 Erlang-Distribution Dashboard: Dashboard ID 11352
 
-* To install pgAdmin:
+* To install pgAdmin (helm chart):
 ```
 kubectl create ns pgadmin
 helm repo add runix https://helm.runix.net/
@@ -878,6 +879,12 @@ helm install pgadmin runix/pgadmin4 --namespace=pgadmin \
 --set persistence.storageClass=generic --set strategy.type=Recreate
 kubectl apply -f resources/pgadmin.yaml
 export PGADMIN_POD_NAME=$(kubectl get pods --namespace pgadmin -l "app.kubernetes.io/name=pgadmin4,app.kubernetes.io/instance=pgadmin" -o jsonpath="{.items[0].metadata.name}")
+```
+
+* To install pgAdmin (without helm):
+```
+kubectl create ns pgadmin
+
 ```
 To connect to pgAdmin: Connect to your-svc.your-namespace.svc.cluster.local
 
