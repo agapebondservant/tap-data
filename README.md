@@ -883,7 +883,7 @@ export PGADMIN_POD_NAME=$(kubectl get pods --namespace pgadmin -l "app.kubernete
 
 * To install pgAdmin (without helm):
 ```
-kubectl create ns pgadmin
+Use the pgAdmin accelerator: <a href="https://github.com/agapebondservant/pgadmin-accelerator.git" target="_blank">here</a>
 
 ```
 To connect to pgAdmin: Connect to your-svc.your-namespace.svc.cluster.local
