@@ -203,5 +203,9 @@ config:
       value: ${DATA_E2E_GIT_TOKEN}
     - name: DATA_E2E_GIT_USER
       value: ${DATA_E2E_GIT_USER}
+    - name: DATA_E2E_ML_INFERENCE_DB_CONNECT
+      value: ${DATA_E2E_ML_INFERENCE_DB_CONNECT}
+    - name: DATA_E2E_ML_TRAINING_DB_CONNECT
+      value: ${DATA_E2E_ML_TRAINING_DB_CONNECT}
 
 

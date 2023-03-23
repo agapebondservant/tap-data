@@ -71,5 +71,9 @@ echo "Git branches set up."
 tanzu acc delete data-catalog-${SESSION_NAMESPACE} -n ${SESSION_NAMESPACE} || true
 echo "Pre-existing accelerators were deleted."
 
+# Database
+psql ${DATA_E2E_ML_INFERENCE_DB_CONNECT} -c "DROP SCHEMA IF EXISTS ${SESSION_NAMESPACE}; CREATE SCHEMA ${SESSION_NAMESPACE}" || true
+psql ${DATA_E2E_ML_TRAINING_DB_CONNECT}-c "DROP SCHEMA IF EXISTS ${SESSION_NAMESPACE}; CREATE SCHEMA ${SESSION_NAMESPACE}" || true
+
 
 
