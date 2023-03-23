@@ -1,4 +1,4 @@
-### Building ML Model with VMware Greenplum
+### Building ML Model using In-Database Analytics
 
 In the previous exercise, we demonstrated how to build an **in-memory learner**. 
 This means that there was no need to scale our training cluster, because the available compute and memory resources was large enough to fit the model.
@@ -17,9 +17,15 @@ One popular approach is to use separate clusters for **training** and **inferenc
 In this session, we will use **in-database analytics** to move the training compute where the **data** resides.
 This way, our training pipelines will actually run within the database itself.
 
+<div style="text-align: left; justify-content: left; align-items: center; width: 80%; margin-bottom: 20px; font-size: small">
+    Also, in-database analytics often includes native support for queries that can be challenging to achieve in a distributed environment,
+    such as distributed joins, sorts, aggregations and parallelization.
+</div>
+<div style="clear: left;"></div>
+
 ![Data movement](images/data-movement.jpg)
 
-**Tanzu Application Platform** can easily integrate with just about any database using **Service Bindings**, which we will explore momentarily.
+**Tanzu Application Platform** can easily integrate with just about any modern database using **Service Bindings**, which we will explore momentarily.
 This includes databases with support for **in-database analytics**.
 In this exercise, we will use **VMware Greenplum** for in-database analytics.
 
@@ -47,7 +53,7 @@ We will use Greenplum's **PL/Python** feature, which allows us to deploy Python 
 
 <font color="red">NOTE</font>: How do we access the training instance?
 Notice the tags that start with **servicebinding:** that have been associated with the **dev** instance.
-The specific names are **servicebinding:type:greenplum** and **servicebinding:provider:vmware**.
+Their specific names are **servicebinding:type:greenplum** and **servicebinding:provider:vmware**.
 Thanks to **ServiceBindings**, these are the only keys we will need to connect to our Greenplum instance.
 
 Navigate to the **TAP GUI** and click on the **pgadmin** instance:
