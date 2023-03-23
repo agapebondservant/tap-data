@@ -191,7 +191,17 @@ url: https://mlflow.{{ ingress_domain }}/#/models
 For **inference**: The pipeline will take the same inference code that we used for the in-memory learners
 and deploy it to the **Postgres-on-Kubernetes** training instance we found in the **Data Catalog** earlier.
 That way, the inference code will be colocated with the apps.
-We will use **PL/Python** to deploy the code, which is available in both Greenplum and Postgres.
+We will use **PL/Python** to deploy the code, which is supported in Postgres.
+
+<font color="red">TODO: Only show for data-centric workshop</font>
+<div style="text-align: left; justify-content: left; align-items: center; width: 80%; margin-bottom: 20px; font-size: small">
+    <img style="float: left; width: 20%; max-width: 20%; margin: 0 10px 0 0" src="images/mlops-tip.png"> 
+    <b>Why Postgres?</b><br/>
+    As an inference store, Postgres has many features that make it a robust solution for serving in-database analytics.
+    Among them is PL/X, or the ability to run programming languages like Python within the database process.
+    This means that Postgres can also be used as edge compute for 
+</div>
+<div style="clear: left;"></div>
 
 Here is the inference code:
 <font color="red">TODO: Show inference code</font>

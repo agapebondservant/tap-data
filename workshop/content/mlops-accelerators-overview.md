@@ -11,7 +11,7 @@ the wheel for common tasks. **Accelerators** are organization-specific archetype
 they can be anything from reference architectures to model schemas to Jupyter notebooks and reusable data pipelines.
 By reusing these archetypes, they are able to cut down on their overall time-to-prod.
 
-Navigate to the **Accelerator** view by clicking the "+" icon below:
+Navigate to the **Accelerator** view:
 ```dashboard:open-url
 url: {{ ingress_protocol }}://tap-gui.{{ ingress_domain }}/create
 ```

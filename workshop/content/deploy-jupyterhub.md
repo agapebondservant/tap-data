@@ -31,7 +31,19 @@ This allows **TAP** to use a single-line install to deploy apps that have been p
 Any containerized app can be transformed into a **Carvel Package**, with an associated source repository called a **PackageRepository**,
 making it ready to install on **TAP**.
 
-First, let's take a look at the JupyterHub Package Repository that we wish to install:
+First, let's take a look at the **accelerator** that contains the reference spec for our deployment (search for "jupyter"):
+```dashboard:open-url
+url: {{ ingress_protocol }}://tap-gui.{{ ingress_domain }}/create
+```
+
+<div style="text-align: left; justify-content: left; align-items: center; width: 80%; margin-bottom: 20px; font-size: small">
+    <img style="float: left; width: 20%; max-width: 20%; margin: 0 10px 0 0" src="images/mlops-tip.png"> 
+    The JupyterHub accelerator provides more in-depth understanding of how it was packaged.
+</div>
+<div style="clear: left;"></div>
+
+Next, let's take a look at the JupyterHub **Package Repository** that we wish to install:
+
 ```dashboard:open-url
 url: https://hub.docker.com/r/{{DATA_E2E_REGISTRY_USERNAME}}/jupyter-package-repo
 ```

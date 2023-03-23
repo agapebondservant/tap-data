@@ -21,6 +21,14 @@ We can use a prebundled Carvel package, or we can **bring our own data catalog**
 For the purposes of this exercise, we will be using **DataHub** as our data catalog.
 (DataHub has already been pre-installed for this workshop; we will go over self-service provisioning of ML tools in a separate section.)
 
+<div style="text-align: left; justify-content: left; align-items: center; width: 80%; margin-bottom: 20px; font-size: small">
+    <img style="float: left; width: 20%; max-width: 20%; margin: 0 10px 0 0" src="images/mlops-tip.png"> 
+    The data catalog was deployed to TAP using a Workload template provided by an <b>Accelerator</b>.
+    For more info, search for <b>datahub</b> on the TAP Accelerators page.
+</div>
+<div style="clear: left;"></div>
+
+
 From **TAP GUI**, go to the **Worklooads** screen:
 ```dashboard:open-url
 url: http://tap-gui.tanzumlai.com/supply-chain
