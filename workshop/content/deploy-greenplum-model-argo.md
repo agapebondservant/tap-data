@@ -8,18 +8,16 @@ However, sometimes we may find that our ML models, data and/or features are too 
 We might use **machine learning curves** or similar to discover that we need to scale out our system so that we can 
 train and/or serve in a more **distributed** environment. This would result in an **out-of-core learner**.
 
-<font color="red">TODO:</font> Distributed ML environment diagram
-
 #### In-Database Analytics
 There are many different approaches for scaling an ML environment. 
 One popular approach is to use separate clusters for **training** and **inference**.
 **Training** is done on a highly parallelized cluster that is colocated where the **data** resides, while 
 **inference** occurs on a separate cluster that is colocated where the **apps/consumers** reside.
 
-<font color="red">TODO:</font> Separate training/serving environment diagram
-
 In this session, we will use **in-database analytics** to move the training compute where the **data** resides.
 This way, our training pipelines will actually run within the database itself.
+
+![Data movement](images/data-movement.jpg)
 
 **Tanzu Application Platform** can easily integrate with just about any database using **Service Bindings**, which we will explore momentarily.
 This includes databases with support for **in-database analytics**.

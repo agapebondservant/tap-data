@@ -547,7 +547,7 @@ envsubst < resources/tap-values-tbsfull.in.yaml > resources/tap-values-tbsfull.y
 
 #If installing TAP 1.3:
 envsubst < resources/tap-values-1.3.in.yaml > resources/tap-values-1.3.yaml
-tanzu package install tap -p tap.tanzu.vmware.com --values-file resources/tap-values-1.3.yaml -n tap-install
+tanzu package install tap -p tap.tanzu.vmware.com -v $TAP_VERSION --values-file resources/tap-values-1.3.yaml -n tap-install
 
 tanzu package repository add tbs-full-deps-repository --url oawofolu/tbs-full-deps:${TBS_VERSION} --namespace tap-install
 tanzu package installed delete full-tbs-deps -n tap-install -y
