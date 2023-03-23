@@ -17,7 +17,10 @@ spec:
       value:
         type: openapi
         location:
-          path: "/v3/api-docs"
+          path: "/app/static/openapi.json"
+          baseUrl: "http://image-processor-api.${SESSION_NAMESPACE}.${DATA_E2E_BASE_URL}"
+        system: image-processors
+        owner: team-image-processors
         description: "A set of API endpoints for the ML Image Processing Demo App."
   env:
     - name: MLFLOW_TRACKING_URI

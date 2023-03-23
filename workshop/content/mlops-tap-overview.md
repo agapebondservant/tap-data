@@ -17,12 +17,17 @@ In this workshop, we will use **Tanzu Application Platform** as the **command ce
 We will bring a mix of ML frameworks, tools and workloads to **Tanzu Application Platform**, 
 and use **TAP** as our **management plane** for plugging ML artifacts into an end-to-end lifecycle.
 
+### Background: How does TAP support the machine learning lifecycle?
+
 Specifically, **Tanzu Application Platform** supports our machine learning process in the following phases:
 
 ![Machine Learning lifecycle with TAP](images/mlops-on-tap-2.jpg)
 
-1. **Discover** Phase
-  
+#### Overview: TAP as Command Center for end-to-end Machine Learning
+![TAP as command center](images/discover-build-deploy.jpg)
+
+#### Deeper Dive
+**DISCOVER** Phase
 
 _**Training Environment**_
 
@@ -44,7 +49,7 @@ All of this can be achieved with **TAP**. **Tanzu Application Platform** provide
 of Data / ML products and assets. We will see some of this in action in the upcoming exercise.
 
 
-2. **Build** Phase
+**BUILD** Phase
   
 _**Reusable Prototypes**_
 
@@ -69,7 +74,7 @@ There are many of these boilerplate tasks, such as:
 that can be adapted during the ML lifecycle process to reduce lead times. We will be able to explore this in the upcoming exercise.
 
 
-3. **Deploy** Phase
+**DEPLOY** Phase
 
 _**Supply Chains**_
 
