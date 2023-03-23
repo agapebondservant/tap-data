@@ -47,7 +47,7 @@ in the **View** search bar towards the top (with the prompt text "Create a View"
 
 For **training**: Click on the **dev** Greenplum database in the search results.
 This will provide our **training environment**.
-We will take the same training code that we used for the in-memory learner 
+For this exercise, we will take the same training code that we used for the in-memory learner 
 and deploy it to the **VMware Greenplum** training instance we found in the **Data Catalog** earlier.
 We will use Greenplum's **PL/Python** feature, which allows us to deploy Python code as a database **UDF** function.
 
@@ -63,18 +63,24 @@ url: {{ ingress_protocol }}://tap-gui.{{ ingress_domain }}/supply-chain
 
 Launch pgAdmin by retrieving the URL from the **tanzu cli** (login credentials: test@test.com/alwaysbekind):
 ```execute
-tanzu apps workload get datahub-tap --namespace pgadmin
+tanzu apps workload get pgadmin-tap --namespace pgadmin
 ```
+
+<div style="text-align: left; justify-content: left; align-items: center; width: 80%; margin-bottom: 20px; font-size: small">
+    <img style="float: left; width: 20%; max-width: 20%; margin: 0 10px 0 0" src="images/mlops-tip.png"> 
+    pgAdmin was deployed to TAP using a Workload template provided by an <b>Accelerator</b>.
+    For more info, search for <b>pgadmin</b> on the TAP Accelerators page.
+</div>
+<div style="clear: left;"></div>
 
 Let's add a new Server connection for the Greenplum instance by creating a server import file:
 ```execute
 export PGADMIN_POD=$(kubectl get pod -l "app.kubernetes.io/part-of=pgadmin-tap,app.kubernetes.io/component=run" -oname -n default
 kubectl cp ~/other/resources/pgadmin/show_server_import_file.sh $PGADMIN_POD default/$PGADMIN_POD:/tmp
 kubectl exec -it $PGADMIN_POD -n default -- sh /tmp/show_server_import_file.sh
-
 ```
 
-Observe that we were able to passively generate a file with the necessary DB credentials by making calls with a ServiceBindings compatible library
+Observe that we were able to fetch the necessary DB credentials by using a ServiceBindings compatible library
 (**pyservicebindings**).
 
 Now we will import the server file:
@@ -89,20 +95,81 @@ Now refresh pgAdmin - the new Server connection instances should be displayed:
 url: {{ ingress_protocol }}://pgadmin-tap.default.{{ DATA_E2E_BASE_URL }}
 ```
 
-For **inference**: We will take the same inference code that we used for the in-memory learners
-and deploy it to the **Postgres-on-Kubernetes** training instance we found in the **Data Catalog** earlier.
-We will use **PL/Python** here, which is available in both Greenplum and Postgres.
-We will also use **GreenplumPython**, which allows us to interact with Greenplum using Python code.
-In both cases, we will use **Liquibase** to update the target databases with the appropriate UDF functions.
+Next, we will view the PL/Python SQL function that will be used to train the model.
+Let's view the code:
+<font color="red">TODO: View the SQL function; only show in Data-centric workshop</font>
+
+Since we are using **in-database analytics**, we need to deploy this code to the Greenplum database.
+In the left hand panel, select _Databases -> dev -> schema -> {{session_namespace}} -> Functions_. This should be empty at first.
+Our pipeline will take care of deploying the code that will be used to train the model. 
+In this case, it will involve a new DB change.
+
+Let's view the manifest for our pipeline:
+```editor:select-matching-text
+file: ~/other/resources/argo-workflows/pipeline-greenplum.yaml
+text: "name: upload-dataset"
+after: 24
+```
 
 <div style="text-align: left; justify-content: left; align-items: center; width: 80%; margin-bottom: 20px; font-size: small">
     <img style="float: left; width: 20%; max-width: 20%; margin: 0 10px 0 0" src="images/mlops-tip.png"> 
-    <b>What is Liquibase?</b><br/>
-    Liquibase is a popular library for managing and applying changes to structured databases in a versioned, trackable, DevOps-friendly manner.
-    Learn more about Liquibase here: <a href="https://www.liquibase.com/">Home Page</a>
+    The pipeline was developed using a Workload template provided by an <b>Accelerator</b>.
+    For more info, search for <b>argo</b> on the TAP Accelerators page.
 </div>
 <div style="clear: left;"></div>
 
+We can still see that the workflow comprises of *4* steps -
+**upload_dataset**, **train-model**, **evaluate-model** and **promote-model-to-staging** -
+with a set of **parameters** for each step.
+
+In addition, we see that there are a few new steps:
+```editor:select-matching-text
+file: ~/other/resources/argo-workflows/pipeline-greenplum.yaml
+text: "name: deploy-training-code"
+after: 37
+```
+
+The **deploy-training** steps are responsible for deploying the Python code and PL/Python SQL script
+that will be used for **training**.
+
+The **deploy-inference** steps handle the same thing for **inference**:
+```editor:select-matching-text
+file: ~/other/resources/argo-workflows/pipeline-greenplum.yaml
+text: "name: deploy-inference-db"
+after: 21
+```
+
+Hence, the order of execution is as follows:
+* **deploy-training** steps deploy the training model code (**Greenplum** instance).
+* **run-training** steps execute the tasks to build and train the ML model (**Greenplum** instance).
+* **deploy-inference** steps deploy the ML model to the inference cluster (**Postgres** instance).
+
+Like before, we will use the lightweight **AppCR** resource to deploy and manage our pipeline.
+
+(<font color="red">NOTE:</font> Learn more about App CR here: <a href="https://carvel.dev/kapp-controller/docs/v0.38.0/app-overview/" target="_blank">Argo Workflows</a>)
+
+Let's view the manifest for our App CR:
+```editor:open-file
+file: ~/other/resources/appcr/pipeline_app_main.yaml
+```
+
+Once deployed, **TAP** will take care of monitoring the App's resources and tracking when there are changes to the git repo source.
+(**TAP** does this by leveraging **kapp-controller**, which is another built-in that comes with **TAP**.)
+
+Let's copy the App CR and pipeline files to our ML code directory:
+```execute
+cp ~/other/resources/appcr/pipeline_app_main.yaml ~/sample-ml-app/pipeline_app.yaml && cp ~/other/resources/appcr/values_main.yaml ~/sample-ml-app/values.yaml && cp ~/other/resources/argo-workflows/pipeline.yaml ~/sample-ml-app/pipeline.yaml
+```
+
+Our directory now looks like this:
+```execute
+ls -ltr ~/sample-ml-app
+```
+
+Let's deploy the App CR:
+```execute
+kapp deploy -a image-procesor-pipeline-{{session_namespace}} -f ~/sample-ml-app/pipeline_app.yaml --logs -y  -n{{session_namespace}}
+```
 
 Let's access the web UI (you may need to click on the topmost menu tab on the left to see the initial screen):
 ```dashboard:open-url
@@ -114,24 +181,68 @@ url: https://argo-workflows.{{ ingress_domain }}
 clear; kubectl -n argo exec $(kubectl get pod -n argo -l 'app=argo-server' -o jsonpath='{.items[0].metadata.name}') -- argo auth token
 ```
 
-Let's view the manifest for our Argo Workflow:
-```editor:select-matching-text
-file: ~/other/resources/argo-workflows/pipeline-greenplum.yaml
-text: "servers"
-after: 16
+The newly deployed Argo pipeline should now be displayed.
+
+At the end, the ML model will be available in the Model Registry:
+```dashboard:open-url
+url: https://mlflow.{{ ingress_domain }}/#/models
 ```
 
-We can still see that the workflow comprises of *4* steps -
-**upload_dataset**, **train-model**, **evaluate-model** and **promote-model-to-staging** -
-with a set of **parameters** for each step. 
+For **inference**: The pipeline will take the same inference code that we used for the in-memory learners
+and deploy it to the **Postgres-on-Kubernetes** training instance we found in the **Data Catalog** earlier.
+That way, the inference code will be colocated with the apps.
+We will use **PL/Python** to deploy the code, which is available in both Greenplum and Postgres.
 
-In addition, we see that there are a few new steps. 
-The **deploy-training** steps are responsible for deploying the Python code and PL/Python SQL script
-that will be used for **training**, while the **deploy-inference** steps handle the same thing for **inference**.
-Hence, the order of execution is as follows:
-* **deploy-training** steps deploy the training model code (Greenplum instance).
-* **run-training** steps execute the tasks to build and train the ML model (Greenplum instance).
-* **deploy-inference** steps deploy the ML model to the inference cluster (Postgres instance).
+Here is the inference code:
+<font color="red">TODO: Show inference code</font>
+
+To invoke the inference code which is deployed to the Postgres database, 
+we will also use **GreenplumPython**, which allows us to interact with Greenplum and Postgres using Python code.
+
+<font color="red">TODO: Only show for data-centric workshop</font>
+<div style="text-align: left; justify-content: left; align-items: center; width: 80%; margin-bottom: 20px; font-size: small">
+    <img style="float: left; width: 20%; max-width: 20%; margin: 0 10px 0 0" src="images/mlops-tip.png"> 
+    <b>What is GreenplumPython?</b><br/>
+    GreenplumPython is a Python library that enables the user to interact with Greenplum in a Pythonic way.
+    Learn more about GreenplumPython here: <a href="https://greenplum-db.github.io/GreenplumPython/stable/">Home Page</a>
+</div>
+<div style="clear: left;"></div>
+
+Here is the app code that invokes the inference function using **GreenplumPython**:
+<font color="red">TODO: Show code; TODO: Only show for data-centric workshop</font>
+
+In both the training and inference, we are using **Liquibase** to update the target databases with the appropriate UDF functions.
+
+<div style="text-align: left; justify-content: left; align-items: center; width: 80%; margin-bottom: 20px; font-size: small">
+    <img style="float: left; width: 20%; max-width: 20%; margin: 0 10px 0 0" src="images/mlops-tip.png"> 
+    <b>What is Liquibase?</b><br/>
+    Liquibase is a popular library for managing and applying changes to structured databases in a versioned, trackable, DevOps-friendly manner.
+    Learn more about Liquibase here: <a href="https://www.liquibase.com/">Home Page</a>
+</div>
+<div style="clear: left;"></div>
+
+Return to **pgAdmin** and select _Databases -> pginstance-inference -> Schemas -> {{session_namespace}}_ to select the Postgres inference instance.
+Then right-click the database schema, select "Query Tool", and run the following query:
+```copy
+SELECT * FROM {{session_namespace}}.databasechangelog;
+```
+
+The database changes are successfully being tracked (managed by Liquibase).
+
+#### APIs
+To invoke the API from TAP, we'll go the TAP API Portal.
+Click on the link, then click on the "Definition" tab:
+```dashboard:open-url
+url: {{ ingress_protocol }}://tap-gui.{{ DATA_E2E_BASE_URL }}/api-docs
+```
+
+The rendered view should be similar to this interface:
+```dashboard:open-url
+url: {{ ingress_protocol }}://image-processor-api.{{ DATA_E2E_BASE_URL }}/docs
+```
+
+Try uploading the images from earlier to test out the API.
+
 
 
 

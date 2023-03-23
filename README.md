@@ -606,6 +606,8 @@ tanzu acc create mlflowrunner --git-repository https://github.com/tanzumlai/mlco
 tanzu acc create datahub --git-repository https://github.com/agapebondservant/datahub-accelerator.git --git-branch main
 tanzu acc create servicebinding --git-repository https://github.com/agapebondservant/external-service-binding-accelerator.git --git-branch main
 tanzu acc create pgadmin --git-repository https://github.com/agapebondservant/pgadmin-accelerator.git --git-branch main
+tanzu acc create argo-pipelines-acc --git-repository https://github.com/agapebondservant/argo-workflows-accelerator.git --git-branch main
+tanzu acc create in-db-analytics-acc --git-repository https://github.com/agapebondservant/datahub-accelerator.git --git-branch main
 ```
 
 Install Auto API Registration:
