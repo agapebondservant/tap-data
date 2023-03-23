@@ -52,7 +52,7 @@ Notice the tags that start with **servicebinding:** that have been associated wi
 The specific names are **servicebinding:type:greenplum** and **servicebinding:provider:vmware**.
 Thanks to **ServiceBindings**, these are the only keys we will need to connect to our Greenplum instance.
 
-Navigate to the **TAP GUI** and click on the **pg-admin** instance:
+Navigate to the **TAP GUI** and click on the **pgadmin** instance:
 ```dashboard:open-url
 url: {{ ingress_protocol }}://tap-gui.{{ ingress_domain }}/supply-chain
 ```
@@ -65,23 +65,9 @@ tanzu apps workload get datahub-tap --namespace pgadmin
 Let's add a new Server connection for the Greenplum instance by creating a server import file:
 ```execute
 export PGADMIN_POD=$(kubectl get pod -l "app.kubernetes.io/part-of=pgadmin-tap,app.kubernetes.io/component=run" -oname -n default
-kubectl exec -it $PGADMIN_POD -n default -- sh
-python -c "from pyservicebinding import binding; bindings = next(iter(binding.ServiceBinding().bindings('greenplum', 'vmware') or []), {}); \
-obj =\"\"\"{{ 
-    'Servers': {{ 
-        '1': {{ 
-            'Name': 'test@test.com', 
-            'Group': 'Default 123 Group 1', 
-            'Port': {0}, 
-            'Username': '{1}', 
-            'Host': '{2}', 
-            'SSLMode': 'require',
-            'PassFile': '/var/lib/pgadmin/pgpass',
-            'MaintenanceDB': '{3}'
-        }}}}}}\"\"\"; \
-obj = obj.replace('\'', '\"'); \
-obj = obj.format(bindings.get('port'), bindings.get('username'), bindings.get('host'), bindings.get('database'));\
-print(obj)"
+kubectl cp ~/other/resources/pgadmin/show_server_import_file.sh $PGADMIN_POD default/$PGADMIN_POD:/tmp
+kubectl exec -it $PGADMIN_POD -n default -- sh /tmp/show_server_import_file.sh
+
 ```
 
 Observe that we were able to passively generate a file with the necessary DB credentials by making calls with a ServiceBindings compatible library
@@ -90,44 +76,8 @@ Observe that we were able to passively generate a file with the necessary DB cre
 Now we will import the server file:
 ```execute
 export PGADMIN_POD=$(kubectl get pod -l "app.kubernetes.io/part-of=pgadmin-tap,app.kubernetes.io/component=run" -oname -n default
-kubectl exec -it $PGADMIN_POD -n default -- sh
-python -c "from pyservicebinding import binding; bindings = next(iter(binding.ServiceBinding().bindings('greenplum', 'vmware') or []), {}); \
-obj =\"\"\"{{ 
-    'Servers': {{ 
-        '1': {{ 
-            'Name': 'test@test.com', 
-            'Group': 'Default 123 Group 1', 
-            'Port': {0}, 
-            'Username': '{1}', 
-            'Host': '{2}', 
-            'SSLMode': 'require',
-            'PassFile': '/var/lib/pgadmin/pgpass',
-            'MaintenanceDB': '{3}'
-        }}}}}}\"\"\"; \
-obj = obj.replace('\'', '\"'); \
-obj = obj.format(bindings.get('port'), bindings.get('username'), bindings.get('host'), bindings.get('database'));\
-print(obj)" > /tmp/servers.json; \
-obj=\"{0}:{1}:{2}:{3}\".format(bindings.get('host'),bindings.get('database'),bindings.get('username'),bindings.get('password')); \
-print(obj)" > /var/lib/pgadmin/pgpass; \
-python -c "from pyservicebinding import binding; bindings = next(iter(binding.ServiceBinding().bindings('postgres', 'vmware') or []), {}); \
-obj =\"\"\"{{ 
-    'Servers': {{ 
-        '1': {{ 
-            'Name': 'test@test.com', 
-            'Group': 'Default 123 Group 1', 
-            'Port': {0}, 
-            'Username': '{1}', 
-            'Host': '{2}', 
-            'SSLMode': 'require',
-            'PassFile': '/var/lib/pgadmin/pgpass',
-            'MaintenanceDB': '{3}'
-        }}}}}}\"\"\"; \
-obj = obj.replace('\'', '\"'); \
-obj = obj.format(bindings.get('port'), bindings.get('username'), bindings.get('host'), bindings.get('database'));\
-print(obj)" >> /tmp/servers.json; \
-obj=\"{0}:{1}:{2}:{3}\".format(bindings.get('host'),bindings.get('database'),bindings.get('username'),bindings.get('password')); \
-print(obj)" >> /var/lib/pgadmin/pgpass; \
-/venv/bin/python3 setup.py --load-servers /tmp/servers.json --user test@test.com;
+kubectl cp ~/other/resources/pgadmin/import_server_import_file.sh $PGADMIN_POD default/$PGADMIN_POD:/tmp
+kubectl exec -it $PGADMIN_POD -n default -- sh /tmp/import_server_import_file.sh
 ```
 
 Now refresh pgAdmin - the new Server connection instances should be displayed:
