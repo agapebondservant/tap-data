@@ -30,7 +30,7 @@ Similarly to how we deployed **MLflow**, we will deploy **Kubeflow Pipelines** o
 </div>
 <div style="clear: left;"></div>
 
-First, we install the Kubeflow Package Repository:
+First, we install the Kubeflow Package Repository (<font color="red">NOTE:</font> This may take a while:)
 ```execute
 clear; export KUBEFLOW_PACKAGE_VERSION=0.0.1; tanzu package repository add kubeflow-pipelines --url ghcr.io/agapebondservant/kubeflow-pipelines:$KUBEFLOW_PACKAGE_VERSION -n {{session_namespace}}
 ```
