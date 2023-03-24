@@ -1,0 +1,19 @@
+apiVersion: kappctrl.k14s.io/v1alpha1
+kind: App
+metadata:
+  name: ml-image-processing-pipeline-app-gp
+spec:
+  serviceAccountName: default
+  fetch:
+    - git:
+        url: https://github.com/tanzumlai/sample-ml-app
+        ref: origin/gp-main-
+
+  template:
+    - ytt:
+        paths:
+          - config/cifar/pipeline.yaml
+          - config/cifar/values.yaml
+
+  deploy:
+    - kapp: {}
