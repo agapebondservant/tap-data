@@ -8,9 +8,16 @@ For this, we will use **Argo Workflows**. **Argo Workflows** is backed by the po
 
 (<font color="red">NOTE:</font> Learn more about Argo Workflows here: <a href="https://argoproj.github.io/argo-workflows/" target="_blank">Argo Workflows</a>)
 
-Let's access the web UI (you may need to click on the topmost menu tab on the left to see the initial screen):
-```dashboard:open-url
-url: https://argo-workflows.{{ ingress_domain }}
+<div style="text-align: left; justify-content: left; align-items: center; width: 80%; margin-bottom: 20px; font-size: small">
+    <img style="float: left; width: 20%; max-width: 20%; margin: 0 10px 0 0" src="images/mlops-tip.png"> 
+    Argo Workflows was deployed to TAP using a template provided by an <b>Accelerator</b>.
+    For more info, search for <b>argo</b> on the TAP Accelerators page.
+</div>
+<div style="clear: left;"></div>
+
+Launch pgAdmin by retrieving the URL from the **tanzu cli** (you may need to click on the topmost menu tab on the left to see the initial screen):
+```execute
+tanzu apps workload get argoworkflows-tap --namespace default
 ```
 
 <font color="red">NOTE:</font> Copy the access token from here to the Login box:

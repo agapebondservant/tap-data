@@ -1,0 +1,36 @@
+#@data/values
+---
+model_stage: Staging
+git_repo: https://github.com/tanzumlai/sample-ml-app.git
+experiment_name: convolutional_neural_network_team_gpmain
+environment_name: gp-main-${SESSION_NAMESPACE}
+script_shared_path: /liquibase/changelog
+mlpipeline_git_repo: ${DATA_E2E_MLPIPELINE_GIT_REPO}
+pyfunction_vendored_dependencies_uri: ${DATA_E2E_PYFUNCTION_VENDORED_DEPS}
+mlflow_s3_uri: http://minio-${SESSION_NAMESPACE}.${DATA_E2E_BASE_URL}
+
+training_shared_path: /usr/local/greenplum-db/bin/plcontainer_clients
+training_db_script: config/cifar/scripts/sql/deploy_db_training.sql
+training_code_shell_script: config/cifar/scripts/shell/deploy_python_training_code.sh
+training_db_shell_script: config/cifar/scripts/shell/deploy_python_training_db.sh
+training_user: gpadmin
+training_master: ${DATA_E2E_ML_TRAINING_MASTER}
+training_db_name: dev
+training_external_secret_ref: greenplum-training-secret
+training_external_secret_ref_key: greenplum_master_password
+training_db_schema: public
+training_image: kroniak/ssh-client
+
+inference_user: pgadmin
+inference_host: ${DATA_E2E_ML_INFERENCE_HOST}
+inference_db_name: pginstance-inference
+mlflow_tracking_uri: http://mlflow.${DATA_E2E_BASE_URL}
+inference_shared_path: /usr/local
+inference_db_script: config/cifar/scripts/sql/deploy_db_inference.sql
+inference_code_shell_script: config/cifar/scripts/shell/deploy_python_inference_code.sh
+inference_db_shell_script: config/cifar/scripts/shell/deploy_python_inference_db.sh
+inference_external_secret_ref: postgres-inference-secret
+inference_external_secret_ref_key: postgres_password
+inference_namespace: default
+inference_db_schema: public
+inference_image: alpine/k8s:1.23.17

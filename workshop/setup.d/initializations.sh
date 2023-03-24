@@ -43,16 +43,11 @@ cd ~/sample-ml-app
 setupgitbranches main
 setupgitbranches gp-main
 setupgitbranches kfp-main
-setupgitbranches api-main
-setupgitbranches api-gp-main
-setupgitbranches api-kfp-main
 cd - && rm -rf ~/sample-ml-app
 
 git clone https://${DATA_E2E_GIT_USER}:${DATA_E2E_GIT_TOKEN}@github.com/${DATA_E2E_GIT_USER}/sample-kubeflow-pipeline.git ~/sample-kubeflow-pipeline
 cd ~/sample-kubeflow-pipeline
 setupgitbranches main
-setupgitbranches gp-main
-setupgitbranches kfp-main
 cd - && rm -rf ~/sample-kubeflow-pipeline
 
 git clone https://${DATA_E2E_GIT_USER}:${DATA_E2E_GIT_TOKEN}@github.com/${DATA_E2E_GIT_USER}/mlcode-runner.git ~/mlcode-runner
