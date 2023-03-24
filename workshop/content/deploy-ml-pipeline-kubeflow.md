@@ -47,6 +47,11 @@ Here's the final **values.yaml** file:
 file: ~/other/resources/kubeflow/kubeflow-values.yaml
 ```
 
+Let's search for the package from the list of available packages to install:
+```execute
+tanzu package available list -n {{session_namespace}} | grep kubeflow-pipelines
+```
+
 Now we can proceed to install the package:
 ```execute
 tanzu package install kubeflow-pipelines --package-name kubeflow-pipelines.tanzu.vmware.com --version $KUBEFLOW_PACKAGE_VERSION --values-file ~/other/resources/kubeflow/kubeflow-values.yaml -n {{session_namespace}}
