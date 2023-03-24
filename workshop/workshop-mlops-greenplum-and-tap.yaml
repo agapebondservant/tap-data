@@ -4,7 +4,10 @@ modules:
     activate:
     - mlops-tap-greenplum-overview
     - mlops-greenplum-data-catalog-overview
-    - deploy-greenplum-model-kubeflow
-    - deploy-greenplum-ml-inference-kubeflow
-    - deploy-greenplum-model-madlib-kubeflow
-    - mlops-gpu-overview
+    - deploy-jupyterhub
+    - deploy-mlflow
+    - deploy-ml-workflow
+    - deploy-ml-pipeline-argo
+    - deploy-ml-inference-argo
+    - mlops-accelerators-overview
+    - deploy-greenplum-model-argo

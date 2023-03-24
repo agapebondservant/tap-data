@@ -57,6 +57,8 @@ modules:
       name: Overview of Accelerators
     deploy-greenplum-model-argo:
       name: Deploy Greenplum Model
+    deploy-greenplum-model-argo-overview:
+      name: Deploy Greenplum Model
     deploy-greenplum-ml-inference-argo:
       name: Deploy Greenplum Model at the edge
     mlops-gpu-overview:

@@ -11,6 +11,4 @@ modules:
     - deploy-ml-pipeline-kubeflow
     - deploy-ml-inference-kubeflow
     - mlops-accelerators-overview
-    - deploy-greenplum-model-kubeflow
-    - deploy-greenplum-ml-inference-kubeflow
-    - mlops-gpu-overview
+    - deploy-greenplum-model-argo-overview

@@ -834,6 +834,13 @@ Deploy sample apps:
 * follow the instructions to **Deploy the Training Pipelines**
 
 ##### Deploy "Machine Learning with Greenplum and TAP"<a name="workshopf"/>
+Deploy pre-requisite apps:
+* MLflow
+* Kubeflow Pipelines
+* Datahub
+* Argo Workflows (TAP Integration)
+
+
 Add the following to your `training-portal.yaml` (under **spec.workshops**):
 ```
 - name: data-ml-greenplum-and-tap

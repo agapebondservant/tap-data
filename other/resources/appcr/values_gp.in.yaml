@@ -18,13 +18,13 @@ training_master: ${DATA_E2E_ML_TRAINING_MASTER}
 training_db_name: dev
 training_external_secret_ref: greenplum-training-secret
 training_external_secret_ref_key: greenplum_master_password
-training_db_schema: public
+training_db_schema: ${SESSION_NAMESPACE}
 training_image: kroniak/ssh-client
 
 inference_user: pgadmin
 inference_host: ${DATA_E2E_ML_INFERENCE_HOST}
 inference_db_name: pginstance-inference
-mlflow_tracking_uri: http://mlflow.${DATA_E2E_BASE_URL}
+mlflow_tracking_uri: http://mlflow-${SESSION_NAMESPACE}.${DATA_E2E_BASE_URL}
 inference_shared_path: /usr/local
 inference_db_script: config/cifar/scripts/sql/deploy_db_inference.sql
 inference_code_shell_script: config/cifar/scripts/shell/deploy_python_inference_code.sh
@@ -32,5 +32,5 @@ inference_db_shell_script: config/cifar/scripts/shell/deploy_python_inference_db
 inference_external_secret_ref: postgres-inference-secret
 inference_external_secret_ref_key: postgres_password
 inference_namespace: default
-inference_db_schema: public
+inference_db_schema: ${SESSION_NAMESPACE}
 inference_image: alpine/k8s:1.23.17

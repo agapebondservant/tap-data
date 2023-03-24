@@ -98,6 +98,9 @@ url: {{ ingress_protocol }}://pgadmin-tap.default.{{ DATA_E2E_BASE_URL }}
 Next, we will view the PL/Python SQL function that will be used to train the model.
 Let's view the code:
 <font color="red">TODO: View the SQL function; only show in Data-centric workshop</font>
+```editor:open-file
+file: ~/other/resources/plpython/sql/deploy_db_training.sql
+```
 
 Since we are using **in-database analytics**, we need to deploy this code to the Greenplum database.
 In the left hand panel, select _Databases -> dev -> schema -> {{session_namespace}} -> Functions_. This should be empty at first.
@@ -150,7 +153,7 @@ Like before, we will use the lightweight **AppCR** resource to deploy and manage
 
 Let's view the manifest for our App CR:
 ```editor:open-file
-file: ~/other/resources/appcr/pipeline_app_main.yaml
+file: ~/other/resources/appcr/pipeline_app_gp.yaml
 ```
 
 Once deployed, **TAP** will take care of monitoring the App's resources and tracking when there are changes to the git repo source.
@@ -158,7 +161,7 @@ Once deployed, **TAP** will take care of monitoring the App's resources and trac
 
 Let's copy the App CR and pipeline files to our ML code directory:
 ```execute
-cp ~/other/resources/appcr/pipeline_app_main.yaml ~/sample-ml-app/pipeline_app.yaml && cp ~/other/resources/appcr/values_main.yaml ~/sample-ml-app/values.yaml && cp ~/other/resources/argo-workflows/pipeline.yaml ~/sample-ml-app/pipeline.yaml
+cp ~/other/resources/appcr/pipeline_app_gp.yaml ~/sample-ml-app/pipeline_app.yaml && cp ~/other/resources/appcr/values_main.yaml ~/sample-ml-app/values.yaml && cp ~/other/resources/argo-workflows/pipeline.yaml ~/sample-ml-app/pipeline.yaml
 ```
 
 Our directory now looks like this:
@@ -166,7 +169,7 @@ Our directory now looks like this:
 ls -ltr ~/sample-ml-app
 ```
 
-Let's deploy the App CR:
+To kick off pipeline orchestration for our ML pipeline, let's deploy the App CR:
 ```execute
 kapp deploy -a image-procesor-pipeline-{{session_namespace}} -f ~/sample-ml-app/pipeline_app.yaml --logs -y  -n{{session_namespace}}
 ```
@@ -205,6 +208,9 @@ We will use **PL/Python** to deploy the code, which is supported in Postgres.
 
 Here is the inference code:
 <font color="red">TODO: Show inference code</font>
+```editor:open-file
+file: ~/other/resources/plpython/sql/deploy_db_inference.sql
+```
 
 To invoke the inference code which is deployed to the Postgres database, 
 we will also use **GreenplumPython**, which allows us to interact with Greenplum and Postgres using Python code.
@@ -220,6 +226,11 @@ we will also use **GreenplumPython**, which allows us to interact with Greenplum
 
 Here is the app code that invokes the inference function using **GreenplumPython**:
 <font color="red">TODO: Show code; TODO: Only show for data-centric workshop</font>
+```editor:select-matching-text
+file: ~/sample-ml-app/app/analytics/cifar_cnn_greenplum.py
+text: "name: deploy-inference-db"
+after: 21
+```
 
 In both the training and inference, we are using **Liquibase** to update the target databases with the appropriate UDF functions.
 
@@ -241,7 +252,7 @@ The database changes are successfully being tracked (managed by Liquibase).
 
 #### APIs
 To invoke the API from TAP, we'll go the TAP API Portal.
-Click on the link, then click on the "Definition" tab:
+Click on the link below, then click on the "Definition" tab:
 ```dashboard:open-url
 url: {{ ingress_protocol }}://tap-gui.{{ DATA_E2E_BASE_URL }}/api-docs
 ```
@@ -252,14 +263,3 @@ url: {{ ingress_protocol }}://image-processor-api.{{ DATA_E2E_BASE_URL }}/docs
 ```
 
 Try uploading the images from earlier to test out the API.
-
-
-
-
-
-
-
-
-
-
-

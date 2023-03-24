@@ -11,6 +11,4 @@ modules:
     - deploy-ml-pipeline-argo
     - deploy-ml-inference-argo
     - mlops-accelerators-overview
-    - deploy-greenplum-model-argo
-    - deploy-greenplum-ml-inference-argo
-    - mlops-gpu-overview
+    - deploy-greenplum-model-argo-overview

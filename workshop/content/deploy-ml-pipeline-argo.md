@@ -60,7 +60,7 @@ Our directory now looks like this:
 ls -ltr ~/sample-ml-app
 ```
 
-Let's deploy the App CR:
+To kick off pipeline orchestration for our ML pipeline, let's deploy the App CR:
 ```execute
 kapp deploy -a image-procesor-pipeline-{{session_namespace}} -f ~/sample-ml-app/pipeline_app.yaml --logs -y  -n{{session_namespace}}
 ```
