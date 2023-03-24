@@ -4,6 +4,13 @@
 
 After **packaging** and **containerizing** our ML model code, we will need to setup an **ML pipeline** to handle its orchestration.
 
+<div style="text-align: left; justify-content: left; align-items: center; width: 80%; margin-bottom: 20px; font-size: small">
+    <img style="float: left; width: 20%; max-width: 20%; margin: 0 10px 0 0" src="images/mlops-tip.png">
+    The template for deployment was taken from an <b>Accelerator</b>.
+    To view, go to the Accelerators page and search for <b>kubeflow</b>.
+</div>
+<div style="clear: left;"></div>
+
 For this, we will use **Kubeflow Pipelines**. **Kubeflow Pipelines** comes from the popular MLOps toolset **Kubeflow**, which 
 is a broad suite that consists of various components: native Jupyter Notebook integration, 
 model serving, native integration with popular ML frameworks like Tensorflow/Keras, 
@@ -11,7 +18,7 @@ extensive add-on support like Elyra for UI-based pipeline design and Kale for ex
 In this case, we will only be using **Kubeflow Pipelines** , which is the pipeline orchestration component.
 Also, it is backed by the popular workflow orchestrator **Argo Workflows**, whose backend - **ArgoCD** - has built-in support in **TAP**.
 
-(<font color="red">NOTE:</font> Learn more about Kubeflow Pipelines here: <a href="https://www.kubeflow.org/docs/components/pipelines/v1/introduction/" target="_blank">Argo Workflows</a>)
+(<font color="red">NOTE:</font> Learn more about Kubeflow Pipelines here: <a href="https://www.kubeflow.org/docs/components/pipelines/v1/introduction/" target="_blank">Kubeflow Pipelines</a>)
 
 Similarly to how we deployed **MLflow**, we will deploy **Kubeflow Pipelines** on **TAP** using the **tanzu** cli.
 
@@ -59,8 +66,7 @@ tanzu package install kubeflow-pipelines --package-name kubeflow-pipelines.tanzu
 (<font color="red">NOTE:</font> The output currently includes an error which can be ignored.)
 
 With that, you should be able to access Kubeflow Pipelines:
-```dashboard:create-dashboard
-name: Kubeflow
+```dashboard:open-url
 url: {{ ingress_protocol }}://kubeflow-pipelines-{{ session_namespace }}.{{ ingress_domain }}
 ```
 
