@@ -901,3 +901,24 @@ To connect to pgAdmin: Connect to your-svc.your-namespace.svc.cluster.local
 ```
 istio-1.13.2/bin/istioctl x uninstall --purge -y
 ```
+
+To restart Vault and BuildService after cluster shutdown:
+* To reinstall Vault: 
+First uninstall:
+```
+helm uninstall vault -nvault
+kubectl delete all --all -nvault
+kubectl delete ns vault
+```
+Then see **Vault** instructions above.
+
+* To reinstall BuildService:
+```
+tanzu package installed delete buildservice -n tap-install
+export BUILD_SVC_VERSION=1.7.4
+tanzu package install buildservice -p buildservice.tanzu.vmware.com -v $BUILD_SVC_VERSION -n tap-install -f resources/buildservice.yaml --poll-timeout 30m
+export TBS_VERSION=1.9.0
+tanzu package repository add tbs-full-deps-repository --url oawofolu/tbs-full-deps:${TBS_VERSION} --namespace tap-install
+tanzu package installed delete full-tbs-deps -n tap-install -y
+tanzu package install full-tbs-deps -p full-tbs-deps.tanzu.vmware.com -v ${TBS_VERSION}  -n tap-install
+```

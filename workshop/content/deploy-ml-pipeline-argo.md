@@ -15,10 +15,19 @@ For this, we will use **Argo Workflows**. **Argo Workflows** is backed by the po
 </div>
 <div style="clear: left;"></div>
 
-Launch pgAdmin by retrieving the URL from the **tanzu cli** (you may need to click on the topmost menu tab on the left to see the initial screen):
+Launch Argo Workflows by retrieving the URL from the **tanzu cli** (you may need to click on the topmost menu tab on the left to see the initial screen):
 ```execute
 tanzu apps workload get argoworkflows-tap --namespace default
 ```
+
+<div style="text-align: left; justify-content: left; align-items: center; width: 80%; margin-bottom: 20px; font-size: small">
+    <img style="float: left; width: 20%; max-width: 20%; margin: 0 10px 0 0" src="images/mlops-tip.png">
+    <b>Why should we use a pipeline orchestrator?</b><br/>
+    By decoupling the pipeline from its orchestration, it is easier to perform management tasks like retries and rollbacks.
+    Orchestration also helps with standardizing pipeline deployment for reuse/repeatability, 
+    and decoupling pipeline steps for greater flexibility and integration: for example, it provides the ability 
+    to leverage multiple languages and frameworks in the same pipeline.
+</div>
 
 <font color="red">NOTE:</font> Copy the access token from here to the Login box:
 ```execute

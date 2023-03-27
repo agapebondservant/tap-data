@@ -6,7 +6,7 @@ After **packaging** and **containerizing** our ML model code, we will need to se
 
 <div style="text-align: left; justify-content: left; align-items: center; width: 80%; margin-bottom: 20px; font-size: small">
     <img style="float: left; width: 20%; max-width: 20%; margin: 0 10px 0 0" src="images/mlops-tip.png">
-    The template for deployment was taken from an <b>Accelerator</b>.
+    The template for the Kubeflow Pipelines deployment was taken from an <b>Accelerator</b>.
     To view, go to the Accelerators page and search for <b>kubeflow</b>.
 </div>
 <div style="clear: left;"></div>
@@ -20,6 +20,16 @@ Also, it is backed by the popular workflow orchestrator **Argo Workflows**, whos
 
 (<font color="red">NOTE:</font> Learn more about Kubeflow Pipelines here: <a href="https://www.kubeflow.org/docs/components/pipelines/v1/introduction/" target="_blank">Kubeflow Pipelines</a>)
 
+<div style="text-align: left; justify-content: left; align-items: center; width: 80%; margin-bottom: 20px; font-size: small">
+    <img style="float: left; width: 20%; max-width: 20%; margin: 0 10px 0 0" src="images/mlops-tip.png">
+    <b>Why should we use a pipeline orchestrator?</b><br/>
+    By decoupling the pipeline from its orchestration, it is easier to perform management tasks like retries and rollbacks.
+    Orchestration also helps with standardizing pipeline deployment for reuse/repeatability, 
+    and decoupling pipeline steps for greater flexibility and integration: for example, it provides the ability 
+    to leverage multiple languages and frameworks in the same pipeline.
+</div>
+<div style="clear: left;"></div>
+
 Similarly to how we deployed **MLflow**, we will deploy **Kubeflow Pipelines** on **TAP** using the **tanzu** cli.
 
 <div style="text-align: left; justify-content: left; align-items: center; width: 80%; margin-bottom: 20px; font-size: small">
@@ -30,44 +40,20 @@ Similarly to how we deployed **MLflow**, we will deploy **Kubeflow Pipelines** o
 </div>
 <div style="clear: left;"></div>
 
-First, we install the Kubeflow Package Repository (<font color="red">NOTE:</font> This may take a while:)
+Let's search for the package from the list of installed packages:
 ```execute
-clear; export KUBEFLOW_PACKAGE_VERSION=0.0.1; tanzu package repository add kubeflow-pipelines --url ghcr.io/agapebondservant/kubeflow-pipelines:$KUBEFLOW_PACKAGE_VERSION -n {{session_namespace}}
+tanzu package installed list -n mlops-tools | grep kubeflow-pipelines
 ```
 
-Next, we may want to update the default configuration values associated with the Kubeflow package.
-To do this, let's view our options by showing the **values schema**:
-```execute
-clear; tanzu package available get kubeflow-pipelines.tanzu.vmware.com/${KUBEFLOW_PACKAGE_VERSION} --values-schema -n {{session_namespace}}
-```
-
-In our case, we'd like to update the properties shown.
-We'll use this script to generate our **values.yaml** file:
-```execute
-cat > ~/other/resources/kubeflow/kubeflow-values.yaml <<- EOF
-full_url: kubeflow-pipelines-{{session_namespace}}.{{ ingress_domain }}
-EOF
-```
-
-Here's the final **values.yaml** file:
-```editor:open-file
-file: ~/other/resources/kubeflow/kubeflow-values.yaml
-```
-
-Let's search for the package from the list of available packages to install:
-```execute
-tanzu package available list -n {{session_namespace}} | grep kubeflow-pipelines
-```
-
-Now we can proceed to install the package:
-```execute
-tanzu package install kubeflow-pipelines --package-name kubeflow-pipelines.tanzu.vmware.com --version $KUBEFLOW_PACKAGE_VERSION --values-file ~/other/resources/kubeflow/kubeflow-values.yaml -n {{session_namespace}}
-```
-(<font color="red">NOTE:</font> The output currently includes an error which can be ignored.)
-
-With that, you should be able to access Kubeflow Pipelines:
+It shows that **Kubeflow Pipelines** has already been installed for us on **TAP** - we can see it in the TAP GUI:
 ```dashboard:open-url
-url: {{ ingress_protocol }}://kubeflow-pipelines-{{ session_namespace }}.{{ ingress_domain }}
+url: {{ ingress_protocol }}://tap-gui.{{ ingress_domain }}/create
+```
+
+
+Access Kubeflow Pipelines by retrieving the URL via the **tanzu cli**:
+```execute
+tanzu apps workloaad get kubeflow-pipelines-tap
 ```
 
 Next, let's fetch the source code for our Kubeflow Pipeline:

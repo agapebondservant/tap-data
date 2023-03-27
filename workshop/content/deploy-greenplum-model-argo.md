@@ -104,8 +104,19 @@ file: ~/other/resources/plpython/sql/deploy_db_training.sql
 
 Since we are using **in-database analytics**, we need to deploy this code to the Greenplum database.
 In the left hand panel, select _Databases -> dev -> schema -> {{session_namespace}} -> Functions_. This should be empty at first.
+
+
 Our pipeline will take care of deploying the code that will be used to train the model. 
 In this case, it will involve a new DB change.
+<div style="text-align: left; justify-content: left; align-items: center; width: 80%; margin-bottom: 20px; font-size: small">
+    <img style="float: left; width: 20%; max-width: 20%; margin: 0 10px 0 0" src="images/mlops-tip.png">
+    <b>Why should we use a pipeline orchestrator?</b><br/>
+    By decoupling the pipeline from its orchestration, it is easier to perform management tasks like retries and rollbacks.
+    Orchestration also helps with standardizing pipeline deployment for reuse/repeatability, 
+    and decoupling pipeline steps for greater flexibility and integration: for example, it provides the ability 
+    to leverage multiple languages and frameworks in the same pipeline.
+</div>
+
 
 Let's view the manifest for our pipeline:
 ```editor:select-matching-text
