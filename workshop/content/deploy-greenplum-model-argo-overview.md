@@ -169,7 +169,7 @@ Our directory now looks like this:
 ls -ltr ~/sample-ml-app
 ```
 
-To kick off pipeline orchestration for our ML pipeline, let's deploy the App CR:
+To kick off pipeline orchestration for our ML pipeline, let's commit the App CR to Git and deploy the App CR:
 ```execute
 cd ~/sample-ml-app; git config --global user.email 'eduk8s@example.com'; git config --global user.name 'Educates'; git commit -a -m 'New commit'; git push origin gp-main-{{session_namespace}}; cd -; kapp deploy -a image-procesor-pipeline-gp-{{session_namespace}} -f ~/sample-ml-app/pipeline_app.yaml --logs -y  -n{{session_namespace}}
 ```
@@ -199,7 +199,6 @@ To invoke the inference code which is deployed to the Postgres database,
 we will also use **GreenplumPython**, which allows us to interact with Greenplum and Postgres using Python code.
 
 Here is the app code that invokes the inference function using **GreenplumPython**:
-<font color="red">TODO: Show code; TODO: Only show for data-centric workshop</font>
 ```editor:select-matching-text
 file: ~/sample-ml-app/app/analytics/cifar_cnn_greenplum.py
 text: "name: deploy-inference-db"

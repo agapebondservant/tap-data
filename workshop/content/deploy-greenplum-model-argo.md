@@ -18,6 +18,7 @@ In this session, we will use **in-database analytics** to move the training comp
 This way, our training pipelines will actually run within the database itself.
 
 <div style="text-align: left; justify-content: left; align-items: center; width: 80%; margin-bottom: 20px; font-size: small">
+    <img style="float: left; width: 20%; max-width: 20%; margin: 0 10px 0 0" src="images/mlops-tip.png">
     Also, in-database analytics often includes native support for queries that can be challenging to achieve in a distributed environment,
     such as distributed joins, sorts, aggregations and parallelization.
 </div>
@@ -104,7 +105,6 @@ clear; export DATA_E2E_GIT_TOKEN={{DATA_E2E_GIT_TOKEN}} && export DATA_E2E_GIT_U
 ```
 
 Let's view the code:
-<font color="red">TODO: View the SQL function; only show in Data-centric workshop</font>
 ```editor:open-file
 file: ~/other/resources/plpython/sql/deploy_db_training.sql
 ```
@@ -187,7 +187,7 @@ Our directory now looks like this:
 ls -ltr ~/sample-ml-app
 ```
 
-To kick off pipeline orchestration for our ML pipeline, let's deploy the App CR:
+To kick off pipeline orchestration for our ML pipeline, let's commit the App CR to Git and deploy the App CR:
 ```execute
 cd ~/sample-ml-app; git config --global user.email 'eduk8s@example.com'; git config --global user.name 'Educates'; git commit -a -m 'New commit'; git push origin gp-main-{{session_namespace}}; cd -; kapp deploy -a image-procesor-pipeline-gp-{{session_namespace}} -f ~/sample-ml-app/pipeline_app.yaml --logs -y  -n{{session_namespace}}
 ```
@@ -214,7 +214,6 @@ and deploy it to the **Postgres-on-Kubernetes** training instance we found in th
 That way, the inference code will be colocated with the apps.
 We will use **PL/Python** to deploy the code, which is supported in Postgres.
 
-<font color="red">TODO: Only show for data-centric workshop</font>
 <div style="text-align: left; justify-content: left; align-items: center; width: 80%; margin-bottom: 20px; font-size: small">
     <img style="float: left; width: 20%; max-width: 20%; margin: 0 10px 0 0" src="images/mlops-tip.png"> 
     <b>Why Postgres?</b><br/>
@@ -225,7 +224,6 @@ We will use **PL/Python** to deploy the code, which is supported in Postgres.
 <div style="clear: left;"></div>
 
 Here is the inference code:
-<font color="red">TODO: Show inference code</font>
 ```editor:open-file
 file: ~/other/resources/plpython/sql/deploy_db_inference.sql
 ```
@@ -233,7 +231,6 @@ file: ~/other/resources/plpython/sql/deploy_db_inference.sql
 To invoke the inference code which is deployed to the Postgres database, 
 we will also use **GreenplumPython**, which allows us to interact with Greenplum and Postgres using Python code.
 
-<font color="red">TODO: Only show for data-centric workshop</font>
 <div style="text-align: left; justify-content: left; align-items: center; width: 80%; margin-bottom: 20px; font-size: small">
     <img style="float: left; width: 20%; max-width: 20%; margin: 0 10px 0 0" src="images/mlops-tip.png"> 
     <b>What is GreenplumPython?</b><br/>
@@ -243,7 +240,6 @@ we will also use **GreenplumPython**, which allows us to interact with Greenplum
 <div style="clear: left;"></div>
 
 Here is the app code that invokes the inference function using **GreenplumPython**:
-<font color="red">TODO: Show code; TODO: Only show for data-centric workshop</font>
 ```editor:select-matching-text
 file: ~/sample-ml-app/app/analytics/cifar_cnn_greenplum.py
 text: "name: deploy-inference-db"

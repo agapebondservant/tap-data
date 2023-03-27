@@ -62,3 +62,5 @@ spec:
           - git_repo="{{inputs.parameters.git_repo}}"
           - experiment_name="{{inputs.parameters.experiment_name}}"
           - environment_name="{{inputs.parameters.environment_name}}"
+          - mlflow_tracking_uri="{{inputs.parameters.mlflow_tracking_uri}}"
+          - mlflow_s3_uri="{{inputs.parameters.mlflow_s3_uri}}"

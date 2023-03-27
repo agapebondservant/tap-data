@@ -3,7 +3,7 @@ kind: Image
 metadata:
   name: imgprocessor-kfp
 spec:
-  tag: ${DATA_E2E_REGISTRY_USERNAME}/ml-image-processor-kfp
+  tag: ${DATA_E2E_REGISTRY_USERNAME}/ml-image-processor-kfp-${SESSION_NAMESPACE}
   builder:
     kind: ClusterBuilder
     name: full
@@ -14,3 +14,9 @@ spec:
   cache:
     volume:
       size: 8G
+  build:
+    env:
+      - name: "MLFLOW_TRACKING_URI"
+        value: http://mlflow-${SESSION_NAMESPACE}.${DATA_E2E_BASE_URL}
+      - name: "MLFLOW_S3_ENDPOINT_URL"
+        value: http://minio-${SESSION_NAMESPACE}.${DATA_E2E_BASE_URL}
