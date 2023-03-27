@@ -15,6 +15,11 @@ For this, we will use **Argo Workflows**. **Argo Workflows** is backed by the po
 </div>
 <div style="clear: left;"></div>
 
+View Argo Workflows in the TAP GUI - the Argo Workflows app should be visible:
+```dashboard:open-url
+url: {{ ingress_protocol }}://tap-gui.{{ ingress_domain }}/supply-chain
+```
+
 Launch Argo Workflows by retrieving the URL from the **tanzu cli** (you may need to click on the topmost menu tab on the left to see the initial screen):
 ```execute
 tanzu apps workload get argoworkflows-tap --namespace default
@@ -35,8 +40,10 @@ clear; kubectl -n argo exec $(kubectl get pod -n argo -l 'app=argo-server' -o js
 ```
 
 Let's view the manifest for our Argo Workflow:
-```editor:open-file
+```editor:select-matching-text
 file: ~/other/resources/argo-workflows/pipeline.yaml
+text: "steps:"
+after: 23
 ```
 
 We can see that the workflow comprises of *4* steps - 

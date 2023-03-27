@@ -39,9 +39,14 @@ Let's begin!
 
 First, MLflow requires a few dependencies: a backend store and an artifact store.
 We'll use Postgres and Minio respectively for our dependencies.
-Let's pre-install those (<font color="red">NOTE: This may take a while:</font>)
+Let's pre-install those (<font color="red">NOTE: This may take up to a minute or more:</font>)
 ```execute
 clear && sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/postgres/openssl.conf && openssl genrsa -out tls.key 2048 && openssl req -new -x509 -nodes -days 730 -key tls.key -out tls.crt -config ~/other/resources/postgres/openssl.conf && kubectl delete secret tls-ssl-postgres --namespace {{session_namespace}} || true && kubectl create secret generic tls-ssl-postgres --from-file=tls.key --from-file=tls.crt --from-file=ca.crt=tls.crt --namespace {{session_namespace}}; kubectl wait --for=condition=Ready pod -l app=postgres-operator --timeout=120s; kubectl apply -f ~/other/resources/postgres/postgres-ml-cluster.yaml --namespace {{session_namespace}} && helm repo add minio-legacy https://helm.min.io/ && helm install --set resources.requests.memory=1.5Gi,tls.enabled=false --namespace {{session_namespace}} minio minio-legacy/minio --set service.type=LoadBalancer --set service.port=9000 && sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/minio/minio-ml-http-proxy.yaml && kubectl apply -f ~/other/resources/minio/minio-ml-http-proxy.yaml --namespace {{session_namespace}} && export AWS_ACCESS_KEY_ID=$(kubectl get secret minio -o jsonpath="{.data.accesskey}" -n {{session_namespace}}| base64 --decode) && export AWS_SECRET_ACCESS_KEY=$(kubectl get secret minio -o jsonpath="{.data.secretkey}" -n {{session_namespace}}| base64 --decode) && kubectl wait --for=condition=Ready pod -l app=minio --timeout=300s -n {{session_namespace}} && mc config host add --insecure data-e2e-minio-ml http://minio-{{session_namespace}}.{{ ingress_domain }} ${AWS_ACCESS_KEY_ID} ${AWS_SECRET_ACCESS_KEY}; sleep 7; mc mb --insecure -p data-e2e-minio-ml/mlflow && mc policy --insecure set public data-e2e-minio-ml/mlflow 
+```
+
+Wait for the dependency installation to complete:
+```execute
+kubectl wait --for=condition=Ready pod -l postgres-instance=pg-mlflow-app -l role=read-write --timeout=9000s
 ```
 
 Now, let's go ahead and install the MLflow Package Repository:

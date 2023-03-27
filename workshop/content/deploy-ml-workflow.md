@@ -7,7 +7,7 @@ in the file explorer on the left.
 
 Our Jupyter notebook has been converted into production-ready code hosted in a **Github repo**.
 The code template has been registered as an **App Accelerator** in the TAP GUI.
-Navigate to the TAP GUI screen below to view the "Sample Tensorflow" accelerator:
+Navigate to the TAP GUI screen below and search for **tensorflow** to view the "Sample Tensorflow" accelerator:
 
 ```dashboard:open-url
 url: {{ ingress_protocol }}://tap-gui.{{ ingress_domain }}/create
@@ -26,7 +26,7 @@ At a high level, our workflow will involve:
 * **_Pre-processing_** the images by transforming them into _n-dimensional tensors_, downscaling and normalizing as necessary;
 * Performing a **_train-test-validation_** split;
 * **_Training_** a baseline model using the training subset and a configurable set of hyperparameters 
-(loss function, optimization function, number of epochs, number of layers, activation function, etc) 
+(loss function, optimization function, number of epochs, number of layers, regularizations, activation function, etc) 
 which we will tune in multiple experimental runs;
 * **_Validating_** the model using the validation subset;
 * **_Evaluating_** and **_tracking_** the model's performance;

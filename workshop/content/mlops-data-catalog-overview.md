@@ -17,7 +17,7 @@ We will use a **Data Catalog** for this. A **Data Catalog** is a data discovery 
 <div style="clear: left;"></div>
 
 With **Tanzu Application Platform**, we have **unrestricted flexibility** for selecting a data catalog.
-We can use a prebundled Carvel package, or we can **bring our own data catalog** as long as it is containerized.
+We can use a prebundled Carvel package, or we can **bring our own** as long as it is containerized.
 For the purposes of this exercise, we will be using **DataHub** as our data catalog.
 (DataHub has already been pre-installed for this workshop; we will go over self-service provisioning of ML tools in a separate section.)
 

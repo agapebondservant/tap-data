@@ -27,7 +27,7 @@ Specifically, **Tanzu Application Platform** supports our machine learning proce
 ![TAP as command center](images/discover-build-deploy.jpg)
 
 #### A Deeper Dive
-**DISCOVER** Phase
+**DISCOVER PHASE**
 
 _**Training Environment**_
 
@@ -49,7 +49,7 @@ All of this can be achieved with **TAP**. **Tanzu Application Platform** provide
 of Data / ML products and assets. We will see some of this in action in the upcoming exercise.
 
 
-**BUILD** Phase
+**BUILD PHASE**
   
 _**Reusable Prototypes**_
 
@@ -74,7 +74,7 @@ There are many of these boilerplate tasks, such as:
 that can be adapted during the ML lifecycle process to reduce lead times. We will be able to explore this in the upcoming exercise.
 
 
-**DEPLOY** Phase
+**DEPLOY PHASE**
 
 _**Supply Chains**_
 
