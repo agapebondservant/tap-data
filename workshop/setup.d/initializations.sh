@@ -63,8 +63,8 @@ cd - && rm -rf ~/sample-accelerator
 echo "Git branches set up."
 
 # Accelerators
-tanzu acc delete data-catalog-${SESSION_NAMESPACE} -n ${SESSION_NAMESPACE} || true
-echo "Pre-existing accelerators were deleted."
+tanzu acc delete data-catalog-${SESSION_NAMESPACE} -n ${SESSION_NAMESPACE} > /dev/null 2>&1
+if [ $? == 0 ]; then echo "Pre-existing accelerators were deleted."; else echo "Accelerators did not exist"; fi
 
 # Database
 psql ${DATA_E2E_ML_INFERENCE_DB_CONNECT} -c "DROP SCHEMA IF EXISTS ${SESSION_NAMESPACE}; CREATE SCHEMA ${SESSION_NAMESPACE}" || true
