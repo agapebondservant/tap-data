@@ -47,13 +47,13 @@ tanzu package installed list -n mlops-tools | grep kubeflow-pipelines
 
 It shows that **Kubeflow Pipelines** has already been installed for us on **TAP** - we can see it in the TAP GUI:
 ```dashboard:open-url
-url: {{ ingress_protocol }}://tap-gui.{{ ingress_domain }}/create
+url: {{ ingress_protocol }}://tap-gui.{{ ingress_domain }}/supply-chain
 ```
 
 
 Access Kubeflow Pipelines by retrieving the URL via the **tanzu cli**:
 ```execute
-tanzu apps workloaad get kubeflow-pipelines-tap
+tanzu apps workload get kubeflow-pipelines-tap
 ```
 
 Next, let's fetch the source code for our Kubeflow Pipeline:
