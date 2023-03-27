@@ -58,7 +58,7 @@ tanzu apps workload get kubeflow-tap -ndefault
 
 Next, let's fetch the source code for our Kubeflow Pipeline:
 ```execute
-export DATA_E2E_GIT_TOKEN={{DATA_E2E_GIT_TOKEN}} && export DATA_E2E_GIT_USER={{DATA_E2E_GIT_USER}} && git clone https://${DATA_E2E_GIT_USER}:${DATA_E2E_GIT_TOKEN}@github.com/${DATA_E2E_GIT_USER}/sample-kubeflow-pipeline.git ~/sample-kubeflow-pipeline
+export DATA_E2E_GIT_TOKEN={{DATA_E2E_GIT_TOKEN}} && export DATA_E2E_GIT_USER={{DATA_E2E_GIT_USER}} && git clone https://${DATA_E2E_GIT_USER}:${DATA_E2E_GIT_TOKEN}@github.com/${DATA_E2E_GIT_USER}/sample-kubeflow-pipeline.git -b kfp-main-{{session_namespace}} ~/sample-kubeflow-pipeline
 ```
 
 Let's view the code:
@@ -101,17 +101,16 @@ cp ~/other/resources/appcr/pipeline_app_kfp.yaml ~/sample-kubeflow-pipeline/pipe
 
 Our directory now looks like this:
 ```execute
-ls -ltr ~/sample-ml-app
+ls -ltr ~/sample-kubeflow-pipeline
 ```
 
-To kick off pipeline orchestration for our ML pipeline, let's deploy the App CR:
+To kick off pipeline orchestration for our ML pipeline, let's commit the App CR to Git and deploy the App CR:
 ```execute
-kapp deploy -a image-procesor-pipeline-kfp-{{session_namespace}} -f ~/sample-kubeflow-pipeline/pipeline_app.yaml --logs -y  -n{{session_namespace}}
+cd ~/sample-kubeflow-pipeline; git config --global user.email 'eduk8s@example.com'; git config --global user.name 'Educates'; git commit -a -m 'New commit'; git push origin kfp-main-{{session_namespace}}; cd -; kapp deploy -a image-procesor-pipeline-kfp-{{session_namespace}} -f ~/sample-kubeflow-pipeline/pipeline_app.yaml --logs -y  -n{{session_namespace}}
 ```
 
 Our newly deployed pipeline should now be visible.
-```dashboard:reload-dashboard
-name: Kubeflow
+```dashboard:open-url
 url: {{ ingress_protocol }}://kubeflow-pipelines-{{ session_namespace }}.{{ ingress_domain }}
 ```
 

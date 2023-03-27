@@ -96,6 +96,13 @@ url: {{ ingress_protocol }}://pgadmin-tap.default.{{ DATA_E2E_BASE_URL }}
 ```
 
 Next, we will view the PL/Python SQL function that will be used to train the model.
+
+
+Let's fetch the code:
+```execute
+clear; export DATA_E2E_GIT_TOKEN={{DATA_E2E_GIT_TOKEN}} && export DATA_E2E_GIT_USER={{DATA_E2E_GIT_USER}} && git clone https://${DATA_E2E_GIT_USER}:${DATA_E2E_GIT_TOKEN}@github.com/${DATA_E2E_GIT_USER}/sample-ml-app.git -b gp-main-{{session_namespace}} ~/sample-ml-app
+```
+
 Let's view the code:
 <font color="red">TODO: View the SQL function; only show in Data-centric workshop</font>
 ```editor:open-file
@@ -182,7 +189,7 @@ ls -ltr ~/sample-ml-app
 
 To kick off pipeline orchestration for our ML pipeline, let's deploy the App CR:
 ```execute
-kapp deploy -a image-procesor-pipeline-{{session_namespace}} -f ~/sample-ml-app/pipeline_app.yaml --logs -y  -n{{session_namespace}}
+cd ~/sample-ml-app; git config --global user.email 'eduk8s@example.com'; git config --global user.name 'Educates'; git commit -a -m 'New commit'; git push origin gp-main-{{session_namespace}}; cd -; kapp deploy -a image-procesor-pipeline-gp-{{session_namespace}} -f ~/sample-ml-app/pipeline_app.yaml --logs -y  -n{{session_namespace}}
 ```
 
 Let's access the web UI (you may need to click on the topmost menu tab on the left to see the initial screen):

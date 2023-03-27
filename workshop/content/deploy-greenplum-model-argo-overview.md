@@ -87,6 +87,11 @@ Now refresh pgAdmin - the new Server connection instances should be displayed:
 url: {{ ingress_protocol }}://pgadmin-tap.default.{{ DATA_E2E_BASE_URL }}
 ```
 
+Next, let's fetch the code:
+```execute
+clear; export DATA_E2E_GIT_TOKEN={{DATA_E2E_GIT_TOKEN}} && export DATA_E2E_GIT_USER={{DATA_E2E_GIT_USER}} && git clone https://${DATA_E2E_GIT_USER}:${DATA_E2E_GIT_TOKEN}@github.com/${DATA_E2E_GIT_USER}/sample-ml-app.git -b gp-main-{{session_namespace}} ~/sample-ml-app
+```
+
 Since we are using **in-database analytics**, we need to deploy this code to the Greenplum database.
 In the left hand panel, select _Databases -> dev -> schema -> {{session_namespace}} -> Functions_. This should be empty at first.
 Our pipeline will take care of deploying the code that will be used to train the model.
@@ -156,7 +161,7 @@ Once deployed, **TAP** will take care of monitoring the App's resources and trac
 
 Let's copy the App CR and pipeline files to our ML code directory:
 ```execute
-cp ~/other/resources/appcr/pipeline_app_gp.yaml ~/sample-ml-app/pipeline_app.yaml && cp ~/other/resources/appcr/values_main.yaml ~/sample-ml-app/values.yaml && cp ~/other/resources/argo-workflows/pipeline.yaml ~/sample-ml-app/pipeline.yaml && mkdir -p ~/sample-ml-app/app/config/cifar/scripts && cp ~/other/resources/plpython/sql ~/sample-ml-app/config/cifar/scripts/sql && cp ~/other/resources/plpython/shell ~/sample-ml-app/config/cifar/scripts/shell
+cp ~/other/resources/appcr/pipeline_app_gp.yaml ~/sample-ml-app/pipeline_app.yaml && cp ~/other/resources/appcr/values_main.yaml ~/sample-ml-app/values.yaml && cp ~/other/resources/argo-workflows/pipeline.yaml ~/sample-ml-app/pipeline.yaml
 ```
 
 Our directory now looks like this:
@@ -166,7 +171,7 @@ ls -ltr ~/sample-ml-app
 
 To kick off pipeline orchestration for our ML pipeline, let's deploy the App CR:
 ```execute
-kapp deploy -a image-procesor-pipeline-{{session_namespace}} -f ~/sample-ml-app/pipeline_app.yaml --logs -y  -n{{session_namespace}}
+cd ~/sample-ml-app; git config --global user.email 'eduk8s@example.com'; git config --global user.name 'Educates'; git commit -a -m 'New commit'; git push origin gp-main-{{session_namespace}}; cd -; kapp deploy -a image-procesor-pipeline-gp-{{session_namespace}} -f ~/sample-ml-app/pipeline_app.yaml --logs -y  -n{{session_namespace}}
 ```
 
 Let's access the web UI (you may need to click on the topmost menu tab on the left to see the initial screen):
