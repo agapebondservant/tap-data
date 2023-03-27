@@ -12,8 +12,8 @@ spec:
   template:
     - ytt:
         paths:
-          - config/cifar/pipeline.yaml
-          - config/cifar/values.yaml
+          - pipeline.yaml
+          - values.yaml
 
   deploy:
     - kapp: {}
