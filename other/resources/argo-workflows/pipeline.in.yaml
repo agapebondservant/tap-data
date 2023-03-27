@@ -52,6 +52,10 @@ spec:
             value: #@ data.values.experiment_name
           - name: environment_name
             value: #@ data.values.environment_name
+          - name: mlflow_tracking_uri
+            value: #@ data.values.mlflow_tracking_uri
+          - name: mlflow_s3_uri
+            value: #@ data.values.mlflow_s3_uri
       container:
         image: ${DATA_E2E_REGISTRY_USERNAME}/ml-image-processor
         command: [python]
