@@ -106,7 +106,7 @@ ls -ltr ~/sample-kubeflow-pipeline
 
 To kick off pipeline orchestration for our ML pipeline, let's commit the App CR to Git and deploy the App CR:
 ```execute
-cd ~/sample-kubeflow-pipeline; git config --global user.email 'eduk8s@example.com'; git config --global user.name 'Educates'; git commit -a -m 'New commit'; git push origin kfp-main-{{session_namespace}}; cd -; kapp deploy -a image-procesor-pipeline-kfp-{{session_namespace}} -f ~/sample-kubeflow-pipeline/pipeline_app.yaml --logs -y  -n{{session_namespace}}
+cd ~/sample-kubeflow-pipeline; git config --global user.email 'eduk8s@example.com'; git config --global user.name 'Educates'; git add .; git commit -m 'New commit'; git push origin kfp-main-{{session_namespace}}; cd -; kapp deploy -a image-procesor-pipeline-kfp-{{session_namespace}} -f ~/sample-kubeflow-pipeline/pipeline_app.yaml --logs -y  -n{{session_namespace}}
 ```
 
 Our newly deployed pipeline should now be visible.
