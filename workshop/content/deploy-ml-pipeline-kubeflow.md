@@ -53,7 +53,7 @@ url: {{ ingress_protocol }}://tap-gui.{{ ingress_domain }}/supply-chain
 
 Access Kubeflow Pipelines by retrieving the URL via the **tanzu cli**:
 ```execute
-tanzu apps workload get kubeflow-pipelines-tap
+tanzu apps workload get kubeflow-tap -ndefault
 ```
 
 Next, let's fetch the source code for our Kubeflow Pipeline:
