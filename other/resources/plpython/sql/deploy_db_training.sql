@@ -1,6 +1,6 @@
 --liquibase formatted sql
 --changeset gpadmin:XYZCHANGESETID
-CREATE OR REPLACE FUNCTION XYZDBSCHEMA.run_training_task (mlflow_stage text,
+CREATE OR REPLACE FUNCTION "XYZDBSCHEMA".run_training_task (mlflow_stage text,
                                         git_repo text,
                                         entry_point text,
                                         experiment_name text,
