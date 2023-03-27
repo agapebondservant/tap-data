@@ -98,12 +98,6 @@ url: {{ ingress_protocol }}://pgadmin-tap.default.{{ DATA_E2E_BASE_URL }}
 
 Next, we will view the PL/Python SQL function that will be used to train the model.
 
-
-Let's fetch the code:
-```execute
-clear; export DATA_E2E_GIT_TOKEN={{DATA_E2E_GIT_TOKEN}} && export DATA_E2E_GIT_USER={{DATA_E2E_GIT_USER}} && git clone https://${DATA_E2E_GIT_USER}:${DATA_E2E_GIT_TOKEN}@github.com/${DATA_E2E_GIT_USER}/sample-ml-app.git -b gp-main-{{session_namespace}} ~/sample-ml-app
-```
-
 Let's view the code:
 ```editor:open-file
 file: ~/other/resources/plpython/sql/deploy_db_training.sql

@@ -38,16 +38,22 @@ setupgitbranches()
     git push origin ${BRANCHNAME}-${SESSION_NAMESPACE}
 }
 
-git clone https://${DATA_E2E_GIT_USER}:${DATA_E2E_GIT_TOKEN}@github.com/${DATA_E2E_GIT_USER}/sample-ml-app.git ~/sample-ml-app
-cd ~/sample-ml-app
-setupgitbranches main
-setupgitbranches gp-main
-setupgitbranches kfp-main
-cd - && rm -rf ~/sample-ml-app
+clone_sample_ml_branch()
+{
+  BRANCHNAME=$1
+  git clone https://${DATA_E2E_GIT_USER}:${DATA_E2E_GIT_TOKEN}@github.com/${DATA_E2E_GIT_USER}/sample-ml-app.git -b ${BRANCHNAME} ~/sample-ml-app
+  cd ~/sample-ml-app
+}
+
+clone_sample_ml_branch main; setupgitbranches main; cd - && rm -rf ~/sample-ml-app
+clone_sample_ml_branch gp-main; setupgitbranches gp-main; cd - && rm -rf ~/sample-ml-app
+clone_sample_ml_branch kfp-main; setupgitbranches kfp-main; cd - && rm -rf ~/sample-ml-app
 
 git clone https://${DATA_E2E_GIT_USER}:${DATA_E2E_GIT_TOKEN}@github.com/${DATA_E2E_GIT_USER}/sample-kubeflow-pipeline.git ~/sample-kubeflow-pipeline
 cd ~/sample-kubeflow-pipeline
 setupgitbranches main
+setupgitbranches gp-main
+setupgitbranches kfp-main
 cd - && rm -rf ~/sample-kubeflow-pipeline
 
 git clone https://${DATA_E2E_GIT_USER}:${DATA_E2E_GIT_TOKEN}@github.com/${DATA_E2E_GIT_USER}/mlcode-runner.git ~/mlcode-runner
@@ -58,6 +64,8 @@ cd - && rm -rf ~/mlcode-runner
 git clone https://${DATA_E2E_GIT_USER}:${DATA_E2E_GIT_TOKEN}@github.com/${DATA_E2E_GIT_USER}/sample-accelerator.git ~/sample-accelerator
 cd ~/sample-accelerator
 setupgitbranches main
+setupgitbranches gp-main
+setupgitbranches kfp-main
 cd - && rm -rf ~/sample-accelerator
 
 echo "Git branches set up."
