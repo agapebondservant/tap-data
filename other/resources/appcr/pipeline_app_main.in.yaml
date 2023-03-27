@@ -7,7 +7,7 @@ spec:
   fetch:
     - git:
         url: https://github.com/${DATA_E2E_GIT_USER}/sample-ml-app
-        ref: origin/main-${SESSION_NAMESPACE}
+        ref: origin/main-${DOLLAR}${SESSION_NAMESPACE}
 
   template:
     - ytt:
