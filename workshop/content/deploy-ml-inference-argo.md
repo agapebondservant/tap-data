@@ -65,10 +65,9 @@ Next, select the **Models** tab. There should be several candidate models shown.
 The selected candidate model should show up as **cifar_cnn**. The model can be promoted (or demoted) through the UI, as shown,
 or programmatically (during the training).
 
-Navigate to a pre-existing sample app deployment:
-```dashboard:create-dashboard
-name: Demo
-url: {{ ingress_protocol }}://image-processor.default.{{ ingress_domain }}
+Navigate to a pre-existing sample app deployment by clicking on the URL from the **tanzu** cli:
+```execute
+tanzu apps workload get image-processor --namespace default
 ```
 
 To test the app, download images from the **Jupyter** tab. Navigate to **/jupyter/test-images** from the left panel,
