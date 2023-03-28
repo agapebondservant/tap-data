@@ -21,21 +21,21 @@ git config --global user.name "Edukates-${SESSION_NAMESPACE}"
 
 #RBAC
 echo "Setting up RBAC..."
-tanzu secret registry delete registry-credentials -n ${SESSION_NAMESPACE} | true
+tanzu secret registry delete registry-credentials -n ${SESSION_NAMESPACE} || true
 tanzu secret registry add registry-credentials \
 --username ${DATA_E2E_REGISTRY_USERNAME} --password ${DATA_E2E_REGISTRY_PASSWORD} \
 --server ${DATA_E2E_GIT_SECRETGEN_SERVER} \
---export-to-all-namespaces --yes --namespace ${SESSION_NAMESPACE} | true
-kubectl apply -f ~/other/resources/tap/rbac-1.3.yaml -n ${SESSION_NAMESPACE} | true
-kubectl apply -f ~/other/resources/tap/rbac.yaml -n ${SESSION_NAMESPACE} | true
-kubectl create rolebinding default-admin --clusterrole=admin --serviceaccount=${SESSION_NAMESPACE}:default -n ${SESSION_NAMESPACE} | true
+--export-to-all-namespaces --yes --namespace ${SESSION_NAMESPACE} || true
+kubectl apply -f ~/other/resources/tap/rbac-1.3.yaml -n ${SESSION_NAMESPACE} || true
+kubectl apply -f ~/other/resources/tap/rbac.yaml -n ${SESSION_NAMESPACE} || true
+kubectl create rolebinding default-admin --clusterrole=admin --serviceaccount=${SESSION_NAMESPACE}:default -n ${SESSION_NAMESPACE} || true
 
 # Set up git branches
 echo "Setting up git branches..."
 setupgitbranches()
 {
     BRANCHNAME=$1
-    git push origin --delete ${BRANCHNAME}-${SESSION_NAMESPACE} | true
+    git push origin --delete ${BRANCHNAME}-${SESSION_NAMESPACE} || true
     git branch ${BRANCHNAME}-${SESSION_NAMESPACE}; git checkout ${BRANCHNAME}-${SESSION_NAMESPACE}; git add .; git commit -m 'New commit'
     git push origin ${BRANCHNAME}-${SESSION_NAMESPACE}
 }
@@ -74,12 +74,12 @@ echo "Git branches set up."
 
 # Accelerators
 tanzu acc delete data-catalog-${SESSION_NAMESPACE} -n ${SESSION_NAMESPACE} > /dev/null 2>&1
-if [ $? == 0 ]; then echo "Pre-existing accelerators were deleted."; else echo "Accelerators did not exist"; fi
+if [ $? = 0 ]; then echo "Pre-existing accelerators were deleted."; else echo "Accelerators did not exist"; fi
 
 echo "Setting up databases..."
 # Database
 docker run --rm -it postgres psql ${DATA_E2E_ML_INFERENCE_DB_CONNECT} -c "DROP SCHEMA IF EXISTS \"${SESSION_NAMESPACE}\"; CREATE SCHEMA \"${SESSION_NAMESPACE}\"" || true
-docker run --rm -it postgres psql ${DATA_E2E_ML_TRAINING_DB_CONNECT}-c "DROP SCHEMA IF EXISTS \"${SESSION_NAMESPACE}\"; CREATE SCHEMA \"${SESSION_NAMESPACE}\"" || true
+docker run --rm -it postgres psql ${DATA_E2E_ML_TRAINING_DB_CONNECT} -c "DROP SCHEMA IF EXISTS \"${SESSION_NAMESPACE}\"; CREATE SCHEMA \"${SESSION_NAMESPACE}\"" || true
 echo "Databases set up."
 
 
