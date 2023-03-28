@@ -32,9 +32,15 @@ In the pop-up that displays, you should be able to navigate to the _config/workl
 Here's the manifest that we will use to deploy the app:
 ```editor:open-file
 file: ~/other/resources/tapworkloads/workload.yaml
+text: "type: openapi"
+after: 3
 ```
 
 Note that it includes an "openapi" field, which will be used to render an OpenAPI-3 compatible interface.
+The app uses **FastAPI** to expose its APIs - here is the code:
+```editor:open-file
+file: ~/sample-ml-app/app/analytics/api.py
+```
 
 Now, let's deploy the app:
 ```execute
