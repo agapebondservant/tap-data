@@ -28,7 +28,7 @@ tanzu secret registry add registry-credentials \
 --export-to-all-namespaces --yes --namespace ${SESSION_NAMESPACE} | true
 kubectl apply -f ~/other/resources/tap/rbac-1.3.yaml -n ${SESSION_NAMESPACE} | true
 kubectl apply -f ~/other/resources/tap/rbac.yaml -n ${SESSION_NAMESPACE} | true
-kubectl create rolebinding default-admin --clusterrole=admin --serviceaccount=${SESSION_NAMESPACE}:default -n ${SESSION_NAMESPACE}
+kubectl create rolebinding default-admin --clusterrole=admin --serviceaccount=${SESSION_NAMESPACE}:default -n ${SESSION_NAMESPACE} | true
 
 # Set up git branches
 echo "Setting up git branches..."
@@ -78,8 +78,8 @@ if [ $? == 0 ]; then echo "Pre-existing accelerators were deleted."; else echo "
 
 echo "Setting up databases..."
 # Database
-docker run --rm -it postgres psql ${DATA_E2E_ML_INFERENCE_DB_CONNECT} -c "DROP SCHEMA IF EXISTS \"${SESSION_SCHEMA}\"; CREATE SCHEMA \"${SESSION_DB_SCHEMA}\"" || true
-docker run --rm -it postgres psql ${DATA_E2E_ML_TRAINING_DB_CONNECT}-c "DROP SCHEMA IF EXISTS \"${SESSION_SCHEMA}\"; CREATE SCHEMA \"${SESSION_DB_SCHEMA}\"" || true
+docker run --rm -it postgres psql ${DATA_E2E_ML_INFERENCE_DB_CONNECT} -c "DROP SCHEMA IF EXISTS \"${SESSION_NAMESPACE}\"; CREATE SCHEMA \"${SESSION_NAMESPACE}\"" || true
+docker run --rm -it postgres psql ${DATA_E2E_ML_TRAINING_DB_CONNECT}-c "DROP SCHEMA IF EXISTS \"${SESSION_NAMESPACE}\"; CREATE SCHEMA \"${SESSION_NAMESPACE}\"" || true
 echo "Databases set up."
 
 
