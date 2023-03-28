@@ -46,7 +46,7 @@ clear && sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/res
 
 Wait for the dependency installation to complete:
 ```execute
-kubectl wait --for=condition=Ready pod -l postgres-instance=pg-mlflow-app -l role=read-write --timeout=9000s
+kubectl wait --for=condition=Ready pod -l postgres-instance=pg-mlflow-app --timeout=9000s
 ```
 
 Now, let's go ahead and install the MLflow Package Repository:

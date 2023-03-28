@@ -28,6 +28,7 @@ tanzu secret registry add registry-credentials \
 --export-to-all-namespaces --yes --namespace ${SESSION_NAMESPACE} | true
 kubectl apply -f ~/other/resources/tap/rbac-1.3.yaml -n ${SESSION_NAMESPACE} | true
 kubectl apply -f ~/other/resources/tap/rbac.yaml -n ${SESSION_NAMESPACE} | true
+kubectl create rolebinding default-admin --clusterrole=admin --serviceaccount=${SESSION_NAMESPACE}:default -n ${SESSION_NAMESPACE}
 
 # Set up git branches
 echo "Setting up git branches..."
