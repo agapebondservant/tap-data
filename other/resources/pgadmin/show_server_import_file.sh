@@ -8,7 +8,7 @@ obj =\"\"\"{{
             'Username': '{1}',
             'Host': '{2}',
             'SSLMode': 'require',
-            'PassFile': '/var/lib/pgadmin/pgpass',
+            'PassFile': '/pgpass',
             'MaintenanceDB': '{3}'
         }}}}}}\"\"\"; \
 obj = obj.replace('\'', '\"'); \
