@@ -78,8 +78,8 @@ if [ $? = 0 ]; then echo "Pre-existing accelerators were deleted."; else echo "A
 
 echo "Setting up databases..."
 # Database
-docker run --rm -it postgres psql ${DATA_E2E_ML_INFERENCE_DB_CONNECT} -c "DROP SCHEMA IF EXISTS \"${SESSION_NAMESPACE}\"; CREATE SCHEMA \"${SESSION_NAMESPACE}\"" || true
-docker run --rm -it postgres psql ${DATA_E2E_ML_TRAINING_DB_CONNECT} -c "DROP SCHEMA IF EXISTS \"${SESSION_NAMESPACE}\"; CREATE SCHEMA \"${SESSION_NAMESPACE}\"" || true
+docker run --rm -it postgres psql ${DATA_E2E_ML_INFERENCE_DB_CONNECT} -c "DROP SCHEMA IF EXISTS \"${SESSION_NAMESPACE}\"; CREATE SCHEMA \"${SESSION_NAMESPACE}\";" || true
+docker run --rm -it postgres psql ${DATA_E2E_ML_TRAINING_DB_CONNECT} -c "DROP SCHEMA IF EXISTS \"${SESSION_NAMESPACE}\"; CREATE SCHEMA \"${SESSION_NAMESPACE}\";" || true
 echo "Databases set up."
 
 
