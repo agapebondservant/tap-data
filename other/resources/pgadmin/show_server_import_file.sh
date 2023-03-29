@@ -4,7 +4,7 @@ obj =\"\"\"{{
     'Servers': {{
         '1': {{
             'Name': 'test@test.com',
-            'Group': 'Default 123 Group 1',
+            'Group': 'Server Group Training ' + sys.argv[1],
             'Port': {0},
             'Username': '{1}',
             'Host': '{2}',

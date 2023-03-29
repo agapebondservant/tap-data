@@ -78,7 +78,7 @@ tanzu apps workload get pgadmin-tap --namespace pgadmin
 Let's add a new Server connection for the Greenplum instance by creating a server import file:
 ```execute
 export PGADMIN_TMP_POD=$(kubectl get pod -l "app.kubernetes.io/part-of=pgadmin-tap,app.kubernetes.io/component=run" -oname -n pgadmin);
-export PGADMIN_POD=$(echo ${PGADMIN_TMP_POD} | -b 5-);
+export PGADMIN_POD=$(echo ${PGADMIN_TMP_POD} | cut -b 5-);
 kubectl cp ~/other/resources/pgadmin/show_server_import_file.sh pgadmin/$PGADMIN_POD:/tmp;
 kubectl exec -it $PGADMIN_POD -n pgadmin -- sh /tmp/show_server_import_file.sh {{session_namespace}};
 ```
@@ -89,7 +89,7 @@ Observe that we were able to fetch the necessary DB credentials by using a Servi
 Now we will import the server file:
 ```execute
 export PGADMIN_TMP_POD=$(kubectl get pod -l "app.kubernetes.io/part-of=pgadmin-tap,app.kubernetes.io/component=run" -oname -n pgadmin);
-export PGADMIN_POD=$(echo ${PGADMIN_TMP_POD} | -b 5-);
+export PGADMIN_POD=$(echo ${PGADMIN_TMP_POD} | cut -b 5-);
 kubectl cp ~/other/resources/pgadmin/import_server_import_file.sh pgadmin/$PGADMIN_POD:/tmp;
 kubectl exec -it $PGADMIN_POD -n pgadmin -- sh /tmp/import_server_import_file.sh {{session_namespace}};
 ```
