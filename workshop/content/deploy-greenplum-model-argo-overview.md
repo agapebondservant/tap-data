@@ -82,7 +82,7 @@ Now we will import the server file:
 export PGADMIN_TMP_POD=$(kubectl get pod -l "app.kubernetes.io/part-of=pgadmin-tap,app.kubernetes.io/component=run" -oname -n pgadmin);
 export PGADMIN_POD=$(echo ${PGADMIN_TMP_POD} | -b 5-);
 kubectl cp ~/other/resources/pgadmin/import_server_import_file.sh pgadmin/$PGADMIN_POD:/tmp;
-kubectl exec -it $PGADMIN_POD -n pgadmin -- sh -c "SRV_GRP_SUFFIX=tanzu-mlops-w03-s001 /tmp/show_server_import_file.sh;"
+kubectl exec -it $PGADMIN_POD -n pgadmin -- sh -c "SRV_GRP_SUFFIX=tanzu-mlops-w03-s001 /tmp/import_server_import_file.sh;"
 ```
 
 Now refresh pgAdmin - the new Server connection instances should be displayed:

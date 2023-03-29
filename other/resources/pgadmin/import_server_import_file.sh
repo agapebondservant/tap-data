@@ -1,3 +1,4 @@
+mkdir -p /var/lib/pgadmin/storage/test_test.com
 chmod 700 /var/lib/pgadmin/storage/test_test.com
 python -c "import os; from pyservicebinding import binding; bindings = next(iter(binding.ServiceBinding().bindings('greenplum', 'vmware') or []), {}); \
 obj =\"\"\"{{
