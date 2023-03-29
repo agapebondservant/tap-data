@@ -1,7 +1,7 @@
 apiVersion: kappctrl.k14s.io/v1alpha1
 kind: App
 metadata:
-  name: ml-image-processing-pipeline-app-gp-main-${SESSION_NAMESPACE}
+  name: mlapp-gp-${SESSION_NAMESPACE}
 spec:
   serviceAccountName: default
   fetch:
@@ -12,8 +12,8 @@ spec:
   template:
     - ytt:
         paths:
-          - config/cifar/pipeline.yaml
-          - config/cifar/values.yaml
+          - pipeline.yaml
+          - values.yaml
 
   deploy:
     - kapp: {}

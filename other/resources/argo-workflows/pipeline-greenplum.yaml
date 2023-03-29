@@ -3,7 +3,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
-  name: ml-image-processing-workflow-greenplum-${SESSION_NAMESPACE}
+  name: mlworkflow-gp-${SESSION_NAMESPACE}
 spec:
   entrypoint: train
   volumes:

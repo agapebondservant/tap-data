@@ -1,7 +1,7 @@
 apiVersion: kappctrl.k14s.io/v1alpha1
 kind: App
 metadata:
-  name: ml-image-processing-pipeline-app-main-${SESSION_NAMESPACE}
+  name: mlapp-main-${SESSION_NAMESPACE}
 spec:
   serviceAccountName: default
   fetch:

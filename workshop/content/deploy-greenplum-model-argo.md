@@ -53,7 +53,7 @@ For this exercise, we will take the same training code that we used for the in-m
 and deploy it to the **VMware Greenplum** training instance we found in the **Data Catalog** earlier.
 We will use Greenplum's **PL/Python** feature, which allows us to deploy Python code as a database **UDF** function.
 
-Notice that the **training** instance is tagged with the label **gcp**, indicating the platform where it is located.
+Notice that the **training** instance is tagged with the label **aws**, indicating the platform where it is located.
 
 <font color="red">NOTE</font>: How do we access the training instance?
 Notice the tags that start with **servicebinding:** that have been associated with the **dev** instance.
@@ -233,8 +233,8 @@ We will use **PL/Python** to deploy the code, which is supported in Postgres.
 <div style="text-align: left; justify-content: left; align-items: center; width: 80%; margin-bottom: 20px; font-size: small">
     <img style="float: left; width: 20%; max-width: 20%; margin: 0 10px 0 0" src="images/mlops-tip.png"> 
     If you search for the <b>pginstance-inference</b> database instance in the data catalog, 
-    you'll see that it's been tagged with the label "aws".
-    Since the training instance is on "gcp", this means that we will be deploying a <b>multi-cloud</b> pipeline.
+    you'll see that it's been tagged with the label "gcp".
+    Since the training instance is on "aws", this means that we will be deploying a <b>multi-cloud</b> pipeline.
 </div>
 <div style="clear: left;"></div>
 
