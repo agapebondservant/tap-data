@@ -1,10 +1,10 @@
 chmod 700 /var/lib/pgadmin/storage/test_test.com
-python -c "from pyservicebinding import binding; bindings = next(iter(binding.ServiceBinding().bindings('greenplum', 'vmware') or []), {}); \
+python -c "import sys; from pyservicebinding import binding; bindings = next(iter(binding.ServiceBinding().bindings('greenplum', 'vmware') or []), {}); \
 obj =\"\"\"{{
     'Servers': {{
         '1': {{
             'Name': 'test@test.com',
-            'Group': 'Server Group Training',
+            'Group': 'Server Group Training ' + sys.argv[1],
             'Port': {0},
             'Username': '{1}',
             'Host': '{2}',
@@ -23,12 +23,12 @@ chmod 600 /var/lib/pgadmin/storage/test_test.com/pgpasstrain; \
 /venv/bin/python3 setup.py --load-servers /tmp/servers.json --user test@test.com; \
 
 
-python -c "from pyservicebinding import binding; bindings = next(iter(binding.ServiceBinding().bindings('postgres', 'vmware') or []), {}); \
+python -c "import sys; from pyservicebinding import binding; bindings = next(iter(binding.ServiceBinding().bindings('postgres', 'vmware') or []), {}); \
 obj =\"\"\"{{
     'Servers': {{
         '1': {{
             'Name': 'test@test.com',
-            'Group': 'Server Group Inference',
+            'Group': 'Server Group Inference ' + sys.argv[1],
             'Port': {0},
             'Username': '{1}',
             'Host': '{2}',

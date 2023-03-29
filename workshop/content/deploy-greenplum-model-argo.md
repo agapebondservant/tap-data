@@ -76,9 +76,10 @@ tanzu apps workload get pgadmin-tap --namespace pgadmin
 
 Let's add a new Server connection for the Greenplum instance by creating a server import file:
 ```execute
-export PGADMIN_POD=$(kubectl get pod -l "app.kubernetes.io/part-of=pgadmin-tap,app.kubernetes.io/component=run" -oname -n default
-kubectl cp ~/other/resources/pgadmin/show_server_import_file.sh $PGADMIN_POD default/$PGADMIN_POD:/tmp
-kubectl exec -it $PGADMIN_POD -n default -- sh /tmp/show_server_import_file.sh
+export PGADMIN_TMP_POD=$(kubectl get pod -l "app.kubernetes.io/part-of=pgadmin-tap,app.kubernetes.io/component=run" -oname -n pgadmin);
+export PGADMIN_POD=$(echo ${PGADMIN_TMP_POD} | -b 5-);
+kubectl cp ~/other/resources/pgadmin/show_server_import_file.sh pgadmin/$PGADMIN_POD:/tmp;
+kubectl exec -it $PGADMIN_POD -n pgadmin -- sh /tmp/show_server_import_file.sh {{session_namespace}};
 ```
 
 Observe that we were able to fetch the necessary DB credentials by using a ServiceBindings compatible library
@@ -86,14 +87,15 @@ Observe that we were able to fetch the necessary DB credentials by using a Servi
 
 Now we will import the server file:
 ```execute
-export PGADMIN_POD=$(kubectl get pod -l "app.kubernetes.io/part-of=pgadmin-tap,app.kubernetes.io/component=run" -oname -n default
-kubectl cp ~/other/resources/pgadmin/import_server_import_file.sh $PGADMIN_POD default/$PGADMIN_POD:/tmp
-kubectl exec -it $PGADMIN_POD -n default -- sh /tmp/import_server_import_file.sh
+export PGADMIN_TMP_POD=$(kubectl get pod -l "app.kubernetes.io/part-of=pgadmin-tap,app.kubernetes.io/component=run" -oname -n pgadmin);
+export PGADMIN_POD=$(echo ${PGADMIN_TMP_POD} | -b 5-);
+kubectl cp ~/other/resources/pgadmin/import_server_import_file.sh pgadmin/$PGADMIN_POD:/tmp;
+kubectl exec -it $PGADMIN_POD -n pgadmin -- sh /tmp/import_server_import_file.sh {{session_namespace}};
 ```
 
-Now refresh pgAdmin - the new Server connection instances should be displayed:
+Now refresh pgAdmin - the new Server connection instances should be displayed as **Server Group Training {{session_namespace}}** and **Server Group Inference {{session_namespace}}**:
 ```dashboard:open-url
-url: {{ ingress_protocol }}://pgadmin-tap.default.{{ DATA_E2E_BASE_URL }}
+url: {{ ingress_protocol }}://pgadmin-tap.pgadmin.{{ DATA_E2E_BASE_URL }}
 ```
 
 Next, we will view the PL/Python SQL function that will be used to train the model.
