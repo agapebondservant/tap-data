@@ -82,7 +82,7 @@ Let's add a new Server connection for the Greenplum instance by creating a serve
 export PGADMIN_TMP_POD=$(kubectl get pod -l "app.kubernetes.io/part-of=pgadmin-tap,app.kubernetes.io/component=run" -oname -n pgadmin);
 export PGADMIN_POD=$(echo ${PGADMIN_TMP_POD} | cut -b 5-);
 kubectl cp ~/other/resources/pgadmin/show_server_import_file.sh pgadmin/$PGADMIN_POD:/tmp;
-kubectl exec -it $PGADMIN_POD -n pgadmin -- sh -c "SRV_GRP_SUFFIX=tanzu-mlops-w03-s001 /tmp/show_server_import_file.sh;"$(SRV_GRP_SUFFIX={{session_namespace}}); /tmp/show_server_import_file.sh;
+kubectl exec -it $PGADMIN_POD -n pgadmin -- sh -c "SRV_GRP_SUFFIX=tanzu-mlops-w03-s001 /tmp/show_server_import_file.sh;"$(SRV_GRP_SUFFIX={{session_namespace}});
 ```
 
 Observe that we were able to fetch the necessary DB credentials by using a ServiceBindings compatible library
