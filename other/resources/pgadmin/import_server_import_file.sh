@@ -1,5 +1,5 @@
 chmod 700 /var/lib/pgadmin/storage/test_test.com
-python -c "import sys; from pyservicebinding import binding; bindings = next(iter(binding.ServiceBinding().bindings('greenplum', 'vmware') or []), {}); \
+python -c "import os; from pyservicebinding import binding; bindings = next(iter(binding.ServiceBinding().bindings('greenplum', 'vmware') or []), {}); \
 obj =\"\"\"{{
     'Servers': {{
         '1': {{
@@ -13,7 +13,7 @@ obj =\"\"\"{{
             'MaintenanceDB': '{4}'
         }}}}}}\"\"\"; \
 obj = obj.replace('\'', '\"'); \
-obj = obj.format(sys.argv[1], bindings.get('port'), bindings.get('username'), bindings.get('host'), bindings.get('database'));\
+obj = obj.format(os.getenv('SRV_GRP_SUFFIX'), bindings.get('port'), bindings.get('username'), bindings.get('host'), bindings.get('database'));\
 print(obj)" > /tmp/servers.json; \
 
 python -c "from pyservicebinding import binding; bindings = next(iter(binding.ServiceBinding().bindings('greenplum', 'vmware') or []), {}); \
@@ -23,7 +23,7 @@ chmod 600 /var/lib/pgadmin/storage/test_test.com/pgpasstrain; \
 /venv/bin/python3 setup.py --load-servers /tmp/servers.json --replace --user test@test.com; \
 
 
-python -c "import sys; from pyservicebinding import binding; bindings = next(iter(binding.ServiceBinding().bindings('postgres', 'vmware') or []), {}); \
+python -c "import os; from pyservicebinding import binding; bindings = next(iter(binding.ServiceBinding().bindings('postgres', 'vmware') or []), {}); \
 obj =\"\"\"{{
     'Servers': {{
         '1': {{
@@ -37,7 +37,7 @@ obj =\"\"\"{{
             'MaintenanceDB': '{4}'
         }}}}}}\"\"\"; \
 obj = obj.replace('\'', '\"'); \
-obj = obj.format(sys.argv[1], bindings.get('port'), bindings.get('username'), bindings.get('host'), bindings.get('database'));\
+obj = obj.format(os.getenv('SRV_GRP_SUFFIX'), bindings.get('port'), bindings.get('username'), bindings.get('host'), bindings.get('database'));\
 print(obj)" > /tmp/servers2.json; \
 
 python -c "from pyservicebinding import binding; bindings = next(iter(binding.ServiceBinding().bindings('postgres', 'vmware') or []), {}); \
