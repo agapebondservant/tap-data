@@ -224,7 +224,7 @@ We will use **PL/Python** to deploy the code, which is supported in Postgres.
     <b>Why Postgres?</b><br/>
     As an inference store, Postgres has many features that make it a robust solution for serving in-database analytics.
     Among them is PL/X, or the ability to run programming languages like Python within the database process.
-    This means that Postgres can also be used as edge compute for 
+    This means that Postgres can also be used as edge compute for integrating with message queues, APIs etc. during the feature processing phase.
 </div>
 <div style="clear: left;"></div>
 
