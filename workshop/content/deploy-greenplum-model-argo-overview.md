@@ -67,9 +67,10 @@ tanzu apps workload get pgadmin-tap --namespace pgadmin
 
 Let's add a new Server connection for the Greenplum instance by creating a server import file:
 ```execute
-export PGADMIN_POD=$(kubectl get pod -l "app.kubernetes.io/part-of=pgadmin-tap,app.kubernetes.io/component=run" -oname -n default
-kubectl cp ~/other/resources/pgadmin/show_server_import_file.sh $PGADMIN_POD default/$PGADMIN_POD:/tmp
-kubectl exec -it $PGADMIN_POD -n default -- sh /tmp/show_server_import_file.sh
+export PGADMIN_TMP_POD=$(kubectl get pod -l "app.kubernetes.io/part-of=pgadmin-tap,app.kubernetes.io/component=run" -oname -n pgadmin);
+export PGADMIN_POD=$(echo ${PGADMIN_TMP_POD} | -b 5-);
+kubectl cp ~/other/resources/pgadmin/show_server_import_file.sh pgadmin/$PGADMIN_POD:/tmp;
+kubectl exec -it $PGADMIN_POD -n pgadmin -- sh /tmp/show_server_import_file.sh;
 ```
 
 Observe that we were able to fetch the necessary DB credentials by using a ServiceBindings compatible library

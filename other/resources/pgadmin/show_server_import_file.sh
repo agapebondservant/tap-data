@@ -1,3 +1,4 @@
+set -x
 python -c "from pyservicebinding import binding; bindings = next(iter(binding.ServiceBinding().bindings('greenplum', 'vmware') or []), {}); \
 obj =\"\"\"{{
     'Servers': {{
