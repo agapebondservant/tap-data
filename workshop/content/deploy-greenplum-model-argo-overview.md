@@ -44,6 +44,8 @@ For this exercise, we will take the same training code that we used for the in-m
 and deploy it to the **VMware Greenplum** training instance we found in the **Data Catalog** earlier.
 We will use Greenplum's **PL/Python** feature, which allows us to deploy Python code as a database **UDF** function.
 
+Notice that the **training** instance is tagged with the label **gcp**, indicating the platform where it is located.
+
 <font color="red">NOTE</font>: How do we access the training instance?
 Notice the tags that start with **servicebinding:** that have been associated with the **dev** instance.
 Their specific names are **servicebinding:type:greenplum** and **servicebinding:provider:vmware**.
