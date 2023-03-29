@@ -45,4 +45,4 @@ python -c "from pyservicebinding import binding; bindings = next(iter(binding.Se
 obj=\"{0}:{1}:{2}:{3}\".format(bindings.get('host'),bindings.get('database'),bindings.get('username'),bindings.get('password')); \
 print(obj)" > /var/lib/pgadmin/storage/test_test.com/pgpassinference; \
 chmod 600 /var/lib/pgadmin/storage/test_test.com/pgpassinference; \
-/venv/bin/python3 setup.py --load-servers /tmp/servers2.json --replace --user test@test.com;
+/venv/bin/python3 setup.py --load-servers /tmp/servers2.json --user test@test.com;
