@@ -43,7 +43,8 @@ Let's go back to our datasets from the data catalog:
 url: {{ ingress_protocol }}://datahub-datahub.{{ DATA_E2E_BASE_URL }}
 ```
 
-Login (credentials: **datahub/datahub**) and select **ServiceBinding Sources** 
+Login (credentials: **datahub/datahub**), go to the Home Page (click on the top-left icon),
+click on the "Explore all" link and select **ServiceBinding Sources**
 in the **View** search bar towards the top (with the prompt text "Create a View").
 
 For **training**: Click on the **dev** Greenplum database in the search results.
@@ -93,9 +94,14 @@ kubectl cp ~/other/resources/pgadmin/import_server_import_file.sh pgadmin/$PGADM
 kubectl exec -it $PGADMIN_POD -n pgadmin -- sh /tmp/import_server_import_file.sh {{session_namespace}};
 ```
 
-Now refresh pgAdmin - the new Server connection instances should be displayed as **Server Group Training {{session_namespace}}** and **Server Group Inference {{session_namespace}}**:
+Now refresh pgAdmin - the Server connection instances should be displayed as **Server Group Training {{session_namespace}}** and **Server Group Inference {{session_namespace}}**:
 ```dashboard:open-url
 url: {{ ingress_protocol }}://pgadmin-tap.pgadmin.{{ DATA_E2E_BASE_URL }}
+```
+
+Next, let's fetch the code:
+```execute
+clear; export DATA_E2E_GIT_TOKEN={{DATA_E2E_GIT_TOKEN}} && export DATA_E2E_GIT_USER={{DATA_E2E_GIT_USER}} && rm -rf ~/sample-ml-app && git clone https://${DATA_E2E_GIT_USER}:${DATA_E2E_GIT_TOKEN}@github.com/${DATA_E2E_GIT_USER}/sample-ml-app.git -b gp-main-{{session_namespace}} ~/sample-ml-app
 ```
 
 Next, we will view the PL/Python SQL function that will be used to train the model.
@@ -120,6 +126,16 @@ In this case, it will involve a new DB change.
     to leverage multiple languages and frameworks in the same pipeline.
 </div>
 
+Let's search on the **Accelerators** page for a prebuilt template that we can use - enter "in-database" in the Search field:
+```dashboard:open-url
+url: {{ ingress_protocol }}://tap-gui.{{ ingress_domain }}/create
+```
+
+<div style="text-align: left; justify-content: left; align-items: center; width: 80%; margin-bottom: 20px; font-size: small">
+    <img style="float: left; width: 20%; max-width: 20%; margin: 0 10px 0 0" src="images/mlops-tip.png"> 
+    You can explore the In-Database Analytics accelerator for a more in-depth overview.
+</div>
+<div style="clear: left;"></div>
 
 Let's view the manifest for our pipeline:
 ```editor:select-matching-text
@@ -127,13 +143,6 @@ file: ~/other/resources/argo-workflows/pipeline-greenplum.yaml
 text: "name: upload-dataset"
 after: 24
 ```
-
-<div style="text-align: left; justify-content: left; align-items: center; width: 80%; margin-bottom: 20px; font-size: small">
-    <img style="float: left; width: 20%; max-width: 20%; margin: 0 10px 0 0" src="images/mlops-tip.png"> 
-    The pipeline was developed using a Workload template provided by an <b>Accelerator</b>.
-    For more info, search for <b>argo</b> on the TAP Accelerators page.
-</div>
-<div style="clear: left;"></div>
 
 We can still see that the workflow comprises of *4* steps -
 **upload_dataset**, **train-model**, **evaluate-model** and **promote-model-to-staging** -
