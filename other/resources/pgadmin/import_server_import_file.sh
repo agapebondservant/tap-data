@@ -4,16 +4,16 @@ obj =\"\"\"{{
     'Servers': {{
         '1': {{
             'Name': 'test@test.com',
-            'Group': 'Server Group Training ' + sys.argv[1],
-            'Port': {0},
-            'Username': '{1}',
-            'Host': '{2}',
+            'Group': 'Server Group Training {0}',
+            'Port': {1},
+            'Username': '{2}',
+            'Host': '{3}',
             'SSLMode': 'require',
             'PassFile': '/pgpasstrain',
-            'MaintenanceDB': '{3}'
+            'MaintenanceDB': '{4}'
         }}}}}}\"\"\"; \
 obj = obj.replace('\'', '\"'); \
-obj = obj.format(bindings.get('port'), bindings.get('username'), bindings.get('host'), bindings.get('database'));\
+obj = obj.format(sys.argv[1], bindings.get('port'), bindings.get('username'), bindings.get('host'), bindings.get('database'));\
 print(obj)" > /tmp/servers.json; \
 
 python -c "from pyservicebinding import binding; bindings = next(iter(binding.ServiceBinding().bindings('greenplum', 'vmware') or []), {}); \
@@ -28,16 +28,16 @@ obj =\"\"\"{{
     'Servers': {{
         '1': {{
             'Name': 'test@test.com',
-            'Group': 'Server Group Inference ' + sys.argv[1],
-            'Port': {0},
-            'Username': '{1}',
-            'Host': '{2}',
+            'Group': 'Server Group Inference {0}',
+            'Port': {1},
+            'Username': '{2}',
+            'Host': '{3}',
             'SSLMode': 'require',
             'PassFile': '/pgpassinference',
-            'MaintenanceDB': '{3}'
+            'MaintenanceDB': '{4}'
         }}}}}}\"\"\"; \
 obj = obj.replace('\'', '\"'); \
-obj = obj.format(bindings.get('port'), bindings.get('username'), bindings.get('host'), bindings.get('database'));\
+obj = obj.format(sys.argv[1], bindings.get('port'), bindings.get('username'), bindings.get('host'), bindings.get('database'));\
 print(obj)" > /tmp/servers2.json; \
 
 python -c "from pyservicebinding import binding; bindings = next(iter(binding.ServiceBinding().bindings('postgres', 'vmware') or []), {}); \
