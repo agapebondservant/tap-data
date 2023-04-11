@@ -3,12 +3,12 @@
 #### Launch app from TAP GUI
 View the app in TAP GUI:
 ```dashboard:open-url
-url: {{ ingress_protocol }}://tap-gui.{{ ingress_domain }}/supply-chain
+url: {{ ingress_protocol }}://tap-gui.tanzumlai.com/supply-chain
 ```
 
 Launch the app by clicking on the URL from the **tanzu** cli:
-```execute
-tanzu apps workload get image-processor --namespace default
+```dashboard:open-url
+url: {{ ingress_protocol }}://image-processor.default.tanzumlai.com
 ```
 
 Upload an image and observe that the app is waiting for the model to be available. 
@@ -19,7 +19,7 @@ We will use TAP to discover the **tooling** that we will need for our developmen
 
 View the Jupyter accelerator in TAP GUI (search for **ml** first, just to demonstrate how accelerators can be used, then search for **jupyter**):
 ```dashboard:open-url
-url: {{ ingress_protocol }}://tap-gui.{{ ingress_domain }}/supply-chain
+url: {{ ingress_protocol }}://tap-gui.tanzumlai.com/supply-chain
 ```
 
 Verify that the Jupyterhub package is available:
@@ -44,7 +44,7 @@ tanzu package install jupyterhub -p jupyter.tanzu.vmware.com -v {{DATA_E2E_JUPYT
 
 View the installed package (login with the default username and password used above - jupyter/Vmware1!):
 ```dashboard:open-url
-url: {{ ingress_protocol }}://jupyter-{{session_namespace}}.{{ ingress_domain }}
+url: {{ ingress_protocol }}://jupyter-{{session_namespace}}.tanzumlai.com
 ```
 
 Click on the Jupyter tab in the workshop (**jupyter** as the password), and show the **File Ingestion** notebook.
@@ -72,7 +72,7 @@ For the purposes of this exercise, we will be using **DataHub** as our data cata
 
 From **TAP GUI**, go to the **Worklooads** screen:
 ```dashboard:open-url
-url: http://tap-gui.{{ ingress_domain }}/supply-chain
+url: http://tap-gui.tanzumlai.com/supply-chain
 ```
 
 Click on the DataHub workload (it should show up as **datahub-tap**.) Notice that the app is in *Ready** state.
@@ -108,12 +108,12 @@ Both assets will be used in a **multi-cloud** ML pipeline.
 #### Launch Pipeline
 View Argo Workflows in the TAP GUI - the Argo Workflows app should be visible:
 ```dashboard:open-url
-url: {{ ingress_protocol }}://tap-gui.{{ ingress_domain }}/supply-chain
+url: {{ ingress_protocol }}://tap-gui.tanzumlai.com/supply-chain
 ```
 
 View Kubeflow Pipelines as well:
 ```dashboard:open-url
-url: {{ ingress_protocol }}://kubeflow-pipelines.{{ ingress_domain }}
+url: {{ ingress_protocol }}://kubeflow-pipelines.tanzumlai.com
 ```
 
 <div style="text-align: left; justify-content: left; align-items: center; width: 80%; margin-bottom: 20px; font-size: small">
@@ -174,12 +174,12 @@ cd ~/sample-ml-app; git config --global user.email 'eduk8s@example.com'; git con
 
 Our newly deployed workflow should now be visible.
 ```dashboard:open-url
-url: https://argo-workflows.{{ ingress_domain }}
+url: https://argo-workflows.tanzumlai.com
 ```
 
 The newly created experiment should also be visible in MlFlow:
 ```dashboard:open-url
-url: https://mlflow.{{ ingress_domain }}
+url: https://mlflow.tanzumlai.com
 ```
 
 #### Launch In-Database Pipeline
@@ -205,7 +205,7 @@ In this exercise, we will use **VMware Greenplum** for in-database analytics.
 
 Let's go back to our datasets from the data catalog:
 ```dashboard:open-url
-url: {{ ingress_protocol }}://datahub-datahub.{{ DATA_E2E_BASE_URL }}
+url: {{ ingress_protocol }}://datahub-datahub.tanzumlai.com
 ```
 
 Login (credentials: **datahub/datahub**), go to the Home Page (click on the top-left icon),
@@ -227,7 +227,7 @@ Thanks to **ServiceBindings**, these are the only keys we will need to connect t
 
 Navigate to the **TAP GUI** and click on the **pgadmin** instance:
 ```dashboard:open-url
-url: {{ ingress_protocol }}://tap-gui.{{ ingress_domain }}/supply-chain
+url: {{ ingress_protocol }}://tap-gui.tanzumlai.com/supply-chain
 ```
 
 Launch pgAdmin by retrieving the URL from the **tanzu cli** (login credentials: test@test.com/alwaysbekind):
@@ -248,7 +248,7 @@ Observe that we were able to fetch the necessary DB credentials by using a Servi
 
 Now return to pgAdmin and locate the Server connection instances which should be displayed as **Server Group Training {{session_namespace}}** and **Server Group Inference {{session_namespace}}**:
 ```dashboard:open-url
-url: {{ ingress_protocol }}://pgadmin-tap.pgadmin.{{ DATA_E2E_BASE_URL }}
+url: {{ ingress_protocol }}://pgadmin-tap.pgadmin.tanzumlai.com
 ```
 
 Next, we will view the PL/Python SQL function that will be used to train the model.
@@ -324,7 +324,7 @@ cd ~/sample-ml-app; git config --global user.email 'eduk8s@example.com'; git con
 
 Let's access the web UI (you may need to click on the topmost menu tab on the left to see the initial screen):
 ```dashboard:open-url
-url: https://argo-workflows.{{ ingress_domain }}
+url: https://argo-workflows.tanzumlai.com
 ```
 
 <font color="red">NOTE:</font> If the Login page is displayed, copy the access token from here to the Login box:
@@ -400,7 +400,7 @@ The database changes are successfully being tracked (managed by Liquibase).
 #### Promote model
 Navigate to MlFlow:
 ```dashboard:open-url
-url: {{ ingress_protocol }}://mlflow.{{ ingress_domain }}
+url: {{ ingress_protocol }}://mlflow.tanzumlai.com
 ```
 
 Select the **convolutional_neural_network_team_main** experiment (on the left),
@@ -409,12 +409,12 @@ and enter **metrics.accuracy_score > 0.5** in the search field, then select the 
 #### Launch API
 To invoke the API from TAP, click on the link below, then click on the "Definition" tab:
 ```dashboard:open-url
-url: {{ ingress_protocol }}://tap-gui.{{ DATA_E2E_BASE_URL }}/api-docs
+url: {{ ingress_protocol }}://tap-gui.tanzumlai.com/api-docs
 ```
 
 The rendered view should be similar to this interface:
 ```dashboard:open-url
-url: {{ ingress_protocol }}://image-processor-api.{{ DATA_E2E_BASE_URL }}/docs
+url: {{ ingress_protocol }}://image-processor-api.default.tanzumlai.com/docs
 ```
 
 Try uploading the images from earlier to test out the API.
@@ -422,8 +422,8 @@ Try uploading the images from earlier to test out the API.
 
 #### Launch app from TAP GUI
 Relaunch the app by clicking on the URL from the **tanzu** cli:
-```execute
-tanzu apps workload get image-processor --namespace default
+```dashboard:open-url
+url: {{ ingress_protocol }}://image-processor.default.tanzumlai.com
 ```
 
 Upload an image and observe the app's prediction results, as well as the performance metrics.
