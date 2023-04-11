@@ -304,3 +304,4 @@ cluster-keys.json
 other/resources/appcr/pipeline_app_gp.yaml
 other/resources/appcr/values_gp.yaml
 /Users/oawofolu/PIVOTAL/data/educates/tap/resources/tap-values-1.5.yaml
+resources/tap-values-1.5.yaml
