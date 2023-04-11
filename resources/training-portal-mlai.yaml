@@ -18,3 +18,7 @@ spec:
       reserved: 1
       expires: 120m
       orphaned: 5m
+    - name: data-mlops-demo
+      capacity: 1
+      expires: 120m
+      orphaned: 5m

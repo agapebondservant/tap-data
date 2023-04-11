@@ -1,10 +1,10 @@
 apiVersion: learningcenter.tanzu.vmware.com/v1beta1
 kind: Workshop
 metadata:
-  name: data-rabbitmq-deepdive
+  name: data-mlops-demo
 spec:
-  title: Tanzu RabbitMQ - Kubernetes Deep Dive
-  description: Demonstration of features of Tanzu RabbitMQ on Kubernetes
+  title: Rapid-Fire MLOps Demo
+  description: High-level Demo of MLOps on TAP
   vendor: eduk8s.io
   difficulty: beginner
   duration: 120m
@@ -17,9 +17,9 @@ spec:
     - name: ENABLE_JUPYTERLAB
       value: "true"
     - name: WORKSHOP_FILE
-      value: workshop-rabbitmq-deepdive.yaml
+      value: workshop-mlops-demo.yaml
     - name: WORKSHOP_TOPIC
-      value: data-rabbitmq-deepdive
+      value: data-mlops-demo
     - name: DEMO_MODE
       value: "yes"
     ingresses:
@@ -40,8 +40,6 @@ spec:
     dashboards:
     - name: Jupyter
       url: "$(ingress_protocol)://$(session_namespace)-jupyter.$(ingress_domain)/"
-    - name: Whiteboard
-      url: https://excalidraw.com/
     #! namespaces:
       #! Allow workshop to run containers as root (note: this is different from the workshop instances which will host deployments created during the course of the workshop)
       #! security:

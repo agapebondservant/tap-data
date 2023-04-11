@@ -1,0 +1,54 @@
+profile: light
+ceip_policy_disclosed: true # The value must be true for installation to succeed
+excluded_packages:
+  - contour.tanzu.vmware.com
+
+buildservice:
+  kp_default_repository: ${DATA_E2E_TAP_BUILD_SERVICE_REPO}
+  kp_default_repository_username: ${DATA_E2E_REGISTRY_USERNAME}
+  kp_default_repository_password: ${DATA_E2E_REGISTRY_PASSWORD}
+  exclude_dependencies: true
+
+supply_chain: basic
+
+cnrs:
+  domain_name: ${DATA_E2E_GIT_TAP_GUI_INGRESS}
+  ingress:
+    # reuse_crds: true
+    external:
+      namespace: projectcontour
+    internal:
+      namespace: projectcontour
+
+accelerator:
+  domain: ${DATA_E2E_GIT_TAP_GUI_INGRESS}
+
+learningcenter:
+  ingressDomain: ${DATA_E2E_GIT_TAP_GUI_INGRESS}
+
+
+ootb_supply_chain_basic:
+  registry:
+    server: ${DATA_E2E_GIT_TAP_REGISTRY_SERVER}
+    repository: ${DATA_E2E_GIT_TAP_REGISTRY_REPO}
+  gitops:
+    ssh_secret: ""
+
+tap_gui:
+  service_type: ClusterIP
+  ingressEnabled: "true"
+  ingressDomain: ${DATA_E2E_GIT_TAP_GUI_INGRESS}
+  app_config:
+    app:
+      baseUrl: http://tap-gui.${DATA_E2E_GIT_TAP_GUI_INGRESS}
+    catalog:
+      locations:
+        - type: url
+          target: https://${DATA_E2E_GIT_TAP_CATALOG_PATH}/catalog-info.yaml
+    backend:
+      baseUrl: http://tap-gui.${DATA_E2E_GIT_TAP_GUI_INGRESS}
+      cors:
+        origin: http://tap-gui.${DATA_E2E_GIT_TAP_GUI_INGRESS}
+
+metadata_store:
+  app_service_type: LoadBalancer # (optional) Defaults to LoadBalancer. Change to NodePort for distributions that don't support LoadBalancer

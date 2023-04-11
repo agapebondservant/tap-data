@@ -1,0 +1,7 @@
+name: MLOps with Argo Workflows, MLFlow and TAP
+
+modules:
+    activate:
+    - mlops-demo-setup
+    - mlops-tap-overview
+    - mlops-demo-overview

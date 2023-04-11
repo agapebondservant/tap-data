@@ -79,6 +79,10 @@ modules:
       name: Discovering Data Sets
     mlops-data-catalog-overview:
       name: Discovering Data Sets
+    mlops-demo-setup:
+      name: Before You Begin
+    mlops-demo-overview:
+      name: Demonstration
 config:
     vars:
     - name: DATA_E2E_REGISTRY_USERNAME

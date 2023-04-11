@@ -54,7 +54,8 @@ AWS_REGION=<your-region> tanzu management-cluster permissions aws set && tanzu m
 * Create new cluster for Educates platform: 
 ```
 tanzu login (select the management cluster when prompted)
-tanzu cluster create <your-cluster-name> --file resources/tanzu-aws.yaml
+tanzu config set features.cluster.allow-legacy-cluster true # only applies for TKG 2.1+
+AWS_REGION=<your-region> tanzu cluster create --file resources/tanzu-aws.yaml
 tanzu cluster kubeconfig get <your-cluster-name> --admin
 kubectl config use-context <your-cluster-name>-admin@<your-cluster-name>
 ```
@@ -97,7 +98,8 @@ kubectl apply -f resources/podsecuritypolicy.yaml
 
 * Install Contour: (NOTE: Change the Loadbalancer's healthcheck from HTTP to TCP in the AWS Console)
 ```
-kubectl apply -f https://projectcontour.io/quickstart/v1.18.2/contour.yaml 
+kubectl apply -f https://projectcontour.io/quickstart/v1.18.2/contour.yaml # For TAP 1.3 and below
+kubectl apply -f https://projectcontour.io/quickstart/v1.24.3/contour.yaml # For TAP 1.5
 ```
 
 * Install the Kubernetes Metrics server: 
@@ -108,7 +110,8 @@ kubectl apply -f resources/metrics-server.yaml; watch kubectl get deployment met
 * Deploy cluster-scoped cert-manager:
 ```
 kubectl create ns cert-manager
-kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.5.3/cert-manager.yaml
+kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.5.3/cert-manager.yaml # For TAP 1.3 and below
+kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.11.0/cert-manager.yaml # For TAP 1.5
 ```
 
 * Deploy CERT-MANAGER-ISSUER  (self-signed), CERTIFICATE-SIGNING-REQUEST, CERT-MANAGER-ISSUER (CA):
@@ -490,19 +493,23 @@ kubectl apply -f resources/kconfigsealedsecret.yaml
 
 #### Install TAP command line tooling
 ```
-mkdir $HOME/tanzu
+export TANZU_CLI_VSN=2.1.1 #set to blank for TKG 1.6 and below
+mkdir -p $HOME/tanzu$TANZU_CLI_VSN
 export TANZU_CLI_NO_INIT=true
-cd $HOME/tanzu
-sudo install cli/core/0.11.1/tanzu-core-linux_amd64 /usr/local/bin/tanzu
+cd $HOME/tanzu$TANZU_CLI_VSN
+sudo install cli/core/0.11.1/tanzu-core-linux_amd64 /usr/local/bin/tanzu # for TKG 1.6 and below
+sudo install cli/core/v0.28.1/tanzu-core-linux_amd64 /usr/local/bin/tanzu #for TKG 2.1.1 and above
 tanzu plugin install --local cli all
 tanzu plugin list
 ```
+
 ##### Install imgpkg
 ```
 wget -O- https://carvel.dev/install.sh > install.sh
 sudo bash install.sh
 imgpkg version
 ```
+
 #### Relocate images to local registry
 ```
 source .env
@@ -512,7 +519,7 @@ export INSTALL_REGISTRY_USERNAME=$DATA_E2E_REGISTRY_USERNAME
 export INSTALL_REGISTRY_PASSWORD=$DATA_E2E_REGISTRY_PASSWORD
 #export TAP_VERSION=1.1.1
 #export TAP_VERSION=1.2.0
-export TAP_VERSION=1.3.4
+export TAP_VERSION=1.5.0-rc.15 #1.3.4
 export INSTALL_REGISTRY_HOSTNAME=index.docker.io #https://index.docker.io/v1/ # index.docker.io
 imgpkg copy -b registry.tanzu.vmware.com/tanzu-application-platform/tap-packages:${TAP_VERSION} --to-repo ${INSTALL_REGISTRY_HOSTNAME}/${DATA_E2E_REGISTRY_USERNAME}/tap-packages
 imgpkg copy -b registry.tanzu.vmware.com/p-rabbitmq-for-kubernetes/tanzu-rabbitmq-package-repo:${DATA_E2E_RABBIT_OPERATOR_VERSION} --to-repo ${INSTALL_REGISTRY_HOSTNAME}/oawofolu/vmware-tanzu-rabbitmq
@@ -538,7 +545,8 @@ tanzu package repository get tanzu-tap-repository --namespace tap-install
 tanzu package available list --namespace tap-install
 tanzu package available list tap.tanzu.vmware.com --namespace tap-install
 tanzu package available get tap.tanzu.vmware.com/$TAP_VERSION --values-schema --namespace tap-install
-export TBS_VERSION=1.9.0
+export TBS_VERSION=1.9.0 # if installing TAP 1.3
+export TBS_VERSION=1.10.8 # if installing TAP 1.5
 imgpkg copy -b registry.tanzu.vmware.com/tanzu-application-platform/full-tbs-deps-package-repo:${TBS_VERSION} --to-repo index.docker.io/oawofolu/tbs-full-deps
 
 #If installing TAP 1.2:
@@ -548,6 +556,10 @@ envsubst < resources/tap-values-tbsfull.in.yaml > resources/tap-values-tbsfull.y
 #If installing TAP 1.3:
 envsubst < resources/tap-values-1.3.in.yaml > resources/tap-values-1.3.yaml
 tanzu package install tap -p tap.tanzu.vmware.com -v $TAP_VERSION --values-file resources/tap-values-1.3.yaml -n tap-install
+
+#If installing TAP 1.5:
+envsubst < resources/tap-values-1.5.in.yaml > resources/tap-values-1.5.yaml
+tanzu package install tap -p tap.tanzu.vmware.com -v $TAP_VERSION --values-file resources/tap-values-1.5.yaml -n tap-install
 
 tanzu package repository add tbs-full-deps-repository --url oawofolu/tbs-full-deps:${TBS_VERSION} --namespace tap-install
 tanzu package installed delete full-tbs-deps -n tap-install -y
@@ -559,6 +571,9 @@ tanzu package installed update tap -p tap.tanzu.vmware.com --values-file resourc
 
 #If installing TAP 1.3:
 tanzu package installed update tap -p tap.tanzu.vmware.com --values-file resources/tap-values-1.3.yaml -n tap-install
+
+#If installing TAP 1.5:
+tanzu package installed update tap -p tap.tanzu.vmware.com --values-file resources/tap-values-1.5.yaml -n tap-install
 ```
 
 To check on a package's install status:
@@ -580,7 +595,7 @@ tanzu package install <name of failed package> -p <package metadata name> -v ${p
 Deploy LearningCenter:
 ```
 tanzu package available list learningcenter.tanzu.vmware.com --namespace tap-install # To view available packages for learningcenter
-tanzu package install learning-center --package-name learningcenter.tanzu.vmware.com --version 0.2.4 -f resources/learning-center-config.yaml -n tap-install
+tanzu package install learning-center --package-name learningcenter.tanzu.vmware.com --version 0.2.7 -f resources/learning-center-config.yaml -n tap-install
 kubectl get all -n learningcenter
 tanzu package available list workshops.learningcenter.tanzu.vmware.com --namespace tap-install
 ```
