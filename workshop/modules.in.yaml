@@ -221,3 +221,5 @@ config:
       value: ${DATA_E2E_ML_TRAINING_MASTER}
     - name: DATA_E2E_ML_INFERENCE_HOST
       value: ${DATA_E2E_ML_INFERENCE_HOST}
+    - name: DATA_E2E_TANZU_CLI_TAR
+      value: ${DATA_E2E_TANZU_CLI_TAR}
