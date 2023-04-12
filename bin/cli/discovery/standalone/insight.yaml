@@ -5,12 +5,12 @@ metadata:
   name: insight
 spec:
   artifacts:
-    v1.1.2:
+    v1.5.0:
     - arch: amd64
-      digest: c1a05b81c10b7f1c09efb76e21ad9923e4626a34812af86fe000f2cc279a50a8
+      digest: 31c38371aef95e4b9143f5e7c792eaf4a75e602daa0ee46f07c19223e46988d1
       os: linux
       type: local
-      uri: linux/amd64/cli/insight/v1.1.2/tanzu-insight-linux_amd64
+      uri: linux/amd64/cli/insight/v1.5.0/tanzu-insight-linux_amd64
   description: post & query image, package, source, and vulnerability data
   optional: false
-  recommendedVersion: v1.1.2
+  recommendedVersion: v1.5.0

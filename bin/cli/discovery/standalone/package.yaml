@@ -5,12 +5,12 @@ metadata:
   name: package
 spec:
   artifacts:
-    v0.11.2:
+    v0.28.1:
     - arch: amd64
-      digest: d141bf1f88e55b4ba0db35c35ddd6d411894835f4ff7c8a0613a4cfae41febfd
+      digest: 76ab34384d4fe9e856ac9ee35da50a010ea99ed8c45d33577a6089c1c9cc2543
       os: linux
       type: local
-      uri: linux/amd64/cli/package/v0.11.2/tanzu-package-linux_amd64
+      uri: linux/amd64/cli/package/v0.28.1/tanzu-package-linux_amd64
   description: Tanzu package management
   optional: false
-  recommendedVersion: v0.11.2
+  recommendedVersion: v0.28.1

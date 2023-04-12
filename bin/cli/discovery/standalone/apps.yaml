@@ -5,12 +5,12 @@ metadata:
   name: apps
 spec:
   artifacts:
-    v0.5.1:
+    v0.11.1:
     - arch: amd64
-      digest: ceb8b8e841ffcb2df7b8fb1b1e456332c2e6fffe60e86a9f4cb863d710708909
+      digest: dd69eea5d6d210299bd49fa46b3236719a925072d7526ca965dc177827ad37fd
       os: linux
       type: local
-      uri: linux/amd64/cli/apps/v0.5.1/tanzu-apps-linux_amd64
+      uri: linux/amd64/cli/apps/v0.11.1/tanzu-apps-linux_amd64
   description: Applications on Kubernetes
   optional: false
-  recommendedVersion: v0.5.1
+  recommendedVersion: v0.11.1

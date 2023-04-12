@@ -5,13 +5,12 @@ metadata:
   name: services
 spec:
   artifacts:
-    v0.2.0:
+    v0.6.0:
     - arch: amd64
-      digest: 24f25b7b8533b4bdec7bd7bcc4903c392dddaec9ec9c6bd80374633b8abb950d
+      digest: 949128446f5d0b7096981c210ee4fd7eed35d01197124aef6b9729ef96eedc2a
       os: linux
       type: local
-      uri: linux/amd64/cli/services/v0.2.0/tanzu-services-linux_amd64
-  description: Discover Service Types, Service Instances and manage Resource Claims
-    (ALPHA)
+      uri: linux/amd64/cli/services/v0.6.0/tanzu-services-linux_amd64
+  description: Commands for working with service instances, classes and claims
   optional: false
-  recommendedVersion: v0.2.0
+  recommendedVersion: v0.6.0
