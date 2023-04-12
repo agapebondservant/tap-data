@@ -50,7 +50,7 @@ tanzu package installed delete postgres-operator -ndefault -y
 
 Now install the operator:
 ```execute
-tanzu package install postgres-operator --package-name postgres-operator.sql.tanzu.vmware.com --version $PG_TANZU_PKG_VERSION -f ~/other/resources/postgres/postgres-values.yaml --namespace default
+tanzu package install postgres-operator -p postgres-operator.sql.tanzu.vmware.com -v $PG_TANZU_PKG_VERSION --values-file ~/other/resources/postgres/postgres-values.yaml --namespace default
 ```
 {% endif %}
 

@@ -595,7 +595,7 @@ tanzu package install <name of failed package> -p <package metadata name> -v ${p
 Deploy LearningCenter:
 ```
 tanzu package available list learningcenter.tanzu.vmware.com --namespace tap-install # To view available packages for learningcenter
-tanzu package install learning-center --package-name learningcenter.tanzu.vmware.com --version 0.2.7 -f resources/learning-center-config.yaml -n tap-install
+tanzu package install learning-center -p learningcenter.tanzu.vmware.com --version 0.2.7 --values-file resources/learning-center-config.yaml -n tap-install
 kubectl get all -n learningcenter
 tanzu package available list workshops.learningcenter.tanzu.vmware.com --namespace tap-install
 ```
