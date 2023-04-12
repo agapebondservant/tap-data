@@ -12,7 +12,7 @@ curl -o tanzu-cli.tar ${DATA_E2E_TANZU_CLI_TAR} ; tar -xvzf tanzu-cli.tar -C ~/b
 cd ~ ; tanzu init ; tanzu plugin install --local bin/cli all
 tanzu secret registry delete regsecret --namespace default -y || true
 tanzu secret registry add regsecret --username ${DATA_E2E_REGISTRY_USERNAME} \
-      --password ${DATA_E2E_REGISTRY_PASSWORD} --server ${DATA_E2E_REGISTRY_USERNAME} \
+      --password ${DATA_E2E_REGISTRY_PASSWORD} --server ${DATA_E2E_GIT_SECRETGEN_SERVER} \
       --export-to-all-namespaces --yes --namespace default
 echo ${DATA_E2E_REGISTRY_PASSWORD} | docker login registry-1.docker.io --username=${DATA_E2E_REGISTRY_USERNAME} --password-stdin
 
