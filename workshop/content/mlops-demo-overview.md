@@ -265,7 +265,7 @@ git clone https://${DATA_E2E_GIT_USER}:${DATA_E2E_GIT_TOKEN}@github.com/${DATA_E
 
 Let's view the PL/Python code:
 ```editor:open-file
-file: ~/other/resources/plpython/sql/deploy_db_training.sql"
+file: ~/other/resources/plpython/sql/deploy_db_training.sql
 text: "--liquibase"
 after: 2
 ```

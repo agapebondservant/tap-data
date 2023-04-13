@@ -1,0 +1,239 @@
+#@ load("@ytt:data", "data")
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  name: mlworkflow-gp-${SESSION_NAMESPACE}
+spec:
+  entrypoint: train
+  volumes:
+    - name: secret-vol
+      secret:
+        secretName: greenplum-training-secret
+        defaultMode: 0600
+  templates:
+    - name: train
+      steps:
+        - - name: deploy-training-code
+            template: deploy-code
+            arguments:
+              parameters:
+                - name: user
+                  value: #@ data.values.training_user
+                - name: host
+                  value: #@ data.values.training_master
+                - name: shared_path
+                  value: #@ data.values.training_shared_path
+                - name: pem_file
+                  value: "/usr/local/creds/greenplum_pem_file"
+                - name: shell_script
+                  value: #@ data.values.training_code_shell_script
+                - name: base_image
+                  value: #@ data.values.training_image
+        - - name: deploy-training-db
+            template: deploy-db
+            arguments:
+              parameters:
+                - name: user
+                  value: #@ data.values.training_user
+                - name: host
+                  value: #@ data.values.training_master
+                - name: db_name
+                  value: #@ data.values.training_db_name
+                - name: db_schema
+                  value: #@ data.values.training_db_schema
+                - name: shared_path
+                  value: #@ data.values.training_shared_path
+                - name: shell_script
+                  value: #@ data.values.training_db_shell_script
+                - name: db_script
+                  value: #@ data.values.training_db_script
+                - name: external_secret_ref
+                  value: #@ data.values.training_external_secret_ref
+                - name: external_secret_ref_key
+                  value: #@ data.values.training_external_secret_ref_key
+
+
+        - - name: upload-dataset
+            template: run-training
+            arguments:
+              parameters:
+                - name: mlflow_entry
+                  value: "upload_dataset"
+        - - name: train-model
+            template: run-training
+            arguments:
+              parameters:
+                - name: mlflow_entry
+                  value: "train_model"
+        - - name: evaluate-model
+            template: run-training
+            arguments:
+              parameters:
+                - name: mlflow_entry
+                  value: "evaluate_model"
+        - - name: promote-model-to-staging
+            template: run-training
+            arguments:
+              parameters:
+                - name: mlflow_entry
+                  value: "promote_model_to_staging"
+
+
+        - - name: deploy-inference-db
+            template: deploy-db
+            arguments:
+              parameters:
+                - name: user
+                  value: #@ data.values.inference_user
+                - name: host
+                  value: #@ data.values.inference_host
+                - name: db_name
+                  value: #@ data.values.inference_db_name
+                - name: db_schema
+                  value: #@ data.values.inference_db_schema
+                - name: shared_path
+                  value: #@ data.values.inference_shared_path
+                - name: shell_script
+                  value: #@ data.values.inference_db_shell_script
+                - name: db_script
+                  value: #@ data.values.inference_db_script
+                - name: external_secret_ref
+                  value: #@ data.values.inference_external_secret_ref
+                - name: external_secret_ref_key
+                  value: #@ data.values.inference_external_secret_ref_key
+
+
+    - name: deploy-code
+      inputs:
+        artifacts:
+          - name: deploy-code-source
+            path: "/usr/local"
+            git:
+              repo: #@ data.values.git_repo
+              singleBranch: true
+              branch: #@ data.values.environment_name
+        parameters:
+          - name: user
+          - name: host
+          - name: shared_path
+          - name: pem_file
+          - name: shell_script
+          - name: base_image
+          - name: git_repo
+            value: #@ data.values.git_repo
+          - name: mlpipeline_git_repo
+            value: #@ data.values.mlpipeline_git_repo
+          - name: git_repo_branch
+            value: #@ data.values.environment_name
+          - name: pyfunction_vendored_dependencies_uri
+            value: #@ data.values.pyfunction_vendored_dependencies_uri
+          - name: inference_namespace
+            value: #@ data.values.inference_namespace
+      script:
+        image: "{{inputs.parameters.base_image}}"
+        volumeMounts:
+          - name: secret-vol
+            mountPath: "usr/local/creds"
+        workingDir: "/usr/local"
+        command: [bash]
+        source: |
+          SCP_PEM_PATH="{{inputs.parameters.pem_file}}" \
+          USER="{{inputs.parameters.user}}" \
+          HOST="{{inputs.parameters.host}}" \
+          SHARED_PATH="{{inputs.parameters.shared_path}}" \
+          GIT_REPO="{{inputs.parameters.git_repo}}" \
+          GIT_REPO_BRANCH="{{inputs.parameters.git_repo_branch}}" \
+          MLPIPELINE_GIT_REPO="{{inputs.parameters.mlpipeline_git_repo}}" \
+          PYFUNC_VENDOR_URI="{{inputs.parameters.pyfunction_vendored_dependencies_uri}}" \
+          NAMESPACE="{{inputs.parameters.inference_namespace}}" \
+          "{{inputs.parameters.shell_script}}"
+    - name: deploy-db
+      inputs:
+        artifacts:
+          - name: deploy-code-db
+            path: "{{inputs.parameters.script_shared_path}}"
+            git:
+              repo: #@ data.values.git_repo
+              singleBranch: true
+              branch: #@ data.values.environment_name
+        parameters:
+          - name: user
+          - name: host
+          - name: db_name
+          - name: db_schema
+          - name: shared_path
+          - name: db_script
+          - name: shell_script
+          - name: external_secret_ref
+          - name: external_secret_ref_key
+          - name: script_shared_path
+            value: #@ data.values.script_shared_path
+      script:
+        image: liquibase/liquibase
+        mirrorVolumeMounts: true
+        env:
+          - name: HOST_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: "{{inputs.parameters.external_secret_ref}}"
+                key: "{{inputs.parameters.external_secret_ref_key}}"
+        command: [bash]
+        source: |
+          liquibase update \
+          --changelog-file="changelog/{{inputs.parameters.db_script}}" \
+          --url="jdbc:postgresql://{{inputs.parameters.host}}:5432/{{inputs.parameters.db_name}}?sslmode=require&prepareThreshold=0" \
+          --username="{{inputs.parameters.user}}" \
+          --password="${HOST_PASSWORD}"
+      initContainers:
+        -  name: update-script
+           image: busybox
+           mirrorVolumeMounts: true
+           command:
+             - /bin/sh
+             - -c
+             - 'DB_SCHEMA="{{inputs.parameters.db_schema}}" SHARED_PATH="{{inputs.parameters.script_shared_path}}" DB_SCRIPT="{{inputs.parameters.db_script}}" "{{inputs.parameters.script_shared_path}}/{{inputs.parameters.shell_script}}"'
+    - name: run-training
+      inputs:
+        parameters:
+          - name: mlflow_entry
+          - name: mlflow_stage
+            value: #@ data.values.model_stage
+          - name: git_repo
+            value: #@ data.values.git_repo
+          - name: experiment_name
+            value: #@ data.values.experiment_name
+          - name: environment_name
+            value: #@ data.values.environment_name
+          - name: user
+            value: #@ data.values.training_user
+          - name: host
+            value: #@ data.values.training_master
+          - name: db_name
+            value: #@ data.values.training_db_name
+          - name: mlflow_tracking_uri
+            value: #@ data.values.mlflow_tracking_uri
+          - name: mlflow_s3_uri
+            value: #@ data.values.mlflow_s3_uri
+          - name: shared_path
+            value: #@ data.values.training_shared_path
+      script:
+        image: postgres
+        env:
+          - name: GREENPLUM_TRAINING_MASTER_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: greenplum-training-secret
+                key: greenplum_master_password
+        command: [bash]
+        source: |
+          echo "SELECT run_training_task(:'mlflow_stage', :'git_repo', :'entry_point', :'experiment_name', :'environment_name', :'mlflow_host', :'mlflow_s3_uri', :'app_location')" \
+            | psql "postgresql://{{inputs.parameters.user}}:${GREENPLUM_TRAINING_MASTER_PASSWORD}@{{inputs.parameters.host}}:5432/{{inputs.parameters.db_name}}?sslmode=require" \
+                   -v mlflow_stage="{{inputs.parameters.mlflow_stage}}" \
+                   -v git_repo="{{inputs.parameters.git_repo}}" \
+                   -v entry_point="{{inputs.parameters.mlflow_entry}}" \
+                   -v experiment_name="{{inputs.parameters.experiment_name}}" \
+                   -v environment_name="{{inputs.parameters.environment_name}}" \
+                   -v mlflow_host="{{inputs.parameters.mlflow_tracking_uri}}" \
+                   -v mlflow_s3_uri="{{inputs.parameters.mlflow_s3_uri}}" \
+                   -v app_location="{{inputs.parameters.shared_path}}/mlapp";
