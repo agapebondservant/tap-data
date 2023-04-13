@@ -73,6 +73,11 @@ cd - && rm -rf ~/sample-accelerator
 
 echo "Git branches set up."
 
+# Reset Argo Pipelines
+kapp delete -a image-procesor-pipeline-${SESSION_NAMESPACE} -n ${SESSION_NAMESPACE} -y || true
+kapp delete -a image-procesor-pipeline-gp-${SESSION_NAMESPACE} -n ${SESSION_NAMESPACE} -y || true
+echo "Argo workflow pipelines reset."
+
 # Accelerators
 tanzu acc delete data-catalog-${SESSION_NAMESPACE} -n ${SESSION_NAMESPACE} > /dev/null 2>&1
 if [ $? = 0 ]; then echo "Pre-existing accelerators were deleted."; else echo "Accelerators did not exist"; fi
