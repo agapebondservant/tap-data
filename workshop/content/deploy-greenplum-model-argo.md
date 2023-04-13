@@ -77,15 +77,15 @@ tanzu apps workload get pgadmin-tap --namespace pgadmin
 </div>
 <div style="clear: left;"></div>
 
-Let's add a new Server connection for the Greenplum instance by creating a server import file:
+Let's view the credentials for the **training** instance using the ServiceBindings **servicebinding:type:greenplum** and **servicebinding:provider:vmware**:
 ```execute
 export PGADMIN_TMP_POD=$(kubectl get pod -l "app.kubernetes.io/part-of=pgadmin-tap,app.kubernetes.io/component=run" -oname -n pgadmin);
 export PGADMIN_POD=$(echo ${PGADMIN_TMP_POD} | cut -b 5-);
 kubectl cp ~/other/resources/pgadmin/show_server_import_file.sh pgadmin/$PGADMIN_POD:/tmp;
-kubectl exec -it $PGADMIN_POD -n pgadmin -- sh -c "SRV_GRP_SUFFIX=tanzu-mlops-w03-s001 /tmp/show_server_import_file.sh;"$(SRV_GRP_SUFFIX={{session_namespace}});
+kubectl exec -it $PGADMIN_POD -n pgadmin -- sh -c "SRV_GRP_SUFFIX={{session_namespace}} /tmp/show_server_import_file.sh;"$(SRV_GRP_SUFFIX={{session_namespace}});
 ```
 
-Observe that we were able to fetch the necessary DB credentials by using a ServiceBindings compatible library
+Observe that we are able to fetch the necessary DB credentials by using a ServiceBindings compatible library
 (**pyservicebindings**).
 
 Now we will import the server file:
@@ -93,7 +93,7 @@ Now we will import the server file:
 export PGADMIN_TMP_POD=$(kubectl get pod -l "app.kubernetes.io/part-of=pgadmin-tap,app.kubernetes.io/component=run" -oname -n pgadmin);
 export PGADMIN_POD=$(echo ${PGADMIN_TMP_POD} | cut -b 5-);
 kubectl cp ~/other/resources/pgadmin/import_server_import_file.sh pgadmin/$PGADMIN_POD:/tmp;
-kubectl exec -it $PGADMIN_POD -n pgadmin -- sh -c "SRV_GRP_SUFFIX=tanzu-mlops-w03-s001 /tmp/import_server_import_file.sh;"
+kubectl exec -it $PGADMIN_POD -n pgadmin -- sh -c "SRV_GRP_SUFFIX={{session_namespace}} /tmp/import_server_import_file.sh;"
 ```
 
 Now refresh pgAdmin - the Server connection instances should be displayed as **Server Group Training {{session_namespace}}** and **Server Group Inference {{session_namespace}}**:
@@ -110,8 +110,13 @@ Next, we will view the PL/Python SQL function that will be used to train the mod
 
 Let's view the code:
 ```editor:open-file
-file: ~/other/resources/plpython/sql/deploy_db_training.sql
+file: ~/other/resources/plpython/sql/deploy_db_training.sql"
+text: "--liquibase"
+after: 2
 ```
+
+Notice the Liquibase **changeset** annotation, which will be used by our data versioning tool
+to log this script as a database change that can be tracked, versioned and rolled back if necessary.
 
 Since we are using **in-database analytics**, we need to deploy this code to the Greenplum database.
 In the left hand panel, select _Databases -> dev -> schema -> {{session_namespace}} -> Functions_. This should be empty at first.

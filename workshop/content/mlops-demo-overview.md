@@ -17,9 +17,14 @@ This requires a viable model to be promoted to the "Production" stage.
 #### Launch Jupyter Notebook
 We will use TAP to discover the **tooling** that we will need for our development environment.
 
+Click on the Jupyter tab in the workshop (**jupyter** as the password), and show the **File Ingestion** notebook.
+
+This is the Jupyter notebook that was used to create experiments for our training use case. 
+To migrate it to our own self-managed instance of Jupyterhub, we will self-provision Jupyterhub using **TAP**.
+
 View the Jupyter accelerator in TAP GUI (search for **ml** first, just to demonstrate how accelerators can be used, then search for **jupyter**):
 ```dashboard:open-url
-url: {{ ingress_protocol }}://tap-gui.{{ ingress_domain }}/supply-chain
+url: {{ ingress_protocol }}://tap-gui.{{ ingress_domain }}/create
 ```
 
 Verify that the Jupyterhub package is available:
@@ -46,8 +51,6 @@ View the installed package (login with the default username and password used ab
 ```dashboard:open-url
 url: {{ ingress_protocol }}://jupyter-{{session_namespace}}.{{ ingress_domain }}
 ```
-
-Click on the Jupyter tab in the workshop (**jupyter** as the password), and show the **File Ingestion** notebook.
 
 #### Launch Catalog
 In order to begin, we will need to discover a suitable **data source** that can provide CIFAR-10 data for our object detection experiments.
@@ -100,9 +103,9 @@ other resources, and it is supported out of the box by **TAP**. More on **Servic
 The results should include 1 **greenplum** database and 1 **postgres** database. Click on each link and explore each asset.
 
 Notice the following:
-*The **greenplum** database has been tagged as a **training** asset. This is the dataset that will be used for **training**.
-*The **postgres** database has been tagged as an **inference** asset. This is the dataset that will be used for **inference**.
-*The Greenplum instance is tagged as a **google-cloud** asset, while the **postgres** instance is tagged as an **aws** asset.
+* The **greenplum** database has been tagged as a **training** asset. This is the dataset that will be used for **training**.
+* The **postgres** database has been tagged as an **inference** asset. This is the dataset that will be used for **inference**.
+* The Greenplum instance is tagged as a **google-cloud** asset, while the **postgres** instance is tagged as an **aws** asset.
 Both assets will be used in a **multi-cloud** ML pipeline.
 
 #### Launch Pipeline
@@ -179,7 +182,7 @@ url: https://argo-workflows.{{ ingress_domain }}
 
 The newly created experiment should also be visible in MlFlow:
 ```dashboard:open-url
-url: https://mlflow.{{ ingress_domain }}
+url: http://mlflow.{{ ingress_domain }}
 ```
 
 #### Launch In-Database Pipeline
@@ -235,12 +238,12 @@ Launch pgAdmin by retrieving the URL from the **tanzu cli** (login credentials: 
 tanzu apps workload get pgadmin-tap --namespace pgadmin
 ```
 
-Let's add a new Server connection for the Greenplum instance by creating a server import file:
+Let's view the credentials for the **training** instance using the ServiceBindings **servicebinding:type:greenplum** and **servicebinding:provider:vmware**:
 ```execute
 export PGADMIN_TMP_POD=$(kubectl get pod -l "app.kubernetes.io/part-of=pgadmin-tap,app.kubernetes.io/component=run" -oname -n pgadmin);
 export PGADMIN_POD=$(echo ${PGADMIN_TMP_POD} | cut -b 5-);
 kubectl cp ~/other/resources/pgadmin/show_server_import_file.sh pgadmin/$PGADMIN_POD:/tmp;
-kubectl exec -it $PGADMIN_POD -n pgadmin -- sh -c "SRV_GRP_SUFFIX=tanzu-mlops-w03-s001 /tmp/show_server_import_file.sh;"$(SRV_GRP_SUFFIX={{session_namespace}});
+kubectl exec -it $PGADMIN_POD -n pgadmin -- sh -c "SRV_GRP_SUFFIX={{session_namespace}} /tmp/show_server_import_file.sh;"$(SRV_GRP_SUFFIX={{session_namespace}});
 ```
 
 Observe that we were able to fetch the necessary DB credentials by using a ServiceBindings compatible library
@@ -262,11 +265,22 @@ git clone https://${DATA_E2E_GIT_USER}:${DATA_E2E_GIT_TOKEN}@github.com/${DATA_E
 
 Let's view the PL/Python code:
 ```editor:open-file
-file: ~/other/resources/plpython/sql/deploy_db_training.sql
+file: ~/other/resources/plpython/sql/deploy_db_training.sql"
+text: "--liquibase"
+after: 2
 ```
 
+Notice the Liquibase **changeset** annotation, which will be used by our data versioning tool 
+to log this script as a database change that can be tracked, versioned and rolled back if necessary.
 
-Let's view the manifest for our pipeline:
+
+Let's view the manifest for our pipeline.
+The order of execution is as follows:
+* **deploy-training** steps deploy the training model code (**Greenplum** instance).
+* **run-training** steps execute the tasks to build and train the ML model (**Greenplum** instance).
+* **deploy-inference** steps deploy the ML model to the inference cluster (**Postgres** instance).
+
+First, we view the training steps:
 ```editor:select-matching-text
 file: ~/other/resources/argo-workflows/pipeline-greenplum.yaml
 text: "name: upload-dataset"
@@ -277,7 +291,7 @@ We can see that the workflow comprises of *4* steps -
 **upload_dataset**, **train-model**, **evaluate-model** and **promote-model-to-staging** -
 with a set of **parameters** for each step.
 
-In addition, we see that there are a few other steps:
+Next, we view the steps that will deploy the **training** function:
 ```editor:select-matching-text
 file: ~/other/resources/argo-workflows/pipeline-greenplum.yaml
 text: "name: deploy-training-code"
@@ -287,21 +301,14 @@ after: 37
 The **deploy-training** steps are responsible for deploying the Python code and PL/Python SQL script
 that will be used for **training**.
 
-The **deploy-inference** steps handle the same thing for **inference**:
+Next, we view the steps that will deploy the **inference** function:
 ```editor:select-matching-text
 file: ~/other/resources/argo-workflows/pipeline-greenplum.yaml
 text: "name: deploy-inference-db"
 after: 21
 ```
 
-Hence, the order of execution is as follows:
-* **deploy-training** steps deploy the training model code (**Greenplum** instance).
-* **run-training** steps execute the tasks to build and train the ML model (**Greenplum** instance).
-* **deploy-inference** steps deploy the ML model to the inference cluster (**Postgres** instance).
-
-Like before, we will use the lightweight **AppCR** resource to deploy and manage our pipeline.
-
-(<font color="red">NOTE:</font> Learn more about App CR here: <a href="https://carvel.dev/kapp-controller/docs/v0.38.0/app-overview/" target="_blank">Argo Workflows</a>)
+Next, we will use the lightweight **AppCR** resource to deploy and manage our pipeline.
 
 Let's view the manifest for our App CR:
 ```editor:open-file
@@ -316,9 +323,9 @@ Update the training parameters for this workflow (under **train_model** --> **pa
 file: ~/sample-ml-app/MLproject
 ```
 
-Commit to Git:
+Push to Git:
 ```execute
-cp ~/other/resources/appcr/pipeline_app_gp.yaml ~/sample-ml-app/pipeline_app.yaml && cp ~/other/resources/appcr/values_main.yaml ~/sample-ml-app/values.yaml && cp ~/other/resources/argo-workflows/pipeline.yaml ~/sample-ml-app/pipeline.yaml;
+cp ~/other/resources/appcr/pipeline_app_gp.yaml ~/sample-ml-app/pipeline_app.yaml && cp ~/other/resources/appcr/values_gp.yaml ~/sample-ml-app/values.yaml && cp ~/other/resources/argo-workflows/pipeline-greenplum.yaml ~/sample-ml-app/pipeline.yaml;
 cd ~/sample-ml-app; git config --global user.email 'eduk8s@example.com'; git config --global user.name 'Educates'; git add .; git commit -m 'New commit'; git push origin gp-main-{{session_namespace}}; cd -; kapp deploy -a image-procesor-pipeline-gp-{{session_namespace}} -f ~/sample-ml-app/pipeline_app.yaml --logs -y  -n{{session_namespace}}
 ```
 
