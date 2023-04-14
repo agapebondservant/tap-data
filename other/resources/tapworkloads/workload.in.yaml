@@ -5,6 +5,7 @@ metadata:
   name: image-processor-${SESSION_NAMESPACE}
   labels:
     apps.tanzu.vmware.com/workload-type: web
+    apis.apps.tanzu.vmware.com/register-api: "true"
     app.kubernetes.io/part-of: image-processor-${SESSION_NAMESPACE}
   annotations:
     autoscaling.knative.dev/minScale: "1"

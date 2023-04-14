@@ -421,7 +421,7 @@ url: {{ ingress_protocol }}://tap-gui.{{ DATA_E2E_BASE_URL }}/api-docs
 
 The rendered view should be similar to this interface:
 ```dashboard:open-url
-url: {{ ingress_protocol }}://image-processor-api.{{ DATA_E2E_BASE_URL }}/docs
+url: {{ ingress_protocol }}://image-processor-api.default.{{ DATA_E2E_BASE_URL }}/docs
 ```
 
 Try uploading the images from earlier to test out the API.
