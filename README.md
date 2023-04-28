@@ -28,16 +28,17 @@ Pre-requisites: A Kubernetes cluster with TAP installed - see [Install TAP](#tap
 5. [Install Wavefront](#wavefront)
 6. [Install Datadog](#datadog)
 7. [Install ArgoCD](#argocd)
-8. [Install OperatorUI](#operatorui)
-9. [Pre-deploy Greenplum and Spring Cloud Data Flow](#predeploys)
-10. [Install Kubeflow Pipelines](#kubeflowpipelines)
-11. [Deploy Argo Workflows](#argoworkflows)
-12. [Build secondary cluster (for multi-site demo)](#multisite)
-13. [Install TAP](#tap-install)
-14. [Deploy Tanzu Data Workshops](#buildanddeploy)
-15. [Deploy Single Workshop to Pre-Existing LearningCenter Portal](#buildsingle)
-16. [Create Carvel Packages for Dependencies](#carvelpackages)
-17. [Other: How-tos/General Info (not needed for setup)](#other)
+8. [Install Gemfire](#gemfirepredeploy)
+9. [Install OperatorUI](#operatorui)
+10. [Pre-deploy Greenplum and Spring Cloud Data Flow](#predeploys)
+11. [Install Kubeflow Pipelines](#kubeflowpipelines)
+12. [Deploy Argo Workflows](#argoworkflows)
+13. [Build secondary cluster (for multi-site demo)](#multisite)
+14. [Install TAP](#tap-install)
+15. [Deploy Tanzu Data Workshops](#buildanddeploy)
+16. [Deploy Single Workshop to Pre-Existing LearningCenter Portal](#buildsingle)
+17. [Create Carvel Packages for Dependencies](#carvelpackages)
+18. [Other: How-tos/General Info (not needed for setup)](#other)
 
 #### Kubernetes Cluster Prep<a name="pre-reqs"/>
 * Create .env file in root directory (use .env-sample as a template - do NOT check into Git)
@@ -288,7 +289,7 @@ helm repo update
 #helm install prometheus bitnami/kube-prometheus --namespace monitoring-tools
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm install prometheus prometheus-community/kube-prometheus-stack --create-namespace --namespace=monitoring-tools \
---set prometheus.service.port=8000 --set prometheus.service.type=ClusterIP \
+--set prometheus.service.port=8000 --set prometheus.service.type=LoadBalancer \
 --set grafana.enabled=false,alertmanager.enabled=false,nodeExporter.enabled=false \
 --set prometheus.prometheusSpec.podMonitorSelectorNilUsesHelmValues=false \
 --set prometheus.prometheusSpec.serviceMonitorSelectorNilUsesHelmValues=false \
@@ -336,6 +337,18 @@ helm install datadog -f other/resources/datadog/data-dog.yaml \
 ```
 kubectl create namespace argocd
 kubectl apply -n argocd -f resources/argocd.yaml
+```
+
+#### Install Gemfire <a name="gemfirepredeploy"/>
+* Install Gemfire:
+```
+source .env
+export GEMFIRE_NAMESPACE_NM=gemfire-system
+export GEMFIRE_VER=2.2.0
+kubectl create ns $GEMFIRE_NAMESPACE_NM || true
+kubectl create secret docker-registry image-pull-secret --namespace=gemfire-system --docker-server=registry.pivotal.io --docker-username='{{ DATA_E2E_PIVOTAL_REGISTRY_USERNAME }}' --docker-password='{{ DATA_E2E_PIVOTAL_REGISTRY_PASSWORD }}' --dry-run -o yaml | kubectl apply -f -
+helm install  gemfire-crd oci://registry.tanzu.vmware.com/tanzu-gemfire-for-kubernetes/gemfire-crd --version $GEMFIRE_VER --namespace $GEMFIRE_NAMESPACE_NM --set operatorReleaseName=gemfire-operator
+helm install gemfire-operator oci://registry.tanzu.vmware.com/tanzu-gemfire-for-kubernetes/gemfire-operator --version $GEMFIRE_VER --namespace $GEMFIRE_NAMESPACE_NM
 ```
 
 #### Install Operator UI <a name="operatorui"/>
@@ -523,6 +536,7 @@ export TAP_VERSION=1.5.0-rc.15 #1.3.4
 export INSTALL_REGISTRY_HOSTNAME=index.docker.io #https://index.docker.io/v1/ # index.docker.io
 imgpkg copy -b registry.tanzu.vmware.com/tanzu-application-platform/tap-packages:${TAP_VERSION} --to-repo ${INSTALL_REGISTRY_HOSTNAME}/${DATA_E2E_REGISTRY_USERNAME}/tap-packages
 imgpkg copy -b registry.tanzu.vmware.com/p-rabbitmq-for-kubernetes/tanzu-rabbitmq-package-repo:${DATA_E2E_RABBIT_OPERATOR_VERSION} --to-repo ${INSTALL_REGISTRY_HOSTNAME}/oawofolu/vmware-tanzu-rabbitmq
+imgpkg copy -b registry.tanzu.vmware.com/tanzu-gemfire-for-kubernetes/gemfire-for-kubernetes-carvel-bundle:${DATA_E2E_GEMFIRE_OPERATOR_VERSION} --to-repo ${INSTALL_REGISTRY_HOSTNAME}/oawofolu/gemfire-operator
 ```
 
 #### Install TAP
