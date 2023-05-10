@@ -18,4 +18,4 @@ resources:
 #!- resources/workshop-operatorui.yaml
 - resources/training-portal.yaml
 - resources/system-profile.yaml
-- resources/workshop-gemfire-wan-replication.yaml
+#!- resources/workshop-gemfire-wan-replication.yaml
