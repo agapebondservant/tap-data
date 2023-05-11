@@ -26,7 +26,7 @@ file: ~/other/resources/rabbitmq/rabbitmq-operator-rbac.yaml
 
 Let's deploy it:
 ```execute
-clear && kubectl create ns rabbitmq-system --dry-run -o yaml | kubectl apply -f - && kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-operator-rbac.yaml -n rabbitmq-system && kubectl create clusterrolebinding tanzu-rabbitmq-crd-install-binding --clusterrole=tanzu-rabbitmq-crd-install --serviceaccount=rabbitmq-system:default -n rabbitmq-system --dry-run -o yaml | kubectl apply -n rabbitmq-system -f - 
+clear && kubectl proxy && kubectl get namespace rabbitmq-system -o json |jq '.spec = {"finalizers":[]}' >temp.json && curl -k -H "Content-Type: application/json" -X PUT --data-binary @temp.json 127.0.0.1:8001/api/v1/namespaces/rabbitmq-system/finalize && kubectl delete ns rabbitmq-system && kubectl create ns rabbitmq-system --dry-run -o yaml | kubectl apply -f - && kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-operator-rbac.yaml -n rabbitmq-system && kubectl create clusterrolebinding tanzu-rabbitmq-crd-install-binding --clusterrole=tanzu-rabbitmq-crd-install --serviceaccount=rabbitmq-system:default -n rabbitmq-system --dry-run -o yaml | kubectl apply -n rabbitmq-system -f - 
 ```
 
 We will also need to create a Secret for pulling from the **Tanzu RabbitMQ** package's container registry,
@@ -66,7 +66,7 @@ file: ~/other/resources/rabbitmq/rabbitmq-operator-packageinstall.yaml
 
 Let's install the **Tanzu RabbitMQ** operator by deploying the **Package Install**:
 ```execute
-export RABBIT_KAPP_INST=$(kubectl get bindings.rabbitmq.com -ojson | jq '.metadata.labels["kapp.k14s.io/app"]' | tr -d '"'); kapp delete -a tanzu-rabbitmq -y -nrabbitmq-system; kubectl get validatingwebhookconfiguration -l kapp.k14s.io/app=$RABBIT_KAPP_INST -o name | xargs -r kubectl delete; kubectl get clusterrolebinding -l kapp.k14s.io/app=$RABBIT_KAPP_INST -o name | xargs -r kubectl delete; kubectl get clusterrole -l kapp.k14s.io/app=$RABBIT_KAPP_INST -o name | xargs -r kubectl delete; for n in $(kubectl get crd -o name | grep 'rabbitmq.com'); do kubectl get $n -o name | xargs -r kubectl delete; done; kapp deploy -a tanzu-rabbitmq -f  ~/other/resources/rabbitmq/rabbitmq-operator-packageinstall.yaml -nrabbitmq-system;
+export RABBIT_KAPP_INST=$(kubectl get bindings.rabbitmq.com -ojson | jq '.metadata.labels["kapp.k14s.io/app"]' | tr -d '"'); kapp delete -a tanzu-rabbitmq -y -nrabbitmq-system; kubectl get validatingwebhookconfiguration -l kapp.k14s.io/app=$RABBIT_KAPP_INST -o name | xargs -r kubectl delete; kubectl get clusterrolebinding -l kapp.k14s.io/app=$RABBIT_KAPP_INST -o name | xargs -r kubectl delete; kubectl get clusterrole -l kapp.k14s.io/app=$RABBIT_KAPP_INST -o name | xargs -r kubectl delete; for n in $(kubectl get crd -o name | grep 'rabbitmq.com'); do kubectl get $n -o name | xargs -r kubectl delete; done; kapp deploy -a tanzu-rabbitmq -f  ~/other/resources/rabbitmq/rabbitmq-operator-packageinstall.yaml -y -nrabbitmq-system;
 ```
 
 Verify that the install was successful. <font color="red">NOTE: Hit **Ctrl-C** to exit once it shows "Reconcile succeeded":</font>
