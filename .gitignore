@@ -307,3 +307,5 @@ other/resources/appcr/values_gp.yaml
 resources/tap-values-1.5.yaml
 ./resources/tap-values-1.5.yaml
 other/resources/argo-workflows/pipeline-greenplum.yaml
+./other/resources/argo-workflows/pipeline-greenplum.yaml
+/Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/argo-workflows/pipeline-greenplum.yaml
