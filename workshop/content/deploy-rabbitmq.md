@@ -66,7 +66,7 @@ file: ~/other/resources/rabbitmq/rabbitmq-operator-packageinstall.yaml
 
 Let's install the **Tanzu RabbitMQ** operator by deploying the **Package Install**:
 ```execute
-export RABBIT_KAPP_INST=$(kubectl get bindings.rabbitmq.com -ojson | jq '.metadata.labels["kapp.k14s.io/app"]' | tr -d '"'); kapp delete -a tanzu-rabbitmq -y -nrabbitmq-system; kubectl get validatingwebhookconfiguration -l kapp.k14s.io/app=$RABBIT_KAPP_INST -o name | xargs -r kubectl delete; kubectl get clusterrolebinding -l kapp.k14s.io/app=$RABBIT_KAPP_INST -o name | xargs -r kubectl delete; kubectl get clusterrole -l kapp.k14s.io/app=$RABBIT_KAPP_INST -o name | xargs -r kubectl delete; for n in $(kubectl get crd -o name | grep 'rabbitmq.com'); do kubectl get $n -o name | xargs -r kubectl delete; done; kapp deploy -a tanzu-rabbitmq -f  ~/other/resources/rabbitmq/rabbitmq-operator-packageinstall.yaml -y -nrabbitmq-system;
+export RABBIT_KAPP_INST=$(kubectl get clusterrole rabbitmq-cluster-operator-role -ojson | jq '.metadata.labels["kapp.k14s.io/app"]' | tr -d '"'); kapp delete -a tanzu-rabbitmq -y -nrabbitmq-system; kubectl get validatingwebhookconfiguration -l kapp.k14s.io/app=$RABBIT_KAPP_INST -o name | xargs -r kubectl delete; kubectl get clusterrolebinding -l kapp.k14s.io/app=$RABBIT_KAPP_INST -o name | xargs -r kubectl delete; kubectl get clusterrole -l kapp.k14s.io/app=$RABBIT_KAPP_INST -o name | xargs -r kubectl delete; for n in $(kubectl get crd -o name | grep 'rabbitmq.tanzu\|rabbitmq.com'); do kubectl get $n -o name | xargs -r kubectl delete; done; kapp deploy -a tanzu-rabbitmq -f  ~/other/resources/rabbitmq/rabbitmq-operator-packageinstall.yaml -y -nrabbitmq-system;
 ```
 
 Verify that the install was successful. <font color="red">NOTE: Hit **Ctrl-C** to exit once it shows "Reconcile succeeded":</font>
@@ -81,7 +81,7 @@ which provides a native approach for managing RabbitMQ clusters. View a list of 
 export PATH="${PATH}:${HOME}/.krew/bin" && kubectl krew install rabbitmq  && kubectl rabbitmq help
 ```
 
-Next, let's deploy a Tanzu RabbitMQ **instance**. Here is the manifest:
+Next, let's deploy a RabbitMQ **instance**. Here is the manifest:
 ```editor:open-file
 file: ~/other/resources/rabbitmq/rabbitmq-cluster.yaml
 ```
