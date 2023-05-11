@@ -26,7 +26,7 @@ file: ~/other/resources/rabbitmq/rabbitmq-operator-rbac.yaml
 
 Let's deploy it:
 ```execute
-(clear &&  kubectl delete ns rabbitmq-system &; kubectl proxy & ) ; kubectl get namespace rabbitmq-system -o json |jq '.spec = {"finalizers":[]}' >temp.json && curl -k -H "Content-Type: application/json" -X PUT --data-binary @temp.json 127.0.0.1:8001/api/v1/namespaces/rabbitmq-system/finalize; kubectl create ns rabbitmq-system --dry-run -o yaml | kubectl apply -f - && kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-operator-rbac.yaml -n rabbitmq-system && kubectl create clusterrolebinding tanzu-rabbitmq-crd-install-binding --clusterrole=tanzu-rabbitmq-crd-install --serviceaccount=rabbitmq-system:default -n rabbitmq-system --dry-run -o yaml | kubectl apply -n rabbitmq-system -f - 
+(clear &&  kubectl delete ns rabbitmq-system & ) ; (kubectl proxy & ) ; kubectl get namespace rabbitmq-system -o json |jq '.spec = {"finalizers":[]}' >temp.json && curl -k -H "Content-Type: application/json" -X PUT --data-binary @temp.json 127.0.0.1:8001/api/v1/namespaces/rabbitmq-system/finalize; kubectl create ns rabbitmq-system --dry-run -o yaml | kubectl apply -f - && kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-operator-rbac.yaml -n rabbitmq-system && kubectl create clusterrolebinding tanzu-rabbitmq-crd-install-binding --clusterrole=tanzu-rabbitmq-crd-install --serviceaccount=rabbitmq-system:default -n rabbitmq-system --dry-run -o yaml | kubectl apply -n rabbitmq-system -f - 
 ```
 
 We will also need to create a Secret for pulling from the **Tanzu RabbitMQ** package's container registry,
