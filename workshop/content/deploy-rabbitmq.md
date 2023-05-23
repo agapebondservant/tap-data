@@ -167,7 +167,7 @@ Exit the shell:
 exit
 ```
 
-Now hit **Esc** to return to the pod view, login to the RabbitMQ management UI with credentials **demo/CHANGEME** - observe that the user has full access to the default **/** virtual host.
+Now hit **Esc** to return to the pod view. On the RabbitMQ management UI, logout and log back in with credentials **demo/CHANGEME** - observe that the user has full access to the default **/** virtual host.
 
 #### BUILT-IN CLUSTERING
 A cluster is a logical grouping of resources whereby the state and data of a RabbitMQ environment is distributed across multiple nodes. By default, RabbitMQ deploys resources - virtual hosts, exchanges, users, user permissions, non-replicated queues - to a single node. To convert it to a multi-node system, new nodes need to be explicitly added to the topology. This can be done declaratively via config file or plugins, or manually via **rabbitmqctl** cli. 
@@ -230,12 +230,40 @@ View the messages (and the newly created queue) in the Grafana dashboard:
 url: {{ ingress_protocol }}://grafana.{{ ingress_domain }}
 ```
 
+The new queue **demo.seed.queue** is a **quorum queue**. 
+**Quorum queues** are a modern type of replicated queue in RabbitMQ, 
+supporting consensus-based replication with higher throughput, stronger data safety guarantees, and more stable performance.
+
+<font color="red">Learn more about quorum queues <a href="https://www.rabbitmq.com/quorum-queues.html#motivation" target="_blank">here</a>.</font>
+
+In addition, RabbitMQ now supports **Streams**, append-only logs which are persistent, durable, and possess non-destructive semantics.
+
+First, we will enable the **stream** plugin - view the newly updated manifest:
+```editor:open-file
+file: ~/other/resources/rabbitmq/rabbitmq-cluster-with-streaming-enabled.yaml
+```
+
+Enable the **stream** plugin:
+```execute
+kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-with-streaming-enabled.yaml -n {{ session_namespace }}
+```
+
+Now, we can publish some messages to a new stream using **StreamPerfTest**, RabbitMQ's throughput tool for streams:
+```execute
+kubectl rabbitmq stream-perf-test rabbitcluster1  --streams demo.streaming --rate 100
+```
+
+View the messages (and the newly created queue) in the Grafana dashboard:
+```dashboard:open-url
+url: {{ ingress_protocol }}://grafana.{{ ingress_domain }}
+```
+
 We can also view the messages in **Wavefront**:
 ```dashboard:open-url
 url: {{ DATA_E2E_WAVEFRONT_RABBIT_DASHBOARD_URL }}
 ```
 
-<font color="red">(<b>NOTE</b>: Delete the PerfTest job before proceeding:</font>
+<font color="red">(<b>NOTE</b>: Delete the PerfTest jobs before proceeding:)</font>
 ```execute
-kubectl delete job perf-test -n {{ session_namespace }}
+kubectl delete job perf-test -n {{ session_namespace }} 2>/dev/null; kubectl delete job stream-perf-test -n {{ session_namespace }} 2>/dev/null; 
 ```

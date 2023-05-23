@@ -3,7 +3,7 @@ kind: RabbitmqCluster
 metadata:
   name: rabbitcluster-uncompressed
 spec:
-  image: rabbitmq:3.9-management
+  image: rabbitmq:3.10-management
   replicas: 3
   service:
     type: LoadBalancer

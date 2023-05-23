@@ -4,17 +4,6 @@
 
 Now we will cover the following:
 
-#### Deploying via the Operator UI
-With **Tanzu RabbitMQ**, brokers/clusters can be deployed by using the **Tanzu Operator UI**. First, refresh the UI settings to ensure that it is in sync with the latest Operator changes:
-```execute
-sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/operator-ui/tanzu-operator-ui-app.yaml && sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/operator-ui/tanzu-operator-ui-httpproxy.yaml && ( kubectl delete configmap kconfig || true ) && kubectl create configmap kconfig --from-file  ~/.kube/config && kubectl apply -f ~/other/resources/operator-ui/tanzu-operator-ui-app.yaml && cp ~/other/resources/operator-ui/cli/* /home/eduk8s/bin/ && kubectl apply -f  ~/other/resources/operator-ui/tanzu-operator-ui-httpproxy.yaml && ~/other/resources/operator-ui/crd_annotations/apply-annotations
-```
-
-Now access the Operator UI:
-```dashboard:open-url
-url: http://operator-ui-{{ session_namespace }}.{{ ingress_domain }}
-```
-
 #### Inter-node Data Compression
 **Tanzu RabbitMQ** provides out-of-the-box compression for traffic between nodes, as well as client-to-node traffic.
 This feature is enabled by default with **Tanzu RabbitMQ**.

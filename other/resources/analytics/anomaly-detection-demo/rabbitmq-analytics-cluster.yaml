@@ -5,7 +5,7 @@ kind: RabbitmqCluster
 metadata:
   name: rabbitanalytics4
 spec:
-  image: rabbitmq:3.9-management
+  image: rabbitmq:3.10-management
   replicas: 3
   service:
     type: LoadBalancer
