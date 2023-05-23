@@ -112,7 +112,7 @@ kubectl apply -f resources/metrics-server.yaml; watch kubectl get deployment met
 ```
 kubectl create ns cert-manager
 kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.5.3/cert-manager.yaml # For TAP 1.3 and below
-kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.11.0/cert-manager.yaml # For TAP 1.5
+kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.11.0/cert-manager.yaml # For TAP 1.5+
 ```
 
 * Deploy CERT-MANAGER-ISSUER  (self-signed), CERTIFICATE-SIGNING-REQUEST, CERT-MANAGER-ISSUER (CA):
@@ -184,9 +184,10 @@ kubectl create ns minio
 kubectl create secret generic tls-ssl-minio --from-file=private.key --from-file=public.crt --namespace minio
 helm install --set resources.requests.memory=1.5Gi,tls.enabled=true,tls.certSecret=tls-ssl-minio --namespace minio minio minio-legacy/minio
 #helm install --set resources.requests.memory=1.5Gi,tls.enabled=true,tls.publicCrt=tls.crt,tls.privateKey=tls.key,tls.certSecret=tls-ssl-minio --namespace minio minio minio-legacy/minio
-export MINIO_ACCESS_KEY=$(kubectl get secret minio -o jsonpath="{.data.accesskey}" -n minio| base64 --decode)
-export MINIO_SECRET_KEY=$(kubectl get secret minio -o jsonpath="{.data.secretkey}" -n minio| base64 --decode)
+export DATA_E2E_MINIO_TLS_ACCESS_KEY=$(kubectl get secret minio -o jsonpath="{.data.accesskey}" -n minio| base64 --decode)
+export DATA_E2E_MINIO_TLS_SECRET_KEY=$(kubectl get secret minio -o jsonpath="{.data.secretkey}" -n minio| base64 --decode)
 export MINIO_POD_NAME=$(kubectl get pods --namespace minio -l "release=minio" -o jsonpath="{.items[0].metadata.name}")
+echo $DATA_E2E_MINIO_TLS_ACCESS_KEY $DATA_E2E_MINIO_TLS_SECRET_KEY # update .env with the values of DATA_E2E_MINIO_TLS_ACCESS_KEY, DATA_E2E_MINIO_TLS_SECRET_KEY
 source .env
 export MINIO_SERVER_URL=$DATA_E2E_MINIO_URL
 kubectl apply -f resources/minio-http-proxy.yaml
@@ -302,6 +303,7 @@ Grafana:
 ```
 helm install grafana bitnami/grafana --namespace monitoring-tools
 export DATA_E2E_GRAFANA_PASSWORD=$(kubectl get secret grafana-admin --namespace monitoring-tools -o jsonpath="{.data.GF_SECURITY_ADMIN_PASSWORD}" | base64 --decode)
+echo $DATA_E2E_GRAFANA_PASSWORD # update .env file with value of DATA_E2E_GRAFANA_PASSWORD
 export GRAFANA_POD_NAME=$(kubectl get pods --namespace monitoring-tools -l "app.kubernetes.io/name=grafana,app.kubernetes.io/instance=grafana" -o jsonpath="{.items[0].metadata.name}")
 # kubectl expose pod $GRAFANA_POD_NAME --port=80 --target-port=3000 --name=grafana --namespace monitoring-tools
 kubectl apply -f resources/grafana-httpproxy.yaml 
@@ -561,7 +563,7 @@ tanzu package available list --namespace tap-install
 tanzu package available list tap.tanzu.vmware.com --namespace tap-install
 tanzu package available get tap.tanzu.vmware.com/$TAP_VERSION --values-schema --namespace tap-install
 export TBS_VERSION=1.9.0 # if installing TAP 1.3
-export TBS_VERSION=1.10.8 # if installing TAP 1.5
+export TBS_VERSION=1.10.8 # if installing TAP 1.5+
 imgpkg copy -b registry.tanzu.vmware.com/tanzu-application-platform/full-tbs-deps-package-repo:${TBS_VERSION} --to-repo index.docker.io/oawofolu/tbs-full-deps
 
 #If installing TAP 1.2:
@@ -586,9 +588,6 @@ tanzu package installed update tap -p tap.tanzu.vmware.com --values-file resourc
 
 #If installing TAP 1.3:
 tanzu package installed update tap -p tap.tanzu.vmware.com --values-file resources/tap-values-1.3.yaml -n tap-install
-
-#If installing TAP 1.5:
-tanzu package installed update tap -p tap.tanzu.vmware.com --values-file resources/tap-values-1.5.yaml -n tap-install
 ```
 
 To check on a package's install status:
@@ -643,9 +642,9 @@ tanzu acc create in-db-analytics-acc --git-repository https://github.com/agapebo
 Install Auto API Registration:
 ```
 tanzu package available list apis.apps.tanzu.vmware.com --namespace tap-install #retrieve available version
-API_REG_VERSION=0.1.2
+export API_REG_VERSION=0.3.0
 tanzu package install api-auto-registration \
---package-name apis.apps.tanzu.vmware.com \
+-p apis.apps.tanzu.vmware.com \
 --namespace tap-install \
 --version $API_REG_VERSION
 ```
