@@ -34,7 +34,7 @@ url: {{ DATA_E2E_WAVEFRONT_RABBIT_DASHBOARD_URL }}
 
 View the Gemfire Pulse console: (login: admin/admin)
 ```dashboard:open-url
-url: http://gfanomaly-server.{{ ingress_domain }}
+url: http://gfanomaly-locator.{{ ingress_domain }}/pulse
 ```
 
 (Optional) View the Wavefront Dashboard for the Gemfire cluster:
@@ -74,15 +74,15 @@ file: ~/other/resources/rabbitmq/rabbitmq-cluster.yaml
 
 Demonstrate Rabbit cluster deployment:
 ```execute
-kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-monitor.yaml -nmonitoring-tools; kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-operator-monitor.yaml -nmonitoring-tools; kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster.yaml -n anomaly-ns
+kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-monitor.yaml -nmonitoring-tools; kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-operator-monitor.yaml -nmonitoring-tools; kubectl apply -f ~/other/resources/rabbitmq/rabbitmq-cluster-data-demo.yaml -n anomaly-ns
 ```
 
 View Gemfire cluster manifest to deploy:
 ```editor:open-file
-file: ~/other/resources/gemfire/gemfire-cluster-with-devapi.yaml
+file: ~/other/resources/gemfire/gemfire-cluster-data-demo.yaml
 ```
 
 Demonstrate Gemfire cluster deployment:
 ```execute
-kubectl apply -f ~/other/resources/gemfire/gemfire-cluster-with-devapi.yaml -n anomaly-ns
+kubectl apply -f ~/other/resources/gemfire/gemfire-cluster-data-demo.yaml -n anomaly-ns
 ```
