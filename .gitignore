@@ -312,3 +312,7 @@ other/resources/argo-workflows/pipeline-greenplum.yaml
 exercises/jupyter/data/
 resources/tanzu-aws-workshop.yaml
 exercises/jupyter/.ipynb_checkpoints/sample-checkpoint.ipynb
+./other/resources/wavefront/wavefront-crd.yaml
+./other/resources/wavefront/wavefront-configmap.yaml
+other/resources/wavefront/wavefront-configmap.yaml
+other/resources/wavefront/wavefront-crd.yaml

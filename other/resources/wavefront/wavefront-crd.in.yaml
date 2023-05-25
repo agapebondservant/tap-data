@@ -1,0 +1,16 @@
+apiVersion: wavefront.com/v1alpha1
+kind: Wavefront
+metadata:
+  name: wavefront
+  namespace: observability-system
+spec:
+  clusterName: ${DATA_E2E_WAVEFRONT_K8S_CLUSTER_NAME}
+  wavefrontUrl: ${DATA_E2E_WAVEFRONT_URL}
+  dataExport:
+    wavefrontProxy:
+      enable: true
+  dataCollection:
+    logging:
+      enable: true
+    metrics:
+      enable: true

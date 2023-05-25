@@ -83,6 +83,8 @@ modules:
       name: Before You Begin
     mlops-demo-overview:
       name: Demonstration
+    data-rapid-demo:
+      name: Demonstration
 config:
     vars:
     - name: DATA_E2E_REGISTRY_USERNAME

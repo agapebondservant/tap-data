@@ -320,8 +320,10 @@ kubectl apply -f resources/prometheus-proxy/proxyhelm/prometheus-proxy-http-prox
 #### Install Wavefront <a name="wavefront"/>
 ```
 source </path/to/env/file>
-helm repo add wavefront https://wavefronthq.github.io/helm/
-helm repo update
+kubectl apply -f https://raw.githubusercontent.com/wavefrontHQ/observability-for-kubernetes/main/deploy/wavefront-operator.yaml
+kubectl create -n observability-system secret generic wavefront-secret --from-literal token=${DATA_E2E_WAVEFRONT_ACCESS_TOKEN}
+kubectl apply -f other/resources/wavefront/wavefront-crd.yaml
+kubectl apply -f other/resources/wavefront/wavefront-configmap.yaml
 ```
 
 

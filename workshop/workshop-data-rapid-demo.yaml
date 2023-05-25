@@ -1,0 +1,5 @@
+name: MLOps with Argo Workflows, MLFlow and TAP
+
+modules:
+    activate:
+    - data-rapid-demo

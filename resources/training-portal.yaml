@@ -53,6 +53,10 @@ spec:
     reserved: 1
     expires: 2h
     orphaned: 5m
+  - name: data-rapid-demo
+    capacity: 3
+    expires: 120m
+    orphaned: 5m
  #!- name: data-rabbitmq-realtime-analytics
  #!   capacity: 3
  #!   reserved: 1
