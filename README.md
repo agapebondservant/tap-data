@@ -623,6 +623,19 @@ kubectl apply -f resources/training-portal-sample.yaml
 watch kubectl get learningcenter-training
 ```
 
+Deploy Bitnami Services - first deploy pre-requisities (Crossplane and Service Toolkit packages:
+```
+tanzu package available list -n tap-install crossplane.tanzu.vmware.com
+tanzu package install crossplane -n tap-install -p crossplane.tanzu.vmware.com -v 0.1.1 # or version  number genrated above)
+tanzu package available list -n tap-install services-toolkit.tanzu.vmware.com
+tanzu package install services-toolkit -n tap-install -p services-toolkit.tanzu.vmware.com -v 0.10.1 # or version number generated above
+```
+```
+tanzu package available list -n tap-install bitnami.services.tanzu.vmware.com
+BITNAMI_VERSION_NUMBER=0.1.0 # or existing bitnami package
+tanzu package install bitnami-services -n tap-install -p bitnami.services.tanzu.vmware.com -v $BITNAMI_VERSION_NUMBER
+```
+
 Publish Accelerators:
 ```
 tanzu plugin install --local <path-to-tanzu-cli> all
