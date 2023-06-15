@@ -38,3 +38,4 @@ filelock==3.9.0
 pyarrow<7.0.0
 hickle
 download_and_extract
+altair==4.0
