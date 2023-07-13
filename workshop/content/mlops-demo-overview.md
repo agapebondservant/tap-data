@@ -15,8 +15,8 @@ Upload an image and observe that the app is waiting for the model to be availabl
 This requires a viable model to be promoted to the "Production" stage.
 
 To view the model registry, launch MLflow and click on the "Models" tab:
-```execute
-tanzu apps workload get mlflow-tap --namespace default
+```dashboard:open-url
+url: http://mlflow.{{ ingress_domain }}
 ```
 
 #### Launch Jupyter Notebook
