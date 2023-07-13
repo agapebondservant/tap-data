@@ -14,6 +14,11 @@ tanzu apps workload get image-processor --namespace default
 Upload an image and observe that the app is waiting for the model to be available.
 This requires a viable model to be promoted to the "Production" stage.
 
+To view the model registry, launch MLflow and click on the "Models" tab:
+```execute
+tanzu apps workload get mlflow-tap --namespace default
+```
+
 #### Launch Jupyter Notebook
 We will use TAP to discover the **tooling** that we will need for our development environment.
 
