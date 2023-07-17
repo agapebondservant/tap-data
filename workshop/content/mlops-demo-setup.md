@@ -15,7 +15,10 @@ EOF
 
 Run the following prep script as well:
 ```execute
-helm install kubeapps oci://registry-1.docker.io/bitnamicharts/kubeapps \
+helm repo add bitnami https://charts.bitnami.com/bitnami;
+helm repo update;
+
+helm install kubeapps bitnami/kubeapps \
 --set frontend.service.type=LoadBalancer \
 --set packaging.carvel.enabled=true \
 --namespace {{ session_namespace }} || true
