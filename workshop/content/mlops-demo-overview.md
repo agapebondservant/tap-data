@@ -27,6 +27,46 @@ Click on the Jupyter tab in the workshop (**jupyter** as the password), and show
 This is the Jupyter notebook that was used to create experiments for our training use case. 
 To migrate it to our own self-managed instance of Jupyterhub, we will self-provision Jupyterhub using **TAP**.
 
+#### Option A: Launch Jupyter Notebook via Kubeapps
+<font color="red"><b>In progress - skip to "Option B: Launch Jupyter Notebook via tanzu cli".</b></font><br/>
+**Kubeapps** provides a web-based GUI for deploying and managing applications to Kubernetes.
+Currently, **Kubeapps** supports applications that are packaged as **helm charts** or **Carvel packages**.
+(**Carvel packages** have the advantage of greater interoperability with a broad set of Kubernetes packaging formats 
+- including Helm - and sources, 
+and are automatically synced via Carvel's **kappcontroller**, which enables more declarative package management.)
+
+Here, we will show how to use it to deploy a JupyterHub Carvel package.
+
+Launch **Kubeapps** using the URL provided here:
+```execute
+export KUBEAPPS_SERVICE_IP=$(kubectl get svc --namespace {{session_namespace}} kubeapps --template "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}");
+echo "http://${KUBEAPPS_SERVICE_IP}"
+```
+
+Use the token generated below to login:
+```execute
+kubectl delete serviceaccount kubeappuser -n {{session_namespace}} || true; kubectl create -n {{session_namespace}} serviceaccount kubeappuser;
+kubectl create clusterrolebinding kubeappuserbinding --clusterrole=cluster-admin --serviceaccount={{session_namespace}}:kubeappuser;
+export KUBEAPPS_SERVICE_IP_TOKEN=kubectl create token kubeappuser -n {{session_namespace}}
+```
+
+In the top right, select the dropdown under **Current Context**, copy the text below to the **Namespace** dropdown, and click "Change Context":
+```execute
+echo {{session_namespace}}
+```
+
+Next, go to the **Catalog** tab, click **AI** checkbox (under "Categories" on the left), 
+click on "Jupyterhub on Tanzu",
+and click "Deploy". 
+The Visual Editor screen should show up: enter "jupyter-test" for "name", "default" for "Service Account", and
+change **base_domain** to the value below, then click "Deploy":
+```execute
+echo {{ ingress_domain }}
+```
+This should trigger deployment of the Jupyterhub app (view the pods below).
+
+
+#### Option B: Launch Jupyter Notebook via tanzu cli
 View the Jupyter accelerator in TAP GUI (search for **ml** first, just to demonstrate how accelerators can be used, then search for **jupyter**):
 ```dashboard:open-url
 url: {{ ingress_protocol }}://tap-gui.{{ ingress_domain }}/create
@@ -58,6 +98,8 @@ url: {{ ingress_protocol }}://jupyter-{{session_namespace}}.{{ ingress_domain }}
 ```
 
 #### Launch Catalog
+<font color="red"><b>NOTE: For a high-level demo, this section may be skipped as optional.</b></font><br/>
+
 In order to begin, we will need to discover a suitable **data source** that can provide CIFAR-10 data for our object detection experiments.
 This is a part of the **Discovery** phase.
 
@@ -98,20 +140,6 @@ The results should show that the **"data lake"** tag was applied to 1 Dataset; c
 Click on the asset that displays in the results (it should be a parquet file).
 It has been previously tagged in DataHub as a **Data Lake** asset. This data source contains the data that will be used for our experiments.
 Click on the "Properties" tab to view more detail.
-
-Next, in the **View** search bar towards the top (with the prompt text "Create a View"),
-enter **ServiceBinding Sources** in the Search Bar.
-These are the assets that have been previously tagged as **ServiceBinding** resources.
-**ServiceBindings** is a Kubernetes-standard specification for connecting apps with databases, API services and
-other resources, and it is supported out of the box by **TAP**. More on **ServiceBindings** will be explored later in the session.
-
-The results should include 1 **greenplum** database and 1 **postgres** database. Click on each link and explore each asset.
-
-Notice the following:
-* The **greenplum** database has been tagged as a **training** asset. This is the dataset that will be used for **training**.
-* The **postgres** database has been tagged as an **inference** asset. This is the dataset that will be used for **inference**.
-* The Greenplum instance is tagged as a **google-cloud** asset, while the **postgres** instance is tagged as an **aws** asset.
-Both assets will be used in a **multi-cloud** ML pipeline.
 
 #### Launch Pipeline
 View Argo Workflows in the TAP GUI - the Argo Workflows app should be visible:
@@ -219,6 +247,18 @@ url: {{ ingress_protocol }}://datahub-datahub.{{ DATA_E2E_BASE_URL }}
 Login (credentials: **datahub/datahub**), go to the Home Page (click on the top-left icon),
 click on the "Explore all" link and select **ServiceBinding Sources**
 in the **View** search bar towards the top (with the prompt text "Create a View").
+
+These are the assets that have been previously tagged as **ServiceBinding** resources.
+**ServiceBindings** is a Kubernetes-standard specification for connecting apps with databases, API services and
+other resources, and it is supported out of the box by **TAP**. More on **ServiceBindings** will be explored later in the session.
+
+The results should include 1 **greenplum** database and 1 **postgres** database. Click on each link and explore each asset.
+
+Notice the following:
+* The **greenplum** database has been tagged as a **training** asset. This is the dataset that will be used for **training**.
+* The **postgres** database has been tagged as an **inference** asset. This is the dataset that will be used for **inference**.
+* The Greenplum instance is tagged as a **google-cloud** asset, while the **postgres** instance is tagged as an **aws** asset.
+  Both assets will be used in a **multi-cloud** ML pipeline.
 
 For **training**: Click on the **dev** Greenplum database in the search results.
 This will provide our **training environment**.

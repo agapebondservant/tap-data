@@ -26,19 +26,20 @@ Pre-requisites: A Kubernetes cluster with TAP installed - see [Install TAP](#tap
 3. [Install Minio](#minio)
 4. [Install Prometheus and Grafana](#prometheusgrafana)
 5. [Install Wavefront](#wavefront)
-6. [Install Datadog](#datadog)
-7. [Install ArgoCD](#argocd)
-8. [Install Gemfire](#gemfirepredeploy)
-9. [Install OperatorUI](#operatorui)
-10. [Pre-deploy Greenplum and Spring Cloud Data Flow](#predeploys)
-11. [Install Kubeflow Pipelines](#kubeflowpipelines)
-12. [Deploy Argo Workflows](#argoworkflows)
-13. [Build secondary cluster (for multi-site demo)](#multisite)
-14. [Install TAP](#tap-install)
-15. [Deploy Tanzu Data Workshops](#buildanddeploy)
-16. [Deploy Single Workshop to Pre-Existing LearningCenter Portal](#buildsingle)
-17. [Create Carvel Packages for Dependencies](#carvelpackages)
-18. [Other: How-tos/General Info (not needed for setup)](#other)
+6. [Install Kubeapps](#kubeapps)
+7. [Install Datadog](#datadog)
+8. [Install ArgoCD](#argocd)
+9. [Install Gemfire](#gemfirepredeploy)
+10. [Install OperatorUI](#operatorui)
+11. [Pre-deploy Greenplum and Spring Cloud Data Flow](#predeploys)
+12. [Install Kubeflow Pipelines](#kubeflowpipelines)
+13. [Deploy Argo Workflows](#argoworkflows)
+14. [Build secondary cluster (for multi-site demo)](#multisite)
+15. [Install TAP](#tap-install)
+16. [Deploy Tanzu Data Workshops](#buildanddeploy)
+17. [Deploy Single Workshop to Pre-Existing LearningCenter Portal](#buildsingle)
+18. [Create Carvel Packages for Dependencies](#carvelpackages)
+19. [Other: How-tos/General Info (not needed for setup)](#other)
 
 #### Kubernetes Cluster Prep<a name="pre-reqs"/>
 * Create .env file in root directory (use .env-sample as a template - do NOT check into Git)
@@ -315,6 +316,36 @@ For Prometheus RSocket Proxy:
 ```
 kubectl apply -f resources/prometheus-proxy/proxyhelm/
 kubectl apply -f resources/prometheus-proxy/proxyhelm/prometheus-proxy-http-proxy.yaml
+```
+
+#### Install Kubeapps <a name="kubeapps"/>
+```
+helm install kubeapps oci://registry-1.docker.io/bitnamicharts/kubeapps \
+--set frontend.service.type=LoadBalancer \
+--set packaging.carvel.enabled=true \
+--namespace kubeapps \
+--create-namespace
+kubectl apply -f resources/kubeapps-httpproxy.yaml -nkubeapps
+```
+
+To get the Kubeapps Service URL (note: the URL may take several seconds to launch in a browser):
+```
+export KUBEAPPS_SERVICE_IP=$(kubectl get svc --namespace kubeapps kubeapps --template "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}")
+echo "http://${KUBEAPPS_SERVICE_IP}"
+```
+
+To create a new Kubeapps user *kubeappsuser* and its API token:
+```
+kubectl delete serviceaccount kubeappuser || true
+kubectl create -n default serviceaccount kubeappuser
+kubectl create clusterrolebinding kubeappuserbinding --clusterrole=cluster-admin --serviceaccount=default:kubeappuser
+kubectl create token kubeappuser
+```
+
+To uninstall:
+```
+helm uninstall kubeapps -n kubeapps
+kubectl delete ns kubeapps
 ```
 
 #### Install Wavefront <a name="wavefront"/>
@@ -662,6 +693,7 @@ tanzu package install api-auto-registration \
 -p apis.apps.tanzu.vmware.com \
 --namespace tap-install \
 --version $API_REG_VERSION
+--values-file resources/tap-api-values.yaml
 ```
 
 Verify that installation was successful:

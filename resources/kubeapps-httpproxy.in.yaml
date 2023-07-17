@@ -1,0 +1,21 @@
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: kubeapps-httpproxy
+  namespace: kubeapps
+spec:
+  routes:
+  - conditions:
+    - prefix: /
+    pathRewritePolicy:
+      replacePrefix:
+        - replacement: /
+    services:
+      - name: kubeapps-internal-kubeappsapis
+        port: 8080
+        protocol: h2c
+  - services:
+    - name: kubeapps
+      port: 80
+  virtualhost:
+    fqdn: kubeapps.${DATA_E2E_BASE_URL}

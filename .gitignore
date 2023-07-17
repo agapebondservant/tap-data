@@ -318,3 +318,5 @@ other/resources/wavefront/wavefront-configmap.yaml
 other/resources/wavefront/wavefront-crd.yaml
 /Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/wavefront/wavefront-crd.yaml
 /Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/wavefront/wavefront-configmap.yaml
+llm.py
+resources/kubeapps-httpproxy.yaml

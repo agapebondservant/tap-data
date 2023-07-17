@@ -13,6 +13,14 @@ container_repo_user: {{DATA_E2E_REGISTRY_USERNAME}}
 EOF
 ```
 
+Run the following prep script as well:
+```execute
+helm install kubeapps oci://registry-1.docker.io/bitnamicharts/kubeapps \
+--set frontend.service.type=LoadBalancer \
+--set packaging.carvel.enabled=true \
+--namespace {{ session_namespace }} || true
+```
+
 
 
 
