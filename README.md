@@ -330,7 +330,7 @@ kubectl apply -f resources/kubeapps-httpproxy.yaml -nkubeapps
 
 To get the Kubeapps Service URL (note: the URL may take several seconds to launch in a browser):
 ```
-export KUBEAPPS_SERVICE_IP=$(kubectl get svc --namespace kubeapps kubeapps --template "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}")
+export KUBEAPPS_SERVICE_IP=$(kubectl get svc --namespace {{session_namespace}} kubeapps -o jsonpath="{.status.loadBalancer.ingress[0].hostname}");
 echo "http://${KUBEAPPS_SERVICE_IP}"
 ```
 

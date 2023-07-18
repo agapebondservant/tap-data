@@ -45,14 +45,16 @@ echo "http://${KUBEAPPS_SERVICE_IP}"
 
 Use the token generated below to login:
 ```execute
-kubectl delete serviceaccount kubeappuser -n {{session_namespace}} || true; kubectl create -n {{session_namespace}} serviceaccount kubeappuser;
-kubectl create clusterrolebinding kubeappuserbinding --clusterrole=cluster-admin --serviceaccount={{session_namespace}}:kubeappuser;
-export KUBEAPPS_SERVICE_IP_TOKEN=kubectl create token kubeappuser -n {{session_namespace}}
+kubectl delete serviceaccount kubeappuser -n {{session_namespace}} || true; 
+kubectl create -n {{session_namespace}} serviceaccount kubeappuser;
+kubectl delete clusterrolebinding kubeappuser{{session_namespace}}binding || true; 
+kubectl create clusterrolebinding kubeappuser{{session_namespace}}binding --clusterrole=cluster-admin --serviceaccount={{session_namespace}}:kubeappuser;
+export KUBEAPPS_SERVICE_IP_TOKEN=kubectl create token kubeappuser -n {{session_namespace}};
 ```
 
 In the top right, select the dropdown under **Current Context**, copy the text below to the **Namespace** dropdown, and click "Change Context":
-```execute
-echo {{session_namespace}}
+```copy
+{{session_namespace}}
 ```
 
 Next, go to the **Catalog** tab, click **AI** checkbox (under "Categories" on the left), 
@@ -60,8 +62,8 @@ click on "Jupyterhub on Tanzu",
 and click "Deploy". 
 The Visual Editor screen should show up: enter "jupyter-test" for "name", "default" for "Service Account", and
 change **base_domain** to the value below, then click "Deploy":
-```execute
-echo {{ ingress_domain }}
+```copy
+{{ ingress_domain }}
 ```
 This should trigger deployment of the Jupyterhub app (view the pods below).
 
