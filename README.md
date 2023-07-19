@@ -330,16 +330,16 @@ kubectl apply -f resources/kubeapps-httpproxy.yaml -nkubeapps
 
 To get the Kubeapps Service URL (note: the URL may take several seconds to launch in a browser):
 ```
-export KUBEAPPS_SERVICE_IP=$(kubectl get svc --namespace {{session_namespace}} kubeapps -o jsonpath="{.status.loadBalancer.ingress[0].hostname}");
+export KUBEAPPS_SERVICE_IP=$(kubectl get svc --namespace kubeapps kubeapps -o jsonpath="{.status.loadBalancer.ingress[0].hostname}");
 echo "http://${KUBEAPPS_SERVICE_IP}"
 ```
 
 To create a new Kubeapps user *kubeappsuser* and its API token:
 ```
-kubectl delete serviceaccount kubeappuser || true
-kubectl create -n default serviceaccount kubeappuser
-kubectl create clusterrolebinding kubeappuserbinding --clusterrole=cluster-admin --serviceaccount=default:kubeappuser
-kubectl create token kubeappuser
+kubectl delete serviceaccount kubeappuser -n kubeapps || true
+kubectl create -n kubeapps serviceaccount kubeappuser
+kubectl create clusterrolebinding kubeappuserkubeappsbinding --clusterrole=cluster-admin --serviceaccount=kubeapps:kubeappuser
+kubectl create token kubeappuser -n kubeapps
 ```
 
 To uninstall:

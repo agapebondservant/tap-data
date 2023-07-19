@@ -49,7 +49,7 @@ kubectl delete serviceaccount kubeappuser -n {{session_namespace}} || true;
 kubectl create -n {{session_namespace}} serviceaccount kubeappuser;
 kubectl delete clusterrolebinding kubeappuser{{session_namespace}}binding || true; 
 kubectl create clusterrolebinding kubeappuser{{session_namespace}}binding --clusterrole=cluster-admin --serviceaccount={{session_namespace}}:kubeappuser;
-export KUBEAPPS_SERVICE_IP_TOKEN=kubectl create token kubeappuser -n {{session_namespace}};
+export KUBEAPPS_SERVICE_IP_TOKEN=$(kubectl create token kubeappuser -n {{session_namespace}});
 ```
 
 In the top right, select the dropdown under **Current Context**, copy the text below to the **Namespace** dropdown, and click "Change Context":
