@@ -21,7 +21,7 @@ jupyterflow
 https://files.pythonhosted.org/packages/ab/88/dc597fdadd74b1a2fe7d4e4fb56f44a2b444a01b76ec35f31c7eee28f2d0/ray-2.1.0-cp310-cp310-manylinux2014_x86_64.whl #ray[default]==2.1.0
 https://github.com/agapebondservant/ml-metrics-accelerator/zipball/main
 lz4
-pyyaml
+pyyaml==5.3.1
 prometheus-client
 protobuf # protobuf==3.20.0 # protobuf==3.19.5
 fastapi
