@@ -321,3 +321,7 @@ other/resources/wavefront/wavefront-crd.yaml
 llm.py
 resources/kubeapps-httpproxy.yaml
 /Users/oawofolu/PIVOTAL/data/educates/tap/resources/kubeapps-httpproxy.yaml
+./resources/kubeapps-httpproxy.yaml
+./resources/tap-values-1.6.yaml
+/Users/oawofolu/PIVOTAL/data/educates/tap/resources/tap-values-1.6.yaml
+resources/tap-values-1.6.yaml
