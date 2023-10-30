@@ -191,7 +191,7 @@ Once deployed, **TAP** will take care of monitoring the App's resources and trac
 
 Let's copy the App CR and pipeline files to our ML code directory:
 ```execute
-cp ~/other/resources/appcr/pipeline_app_gp.yaml ~/sample-ml-app/pipeline_app.yaml && cp ~/other/resources/appcr/values_main.yaml ~/sample-ml-app/values.yaml && cp ~/other/resources/argo-workflows/pipeline.yaml ~/sample-ml-app/pipeline.yaml
+cp ~/other/resources/appcr/pipeline_app_gp.yaml ~/sample-ml-app/pipeline_app.yaml && cp ~/other/resources/appcr/values_gp.yaml ~/sample-ml-app/values.yaml && cp ~/other/resources/argo-workflows/pipeline-greenplum.yaml ~/sample-ml-app/pipeline.yaml && cp ~/other/resources/appcr/job_gp.yaml ~/sample-ml-app/job.yaml
 ```
 
 Our directory now looks like this:

@@ -325,3 +325,8 @@ resources/kubeapps-httpproxy.yaml
 ./resources/tap-values-1.6.yaml
 /Users/oawofolu/PIVOTAL/data/educates/tap/resources/tap-values-1.6.yaml
 resources/tap-values-1.6.yaml
+exercises/jupyter/
+full-deps-package-repo.tar tap-packages-1.6.2.tar
+full-deps-package-repo.tar
+tanzu-cluster-essentials-linux-amd64-1.6.1.tgz
+tap-packages-1.6.2.tar

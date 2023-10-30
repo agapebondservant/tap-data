@@ -21,7 +21,7 @@ spec:
     - name: WORKSHOP_TOPIC
       value: data-gemfire-deepdive
     - name: DEMO_MODE
-      value: yes
+      value: "yes"
     ingresses:
     - name: jupyter
       port: 8888

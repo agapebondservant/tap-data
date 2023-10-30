@@ -1,7 +1,8 @@
 #@data/values
 ---
 model_stage: Staging
-git_repo: https://github.com/${DATA_E2E_GIT_USER}/sample-ml-app.git
+git_repo_user: ${DATA_E2E_GIT_USER}
+git_repo_app: sample-ml-app
 experiment_name: convolutional_neural_network_team_kfp_${SESSION_NAMESPACE}
 environment_name: kfp-main-${SESSION_NAMESPACE}
 kfp_host: http://kubeflow-pipelines-${SESSION_NAMESPACE}.${DATA_E2E_BASE_URL}

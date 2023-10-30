@@ -1,0 +1,399 @@
+apiVersion: kpack.io/v1alpha2
+kind: ClusterBuilder
+metadata:
+  name: full
+spec:
+  order:
+  - group:
+    - id: tanzu-buildpacks/ruby
+  - group:
+    - id: tanzu-buildpacks/dotnet-core
+  - group:
+    - id: tanzu-buildpacks/go
+  - group:
+    - id: tanzu-buildpacks/python
+  - group:
+    - id: tanzu-buildpacks/php
+  - group:
+    - id: tanzu-buildpacks/web-servers
+  - group:
+    - id: tanzu-buildpacks/java-native-image
+  - group:
+    - id: tanzu-buildpacks/java
+  - group:
+    - id: tanzu-buildpacks/nodejs
+  - group:
+    - id: paketo-buildpacks/procfile
+  serviceAccountRef:
+    name: kp-default-repository-serviceaccount
+    namespace: kpack
+  stack:
+    kind: ClusterStack
+    name: full
+  store:
+    kind: ClusterStore
+    name: default
+  tag: oawofolu/tap-build-service:clusterbuilder-full
+status:
+  builderMetadata:
+  - homepage: https://github.com/paketo-buildpacks/liberty
+    id: paketo-buildpacks/liberty
+    version: 3.5.0
+  - homepage: https://github.com/paketo-buildpacks/bellsoft-liberica
+    id: paketo-buildpacks/bellsoft-liberica
+    version: 9.11.0
+  - homepage: https://github.com/pivotal-cf/tanzu-cpython
+    id: tanzu-buildpacks/cpython
+    version: 1.8.2
+  - id: tanzu-buildpacks/go-dist
+    version: 2.2.5
+  - homepage: https://github.com/paketo-buildpacks/apache-tomee
+    id: paketo-buildpacks/apache-tomee
+    version: 1.6.1
+  - id: tanzu-buildpacks/mri
+    version: 0.4.2
+  - id: tanzu-buildpacks/node-engine
+    version: 1.2.0
+  - id: tanzu-buildpacks/node-engine
+    version: 1.3.0
+  - id: tanzu-buildpacks/php-dist
+    version: 2.0.7
+  - id: tanzu-buildpacks/dotnet-core-sdk
+    version: 0.11.4
+  - id: tanzu-buildpacks/dotnet-core-aspnet-runtime
+    version: 0.0.6
+  - homepage: https://github.com/paketo-buildpacks/appdynamics
+    id: paketo-buildpacks/appdynamics
+    version: 5.6.2
+  - homepage: https://github.com/paketo-buildpacks/appdynamics
+    id: paketo-buildpacks/appdynamics
+    version: 5.6.0
+  - homepage: https://github.com/paketo-buildpacks/yourkit
+    id: paketo-buildpacks/yourkit
+    version: 5.2.1
+  - homepage: https://github.com/paketo-buildpacks/gradle
+    id: paketo-buildpacks/gradle
+    version: 6.11.0
+  - homepage: https://github.com/paketo-buildpacks/jprofiler
+    id: paketo-buildpacks/jprofiler
+    version: 6.4.0
+  - homepage: https://github.com/pivotal-cf/tanzu-miniconda
+    id: tanzu-buildpacks/miniconda
+    version: 0.6.6
+  - id: tanzu-buildpacks/vsdbg
+    version: 0.2.2
+  - homepage: https://github.com/paketo-buildpacks/google-stackdriver
+    id: paketo-buildpacks/google-stackdriver
+    version: 7.4.0
+  - homepage: https://github.com/pivotal-cf/tanzu-overops
+    id: tanzu-buildpacks/overops
+    version: 4.10.1
+  - homepage: https://github.com/paketo-buildpacks/apache-tomcat
+    id: paketo-buildpacks/apache-tomcat
+    version: 7.12.1
+  - homepage: https://github.com/paketo-buildpacks/maven
+    id: paketo-buildpacks/maven
+    version: 6.13.0
+  - homepage: https://github.com/paketo-buildpacks/new-relic
+    id: paketo-buildpacks/new-relic
+    version: 5.7.1
+  - homepage: https://github.com/paketo-buildpacks/sbt
+    id: paketo-buildpacks/sbt
+    version: 6.10.1
+  - homepage: https://github.com/paketo-buildpacks/new-relic
+    id: paketo-buildpacks/new-relic
+    version: 5.6.0
+  - id: tanzu-buildpacks/icu
+    version: 0.6.5
+  - homepage: https://docs.pivotal.io/tanzu-buildpacks/httpd/httpd-buildpack.html
+    id: tanzu-buildpacks/httpd
+    version: 0.8.2
+  - homepage: https://github.com/paketo-buildpacks/azure-application-insights
+    id: paketo-buildpacks/azure-application-insights
+    version: 5.12.0
+  - homepage: https://github.com/paketo-buildpacks/apache-skywalking
+    id: paketo-buildpacks/apache-skywalking
+    version: 5.4.0
+  - homepage: https://github.com/pivotal-cf/tanzu-jrebel
+    id: tanzu-buildpacks/jrebel
+    version: 4.10.0
+  - homepage: https://docs.pivotal.io/tanzu-buildpacks/nginx/nginx-buildpack.html
+    id: tanzu-buildpacks/nginx
+    version: 0.11.2
+  - id: tanzu-buildpacks/java-function
+    version: 1.1.0
+  - homepage: https://github.com/pivotal-cf/tanzu-luna-security-provider
+    id: tanzu-buildpacks/luna-security-provider
+    version: 1.6.0
+  - homepage: https://github.com/paketo-buildpacks/datadog
+    id: paketo-buildpacks/datadog
+    version: 3.7.0
+  - homepage: https://github.com/pivotal-cf/tanzu-pip
+    id: tanzu-buildpacks/pip
+    version: 0.16.4
+  - homepage: https://github.com/paketo-buildpacks/syft
+    id: paketo-buildpacks/syft
+    version: 1.10.1
+  - homepage: https://github.com/paketo-buildpacks/aternity
+    id: paketo-buildpacks/aternity
+    version: 5.3.0
+  - homepage: https://github.com/pivotal-cf/tanzu-pipenv
+    id: tanzu-buildpacks/pipenv
+    version: 1.14.0
+  - homepage: https://github.com/pivotal-cf/tanzu-contrast-security
+    id: tanzu-buildpacks/contrast-security
+    version: 4.26.0
+  - id: tanzu-buildpacks/dep
+    version: 0.5.1
+  - homepage: https://github.com/pivotal-cf/tanzu-contrast-security
+    id: tanzu-buildpacks/contrast-security
+    version: 4.24.1
+  - id: tanzu-buildpacks/kerberos
+    version: 0.1.0
+  - homepage: https://github.com/paketo-buildpacks/elastic-apm
+    id: paketo-buildpacks/elastic-apm
+    version: 5.7.0
+  - homepage: https://github.com/paketo-buildpacks/elastic-apm
+    id: paketo-buildpacks/elastic-apm
+    version: 5.6.0
+  - homepage: https://github.com/paketo-buildpacks/watchexec
+    id: paketo-buildpacks/watchexec
+    version: 2.8.0
+  - homepage: https://github.com/paketo-buildpacks/watchexec
+    id: paketo-buildpacks/watchexec
+    version: 2.7.0
+  - id: tanzu-buildpacks/yarn
+    version: 1.1.1
+  - id: tanzu-buildpacks/passenger
+    version: 0.3.5
+  - homepage: https://github.com/pivotal-cf/tanzu-poetry
+    id: tanzu-buildpacks/poetry
+    version: 0.5.5
+  - id: tanzu-buildpacks/yarn
+    version: 1.1.3
+  - id: tanzu-buildpacks/bundler
+    version: 0.3.6
+  - id: tanzu-buildpacks/npm-install
+    version: 1.0.2
+  - id: tanzu-buildpacks/yarn-install
+    version: 1.0.0
+  - id: tanzu-buildpacks/bundle-install
+    version: 0.2.3
+  - id: tanzu-buildpacks/go-build
+    version: 2.0.10
+  - homepage: https://github.com/pivotal-cf/tanzu-poetry-install
+    id: tanzu-buildpacks/poetry-install
+    version: 0.3.9
+  - homepage: https://github.com/pivotal-cf/tanzu-conda-env-update
+    id: tanzu-buildpacks/conda-env-update
+    version: 0.6.4
+  - homepage: https://github.com/pivotal-cf/tanzu-pipenv-install
+    id: tanzu-buildpacks/pipenv-install
+    version: 0.5.10
+  - id: tanzu-buildpacks/go-mod-vendor
+    version: 1.0.9
+  - id: tanzu-buildpacks/composer
+    version: 0.5.5
+  - homepage: https://github.com/pivotal-cf/tanzu-pip-install
+    id: tanzu-buildpacks/pip-install
+    version: 0.5.7
+  - id: tanzu-buildpacks/dotnet-execute
+    version: 0.10.5
+  - id: tanzu-buildpacks/dotnet-publish
+    version: 0.10.4
+  - id: tanzu-buildpacks/composer-install
+    version: 0.3.5
+  - homepage: https://github.com/paketo-buildpacks/dynatrace
+    id: paketo-buildpacks/dynatrace
+    version: 5.2.1
+  - homepage: https://github.com/paketo-buildpacks/dynatrace
+    id: paketo-buildpacks/dynatrace
+    version: 5.2.0
+  - homepage: https://github.com/paketo-buildpacks/dynatrace
+    id: paketo-buildpacks/dynatrace
+    version: 5.1.0
+  - id: tanzu-buildpacks/python-function
+    version: 1.1.0
+  - id: tanzu-buildpacks/node-module-bom
+    version: 0.3.4
+  - homepage: https://github.com/paketo-buildpacks/spring-boot
+    id: paketo-buildpacks/spring-boot
+    version: 5.23.0
+  - homepage: https://github.com/pivotal-cf/tanzu-jacoco
+    id: tanzu-buildpacks/jacoco
+    version: 4.5.1
+  - homepage: https://github.com/pivotal-cf/tanzu-synopsys
+    id: tanzu-buildpacks/synopsys
+    version: 4.5.1
+  - homepage: https://github.com/paketo-buildpacks/java-memory-assistant
+    id: paketo-buildpacks/java-memory-assistant
+    version: 1.3.0
+  - homepage: https://github.com/pivotal-cf/tanzu-checkmarx
+    id: tanzu-buildpacks/checkmarx
+    version: 4.5.0
+  - homepage: https://github.com/paketo-buildpacks/ca-certificates
+    id: paketo-buildpacks/ca-certificates
+    version: 3.6.0
+  - id: tanzu-buildpacks/php-start
+    version: 0.2.6
+  - homepage: https://github.com/pivotal-cf/tanzu-synopsys
+    id: tanzu-buildpacks/synopsys
+    version: 4.4.0
+  - homepage: https://github.com/paketo-buildpacks/upx
+    id: paketo-buildpacks/upx
+    version: 3.4.0
+  - homepage: https://github.com/paketo-buildpacks/ca-certificates
+    id: paketo-buildpacks/ca-certificates
+    version: 3.5.1
+  - homepage: https://github.com/paketo-buildpacks/encrypt-at-rest
+    id: paketo-buildpacks/encrypt-at-rest
+    version: 4.4.0
+  - homepage: https://github.com/paketo-buildpacks/procfile
+    id: paketo-buildpacks/procfile
+    version: 5.6.0
+  - homepage: https://github.com/paketo-buildpacks/procfile
+    id: paketo-buildpacks/procfile
+    version: 5.5.0
+  - homepage: https://github.com/paketo-buildpacks/leiningen
+    id: paketo-buildpacks/leiningen
+    version: 4.5.1
+  - homepage: https://github.com/paketo-buildpacks/clojure-tools
+    id: paketo-buildpacks/clojure-tools
+    version: 2.7.1
+  - homepage: https://github.com/paketo-buildpacks/jattach
+    id: paketo-buildpacks/jattach
+    version: 1.3.0
+  - homepage: https://github.com/pivotal-cf/tanzu-snyk
+    id: tanzu-buildpacks/snyk
+    version: 4.5.0
+  - id: tanzu-buildpacks/php-fpm
+    version: 0.2.6
+  - homepage: https://github.com/pivotal-cf/tanzu-snyk
+    id: tanzu-buildpacks/snyk
+    version: 4.4.0
+  - id: tanzu-buildpacks/php-redis-session-handler
+    version: 0.2.6
+  - id: tanzu-buildpacks/php-memcached-session-handler
+    version: 0.2.5
+  - id: tanzu-buildpacks/php-nginx
+    version: 0.2.6
+  - id: tanzu-buildpacks/php-httpd
+    version: 0.2.6
+  - homepage: https://github.com/paketo-buildpacks/executable-jar
+    id: paketo-buildpacks/executable-jar
+    version: 6.6.2
+  - homepage: https://github.com/paketo-buildpacks/native-image
+    id: paketo-buildpacks/native-image
+    version: 5.9.0
+  - id: tanzu-buildpacks/node-run-script
+    version: 1.0.1
+  - id: tanzu-buildpacks/npm-start
+    version: 1.0.2
+  - id: tanzu-buildpacks/yarn-start
+    version: 1.0.2
+  - homepage: https://github.com/paketo-buildpacks/dist-zip
+    id: paketo-buildpacks/dist-zip
+    version: 5.5.2
+  - id: tanzu-buildpacks/deprecation-warnings
+    version: 0.0.3
+  - id: tanzu-buildpacks/rails-assets
+    version: 0.4.5
+  - id: tanzu-buildpacks/node-start
+    version: 1.0.2
+  - homepage: https://github.com/paketo-buildpacks/environment-variables
+    id: paketo-buildpacks/environment-variables
+    version: 4.5.0
+  - id: tanzu-buildpacks/rackup
+    version: 0.2.15
+  - homepage: https://github.com/pivotal-cf/tanzu-python-start
+    id: tanzu-buildpacks/python-start
+    version: 0.10.3
+  - id: tanzu-buildpacks/thin
+    version: 0.2.15
+  - id: tanzu-buildpacks/rake
+    version: 0.2.15
+  - id: tanzu-buildpacks/unicorn
+    version: 0.2.15
+  - id: tanzu-buildpacks/puma
+    version: 0.2.16
+  - id: tanzu-buildpacks/php-builtin-server
+    version: 0.2.6
+  - homepage: https://github.com/pivotal-cf/tanzu-aspectj
+    id: tanzu-buildpacks/aspectj
+    version: 4.4.0
+  - id: tanzu-buildpacks/dep-ensure
+    version: 0.3.2
+  - homepage: https://github.com/paketo-buildpacks/image-labels
+    id: paketo-buildpacks/image-labels
+    version: 4.4.1
+  - homepage: https://github.com/paketo-buildpacks/git
+    id: paketo-buildpacks/git
+    version: 1.0.1
+  - homepage: https://github.com/pivotal-cf/tanzu-poetry-run
+    id: tanzu-buildpacks/poetry-run
+    version: 0.4.6
+  - homepage: https://github.com/paketo-buildpacks/environment-variables
+    id: paketo-buildpacks/environment-variables
+    version: 4.4.0
+  - homepage: https://github.com/paketo-buildpacks/image-labels
+    id: paketo-buildpacks/image-labels
+    version: 4.4.0
+  - homepage: https://docs.vmware.com/en/VMware-Tanzu-Buildpacks/services/tanzu-buildpacks/GUID-java-java-buildpack.html
+    id: tanzu-buildpacks/java
+    version: 8.14.0
+  - homepage: https://docs.vmware.com/en/VMware-Tanzu-Buildpacks/services/tanzu-buildpacks/GUID-java-java-buildpack.html
+    id: tanzu-buildpacks/java-native-image
+    version: 6.45.0
+  - homepage: https://docs.pivotal.io/tanzu-buildpacks/nodejs/nodejs-buildpack.html
+    id: tanzu-buildpacks/nodejs
+    version: 2.1.0
+  - homepage: https://docs.vmware.com/en/VMware-Tanzu-Buildpacks/services/tanzu-buildpacks/GUID-php-php-buildpack.html
+    id: tanzu-buildpacks/php
+    version: 2.2.0
+  - id: tanzu-buildpacks/ruby
+    version: 2.1.0
+  - homepage: https://docs.vmware.com/en/VMware-Tanzu-Buildpacks/services/tanzu-buildpacks/GUID-dotnet-core-dotnet-core-buildpack.html
+    id: tanzu-buildpacks/dotnet-core
+    version: 2.5.1
+  - id: tanzu-buildpacks/python
+    version: 2.3.3
+  - id: tanzu-buildpacks/web-servers
+    version: 0.8.0
+  - homepage: https://docs.pivotal.io/tanzu-buildpacks/go/go-buildpack.html
+    id: tanzu-buildpacks/go
+    version: 2.0.8
+  order:
+  - group:
+    - id: tanzu-buildpacks/ruby
+      version: 2.1.0
+  - group:
+    - id: tanzu-buildpacks/dotnet-core
+      version: 2.5.1
+  - group:
+    - id: tanzu-buildpacks/go
+      version: 2.0.8
+  - group:
+    - id: tanzu-buildpacks/python
+      version: 2.3.3
+  - group:
+    - id: tanzu-buildpacks/php
+      version: 2.2.0
+  - group:
+    - id: tanzu-buildpacks/web-servers
+      version: 0.8.0
+  - group:
+    - id: tanzu-buildpacks/java-native-image
+      version: 6.45.0
+  - group:
+    - id: tanzu-buildpacks/java
+      version: 8.14.0
+  - group:
+    - id: tanzu-buildpacks/nodejs
+      version: 2.1.0
+  - group:
+    - id: paketo-buildpacks/procfile
+      version: 5.6.0
+  os: linux
+  stack:
+    id: io.buildpacks.stacks.bionic
+    runImage: index.docker.io/oawofolu/tap-build-service@sha256:cb4a2aeeba552d3f4569b16d96181b2f28fdb9c309ad76d8742ade58752ce515

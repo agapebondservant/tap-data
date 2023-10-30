@@ -4,6 +4,9 @@ apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
   name: mlworkflow-${SESSION_NAMESPACE}
+  annotations:
+    kapp.k14s.io/change-group: "apps.big.co/argo-pipelines"
+    kapp.k14s.io/disable-original: ""
 spec:
   entrypoint: train
   templates:
@@ -47,7 +50,7 @@ spec:
           - name: mlflow_entry
           - name: mlflow_stage
           - name: git_repo
-            value: #@ data.values.git_repo
+            value: #@ "https://github.com/" + data.values.git_repo_user + "/" +  data.values.git_repo_app
           - name: experiment_name
             value: #@ data.values.experiment_name
           - name: environment_name

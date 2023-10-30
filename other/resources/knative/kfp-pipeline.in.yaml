@@ -1,9 +1,10 @@
 #@ load("@ytt:data", "data")
+#@ load("@ytt:json", "json")
 ---
 apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
-  name: ml-image-processing-pipeline-kfpmain
+  name:  #@ "ml-image-processing-pipeline-kfpmain-{}".format(json.decode(data.read(kfp-main-${SESSION_NAMESPACE}))["sha"])
 spec:
   template:
     spec:
@@ -15,7 +16,7 @@ spec:
             - name: MLFLOW_STAGE
               value: #@ data.values.model_stage
             - name: GIT_REPO
-              value: #@ data.values.git_repo
+              value: https://github.com/${DATA_E2E_GIT_USER}/sample-ml-app
             - name: EXPERIMENT_NAME
               value: #@ data.values.experiment_name
             - name: ENVIRONMENT_NAME

@@ -374,6 +374,14 @@ kubectl create namespace argocd
 kubectl apply -n argocd -f resources/argocd.yaml
 ```
 
+#### Install Argo Workflows cli <a name="argoworkflowscli"/>
+```
+cd other/resources/argocd
+docker build -t ${DATA_E2E_REGISTRY_USERNAME}/argocli:latest .
+docker push ${DATA_E2E_REGISTRY_USERNAME}/argocli:latest
+cd -
+```
+
 #### Install Gemfire <a name="gemfirepredeploy"/>
 * Install Gemfire:
 ```
@@ -615,6 +623,27 @@ tanzu package repository add tbs-full-deps-repository --url oawofolu/tbs-full-de
 tanzu package installed delete full-tbs-deps -n tap-install -y
 tanzu package install full-tbs-deps -p full-tbs-deps.tanzu.vmware.com -v ${TBS_VERSION}  -n tap-install
 tanzu package installed get full-tbs-deps   -n tap-install
+
+# If upgrading to TAP 1.6.2:
+kubectl create serviceaccount tap-gui || true
+kubectl create clusterrolebinding tap-gui-cluster-admin --serviceaccount=default:tap-gui --clusterrole=cluster-admin || true
+kubectl create token tap-gui || true
+export TAP_1_6_KUBECONFIG_CA=$(kubectl config view --raw --minify --flatten -o jsonpath='{.clusters[].cluster.certificate-authority-data}')
+export TAP_1_6_KUBECONFIG_CA_B64=$(echo ${TAP_1_6_KUBECONFIG_CA} | base64 --decode)
+export TAP_1_6_KUBEURL=$(kubectl config view --raw --minify --flatten -o jsonpath='{.clusters[].cluster.server}')
+export TAP_1_6_KUBETOKEN=tap-gui
+envsubst < resources/tap-values-1.6.in.yaml > resources/tap-values-1.6.yaml
+
+tanzu package installed delete tap -n tap-install -y 
+# may require manually clearing the finalizers for each stuck package - get the list of stuck packages by running 
+kubectl get packageinstall -ntap-install
+kubectl edit packageinstall/tap -ntap-install
+# Then edit the finalizers list to an empty list - finalizers: []
+
+tanzu package install tap -p tap.tanzu.vmware.com -v 1.6.2 --values-file resources/tap-values-1.6.yaml -n tap-install
+
+tanzu package repository add full-deps-package-repo --url ${INSTALL_REGISTRY_HOSTNAME}/${DATA_E2E_REGISTRY_USERNAME}/full-deps-package-repo:1.6.2 --namespace tap-install
+tanzu package install full-deps -p full-deps.buildservice.tanzu.vmware.com -v "> 0.0.0" -n tap-install --values-file resources/tap-values-1.6.yaml
 
 #If installing TAP 1.2:
 tanzu package installed update tap -p tap.tanzu.vmware.com --values-file resources/tap-values-tbsfull.yaml -n tap-install

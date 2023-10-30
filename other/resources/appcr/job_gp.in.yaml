@@ -1,0 +1,38 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:json", "json")
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: #@ "resubmit-workflow-" + json.decode(data.read(gp-main-${SESSION_NAMESPACE}))["sha"]
+  annotations:
+    kapp.k14s.io/change-group: "apps.big.co/argo-pipeline-job"
+    kapp.k14s.io/change-rule: "upsert before upserting apps.big.co/argo-pipelines"
+spec:
+  template:
+    spec:
+      containers:
+        - name: resubmit-workflow
+          image: oawofolu/argocli:latest
+          command: [/bin/sh]
+          args: ["-c", "argo resubmit --log mlworkflow-gp-${SESSION_NAMESPACE} || true"]
+      restartPolicy: Never
+  backoffLimit: 0
+  podFailurePolicy:
+    rules:
+      - action: Ignore
+        onExitCodes:
+          operator: NotIn
+          values: [ 4200000 ]
+---
+apiVersion: kapp.k14s.io/v1alpha1
+kind: Config
+rebaseRules:
+  - paths:
+      - [spec]
+      - [metadata, annotations]
+      - [metadata, labels]
+    type: copy
+    sources: [existing]
+    resourceMatchers:
+      - apiVersionKindMatcher: {apiVersion: argoproj.io/v1alpha1, kind: Workflow}

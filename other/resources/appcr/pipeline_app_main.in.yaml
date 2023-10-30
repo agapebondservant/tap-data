@@ -8,12 +8,16 @@ spec:
     - git:
         url: https://github.com/${DATA_E2E_GIT_USER}/sample-ml-app
         ref: origin/main-${SESSION_NAMESPACE}
+    - http:
+        url: https://api.github.com/repos/${DATA_E2E_GIT_USER}/sample-ml-app/commits/main-${SESSION_NAMESPACE}
 
   template:
     - ytt:
         paths:
-          - pipeline.yaml
-          - values.yaml
+          - 0/job.yaml
+          - 0/pipeline.yaml
+          - 0/values.yaml
+          - 1/main-${SESSION_NAMESPACE}
 
   deploy:
     - kapp: {}
