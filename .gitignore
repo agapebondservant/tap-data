@@ -330,3 +330,5 @@ full-deps-package-repo.tar tap-packages-1.6.2.tar
 full-deps-package-repo.tar
 tanzu-cluster-essentials-linux-amd64-1.6.1.tgz
 tap-packages-1.6.2.tar
+other/resources/appcr/job_gp.yaml
+other/resources/appcr/job_main.yaml
