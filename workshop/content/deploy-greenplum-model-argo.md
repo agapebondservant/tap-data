@@ -43,7 +43,7 @@ Let's go back to our datasets from the data catalog:
 url: {{ ingress_protocol }}://datahub-datahub.{{ DATA_E2E_BASE_URL }}
 ```
 
-Login (credentials: **datahub/datahub**), go to the Home Page (click on the top-left icon),
+Login (credentials: **datahub/Vmware1!**), go to the Home Page (click on the top-left icon),
 click on the "Explore all" link and select **ServiceBinding Sources**
 in the **View** search bar towards the top (with the prompt text "Create a View").
 

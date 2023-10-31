@@ -40,7 +40,7 @@ Launch DataHub by clicking on the URL from the **tanzu** cli:
 tanzu apps workload get datahub-tap --namespace default
 ```
 
-Login to **DataHub** (credentials: **datahub/datahub**), and click on the DataHub icon (top-left).
+Login to **DataHub** (credentials: **datahub/Vmware1!**), and click on the DataHub icon (top-left).
 
 Next, in the **View** search bar towards the top (with the prompt text "Create a View"), 
 enter **ServiceBinding Sources** in the Search Bar.

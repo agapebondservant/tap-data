@@ -135,7 +135,7 @@ Launch DataHub by clicking on the URL from the **tanzu** cli:
 tanzu apps workload get datahub-tap --namespace default
 ```
 
-Login to **DataHub** (credentials: **datahub/datahub**), and click on the DataHub icon (top-left).
+Login to **DataHub** (credentials: **datahub/Vmware1!**), and click on the DataHub icon (top-left).
 
 Next, enter **"data lake"** in the Search Bar (include the double quotes), and select the Tag in the dropdown that displays.
 The results should show that the **"data lake"** tag was applied to 1 Dataset; click on that link.
@@ -259,7 +259,7 @@ Let's go back to our datasets from the data catalog:
 url: {{ ingress_protocol }}://datahub-datahub.{{ DATA_E2E_BASE_URL }}
 ```
 
-Login (credentials: **datahub/datahub**), go to the Home Page (click on the top-left icon),
+Login (credentials: **datahub/Vmware1!**), go to the Home Page (click on the top-left icon),
 click on the "Explore all" link and select **ServiceBinding Sources**
 in the **View** search bar towards the top (with the prompt text "Create a View").
 

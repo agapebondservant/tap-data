@@ -41,7 +41,7 @@ Launch DataHub by clicking on the URL from the **tanzu** cli:
 tanzu apps workload get datahub-tap --namespace default
 ```
 
-Login to **DataHub** (credentials: **datahub/datahub**). 
+Login to **DataHub** (credentials: **datahub/Vmware1!**). 
 
 Next, enter **"data lake"** in the Search Bar (include the double quotes), and select the Tag in the dropdown that displays.
 The results should show that the **"data lake"** tag was applied to 1 Dataset; click on that link.
