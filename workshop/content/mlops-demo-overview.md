@@ -184,8 +184,20 @@ With **TAP**, using a **GitOps**-ready deployment approach is easy. There are ma
 One of the simplest is to use the **AppCR** resource, which is backed by Carvel's **kapp-controller**.
 With AppCR, we can use a lightweight approach to employ a declarative, Infrastructure-as-Code deployment,
 allowing us to use our git repository as the source of truth that takes care of synching up our latest changes with our environment.
+Additionally, rather than build the **AppCR** configuration from scratch, we can take advantage of TAP's **accelerators** as an 
+enterprise-compatible source of reusable templates that we can use to bootstrap our deployment. Let's see how.
 
-Fetch the code:
+In **TAP**, navigate to the Accelerators view:
+```dashboard:open-url
+url: {{ ingress_protocol }}://tap-gui.{{ ingress_domain }}/create
+```
+
+In the Search field (top-left), enter **kapp**, then click "Choose" on the accelerator entitled **Sample Argo Workflow with KappController**.
+Fill out the fields as appropriate, click "Generate" to generate the template, then click "Explore" to view the generated files.
+Observe that the entries made are reflected in the generated template.
+**Tanzu** Accelerators allows us to reuse the template as a bootstrap for our own projects: you can download the files, or copy the template as you prefer.
+
+Next, we will load a template that has already been previously generated and custommized. Fetch the code:
 ```execute
 export DATA_E2E_GIT_TOKEN={{DATA_E2E_GIT_TOKEN}};
 export DATA_E2E_GIT_USER={{DATA_E2E_GIT_USER}} && rm -rf ~/sample-ml-app;

@@ -76,6 +76,7 @@ echo "Git branches set up."
 # Reset Argo Pipelines
 kapp delete -a image-procesor-pipeline-${SESSION_NAMESPACE} -n ${SESSION_NAMESPACE} -y || true
 kapp delete -a image-procesor-pipeline-gp-${SESSION_NAMESPACE} -n ${SESSION_NAMESPACE} -y || true
+kapp delete -a image-procesor-pipeline-kfp-${SESSION_NAMESPACE} -n ${SESSION_NAMESPACE} -y || true
 echo "Argo workflow pipelines reset."
 
 # Accelerators
