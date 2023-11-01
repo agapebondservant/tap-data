@@ -142,6 +142,7 @@ helm install external-secrets external-secrets/external-secrets -n external-secr
 ```
 helm repo add hashicorp https://helm.releases.hashicorp.com
 helm install vault hashicorp/vault --set='server.ha.enabled=true' --set='server.ha.raft.enabled=true' -n vault --create-namespace --wait
+watch kubectl get pod -nvault
 
 resources/scripts/setup-vault.sh
 
