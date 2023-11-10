@@ -223,10 +223,17 @@ cp ~/other/resources/appcr/pipeline_app_main.yaml ~/sample-ml-app/pipeline_app.y
 cd ~/sample-ml-app; git config --global user.email 'eduk8s@example.com'; git config --global user.name 'Educates'; git add .; git commit -m 'New commit'; git push origin main-{{session_namespace}}; cd -; kapp deploy -a image-procesor-pipeline-{{session_namespace}} -f ~/sample-ml-app/pipeline_app.yaml --logs -y  -n{{session_namespace}}
 ```
 
-Our newly deployed workflow should now be visible.
+Navigate to Argo Workflows to view the newly deployed workflow:
 ```dashboard:open-url
 url: https://argo-workflows.{{ ingress_domain }}
 ```
+
+In the **Namespace** field, enter the namespace below:
+```copy
+{{session_namespace}}
+```
+
+Our newly deployed workflow should now be visible.
 
 The newly created experiment should also be visible in MlFlow:
 ```dashboard:open-url
