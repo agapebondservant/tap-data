@@ -336,3 +336,5 @@ other/resources/appcr/job_main.yaml
 /Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/appcr/job_gp.yaml
 /other/resources/datahub/postgres_emitter.py
 /other/resources/datahub/dataset_emitter.py
+/Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/datahub/dataset_emitter.py
+/Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/datahub/postgres_emitter.py
