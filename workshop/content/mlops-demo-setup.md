@@ -13,12 +13,6 @@ container_repo_user: {{DATA_E2E_REGISTRY_USERNAME}}
 EOF
 ```
 
-Create database schema:
-```
-docker run --rm postgres psql {{DATA_E2E_ML_INFERENCE_DB_CONNECT}} -c "DROP SCHEMA IF EXISTS \"{{session_namespace}}\"; CREATE SCHEMA \"{{session_namespace}}";" || true
-docker run --rm postgres psql {{DATA_E2E_ML_TRAINING_DB_CONNECT}} -c "DROP SCHEMA IF EXISTS \"{{session_namespace}}\"; CREATE SCHEMA \"{{session_namespace}}\";" || true
-```
-
 Run the following general prep script (adds bitnami repo, installs kubeapps chart, restarts Argo Workflows controller) :
 ```execute
 helm repo add bitnami https://charts.bitnami.com/bitnami;
