@@ -68,8 +68,10 @@ RUN curl -sL -o get-pip.py https://bootstrap.pypa.io/get-pip.py && \
     mv kubectl /opt/eduk8s/bin && \
 # Install helm cli, k9s, yq, flux, argocd, tanzu
     tar xzf /home/eduk8s/other/resources/bin/argocd.tar.gz && \
-    mv /home/eduk8s/other/resources/bin/* /opt/eduk8s/bin
+    mv /home/eduk8s/other/resources/bin/* /opt/eduk8s/bin && \
     # && mv /home/eduk8s/workshop /opt/workshop
+# Install postgres client
+    apt-get update && apt-get install postgresql-client -y
 
 # Set environment variables
 ENV PATH=/opt/java/bin:/opt/gradle/bin:/opt/maven/bin:$PATH \
