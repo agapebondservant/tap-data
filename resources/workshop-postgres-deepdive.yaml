@@ -85,3 +85,5 @@ spec:
         enabled: true
       slides:
         enabled: true
+      docker:
+        enabled: true

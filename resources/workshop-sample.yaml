@@ -26,3 +26,5 @@ spec:
         enabled: true
       editor:
         enabled: true
+      docker:
+        enabled: true

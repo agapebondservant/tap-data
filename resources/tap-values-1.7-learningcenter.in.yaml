@@ -1,1 +1,3 @@
 ingressDomain: ${DATA_E2E_GIT_TAP_GUI_INGRESS}
+clusterSecurity:
+  policyEngine: pod-security-standards

@@ -353,3 +353,9 @@ resources/tanzu-aws-1.7.yaml
 other/resources/minio/minio-bitnami-ml-http-proxy.yaml
 resources/minio-bitnami-plain-http-proxy.yaml
 other/resources/bin/tanzu_1.1
+/Users/oawofolu/PIVOTAL/data/educates/tap/resources/tap-values-1.7.yaml
+/Users/oawofolu/PIVOTAL/data/educates/tap/resources/tap-values-1.7-learningcenter.yaml
+/Users/oawofolu/PIVOTAL/data/educates/tap/resources/minio-bitnami-plain-http-proxy.yaml
+/Users/oawofolu/PIVOTAL/data/educates/tap/resources/minio-bitnami-http-proxy.yaml
+/Users/oawofolu/PIVOTAL/data/educates/tap/resources/tap-values-1.7-buildservice.yaml
+/Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/minio/minio-bitnami-ml-http-proxy.yaml
