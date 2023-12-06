@@ -753,13 +753,13 @@ watch kubectl get learningcenter-training
 Deploy Bitnami Services - first deploy pre-requisities (Crossplane and Service Toolkit packages:
 ```
 tanzu package available list -n tap-install crossplane.tanzu.vmware.com
-tanzu package install crossplane -n tap-install -p crossplane.tanzu.vmware.com -v 0.1.1 # or version  number genrated above)
+tanzu package install crossplane -n tap-install -p crossplane.tanzu.vmware.com -v 0.3.0 # or version  number genrated above)
 tanzu package available list -n tap-install services-toolkit.tanzu.vmware.com
-tanzu package install services-toolkit -n tap-install -p services-toolkit.tanzu.vmware.com -v 0.10.1 # or version number generated above
+tanzu package install services-toolkit -n tap-install -p services-toolkit.tanzu.vmware.com -v 0.12.0 # or version number generated above
 ```
 ```
 tanzu package available list -n tap-install bitnami.services.tanzu.vmware.com
-BITNAMI_VERSION_NUMBER=0.1.0 # or existing bitnami package
+BITNAMI_VERSION_NUMBER=0.3.1 # or existing bitnami package
 tanzu package install bitnami-services -n tap-install -p bitnami.services.tanzu.vmware.com -v $BITNAMI_VERSION_NUMBER
 ```
 
@@ -785,7 +785,7 @@ tanzu acc create argo-pipelines-kapp-acc --git-repository https://github.com/aga
 Install Auto API Registration:
 ```
 tanzu package available list apis.apps.tanzu.vmware.com --namespace tap-install #retrieve available version
-export API_REG_VERSION=0.3.0
+export API_REG_VERSION=0.4.1 # or existing Auto API package
 tanzu package install api-auto-registration \
 -p apis.apps.tanzu.vmware.com \
 --namespace tap-install \
