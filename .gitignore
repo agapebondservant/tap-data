@@ -352,3 +352,4 @@ other/resources/scdf/apps/data-flow/kustomize/base/kustomization.yaml.other
 resources/tanzu-aws-1.7.yaml
 other/resources/minio/minio-bitnami-ml-http-proxy.yaml
 resources/minio-bitnami-plain-http-proxy.yaml
+other/resources/bin/tanzu_1.1
