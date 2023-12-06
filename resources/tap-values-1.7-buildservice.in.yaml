@@ -1,0 +1,5 @@
+kp_default_repository: ${DATA_E2E_GIT_TAP_REGISTRY_SERVER}/${DATA_E2E_REGISTRY_USERNAME}/tap-build-service
+kp_default_repository_secret:
+  name: registry-credentials
+  namespace: tap-install
+exclude_dependencies: true

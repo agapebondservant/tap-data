@@ -338,3 +338,15 @@ other/resources/appcr/job_main.yaml
 /other/resources/datahub/dataset_emitter.py
 /Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/datahub/dataset_emitter.py
 /Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/datahub/postgres_emitter.py
+resources/tanzu-aws-1.7-legacy.yaml
+./other/resources/appcr/job_main.yaml
+./other/resources/appcr/job_gp.yaml
+./other/resources/datahub/dataset_emitter.py
+./other/resources/datahub/postgres_emitter.py
+resources/minio-bitnami-http-proxy.yaml
+resources/tap-values-1.7.yaml
+resources/tap-values-1.7-learningcenter.yaml
+resources/tap-values-1.7-buildservice.yaml
+other/resources/scdf/apps/skipper/kustomize/base/kustomization.yaml.other
+other/resources/scdf/apps/data-flow/kustomize/base/kustomization.yaml.other
+resources/tanzu-aws-1.7.yaml
