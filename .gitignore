@@ -350,3 +350,5 @@ resources/tap-values-1.7-buildservice.yaml
 other/resources/scdf/apps/skipper/kustomize/base/kustomization.yaml.other
 other/resources/scdf/apps/data-flow/kustomize/base/kustomization.yaml.other
 resources/tanzu-aws-1.7.yaml
+other/resources/minio/minio-bitnami-ml-http-proxy.yaml
+resources/minio-bitnami-plain-http-proxy.yaml
