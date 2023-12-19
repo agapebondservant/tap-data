@@ -11,9 +11,16 @@ Launch the app by clicking on the URL from the **tanzu** cli:
 tanzu apps workload get image-processor --namespace default
 ```
 
-Upload an image and observe that the app is waiting for the model to be available.
-This requires a viable model to be promoted to the "Production" stage.
+Download test images to your local machine by right-clicking on the set of images shown and selecting "Download":
+```editor:open-file
+file: ~/exercises/jupyter/test-images/object-detection/img2.jpeg
+```
 
+Upload an image and observe the prediction from the model.
+
+**NOTE**: If the app shows that it is waiting for the model to be available,
+it means it is waiting for a viable model to be promoted to the "Production" stage.
+This is currently handled using MLFlow's **Model Registry**: <a href="https://mlflow.org/docs/latest/model-registry.html" target="_blank">link</a>.
 To view the model registry, launch MLflow and click on the "Models" tab:
 ```dashboard:open-url
 url: http://mlflow.{{ ingress_domain }}
@@ -219,7 +226,7 @@ file: ~/sample-ml-app/MLproject
 
 Commit to Git:
 ```execute
-cp ~/other/resources/appcr/pipeline_app_main.yaml ~/sample-ml-app/pipeline_app.yaml && cp ~/other/resources/appcr/values_main.yaml ~/sample-ml-app/values.yaml && cp ~/other/resources/argo-workflows/pipeline.yaml ~/sample-ml-app/pipeline.yaml && cp ~/other/resources/appcr/job_main.yaml ~/sample-ml-app/job.yaml;
+cp ~/other/resources/appcr/pipeline_app_main.yaml ~/sample-ml-app/pipeline_app.yaml && cp ~/other/resources/appcr/values_default.yaml ~/sample-ml-app/values.yaml && cp ~/other/resources/argo-workflows/pipeline.yaml ~/sample-ml-app/pipeline.yaml && cp ~/other/resources/appcr/job_main.yaml ~/sample-ml-app/job.yaml;
 cd ~/sample-ml-app; git config --global user.email 'eduk8s@example.com'; git config --global user.name 'Educates'; git add .; git commit -m 'New commit'; git push origin main-{{session_namespace}}; cd -; kapp deploy -a image-procesor-pipeline-{{session_namespace}} -f ~/sample-ml-app/pipeline_app.yaml --logs -y  -n{{session_namespace}}
 ```
 

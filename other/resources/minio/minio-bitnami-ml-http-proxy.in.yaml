@@ -1,7 +1,7 @@
 apiVersion: projectcontour.io/v1
 kind: HTTPProxy
 metadata:
-  name: minio-ml-httpproxy
+  name: minio-ml-console-httpproxy
   namespace: YOUR_SESSION_NAMESPACE
 spec:
   routes:
@@ -10,6 +10,21 @@ spec:
       services:
         - name: minio
           port: 9001
+  virtualhost:
+    fqdn: minio-console-YOUR_SESSION_NAMESPACE.${DATA_E2E_BASE_URL}
+---
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: minio-ml-httpproxy
+  namespace: YOUR_SESSION_NAMESPACE
+spec:
+  routes:
+    - conditions:
+        - prefix: /
+      services:
+        - name: minio
+          port: 9000
   virtualhost:
     fqdn: minio-YOUR_SESSION_NAMESPACE.${DATA_E2E_BASE_URL}
     

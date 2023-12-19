@@ -1,0 +1,20 @@
+apiVersion: carto.run/v1alpha1
+kind: Workload
+metadata:
+  name: tdp-configurator
+  namespace: default
+  labels:
+    apps.tanzu.vmware.com/workload-type: web
+    app.kubernetes.io/part-of: tdp-configurator
+spec:
+  build:
+    env:
+      - name: BP_NODE_RUN_SCRIPTS
+        value: 'set-tdp-config,portal:pack'
+      - name: TPB_CONFIG
+        value: /tmp/tdp-config.yaml
+      - name: TPB_CONFIG_STRING
+        value: $TDP_CONFIG_STR
+  source:
+    $TDP_BUILDER_IMAGE
+    subPath: builder

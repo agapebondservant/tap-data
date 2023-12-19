@@ -36,10 +36,11 @@ Pre-requisites: A Kubernetes cluster with TAP installed - see [Install TAP](#tap
 13. [Deploy Argo Workflows](#argoworkflows)
 14. [Build secondary cluster (for multi-site demo)](#multisite)
 15. [Install TAP](#tap-install)
-16. [Deploy Tanzu Data Workshops](#buildanddeploy)
-17. [Deploy Single Workshop to Pre-Existing LearningCenter Portal](#buildsingle)
-18. [Create Carvel Packages for Dependencies](#carvelpackages)
-19. [Other: How-tos/General Info (not needed for setup)](#other)
+16. [Setup Tanzu Developer Portal Backstage Configurator](#tdp)
+17. [Deploy Tanzu Data Workshops](#buildanddeploy)
+18. [Deploy Single Workshop to Pre-Existing LearningCenter Portal](#buildsingle)
+19. [Create Carvel Packages for Dependencies](#carvelpackages)
+20. [Other: How-tos/General Info (not needed for setup)](#other)
 
 #### Kubernetes Cluster Prep<a name="pre-reqs"/>
 * Create .env file in root directory (use .env-sample as a template - do NOT check into Git)
@@ -624,6 +625,7 @@ tanzu secret registry add registry-credentials \
 --server ${INSTALL_REGISTRY_HOSTNAME} \
 --export-to-all-namespaces --yes --namespace tap-install
 kubectl apply -f resources/tap-rbac.yaml -n default
+kubectl apply -f resources/tap-rbac2.yaml -n default
 
 tanzu package repository add tanzu-tap-repository \
 --url ${INSTALL_REGISTRY_HOSTNAME}/${DATA_E2E_REGISTRY_USERNAME}/tap-packages:$TAP_VERSION \
@@ -826,6 +828,60 @@ other/resources/analytics/anomaly-detection-demo/scripts/port-forward-apps.sh
 # For exposing externally accessible endpoints:
 kubectl apply -f other/resources/analytics/anomaly-detection-demo/dashboard-httpproxy.yaml -nstreamlit
 ```
+
+### Setup Tanzu Developer Portal Backstage Configurator<a name="tdp"/>
+(NOTE: Manual used was https://github.com/benjaminleesmith/docs-tap/blob/main/tap-gui/configurator/create-plug-in-wrapper.hbs.md)
+
+Build and publish the non-external Backstage frontend plugins that you wish to integrate with the Portal (update plugin version when prompted):
+```
+cd </path/to/frontend> 
+yarn install --ignore-engines
+yarn tsc && yarn build
+npm init --scope=<npmjs scope>
+npm publish --access=public
+```
+
+Build and publish the non-external Backstage backend plugins that you wish to integrate with the Portal (update plugin version when prompted):
+```
+cd </path/to/backend> 
+yarn install --ignore-engines
+yarn tsc && yarn build
+npm init --scope=<npmjs scope>
+npm publish --access=public
+```
+
+* Update the TDP config if necessary with the latest **app** and **backend** plugins: update
+```
+other/resources/tdp/tdp-workload.yaml
+```
+
+* Deploy the TDP Configurator Workload:
+```
+export TDP_CONFIG_STR=$(base64 -i other/resources/tdp/tdp-config.yaml)
+export TDP_BUILDER_IMAGE=$(imgpkg describe -b $(kubectl get -n tap-install $(kubectl get package -n tap-install \
+--field-selector spec.refName=tpb.tanzu.vmware.com -o name) -o \
+jsonpath="{.spec.template.spec.fetch[0].imgpkgBundle.image}") -o yaml --tty=true | grep -A 1 \
+"kbld.carvel.dev/id: harbor-repo.vmware.com/esback/configurator" | grep "image: " | sed 's/\simage: //g')
+envsubst < other/resources/tdp/tdp-workload.in.yaml > other/resources/tdp/tdp-workload.yaml
+kubectl delete -f other/resources/tdp/tdp-workload.yaml
+kubectl apply -f other/resources/tdp/tdp-workload.yaml
+tanzu kubernetes apps workload tail tdp-configurator --since 64h
+```
+
+* Update the TDP overlay secret:
+```
+export TDP_OVERLAY_SECRET=$(kubectl -n default get images.kpack.io tdp-configurator -o jsonpath={.status.latestImage})
+envsubst < other/resources/tdp/tdp-overlay-secret.in.yaml > other/resources/tdp/tdp-overlay-secret.yaml
+kubectl delete -f other/resources/tdp/tdp-overlay-secret.yaml
+kubectl apply -f other/resources/tdp/tdp-overlay-secret.yaml
+```
+
+* Uncomment the **package-overlays** section of the TAP values.yaml file, and update tap:
+```
+tanzu package installed update tap -n tap-install --values-file resources/tap-values-1.7.yaml
+```
+
+
 
 #### Deploy Tanzu Data Workshops<a name="buildanddeploy"/>
 * Build Workshop image:

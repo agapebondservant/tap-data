@@ -1,4 +1,3 @@
-stack_configuration: jammy-only
 shared:
   ingress_domain: ${DATA_E2E_GIT_TAP_GUI_INGRESS}
   image_registry:
