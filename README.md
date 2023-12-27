@@ -834,20 +834,16 @@ kubectl apply -f other/resources/analytics/anomaly-detection-demo/dashboard-http
 
 Build and publish the non-external Backstage frontend plugins that you wish to integrate with the Portal (update plugin version when prompted):
 ```
-cd </path/to/frontend> 
-yarn install --ignore-engines
-yarn tsc && yarn build
-npm init --scope=<npmjs scope>
-npm publish --access=public
+cd </path/to/frontend>/src
+yarn install && yarn tsc && yarn build
+yarn publish
 ```
 
 Build and publish the non-external Backstage backend plugins that you wish to integrate with the Portal (update plugin version when prompted):
 ```
-cd </path/to/backend> 
-yarn install --ignore-engines
-yarn tsc && yarn build
-npm init --scope=<npmjs scope>
-npm publish --access=public
+cd </path/to/backend>/src
+yarn install && yarn tsc && yarn build
+yarn publish
 ```
 
 * Update the TDP config if necessary with the latest **app** and **backend** plugins: update
@@ -863,7 +859,6 @@ export TDP_BUILDER_IMAGE=$(imgpkg describe -b $(kubectl get -n tap-install $(kub
 jsonpath="{.spec.template.spec.fetch[0].imgpkgBundle.image}") -o yaml --tty=true | grep -A 1 \
 "kbld.carvel.dev/id: harbor-repo.vmware.com/esback/configurator" | grep "image: " | sed 's/\simage: //g')
 envsubst < other/resources/tdp/tdp-workload.in.yaml > other/resources/tdp/tdp-workload.yaml
-kubectl delete -f other/resources/tdp/tdp-workload.yaml
 kubectl apply -f other/resources/tdp/tdp-workload.yaml
 tanzu kubernetes apps workload tail tdp-configurator --since 64h
 ```

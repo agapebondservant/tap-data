@@ -10,7 +10,7 @@ spec:
   build:
     env:
       - name: BP_NODE_RUN_SCRIPTS
-        value: 'set-tdp-config,portal:pack'
+        value: 'set-tpb-config,portal:pack'
       - name: TPB_CONFIG
         value: /tmp/tdp-config.yaml
       - name: TPB_CONFIG_STRING

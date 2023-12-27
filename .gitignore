@@ -363,3 +363,13 @@ other/resources/tdp/tdp-workload.yaml
 other/resources/tdp/tdp-overlay-secret.yaml
 other/resources/appcr/values_default.yaml
 other/resources/appcr/values_default_gp.yaml
+/Users/oawofolu/PIVOTAL/data/educates/tap/resources/tap-values-1.7.yaml
+/Users/oawofolu/PIVOTAL/data/educates/tap/resources/tap-values-1.7-learningcenter.yaml
+/Users/oawofolu/PIVOTAL/data/educates/tap/resources/minio-bitnami-plain-http-proxy.yaml
+/Users/oawofolu/PIVOTAL/data/educates/tap/resources/minio-bitnami-http-proxy.yaml
+/Users/oawofolu/PIVOTAL/data/educates/tap/resources/tap-values-1.7-buildservice.yaml
+/Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/appcr/values_default.yaml
+/Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/appcr/values_default_gp.yaml
+/Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/minio/minio-bitnami-ml-http-proxy.yaml
+/Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/tdp/tdp-workload.yaml
+/Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/tdp/tdp-overlay-secret.yaml
