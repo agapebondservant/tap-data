@@ -6,4 +6,4 @@ git_repo_app: sample-ml-app
 experiment_name: convolutional_neural_network_team_${SESSION_NAMESPACE}
 environment_name: main-${SESSION_NAMESPACE}
 mlflow_tracking_uri: http://mlflow-${SESSION_NAMESPACE}.${DATA_E2E_BASE_URL}
-mlflow_s3_uri: https://minio-${SESSION_NAMESPACE}.${DATA_E2E_BASE_URL}
+mlflow_s3_uri: http://minio-${SESSION_NAMESPACE}.${DATA_E2E_BASE_URL}
