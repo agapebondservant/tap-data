@@ -9,6 +9,9 @@ metadata:
     kapp.k14s.io/disable-original: ""
 spec:
   entrypoint: train
+  synchronization:
+    mutex:
+      name: object-classification-gp-${SESSION_NAMESPACE}
   volumes:
     - name: secret-vol
       secret:
