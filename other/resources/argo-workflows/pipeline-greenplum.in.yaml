@@ -154,7 +154,7 @@ spec:
           liquibase releaseLocks \
           --url="jdbc:postgresql://{{inputs.parameters.host}}:5432/{{inputs.parameters.db_name}}?sslmode=require&prepareThreshold=0" \
           --username="{{inputs.parameters.user}}" \
-          --password="${HOST_PASSWORD}";
+          --password="${DOLLAR}HOST_PASSWORD";
 
     - name: deploy-code
       inputs:
@@ -239,26 +239,26 @@ spec:
           liquibase executeSql \
           --url="{{inputs.parameters.db_uri}}" \
           --username="{{inputs.parameters.user}}" \
-          --password="${HOST_PASSWORD}" \
+          --password="${DOLLAR}HOST_PASSWORD" \
           --sql="SELECT 'start'";
 
           liquibase tag --tag="{{inputs.parameters.git_repo_prefix}}/commit/{{inputs.parameters.git_sha}}" \
           --url="{{inputs.parameters.db_uri}}" \
           --username="{{inputs.parameters.user}}" \
-          --password="${HOST_PASSWORD}";
+          --password="${DOLLAR}HOST_PASSWORD";
 
           liquibase update \
           --changelog-file="changelog/{{inputs.parameters.db_script}}" \
           --url="jdbc:postgresql://{{inputs.parameters.host}}:5432/{{inputs.parameters.db_name}}?sslmode=require&prepareThreshold=0" \
           --username="{{inputs.parameters.user}}" \
-          --password="${HOST_PASSWORD}" \
+          --password="${DOLLAR}HOST_PASSWORD" \
           --log-level=INFO;
 
           liquibase changeLogSync \
           --changeLogFile="changelog/{{inputs.parameters.db_script}}" \
           --url="{{inputs.parameters.db_uri}}" \
           --username="{{inputs.parameters.user}}" \
-          --password="${HOST_PASSWORD}";
+          --password="${DOLLAR}HOST_PASSWORD";
       initContainers:
         -  name: update-script
            image: busybox
