@@ -53,7 +53,7 @@ The results should include 1 **greenplum** database and 1 **postgres** database.
 Notice the following:
 *The **greenplum** database has been tagged as a **training** asset. This is the dataset that will be used for **training**.
 *The **postgres** database has been tagged as an **inference** asset. This is the dataset that will be used for **inference**.
-*The Greenplum instance is tagged as a **google-cloud** asset, while the **postgres** instance is tagged as an **aws** asset.
+*The **postgres** instance is tagged as a **google-cloud** asset, while the **greenplum** instance is tagged as an **aws** asset.
 Both assets will be used in a **multi-cloud** ML pipeline. 
 
 Next, we will work on discovering the tooling that we will need for our development environment.

@@ -286,7 +286,7 @@ The results should include 1 **greenplum** database and 1 **postgres** database.
 Notice the following:
 * The **greenplum** database has been tagged as a **training** asset. This is the dataset that will be used for **training**.
 * The **postgres** database has been tagged as an **inference** asset. This is the dataset that will be used for **inference**.
-* The Greenplum instance is tagged as a **google-cloud** asset, while the **postgres** instance is tagged as an **aws** asset.
+* The **postgres** instance is tagged as a **google-cloud** asset, while the **greenplum** instance is tagged as an **aws** asset.
   Both assets will be used in a **multi-cloud** ML pipeline.
 
 For **training**: Click on the **dev** Greenplum database in the search results.
@@ -323,7 +323,15 @@ kubectl exec -it $PGADMIN_POD -n pgadmin -- sh -c "SRV_GRP_SUFFIX={{session_name
 Observe that we were able to fetch the necessary DB credentials by using a ServiceBindings compatible library
 (**pyservicebindings**).
 
-Now return to pgAdmin and locate the Server connection instances which should be displayed as **Server Group Training {{session_namespace}}** and **Server Group Inference {{session_namespace}}**:
+Now we will import the server file:
+```execute
+export PGADMIN_TMP_POD=$(kubectl get pod -l "app.kubernetes.io/part-of=pgadmin-tap,app.kubernetes.io/component=run" -oname -n pgadmin);
+export PGADMIN_POD=$(echo ${PGADMIN_TMP_POD} | cut -b 5-);
+kubectl cp ~/other/resources/pgadmin/import_server_import_file.sh pgadmin/$PGADMIN_POD:/tmp;
+kubectl exec -it $PGADMIN_POD -n pgadmin -- sh -c "SRV_GRP_SUFFIX={{session_namespace}} /tmp/import_server_import_file.sh;"
+```
+
+Now refresh pgAdmin and locate the Server connection instances which should be displayed as **Server Group Training {{session_namespace}}** and **Server Group Inference {{session_namespace}}**:
 ```dashboard:open-url
 url: {{ ingress_protocol }}://pgadmin-tap.pgadmin.{{ DATA_E2E_BASE_URL }}
 ```
