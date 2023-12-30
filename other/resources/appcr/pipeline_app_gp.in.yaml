@@ -15,6 +15,7 @@ spec:
           - job.yaml
           - pipeline.yaml
           - values.yaml
+          - external_secrets.yaml
           - .git/HEAD
 
   deploy:
