@@ -238,7 +238,8 @@ spec:
         source: |
           liquibase executeSql \
           --url="{{inputs.parameters.db_uri}}" \
-          --username="{{inputs.parameters.user}}" --password="${HOST_PASSWORD}" \
+          --username="{{inputs.parameters.user}}" \
+          --password="${HOST_PASSWORD}" \
           --sql="SELECT 'start'";
 
           liquibase tag --tag="{{inputs.parameters.git_repo_prefix}}/commit/{{inputs.parameters.git_sha}}" \
@@ -250,10 +251,11 @@ spec:
           --changelog-file="changelog/{{inputs.parameters.db_script}}" \
           --url="jdbc:postgresql://{{inputs.parameters.host}}:5432/{{inputs.parameters.db_name}}?sslmode=require&prepareThreshold=0" \
           --username="{{inputs.parameters.user}}" \
-          --password="${HOST_PASSWORD}";
+          --password="${HOST_PASSWORD}" \
+          --log-level=INFO;
 
           liquibase changeLogSync \
-          --changeLogFile=sample.sql \
+          --changeLogFile="changelog/{{inputs.parameters.db_script}}" \
           --url="{{inputs.parameters.db_uri}}" \
           --username="{{inputs.parameters.user}}" \
           --password="${HOST_PASSWORD}";
