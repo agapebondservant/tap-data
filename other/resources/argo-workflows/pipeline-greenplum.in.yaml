@@ -62,7 +62,7 @@ spec:
                 - name: external_secret_ref_key
                   value: #@ data.values.training_external_secret_ref_key
                 - name: db_uri
-                  values: #@ "jdbc:postgresql://{}:5432/{}?sslmode=require&prepareThreshold=0".format(data.values.training_master, data.values.training_db_name)
+                  value: #@ "jdbc:postgresql://{}:5432/{}?sslmode=require&prepareThreshold=0".format(data.values.training_master, data.values.training_db_name)
                 - name: git_sha
                   value: "{{steps.fetch-git-revision.outputs.result}}"
 
@@ -116,7 +116,7 @@ spec:
                 - name: external_secret_ref_key
                   value: #@ data.values.inference_external_secret_ref_key
                 - name: db_uri
-                  values: #@ "jdbc:postgresql://{}:5432/{}?sslmode=require".format(data.values.inference_host, data.values.inference_db_name)
+                  value: #@ "jdbc:postgresql://{}:5432/{}?sslmode=require".format(data.values.inference_host, data.values.inference_db_name)
                 - name: git_sha
                   value: "{{steps.fetch-git-revision.outputs.result}}"
 
