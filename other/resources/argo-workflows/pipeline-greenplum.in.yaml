@@ -285,6 +285,8 @@ spec:
             value: #@ data.values.training_master
           - name: db_name
             value: #@ data.values.training_db_name
+          - name: db_schema
+            value: #@ data.values.training_db_schema
           - name: mlflow_tracking_uri
             value: #@ data.values.mlflow_tracking_uri
           - name: mlflow_s3_uri
@@ -301,8 +303,8 @@ spec:
                 key: greenplum_master_password
         command: [bash]
         source: |
-          echo "SELECT run_training_task(:'mlflow_stage', :'git_repo', :'entry_point', :'experiment_name', :'environment_name', :'mlflow_host', :'mlflow_s3_uri', :'app_location')" \
-            | psql "postgresql://{{inputs.parameters.user}}:${GREENPLUM_TRAINING_MASTER_PASSWORD}@{{inputs.parameters.host}}:5432/{{inputs.parameters.db_name}}?sslmode=require" \
+          echo "SELECT {{inputs.parameters.db_schema}}.run_training_task(:'mlflow_stage', :'git_repo', :'entry_point', :'experiment_name', :'environment_name', :'mlflow_host', :'mlflow_s3_uri', :'app_location')" \
+            | psql "postgresql://{{inputs.parameters.user}}:${DOLLAR}GREENPLUM_TRAINING_MASTER_PASSWORD@{{inputs.parameters.host}}:5432/{{inputs.parameters.db_name}}?sslmode=require" \
                    -v mlflow_stage="{{inputs.parameters.mlflow_stage}}" \
                    -v git_repo="{{inputs.parameters.git_repo}}" \
                    -v entry_point="{{inputs.parameters.mlflow_entry}}" \
