@@ -407,7 +407,7 @@ file: ~/sample-ml-app/MLproject
 
 Push to Git:
 ```execute
-cp ~/other/resources/appcr/pipeline_app_gp.yaml ~/sample-ml-app/pipeline_app.yaml && cp ~/other/resources/appcr/values_gp.yaml ~/sample-ml-app/values.yaml && cp ~/other/resources/argo-workflows/pipeline-greenplum.yaml ~/sample-ml-app/pipeline.yaml && cp ~/other/resources/appcr/job_gp.yaml ~/sample-ml-app/job.yaml  && cp ~/other/resources/appcr/external_secrets_gp.yaml ~/sample-ml-app/external_secrets.yaml && cp -r ~/other/resources/plpython ~/sample-ml-app/;
+cp ~/other/resources/appcr/pipeline_app_gp.yaml ~/sample-ml-app/pipeline_app.yaml && cp ~/other/resources/appcr/values_default_gp.yaml ~/sample-ml-app/values.yaml && cp ~/other/resources/argo-workflows/pipeline-greenplum.yaml ~/sample-ml-app/pipeline.yaml && cp ~/other/resources/appcr/job_gp.yaml ~/sample-ml-app/job.yaml  && cp ~/other/resources/appcr/external_secrets_gp.yaml ~/sample-ml-app/external_secrets.yaml && cp -r ~/other/resources/plpython ~/sample-ml-app/;
 cd ~/sample-ml-app; git config --global user.email 'eduk8s@example.com'; git config --global user.name 'Educates'; git add .; git commit -m 'New commit'; git push origin gp-main-{{session_namespace}}; cd -; kapp deploy -a image-procesor-pipeline-gp-{{session_namespace}} -f ~/sample-ml-app/pipeline_app.yaml --logs -y  -n{{session_namespace}}
 ```
 
