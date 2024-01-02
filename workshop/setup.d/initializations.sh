@@ -36,9 +36,9 @@ echo "Setting up git branches..."
 setupgitbranches()
 {
     BRANCHNAME=$1
-    git push origin --delete ${BRANCHNAME}-${SESSION_NAMESPACE} || true
+    git push -u origin --delete ${BRANCHNAME}-${SESSION_NAMESPACE} || true
     git branch ${BRANCHNAME}-${SESSION_NAMESPACE}; git checkout ${BRANCHNAME}-${SESSION_NAMESPACE}; git add .; git commit -m 'New commit'
-    git push origin ${BRANCHNAME}-${SESSION_NAMESPACE}
+    git push -u origin ${BRANCHNAME}-${SESSION_NAMESPACE}
 }
 
 clone_sample_ml_branch()
