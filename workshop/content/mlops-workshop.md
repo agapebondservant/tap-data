@@ -324,6 +324,9 @@ Let's go back to the **MLProject** file for our pipeline:
 ```editor:open-file
 file: ~/sample-ml-app/MLproject
 line: 15
+text: "ray-address"
+before: 0
+after: 0
 ```
 
 Our **training step** has already been set up to run on a remote Ray cluster if we supply it with a **ray-address**.
@@ -346,7 +349,7 @@ url: https://argo-workflows.{{ ingress_domain }}
 This time, the training step should be launched on our Ray cluster.
 Click on "Cluster" on the Ray Dashboard, and observe new activity once the pipeline hits the "training" step:
 ```dashboard:open-url
-url: https://ray.{{ ingress_domain }}
+url: http://ray.{{ ingress_domain }}
 ```
 
 #### Launch In-Database Pipeline

@@ -9,7 +9,7 @@ They can also use it to connect their Jupyter notebooks (and other similar IDEs)
 
 Navigate to the ML Panel:
 ```dashboard:open-url
-url: {{ ingress_protocol }}://tap-gui.{{ ingress_domain }}/mlworkflows
+url: {{ ingress_protocol }}://tap-gui.tanzudatatap.com/mlworkflows
 ```
 
 You can see tabs for different categories of services: **Data**, **Models**, **Pipelines**, **Clusters** and **Experiments**.
@@ -17,7 +17,7 @@ You can see tabs for different categories of services: **Data**, **Models**, **P
 Thanks to **Backstage Components**, the actual items on each tab are configurable.
 Where appropriate, users can add, remove or update tiles by simply navigating to the **Catalog** page:
 ```dashboard:open-url
-url: {{ ingress_protocol }}://tap-gui.{{ ingress_domain }}/catalog
+url: {{ ingress_protocol }}://tap-gui.tanzudatatap.com/catalog
 ```
 
 From there, they can make changes to the underlying YAML config by clicking on "View Source" and updating the displayed file from GitHub.
@@ -73,6 +73,7 @@ url: http://mlflow.{{ ingress_domain }}
 ```
 
 #### Launch Jupyter Notebook
+<font color="red"><b>Optional; for a shorter demo, skip this section and go to "Launch Pipeline".</b> </font><br/>
 We will use TAP to discover the **tooling** that we will need for our development environment.
 
 Click on the Jupyter tab in the workshop (**jupyter** as the password), and show the **File Ingestion** notebook.
@@ -292,6 +293,9 @@ Let's go back to the **MLProject** file for our pipeline:
 ```editor:open-file
 file: ~/sample-ml-app/MLproject
 line: 15
+text: "ray-address"
+before: 0
+after: 0
 ```
 
 Our **training step** has already been set up to run on a remote Ray cluster if we supply it with a **ray-address**.
@@ -314,7 +318,7 @@ url: https://argo-workflows.{{ ingress_domain }}
 This time, the training step should be launched on our Ray cluster. 
 Click on "Cluster" on the Ray Dashboard, and observe new activity once the pipeline hits the "training" step:
 ```dashboard:open-url
-url: https://ray.{{ ingress_domain }}
+url: http://ray.{{ ingress_domain }}
 ```
 
 #### Launch In-Database Pipeline
