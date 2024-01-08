@@ -1,15 +1,15 @@
-### Rapid-fire Demo
+### Rapid-fire Workshop
 
 #### Launch Jupyter notebook from ML Portal
 TAP's **Tanzu Developer Portal** is a customizable portal that can be extended to incorporate different **Backstage plugins**.
 An example of a Backstage plugin extension is the **Backstage ML Portal**.
-With this portal, data scientists can discover different Data / ML tools, pipelines and platforms that have been previously made available to them 
+With this portal, data scientists can discover different Data / ML tools, pipelines and platforms that have been previously made available to them
 by a **Platform Operator**.
 They can also use it to connect their Jupyter notebooks (and other similar IDEs) to the datasources or endpoints of their choosing.
 
 Navigate to the ML Panel:
 ```dashboard:open-url
-url: {{ ingress_protocol }}://tap-gui.{{ ingress_domain }}/mlworkflows
+url: {{ ingress_protocol }}://tap-gui.tanzudatatap.com/mlworkflows
 ```
 
 You can see tabs for different categories of services: **Data**, **Models**, **Pipelines**, **Clusters** and **Experiments**.
@@ -17,14 +17,14 @@ You can see tabs for different categories of services: **Data**, **Models**, **P
 Thanks to **Backstage Components**, the actual items on each tab are configurable.
 Where appropriate, users can add, remove or update tiles by simply navigating to the **Catalog** page:
 ```dashboard:open-url
-url: {{ ingress_protocol }}://tap-gui.{{ ingress_domain }}/catalog
+url: {{ ingress_protocol }}://tap-gui.tanzudatatap.com/catalog
 ```
 
 From there, they can make changes to the underlying YAML config by clicking on "View Source" and updating the displayed file from GitHub.
 
 <font color="red">NOTE:</font> A separate workshop will go into the plugin configuration in more detail.
 
-Back on the ML Panel, click on the Data tab, and click "CONSOLE" on the Greenplum tile. 
+Back on the ML Panel, click on the Data tab, and click "CONSOLE" on the Greenplum tile.
 The **Greenplum Command Center** is displayed.
 Generally, the **CONSOLE** button links to any existing management console UI that has been set up for access by the user.
 If no console has been set up, then the **CONSOLE** will not be displayed.
@@ -41,8 +41,8 @@ Click on the notebook to launch it.
 Then:
 * Launch a new cell (hover underneath the existing cell for the "Click to add a cell" link to appear);
 * Copy all the lines underneath **# For Greenplum** to the new cell;
-* Uncomment the content (using Cmd + / on Mac or Ctrl + / on Windows); and 
-* Run the cell (using Cmd + Enter on Mac or Ctrl + Enter on Windows). 
+* Uncomment the content (using Cmd + / on Mac or Ctrl + / on Windows); and
+* Run the cell (using Cmd + Enter on Mac or Ctrl + Enter on Windows).
 
 Data from the Greenplum query should be displayed in a **DataFrame**.
 
@@ -80,7 +80,7 @@ Click on the Jupyter tab in the workshop (**jupyter** as the password), and show
 This is the Jupyter notebook that was used to create experiments for our training use case. 
 To migrate it to our own self-managed instance of Jupyterhub, we will self-provision Jupyterhub using **TAP**.
 
-#### Launch Jupyter Notebook via Kubeapps
+#### Option A: Launch Jupyter Notebook via Kubeapps
 <font color="red"><b>In progress - skip to "Option B: Launch Jupyter Notebook via tanzu cli".</b></font><br/>
 **Kubeapps** provides a web-based GUI for deploying and managing applications to Kubernetes.
 Currently, **Kubeapps** supports applications that are packaged as **helm charts** or **Carvel packages**.
@@ -120,6 +120,38 @@ change **base_domain** to the value below, then click "Deploy":
 {{ ingress_domain }}
 ```
 This should trigger deployment of the Jupyterhub app (view the pods below).
+
+
+#### Option B: Launch Jupyter Notebook via tanzu cli
+View the Jupyter accelerator in TAP GUI (search for **ml** first, just to demonstrate how accelerators can be used, then search for **jupyter**):
+```dashboard:open-url
+url: {{ ingress_protocol }}://tap-gui.{{ ingress_domain }}/create
+```
+
+Verify that the Jupyterhub package is available:
+```execute
+tanzu package available list jupyter.tanzu.vmware.com -n {{session_namespace}}
+```
+
+View the install configuration options by showing the **values schema**:
+```execute
+tanzu package available get jupyter.tanzu.vmware.com/{{DATA_E2E_JUPYTERHUB_VERSION}} --values-schema -n {{session_namespace}}
+```
+
+View the values.yaml file based on the configuration options:
+```editor:open-file
+file: ~/other/resources/jupyterhub/jupyter-values.yaml
+```
+
+Install the package:
+```execute
+tanzu package install jupyterhub -p jupyter.tanzu.vmware.com -v {{DATA_E2E_JUPYTERHUB_VERSION}} --values-file ~/other/resources/jupyterhub/jupyter-values.yaml -n {{session_namespace}}
+```
+
+View the installed package (login with the default username and password used above - jupyter/Vmware1!):
+```dashboard:open-url
+url: {{ ingress_protocol }}://jupyter-{{session_namespace}}.{{ ingress_domain }}
+```
 
 #### Launch Catalog
 <font color="red"><b>NOTE: For a high-level demo, this section may be skipped as optional.</b></font><br/>
@@ -230,8 +262,8 @@ Let's view the manifest that was used to enable **GitOps**-ready deployment by v
 file: ~/other/resources/appcr/pipeline_app_main.yaml
 ```
 
-Once deployed, **TAP** will take care of monitoring the App's resources and tracking when there are changes to the git repo source.
-(**TAP** does this by leveraging **kapp-controller**, which is another built-in that comes with **TAP**.)
+Once the **AppCR** deployed, **TAP** will take care of monitoring the App's resources and tracking when there are changes to the git repo source.
+(**TAP** does this by leveraging **kapp-controller**, which is another built-in that comes with **TAP**.) 
 Normally, deploying **AppCR** should be a one-time activity.
 
 Let's go ahead and deploy the **AppCR** with the current version of our git repo:
@@ -276,7 +308,7 @@ url: https://argo-workflows.{{ ingress_domain }}
 ```
 
 (<font color="red">NOTE</font>: Most pipeline orchestrators allow the user to control the behavior of the pipelines when a pre-existing job instance is still running.
-Here, we are using **Argo Workflows'** <a href="https://argo-workflows.readthedocs.io/en/latest/synchronization" target="_blank">synchronization</a> feature
+Here, we are using **Argo Workflows'** <a href="https://argo-workflows.readthedocs.io/en/latest/synchronization" target="_blank">synchronization</a> feature 
 to limit the number of concurrent jobs to 1, so that any subsequent workflows will be queued.)
 
 #### Scaling the Training Environment
@@ -311,7 +343,7 @@ Shortly, the ML pipeline should be resubmitted:
 url: https://argo-workflows.{{ ingress_domain }}
 ```
 
-This time, the training step should be launched on our Ray cluster. 
+This time, the training step should be launched on our Ray cluster.
 Click on "Cluster" on the Ray Dashboard, and observe new activity once the pipeline hits the "training" step:
 ```dashboard:open-url
 url: https://ray.{{ ingress_domain }}
@@ -326,9 +358,9 @@ with APIs and languages that are simple and familiar, such as SQL.
 Also, with **in-database analytics**, the training compute moves to where the **data** resides.
 This way, our training pipelines will actually run within the database itself.
 
-Here, we will use **Greenplum** for **in-database-analytics**. 
+Here, we will use **Greenplum** for **in-database-analytics**.
 
-(<font color="red">NOTE:</font> **Greenplum** is a **Massive Parallel Processing** data platform; 
+(<font color="red">NOTE:</font> **Greenplum** is a **Massive Parallel Processing** data platform;
 it's been designed from the ground up for exactly this kind of use case.)
 
 <div style="text-align: left; justify-content: left; align-items: center; width: 80%; margin-bottom: 20px; font-size: small">
@@ -338,7 +370,79 @@ it's been designed from the ground up for exactly this kind of use case.)
 </div>
 <div style="clear: left;"></div>
 
-Let's view the PL/Python SQL function that will be used to train the model.
+**Tanzu Application Platform** can easily integrate with just about any modern database using **Service Bindings**.
+This includes databases with support for **in-database analytics**.
+In this exercise, we will use **VMware Greenplum** for in-database analytics.
+
+Let's go back to our datasets from the data catalog:
+```dashboard:open-url
+url: {{ ingress_protocol }}://datahub-datahub.{{ DATA_E2E_BASE_URL }}
+```
+
+Login (credentials: **datahub/Vmware1!**), go to the Home Page (click on the top-left icon),
+click on the "Explore all" link and select **ServiceBinding Sources**
+in the **View** search bar towards the top (with the prompt text "Create a View").
+
+These are the assets that have been previously tagged as **ServiceBinding** resources.
+**ServiceBindings** is a Kubernetes-standard specification for connecting apps with databases, API services and
+other resources, and it is supported out of the box by **TAP**. More on **ServiceBindings** will be explored later in the session.
+
+The results should include 1 **greenplum** database and 1 **postgres** database. Click on each link and explore each asset.
+
+Notice the following:
+* The **greenplum** database has been tagged as a **training** asset. This is the dataset that will be used for **training**.
+* The **postgres** database has been tagged as an **inference** asset. This is the dataset that will be used for **inference**.
+* The **postgres** instance is tagged as a **google-cloud** asset, while the **greenplum** instance is tagged as an **aws** asset.
+  Both assets will be used in a **multi-cloud** ML pipeline.
+
+For **training**: Click on the **dev** Greenplum database in the search results.
+This will provide our **training environment**.
+For this exercise, we will take the same training code that we used for the in-memory learner
+and deploy it to the **VMware Greenplum** training instance we found in the **Data Catalog** earlier.
+We will use Greenplum's **PL/Python** feature, which allows us to deploy Python code as a database **UDF** function.
+
+Notice that the **training** instance is tagged with the label **aws**, indicating the platform where it is located.
+
+<font color="red">NOTE</font>: How do we access the training instance?
+Notice the tags that start with **servicebinding:** that have been associated with the **dev** instance.
+Their specific names are **servicebinding:type:greenplum** and **servicebinding:provider:vmware**.
+Thanks to **ServiceBindings**, these are the only keys we will need to connect to our Greenplum instance.
+
+Navigate to the **TAP GUI** and click on the **pgadmin** instance:
+```dashboard:open-url
+url: {{ ingress_protocol }}://tap-gui.{{ ingress_domain }}/supply-chain
+```
+
+Launch pgAdmin by retrieving the URL from the **tanzu cli** (login credentials: test@test.com/alwaysbekind):
+```execute
+tanzu apps workload get pgadmin-tap --namespace pgadmin
+```
+
+Let's view the credentials for the **training** instance using the ServiceBindings **servicebinding:type:greenplum** and **servicebinding:provider:vmware**:
+```execute
+export PGADMIN_TMP_POD=$(kubectl get pod -l "app.kubernetes.io/part-of=pgadmin-tap,app.kubernetes.io/component=run" -oname -n pgadmin);
+export PGADMIN_POD=$(echo ${PGADMIN_TMP_POD} | cut -b 5-);
+kubectl cp ~/other/resources/pgadmin/show_server_import_file.sh pgadmin/$PGADMIN_POD:/tmp;
+kubectl exec -it $PGADMIN_POD -n pgadmin -- sh -c "SRV_GRP_SUFFIX={{session_namespace}} /tmp/show_server_import_file.sh;"$(SRV_GRP_SUFFIX={{session_namespace}});
+```
+
+Observe that we were able to fetch the necessary DB credentials by using a ServiceBindings compatible library
+(**pyservicebindings**).
+
+Now we will import the server file:
+```execute
+export PGADMIN_TMP_POD=$(kubectl get pod -l "app.kubernetes.io/part-of=pgadmin-tap,app.kubernetes.io/component=run" -oname -n pgadmin);
+export PGADMIN_POD=$(echo ${PGADMIN_TMP_POD} | cut -b 5-);
+kubectl cp ~/other/resources/pgadmin/import_server_import_file.sh pgadmin/$PGADMIN_POD:/tmp;
+kubectl exec -it $PGADMIN_POD -n pgadmin -- sh -c "SRV_GRP_SUFFIX={{session_namespace}} /tmp/import_server_import_file.sh;"
+```
+
+Now refresh pgAdmin and locate the Server connection instances which should be displayed as **Server Group Training {{session_namespace}}** and **Server Group Inference {{session_namespace}}**:
+```dashboard:open-url
+url: {{ ingress_protocol }}://pgadmin-tap.pgadmin.{{ DATA_E2E_BASE_URL }}
+```
+
+Next, we will view the PL/Python SQL function that will be used to train the model.
 
 Fetch the code:
 ```execute
@@ -402,7 +506,7 @@ file: ~/other/resources/appcr/pipeline_app_gp.yaml
 Once deployed, **TAP** will take care of monitoring the App's resources and tracking when there are changes to the git repo source.
 (**TAP** does this by leveraging **kapp-controller**, which is another built-in that comes with **TAP**.)
 
-Update the training parameters for this workflow (under **train_model** --> **parameters**, increase **epochs** from 10 to 20):
+Update the training parameters for this workflow (under **train_model** --> **parameters**, increase **epochs** from 10 to 15):
 ```editor:open-file
 file: ~/sample-ml-app/MLproject
 ```
@@ -450,6 +554,24 @@ We will use **PL/Python** to deploy the code, which is supported in Postgres.
 Here is the inference code:
 ```editor:open-file
 file: ~/other/resources/plpython/sql/deploy_db_inference.sql
+```
+
+To invoke the inference code which is deployed to the Postgres database,
+we will also use **GreenplumPython**, which allows us to interact with Greenplum and Postgres using Python code.
+
+<div style="text-align: left; justify-content: left; align-items: center; width: 80%; margin-bottom: 20px; font-size: small">
+    <img style="float: left; width: 20%; max-width: 20%; margin: 0 10px 0 0" src="images/mlops-tip.png"> 
+    <b>What is GreenplumPython?</b><br/>
+    GreenplumPython is a Python library that enables the user to interact with Greenplum in a Pythonic way.
+    Learn more about GreenplumPython here: <a href="https://greenplum-db.github.io/GreenplumPython/stable/">Home Page</a>
+</div>
+<div style="clear: left;"></div>
+
+Here is the app code that invokes the inference function using **GreenplumPython**:
+```editor:select-matching-text
+file: ~/sample-ml-app/app/analytics/cifar_cnn_greenplum.py
+text: "name: deploy-inference-db"
+after: 21
 ```
 
 In both the training and inference, we are using **Liquibase** to update the target databases with the appropriate UDF functions.

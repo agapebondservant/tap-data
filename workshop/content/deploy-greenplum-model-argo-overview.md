@@ -227,7 +227,7 @@ In both the training and inference, we are using **Liquibase** to update the tar
 Return to **pgAdmin** and select _Databases -> pginstance-inference -> Schemas -> {{session_namespace}}_ to select the Postgres inference instance.
 Then right-click the database schema, select "Query Tool", and run the following query:
 ```copy
-SELECT * FROM "{{session_namespace}}".databasechangelog;
+SELECT * FROM databasechangelog;
 ```
 
 The database changes are successfully being tracked (managed by Liquibase).

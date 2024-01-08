@@ -1,0 +1,7 @@
+name: MLOps Workshop with Argo Workflows, Greenplum, MLFlow and TAP
+
+modules:
+    activate:
+    - mlops-demo-setup
+    - mlops-tap-overview
+    - mlops-workshop

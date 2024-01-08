@@ -18,7 +18,8 @@ streamlit==1.18.0 # streamlit==1.11.1
 Pillow
 streamlit-autorefresh
 jupyterflow
-https://files.pythonhosted.org/packages/bd/1a/45fc8084873d58419b0b1b1f2f8303e84706adc8478c63d4ed19e9919445/ray-2.1.0-cp310-cp310-macosx_10_15_universal2.whl
+#https://files.pythonhosted.org/packages/bd/1a/45fc8084873d58419b0b1b1f2f8303e84706adc8478c63d4ed19e9919445/ray-2.1.0-cp310-cp310-macosx_10_15_universal2.whl
+https://files.pythonhosted.org/packages/d5/d1/50c97d98a8ead5660b832136b7cfcab0b4ed02099bf0fa6e7b18beaf3ba8/ray-2.6.3-cp310-cp310-manylinux2014_x86_64.whl
 https://github.com/agapebondservant/ml-metrics-accelerator/zipball/main
 lz4
 pyyaml==5.3.1

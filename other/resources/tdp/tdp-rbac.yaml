@@ -1,0 +1,38 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: bkstg-automation
+  labels:
+    apps.tanzu.vmware.com/aggregate-to-app-operator-cluster-access: "true"
+rules:
+  - apiGroups: ["services.apps.tanzu.vmware.com"]
+    resources: ["clusterinstanceclasses"]
+    verbs: ["*"]
+  - apiGroups: ["*"]
+    resources: ["*"]
+    verbs: ["get", "watch", "list", "patch", "update"]
+  - apiGroups: ["services.apps.tanzu.vmware.com"]
+    resources: ["classclaims"]
+    verbs: ["*"]
+  - apiGroups: ["services.apps.tanzu.vmware.com"]
+    resources: ["resourceclaims"]
+    verbs: ["*"]
+  - apiGroups: ["servicebinding.io"]
+    resources: ["servicebindings"]
+    verbs: ["*"]
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    verbs: ["*"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: bkstg-automation-tap-gui
+subjects:
+  - kind: ServiceAccount
+    name: tap-gui
+    namespace: tap-gui
+roleRef:
+  kind: ClusterRole
+  name: bkstg-automation
+  apiGroup: rbac.authorization.k8s.io

@@ -188,6 +188,8 @@ tap_gui:
       locations:
         - type: url
           target: ${DATA_E2E_GIT_TAP_CATALOG_PATH}/catalog-info.yaml
+        - type: url
+          target: https://github.com/tanzumldemos/backstage-ml-panel/blob/main/yaml/static/tools.yaml
     #Example Integration for custom GitLab:
     integrations:
       gitlab:
@@ -198,6 +200,9 @@ tap_gui:
       reading:
         allow:
           - host: gitlab.com # Example URL: gitlab.example.com
+    mlbackstage:
+      clusterName: host
+      imageRepoBaseUrl: https://github.com/tanzumldemos/backstage-ml-panel/blob/main/images
 
 metadata_store:
   ns_for_export_app_cert: "*"
@@ -205,3 +210,8 @@ metadata_store:
 
 policy:
   tuf_enabled: false
+
+#package_overlays:
+#  - name: tap-gui
+#    secrets:
+#      - name: tpb-app-image-overlay-secret

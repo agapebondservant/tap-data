@@ -1,0 +1,14 @@
+apiVersion: learningcenter.tanzu.vmware.com/v1beta1
+kind: TrainingPortal
+metadata:
+  name: tanzu-mlops
+spec:
+  workshops:
+    - name: data-mlops-workshop
+      capacity: 5
+      expires: 120m
+      orphaned: 5m
+    - name: data-mlops-demo
+      capacity: 1
+      expires: 120m
+      orphaned: 5m

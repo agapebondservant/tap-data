@@ -656,11 +656,11 @@ tanzu package install tap -p tap.tanzu.vmware.com -v $TAP_VERSION --values-file 
 # If installing TAP 1.7+:
 kubectl create serviceaccount tap-gui || true
 kubectl create clusterrolebinding tap-gui-cluster-admin --serviceaccount=default:tap-gui --clusterrole=cluster-admin || true
-kubectl create token tap-gui || true
+kubectl apply -f resources/tap-gui-token.yaml || true
 export TAP_1_7_KUBECONFIG_CA=$(kubectl config view --raw --minify --flatten -o jsonpath='{.clusters[].cluster.certificate-authority-data}')
 export TAP_1_7_KUBECONFIG_CA_B64=$(echo ${TAP_1_7_KUBECONFIG_CA} | base64 --decode)
 export TAP_1_7_KUBEURL=$(kubectl config view --raw --minify --flatten -o jsonpath='{.clusters[].cluster.server}')
-export TAP_1_7_KUBETOKEN=tap-gui
+export TAP_1_7_KUBETOKEN=$(kubectl -n tap-gui get secret tap-gui -o=json | jq -r '.data["token"]' | base64 --decode)
 envsubst < resources/tap-values-1.7.in.yaml > resources/tap-values-1.7.yaml
 envsubst < resources/tap-values-1.7-buildservice.in.yaml > resources/tap-values-1.7-buildservice.yaml
 tanzu package install tap -p tap.tanzu.vmware.com -v $TAP_VERSION --values-file resources/tap-values-1.7.yaml -n tap-install
@@ -846,9 +846,14 @@ yarn install && yarn tsc && yarn build
 yarn publish
 ```
 
+* Enable RBAC permissions for the TDP user (**tap-gui** by default - update as appropriate):
+```
+kubectl apply -f other/resources/tdp/tdp-rbac.yaml
+```
+
 * Update the TDP config if necessary with the latest **app** and **backend** plugins: update
 ```
-other/resources/tdp/tdp-workload.yaml
+other/resources/tdp/tdp-config.yaml
 ```
 
 * Deploy the TDP Configurator Workload:
@@ -873,6 +878,12 @@ kubectl apply -f other/resources/tdp/tdp-overlay-secret.yaml
 
 * Uncomment the **package-overlays** section of the TAP values.yaml file, and update tap:
 ```
+source .env
+export TAP_1_7_KUBECONFIG_CA=$(kubectl config view --raw --minify --flatten -o jsonpath='{.clusters[].cluster.certificate-authority-data}')
+export TAP_1_7_KUBECONFIG_CA_B64=$(echo ${TAP_1_7_KUBECONFIG_CA} | base64 --decode)
+export TAP_1_7_KUBETOKEN=$(kubectl -n tap-gui get secret tap-gui -o=json | jq -r '.data["token"]' | base64 --decode)
+export TAP_1_7_KUBETOKEN=tap-gui
+envsubst < resources/tap-values-1.7.in.yaml > resources/tap-values-1.7.yaml
 tanzu package installed update tap -n tap-install --values-file resources/tap-values-1.7.yaml
 ```
 

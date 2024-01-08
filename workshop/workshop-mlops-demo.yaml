@@ -1,4 +1,4 @@
-name: MLOps with Argo Workflows, MLFlow and TAP
+name: MLOps Demo with Argo Workflows, Greenplum, MLFlow and TAP
 
 modules:
     activate:

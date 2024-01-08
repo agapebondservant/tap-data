@@ -1,8 +1,8 @@
 app:
   plugins:
     - name: "@oawofolu/plugin-mlworkflows-main-wrapper"
-      version: "0.1.4"
+      version: "0.1.6"
 backend:
   plugins:
     - name: "@oawofolu/plugin-mlworkflows-main-wrapper-backend"
-      version: "0.1.6"
+      version: "0.1.7"
