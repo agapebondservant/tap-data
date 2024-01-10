@@ -1,4 +1,4 @@
-### Exploring the Backstage ML Portal in Tanzu Developer Portal
+### Exploring the Backstage ML Portal
 
 #### Launch Jupyter notebook from ML Portal
 TAP's **Tanzu Developer Portal** is a customizable portal that can be extended to incorporate different **Backstage plugins**.

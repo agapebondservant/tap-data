@@ -168,12 +168,22 @@ In **TAP**, navigate to the Accelerators view:
 url: {{ ingress_protocol }}://tap-gui.{{ ingress_domain }}/create
 ```
 
-In the Search field (top-left), enter **kapp**, then click "Choose" on the accelerator entitled **Sample Argo Workflow with KappController**.
-Fill out the fields as appropriate, click "Generate" to generate the template, then click "Explore" to view the generated files.
+In the Search field (top-left), enter **ml**. 
+This presents a filtered view of templated that have been tagged as **ML** accelerators.
+Scroll through the panel to see what's available.
+
+Next, enter **kapp**, then click "Choose" on the accelerator entitled **Sample Argo Workflow with KappController**.
+This Accelerator includes a link to a Manual with more information. Highlight the copy the link to view.
+
+Now, fill out the fields as appropriate, click "Generate" to generate the template, then click "Explore" to view the generated files.
 Observe that the entries made are reflected in the generated template.
 **Tanzu** Accelerators allows us to reuse the template as a bootstrap for our own projects: you can download the files, or copy the template as you prefer.
 
-Next, we will load a template that has already been previously generated and custommized. Fetch the code:
+Let's also view an accelerator that could be used to generate a template for a multi-step training pipeline and webapp frontend.
+Enter **tensorflow**, then click "Choose" on the accelerator entitled **Sample ML App Accelerator with multi-step MLflow Workflows**.
+This Accelerator also includes a link to a Manual with more information - highlight and copy to view.
+
+Next, we will load a template from Github that has already been previously generated and customized with the previous two accelerators. Fetch the code:
 ```execute
 export DATA_E2E_GIT_TOKEN={{DATA_E2E_GIT_TOKEN}};
 export DATA_E2E_GIT_USER={{DATA_E2E_GIT_USER}} && rm -rf ~/sample-ml-app;
