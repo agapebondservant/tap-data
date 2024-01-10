@@ -13,14 +13,14 @@ tanzu apps workload get image-processor --namespace default
 
 Download test images to your local machine by right-clicking on the set of images shown and selecting "Download":
 ```editor:open-file
-file: ~/exercises/jupyter/test-images/object-detection/img2.jpeg
+file: ~/exercises/jupyter/test-images/testimages.zip
 ```
 
 Upload an image and observe the prediction from the model.
 
 **NOTE**: If the app shows that it is waiting for the model to be available,
 it means it is waiting for a viable model to be promoted to the "Production" stage.
-This is currently handled using MLFlow's **Model Registry**: <a href="https://mlflow.org/docs/latest/model-registry.html" target="_blank">link</a>.
+This is currently handled using MLFlow's **Model Registry** (see <a href="https://mlflow.org/docs/latest/model-registry.html" target="_blank">documentation</a>).
 To view the model registry, launch MLflow and click on the "Models" tab:
 ```dashboard:open-url
 url: http://mlflow.{{ ingress_domain }}
@@ -68,7 +68,7 @@ In the top right, select the dropdown under **Current Context**, copy the text b
 Next, go to the **Catalog** tab, click **AI** checkbox (under "Categories" on the left), 
 click on "Jupyterhub on Tanzu",
 and click "Deploy". 
-The Visual Editor screen should show up: enter "jupyter-test" for "name", "default" for "Service Account", and
+The Visual Editor screen should show up: enter "jupyter-test" for "name", "kubeappuser" for "Service Account", and
 change **base_domain** to the value below, then click "Deploy":
 ```copy
 {{ ingress_domain }}
