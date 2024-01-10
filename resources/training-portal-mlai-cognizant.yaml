@@ -5,10 +5,10 @@ metadata:
 spec:
   workshops:
     - name: data-mlops-workshop
-      capacity: 5
+      capacity: 2
       expires: 120m
       orphaned: 5m
     - name: data-mlops-demo
-      capacity: 1
+      capacity: 5
       expires: 120m
       orphaned: 5m

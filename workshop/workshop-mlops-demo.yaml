@@ -4,4 +4,5 @@ modules:
     activate:
     - mlops-demo-setup
     - mlops-tap-overview
+    - mlops-backstage-plugin-overview
     - mlops-demo-overview

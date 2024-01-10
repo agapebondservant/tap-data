@@ -436,11 +436,12 @@ watch kubectl get all -noperator-ui
 ```
 
 #### Pre-deploy Greenplum and Spring Cloud Data Flow<a name="predeploys"/>
-* Pre-deploy Greenplum: (only required for these workshops: <b>Greenplum Workshops</b>)
+* Pre-deploy Greenplum for Kubernetes: (only required for these workshops: <b>Greenplum Workshops</b>)
 ```
 source .env
 resources/scripts/setup.sh
 ```
+* Pre-deploy Greenplum on AWS Marketplace: see <a href="https://aws.amazon.com/marketplace/pp/prodview-piiukzn26stas" target="_blank">link</a>
 * Pre-deploy Spring Cloud Data Flow: (only required for these workshops: <b>RabbitMQ Workshops, Gemfire Workshops, Greenplum Workshops, ML/AI workshops</b>)
 ```
 resources/scripts/setup-scdf-1.3.sh

@@ -87,6 +87,8 @@ modules:
       name: Rapid-Fire Workshop
     data-rapid-demo:
       name: Demonstration
+    mlops-backstage-plugin-overview:
+      name: For Data Scientists
 config:
     vars:
     - name: DATA_E2E_REGISTRY_USERNAME
