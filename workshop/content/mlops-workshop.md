@@ -11,7 +11,8 @@ Launch the app by clicking on the URL from the **tanzu** cli:
 tanzu apps workload get image-processor --namespace default
 ```
 
-Download test images to your local machine by right-clicking on the set of images shown and selecting "Download":
+Download test images to your local machine by right-clicking on the set of images shown and selecting "Download".
+(<font color="red">NOTE: </font>If you see an error, navigate to the zip file manually - go to _exercises -> jupyter -> test-images_ in the Code Editor.)
 ```editor:open-file
 file: ~/exercises/jupyter/test-images/testimages.zip
 ```
