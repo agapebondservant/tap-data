@@ -41,14 +41,50 @@ Next, click on **CONNECT** tab, and click on the _copy_ icon for the displayed *
 For this demo, we will use our copied clipboard to connect to this Greenplum instance.
 Click on the **Experiments** tab, and click on **CONSOLE** on the Jupyter tile.
 
-Login to the JupyterLab environment (credentials: **jhub/Vmware1!**).
+Login to the JupyterLab environment - copy the **username** below  (password: **Vmware1!**):
+```copy
+{{session_namespace}}
+```
+
 There should be a templated notebook available - **connect-template.ipynb**.
 Click on the notebook to launch it.
 Then:
 * Launch a new cell (hover underneath the existing cell for the "Click to add a cell" link to appear);
-* Copy all the lines underneath `# For Greenplum` to the new cell;
+* Copy all the lines in the section entitled `# For Greenplum` to the new cell;
 * Replace **bkstg-xxx-name-of-service-binding** with the value of the **ServiceBinding** just copied;
 * Uncomment the content (using **Cmd + /** on Mac or **Ctrl + /** on Windows); and 
 * Run the cell (using **Cmd + Enter** on Mac or **Ctrl + Enter** on Windows). 
 
+<font color="red"><b>NOTE: The first line contains a "pip install" function, which may require a restart of the kernel to take effect. 
+If you receive an error when running the notebook for the first time, simply click on "Restart the kernel" icon in the top panel
+(hover over each icon to locate the right one).
+</b></font>
+
 Data from the Greenplum query should be displayed in a <a href="https://pandas.pydata.org/" target="_blank">pandas</a> **DataFrame**.
+
+#### Experiment with postgresml LLM queries
+With **Tanzu Greenplum / Tanzu Postgres**, developers are able to take advantage of an exciting in-database capability for Generative AI: 
+the **postgresml** extension. **Postgresml** provides the ability to build, train and predict with many different LLM, NLP and other ML workflows 
+entirely within the database.
+
+<div style="text-align: left; justify-content: left; align-items: center; width: 80%; margin-bottom: 20px; font-size: small">
+    <img style="float: left; width: 20%; max-width: 20%; margin: 0 10px 0 0" src="images/mlops-tip.png"> 
+    <b>PostgresML for In-Database AI</b><br/>
+    For more information about PostgresML and how it compares to popular Python tech stacks for similar tasks, see <a href="https://postgresml.org/docs/" target="_blank">the documentation</a>.
+</div>
+<div style="clear: left;"></div>
+
+Let's play with it briefly here. (More background will be covered in a separate workshop.)
+
+* Launch a new cell (hover underneath the existing cell for the "Click to add a cell" link to appear);
+* Copy all the lines in the section entitled `# For Generative AI` to the new cell;
+* Replace **bkstg-xxx-name-of-service-binding** with the value of the **ServiceBinding** under the **Postgres** tile on the **Data** tab.
+  Select the binding that contains _custom-user_ in the list of services displayed by the Postgres tile;
+* Uncomment the content (using **Cmd + /** on Mac or **Ctrl + /** on Windows); and
+* Run the cell (using **Cmd + Enter** on Mac or **Ctrl + Enter** on Windows). 
+
+The inference results should show a short, so-called **text-generation** response to our query.
+
+Next, try again with a larger **max_new_tokens**. Change its value to 100, and then run the steps above again. 
+Notice that there is a different, less "hallucinated", fuller generated response than last time.
+
