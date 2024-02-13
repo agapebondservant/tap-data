@@ -2,6 +2,8 @@
 
 #### Introduction
 
+![Apache Airflow](images/airflow.png)
+
 **Apache Airflow** is a popular workflow management system for scheduling and orchestrating data pipelines.
 
 We will use TAP to deploy a scalable, resilient instance of **Apache Airflow** on our cluster. 
