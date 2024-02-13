@@ -239,4 +239,6 @@ config:
       value: ${DATA_E2E_LLM_GIT_TOKEN}
     - name: DATA_E2E_RAY_ADDRESS
       value: ${DATA_E2E_RAY_ADDRESS}
+    - name: DATA_E2E_AIRFLOW_DAGS_REPO
+      value: ${DATA_E2E_AIRFLOW_DAGS_REPO}
 

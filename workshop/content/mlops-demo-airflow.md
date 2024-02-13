@@ -14,7 +14,7 @@ Also, we will use **Git-Sync** to allow our **DAG files** in GitHub to be synced
 
 Here is the **DAG** that will be synced:
 ```dashboard:open-url
-url: https://github.com/agapebondservant/airflow-accelerator/tree/main/resources/dags
+url: {{DATA_E2E_AIRFLOW_DAGS_REPO}}
 ```
 
 <font color="red"><b>NOTE:</b></font> This will be a one-off deployment. Normally, we will use **GitOps pipelines** to deploy and manage our **Apache Airflow** instances.
