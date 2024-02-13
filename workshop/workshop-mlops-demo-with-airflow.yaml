@@ -1,0 +1,9 @@
+name: MLOps Demo with Argo Workflows, Greenplum, MLFlow and TAP
+
+modules:
+    activate:
+    - mlops-demo-setup
+    - mlops-tap-overview
+    - mlops-demo-airflow
+    - mlops-backstage-plugin-overview
+    - mlops-demo-overview

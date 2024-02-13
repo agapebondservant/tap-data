@@ -4,11 +4,7 @@ metadata:
   name: uhs-demo
 spec:
   workshops:
-    - name: data-mlops-workshop
-      capacity: 2
-      expires: 120m
-      orphaned: 5m
-    - name: data-mlops-demo
-      capacity: 5
+    - name: data-mlops-demo-with-airflow
+      capacity: 7
       expires: 120m
       orphaned: 5m

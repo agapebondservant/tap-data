@@ -83,6 +83,8 @@ modules:
       name: Before You Begin
     mlops-demo-overview:
       name: Demonstration
+    mlops-demo-airflow:
+      name: Airflow
     mlops-workshop:
       name: Rapid-Fire Workshop
     data-rapid-demo:
