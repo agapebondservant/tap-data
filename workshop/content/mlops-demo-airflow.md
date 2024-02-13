@@ -6,7 +6,7 @@
 
 **Apache Airflow** is a popular workflow management system for scheduling and orchestrating data pipelines.
 
-We will use TAP to deploy a scalable, resilient instance of **Apache Airflow** on our cluster. 
+We will use **TAP** to deploy a scalable, resilient instance of **Apache Airflow** on our cluster. 
 
 For this deployment, we will leverage the **KubernetesExecutor** for resilience and isolation.
 (Click <a href="https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/executor/kubernetes.html" target="_blank">here</a> to learn more about the **KubernetesExecutor**.)
@@ -52,7 +52,7 @@ Next, go to the **Catalog** tab, click on "Airflow", and click "Deploy".
 The Visual Editor screen should show up with the content of the **values.yaml** file.
 Updating the content will allow us to override the configuration for our deployment.
 
-For a baseline configuration to use, we can search for a predefined template from TAP's **Accelerators**.
+For a baseline, we can search for a predefined template with TAP's **Accelerators**.
 Launch the Accelerator view:
 ```dashboard:open-url
 url: {{ ingress_protocol }}://tap-gui.{{ ingress_domain }}/create
