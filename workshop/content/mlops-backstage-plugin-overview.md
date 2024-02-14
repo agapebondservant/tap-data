@@ -56,7 +56,7 @@ Then:
 * Run the cell (using **Cmd + Enter** on Mac or **Ctrl + Enter** on Windows). 
 
 <font color="red"><b>NOTE: The first line contains a "pip install" function, which may require a restart of the kernel to take effect. 
-If you receive an error when running the notebook for the first time, simply click on "Restart the kernel" icon in the top panel
+If you receive an error when running the notebook for the first time (such as <font color="red"><i>No module named 'psycopg2'</i></font>), simply click on "Restart the kernel" icon in the top panel
 (hover over each icon to locate the right one).
 </b></font>
 
