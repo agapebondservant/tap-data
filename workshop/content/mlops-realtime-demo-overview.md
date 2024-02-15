@@ -5,15 +5,15 @@ Launch the Workloads screen:
 {{ ingress_protocol }}://tap-gui.{{ DATA_E2E_BASE_URL }}/supply-chain
 ```
 
-Click on **realtimedemo-tap**, scroll to the *Delivery** tile and click on the **URL** that shows up towards the bottom.
+Click on **realtimedemo-tap**, scroll to the **Delivery** tile and click on the **URL** that shows up towards the bottom.
 (The URL should appear as:)
 ```dashboard:open-url
-https://realtimedemo-tap.default.{{ DATA_E2E_BASE_URL }}
+url: https://realtimedemo-tap.default.{{ DATA_E2E_BASE_URL }}
 ```
 
 Next, show the accelerators - Evidently, Argo Workflows, Sample Realtime analytics demo, etc:
 ```dashboard:open-url
-{{ ingress_protocol }}://tap-gui.{{ DATA_E2E_BASE_URL }}/supply-chain
+url: {{ ingress_protocol }}://tap-gui.{{ DATA_E2E_BASE_URL }}/supply-chain
 ```
 
 Enter **kapp**, then click "Choose" on the accelerator entitled **Sample Argo Workflow with KappController**.
@@ -30,7 +30,7 @@ rm -rf data-e2e-demo-app; git clone https://github.com/agapebondservant/data-e2e
 
 Next, we will view the associated pipelines from the ML Panel:
 ```dashboard:open-url
-{{ ingress_protocol }}://tap-gui.{{ DATA_E2E_BASE_URL }}/mlworkflows/mlworkflows-pipelines
+url: {{ ingress_protocol }}://tap-gui.{{ DATA_E2E_BASE_URL }}/mlworkflows/mlworkflows-pipelines
 ```
 
 First, view the Argo Workflows pipelines that was just launched by clicking on **CONSOLE** on the Argo Workflows tile.
@@ -54,7 +54,7 @@ url: http://mlflow.{{ ingress_domain }}
 ```
 Select any of the models shown and promote to production, then navigate to the app - the selected model should be displayed on top:
 ```dashboard:open-url
-https://realtimedemo-tap.default.{{ DATA_E2E_BASE_URL }}
+url: https://realtimedemo-tap.default.{{ DATA_E2E_BASE_URL }}
 ```
 
 Next, view the Evidently dashboard by navigating to **Models** and clicking on **CONSOLE** on the **Evidently** tile.
