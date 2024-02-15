@@ -24,7 +24,7 @@ Observe that the entries made are reflected in the generated template.
 **Tanzu** Accelerators allows us to reuse the template as a bootstrap for our own projects: you can download the files, or copy the template as you prefer.
 
 Next, we will deploy a realtime Argo Workflows pipeline by pushing an accelerator template to Github:
-```
+```dashboard:open-url
 rm -rf data-e2e-demo-app; git clone https://github.com/agapebondservant/data-e2e-demo-app.git; cd data-e2e-demo-app; kapp deploy -a random-forest-training-main --logs -y  -nargo -f demo-ml/appcr/pipeline_app.yaml;
 ```
 
