@@ -1,0 +1,6 @@
+name: Rapid Realtime MLOps Demo
+
+modules:
+    activate:
+    - mlops-realtime-demo-setup
+    - mlops-realtime-demo-overview
