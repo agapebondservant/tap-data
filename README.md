@@ -784,6 +784,12 @@ tanzu acc create argo-pipelines-acc --git-repository https://github.com/agapebon
 tanzu acc create in-db-analytics-acc --git-repository https://github.com/agapebondservant/in-database-analytics-accelerator.git --git-branch main
 tanzu acc create argo-pipelines-kapp-acc --git-repository https://github.com/agapebondservant/sample-argo-workflow-kappcontroller-accelerator.git --git-branch main
 tanzu acc create mlplatform --git-repository https://github.com/agapebondservant/mlplatform-accelerator.git --git-branch main
+tanzu acc create airflow --git-repository https://github.com/agapebondservant/airflow-accelerator.git --git-branch main
+tanzu acc fragment create airflow-fragment --git-repository https://github.com/agapebondservant/airflow-accelerator.git --git-branch main
+tanzu acc create postgres --git-repository https://github.com/agapebondservant/postgres-accelerator.git --git-branch main
+tanzu acc fragment create postgres-fragment --git-repository https://github.com/agapebondservant/postgres-accelerator.git --git-branch main
+tanzu acc create mlflow --git-repository https://github.com/agapebondservant/mlflow-accelerator.git --git-branch main
+tanzu acc fragment create mlflow-fragment --git-repository https://github.com/agapebondservant/mlflow-accelerator.git --git-branch main
 ```
 
 Install Auto API Registration:
