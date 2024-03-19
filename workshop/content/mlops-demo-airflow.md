@@ -60,12 +60,26 @@ url: {{ ingress_protocol }}://tap-gui.{{ ingress_domain }}/create
 
 On the **Airflow Accelerator**, click **Choose**. A list of configurable entries should be displayed, as well as
 a link to the official documentation for the Airflow package. 
+For example, notice that the _web.image.tag_ property that we are configuring is **2.8.1**.
+Selecting and configuring the right version for our environment is important; 
+we may want to keep a specific, consistent version, or upgrade to a new version.
+We will make use of the version number shortly.
 
 For this exercise, we'll keep the default values as is. Click on **Explore**, navigate to **resources/values-overrides.yaml** in the displayed window, 
 and click **Copy**. 
 
 Now, return to **KubeApps** and replace the content of the textarea with the values you just copied.
+
+**KubeApps** includes a list of **chart versions** that can be deployed.
+Click on the **Package Version** dropdown on the top right, and select **16.6.0 / App Version 2.8.1**.
+This version matches the app version that we configured earlier.
 Then click "Deploy".
+
+In the YAML editor, our updates to the default configuration should be visually displayed in _diff_ format.
+This allows us to validate our updates;
+it also allows us to spot any breaking changes to the YAML config that we may need to backfill before deploying.
+Then, click the "Deploy" button below.
+
 
 <font color="red"><b>NOTE:</b></font> This may take up to a few minutes to deploy. Once fully deployed, **KubeApps** should display an indicator 
 showing that the deployment is complete. Refresh your screen after a minute if the status doesn't show the update right away.
