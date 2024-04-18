@@ -373,3 +373,17 @@ other/resources/appcr/values_default_gp.yaml
 /Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/minio/minio-bitnami-ml-http-proxy.yaml
 /Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/tdp/tdp-workload.yaml
 /Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/tdp/tdp-overlay-secret.yaml
+./resources/tap-values-1.7.yaml
+./resources/tap-values-1.7-learningcenter.yaml
+./resources/minio-bitnami-plain-http-proxy.yaml
+./resources/minio-bitnami-http-proxy.yaml
+./resources/tap-values-1.7-buildservice.yaml
+./other/resources/appcr/values_default.yaml
+./other/resources/appcr/values_default_gp.yaml
+./other/resources/minio/minio-bitnami-ml-http-proxy.yaml
+./other/resources/tdp/tdp-workload.yaml
+./other/resources/tdp/tdp-overlay-secret.yaml
+resources/cert-manager-issuer-gke.yaml
+resources/tanzu-aws-1.7-gke.yaml
+/Users/oawofolu/PIVOTAL/data/educates/tap/resources/cert-manager-issuer-gke.yaml
+/Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/tls/openssl.conf

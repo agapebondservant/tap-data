@@ -4,11 +4,11 @@ metadata:
   name: tap-gui-httpproxy
   namespace: tap-gui
 spec:
-  routes:
-  - conditions:
-    - prefix: /
-    services:
-    - name: server
-      port: 7000
   virtualhost:
     fqdn: tap-gui.${DATA_E2E_BASE_URL}
+    tls:
+      passthrough: true
+  tcpproxy:
+    services:
+      - name: server
+        port: 7000

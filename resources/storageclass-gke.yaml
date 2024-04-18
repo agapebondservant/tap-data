@@ -1,15 +1,20 @@
+---
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: generic
   annotations:
+    components.gke.io/component-name: pdcsi
+    components.gke.io/component-version: 0.16.18
+    components.gke.io/layer: addon
     kapp.k14s.io/update-strategy: always-replace
     storageclass.kubernetes.io/is-default-class: "true"
-provisioner: kubernetes.io/gce-pd
-reclaimPolicy: Delete
-allowVolumeExpansion: true
-volumeBindingMode: WaitForFirstConsumer
+  labels:
+    addonmanager.kubernetes.io/mode: EnsureExists
+    k8s-app: gcp-compute-persistent-disk-csi-driver
+  name: generic
 parameters:
-  type: pd-standard
-  fstype: ext4
-  replication-type: none
+  type: pd-balanced
+provisioner: pd.csi.storage.gke.io
+reclaimPolicy: Delete
+volumeBindingMode: WaitForFirstConsumer
+allowVolumeExpansion: true

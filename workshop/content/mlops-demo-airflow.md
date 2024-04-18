@@ -28,7 +28,7 @@ Let's begin!
 
 Launch **Kubeapps** using the URL provided here:
 ```execute
-export KUBEAPPS_SERVICE_IP=$(kubectl get svc --namespace {{session_namespace}} kubeapps -o jsonpath="{.status.loadBalancer.ingress[0].hostname}");
+export KUBEAPPS_SERVICE_IP=$(kubectl get svc --namespace {{session_namespace}} kubeapps -o jsonpath="{.status.loadBalancer.ingress[0]['hostname', 'ip']}");
 echo "http://${KUBEAPPS_SERVICE_IP}"
 ```
 

@@ -16,7 +16,7 @@ spec:
           - pipeline.yaml
           - values.yaml
           - external_secrets.yaml
-          - .git/HEAD
+          - #@ ".git/refs/heads/{}".format(data.values.environment_name)
 
   deploy:
     - kapp: {}

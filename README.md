@@ -48,9 +48,12 @@ Pre-requisites: A Kubernetes cluster with TAP installed - see [Install TAP](#tap
 * Populate the .env file where possible (NOTE: only a subset of the variables can be populated at the moment.
 New entries will be populated as the install proceeds)
 
-* Download the latest version of the tanzu cli (see link: https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap/install-tanzu-cli.html)
-
 * Install the appropriate version of the kubectl version for the desired version of TAP (see below to confirm if a new version of Kubernetes is needed).
+
+FOR TKG:
+--------
+
+* Download the latest version of the tanzu cli (see link: https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap/install-tanzu-cli.html)
 
 * Run the following if a Kubernetes cluster upgrade is needed (see TAP version support matrix: https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap/k8s-matrix.html):
 ```
@@ -82,6 +85,21 @@ tanzu cluster kubeconfig get <your-cluster-name> --admin
 kubectl config use-context <your-cluster-name>-admin@<your-cluster-name>
 ```
 
+FOR GKE:
+--------
+* Login:
+```
+gcloud auth login
+```
+
+* Ensure that the user returned by `gcloud info` has **Kubernetes Engine Admin** privileges: 
+under IAM -> View Princiapls, select the user returned above and add the **Kubernetes Engine Admin** role.
+
+* Switch to the K8s cluster context:
+```
+gcloud container clusters get-credentials mlops-gke --zone us-east1-c --project pa-oawofolu
+```
+
 * Populate a ConfigMap based on the .env file
 ```
 kubectl delete configmap data-e2e-env || true; sed 's/export //g' .env > .env-properties && kubectl create configmap data-e2e-env --from-env-file=.env-properties && rm .env-properties
@@ -97,15 +115,21 @@ for orig in `find . -name "*.in.*" -type f`; do
 done
 ```
 
-* Create the default storage class (ensure that it is called generic, that the volume binding mode is WaitForFirstCustomer instead of Immediate, and the reclaimPolicy should be Retain) 
+* (On AWS) Create the default storage class (ensure that it is called generic, that the volume binding mode is WaitForFirstCustomer instead of Immediate, and the reclaimPolicy should be Retain) 
 ```
 kubectl apply -f resources/storageclass.yaml
 ```
 
-* Mark the storage class as default: 
+* (On AWS) Mark the storage class as default: 
 ```
 kubectl patch storageclass generic -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
 kubectl patch storageclass default -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
+```
+
+* (On GCP) Mark the storage class as default:
+```
+kubectl apply -f resources/storageclass-gke.yaml
+kubectl patch storageclass standard-rwo -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
 ```
 
 * Create the network policy (networkpolicy.yaml - uses allow-all-ingress for now)
@@ -129,6 +153,8 @@ kubectl apply -f https://projectcontour.io/quickstart/v1.24.3/contour.yaml # For
 kubectl apply -f resources/metrics-server.yaml; watch kubectl get deployment metrics-server -n kube-system
 ```
 
+* Deploy Tanzu Cluster Essentials: see https://docs.vmware.com/en/Cluster-Essentials-for-VMware-Tanzu/1.8/cluster-essentials/deploy.html
+
 * Deploy cluster-scoped cert-manager:
 ```
 kubectl create ns cert-manager
@@ -136,9 +162,33 @@ kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.5
 kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.11.0/cert-manager.yaml # For TAP 1.5+
 ```
 
-* Deploy CERT-MANAGER-ISSUER  (self-signed), CERTIFICATE-SIGNING-REQUEST, CERT-MANAGER-ISSUER (CA):
+* (On AWS): Deploy CERT-MANAGER-ISSUER  (self-signed), CERTIFICATE-SIGNING-REQUEST, CERT-MANAGER-ISSUER (CA):
 ```
 kubectl apply -f resources/cert-manager-issuer.yaml
+```
+
+* (On GCP): Set up ServiceAccount secret (see "Use Static Credentials": https://cert-manager.io/docs/configuration/acme/dns01/google/)
+```
+PROJECT_ID=<YOUR-GCP-PROJECT-ID>
+gcloud iam service-accounts create dns01-solver --display-name "dns01-solver"
+gcloud iam service-accounts keys create key.json \
+   --iam-account dns01-solver@$PROJECT_ID.iam.gserviceaccount.com
+kubectl create secret generic clouddns-dns01-solver-svc-acct -n cert-manager \
+   --from-file=key.json
+```
+
+* (On GCP): Deploy ClusterIssuer, Certificate, SecretExport:
+```
+kubectl apply -f resources/cert-manager-issuer-gke.yaml
+rm key.json
+```
+
+* Set up Secrets:
+```
+kubectl create secret docker-registry registry-credentials --docker-server=https://index.docker.io/v1/ --docker-username=${DATA_E2E_REGISTRY_USERNAME} --docker-password=${DATA_E2E_REGISTRY_PASSWORD} --dry-run -o yaml | kubectl apply -f -
+kubectl annotate secret registry-credentials secretgen.carvel.dev/image-pull-secret=""
+kubectl create secret docker-registry tanzu-image-pull-secret --docker-server=registry.tanzu.vmware.com --docker-username=${DATA_E2E_PIVOTAL_REGISTRY_USERNAME} --docker-password=${DATA_E2E_PIVOTAL_REGISTRY_PASSWORD} --dry-run -o yaml | kubectl apply -f -
+kubectl annotate secret tanzu-image-pull-secret secretgen.carvel.dev/image-pull-secret=""
 ```
 
 * Install SealedSecrets:
@@ -162,7 +212,7 @@ helm install external-secrets external-secrets/external-secrets -n external-secr
 ```
 helm repo add hashicorp https://helm.releases.hashicorp.com
 helm install vault hashicorp/vault --set='server.ha.enabled=true' --set='server.ha.raft.enabled=true' -n vault --create-namespace --wait
-watch kubectl get pod -nvault
+watch kubectl get pod -nvault #NOTE: will not show "Ready" until the rest of the steps below are executed
 
 resources/scripts/setup-vault.sh
 
@@ -203,7 +253,7 @@ openssl req -new -x509 -nodes -days 730 -key private.key -out public.crt -config
 kubectl create ns minio
 kubectl create secret generic tls-ssl-minio --from-file=private.key  --from-file=tls.key=private.key --from-file=public.crt  --from-file=tls.crt=public.crt --from-file=ca.crt=public.crt --namespace minio
 helm install --set resources.requests.memory=1.5Gi,tls.enabled=true,auth.rootUser=minio,ingress.enabled=true,ingress.hostname=${DATA_E2E_MINIO_URL},ingress.selfSigned=true,tls.autoGenerated=true \
---namespace minio minio oci://registry-1.docker.io/bitnamicharts/minio
+--namespace minio minio bitnami/minio
 #helm install --set resources.requests.memory=1.5Gi,tls.enabled=true,auth.rootUser=minio,auth.rootPassword=minio123,tls.existingSecret=tls-ssl-minio \
 #--namespace minio minio oci://registry-1.docker.io/bitnamicharts/minio
 kubectl apply -f resources/minio-bitnami-http-proxy.yaml
@@ -350,9 +400,12 @@ kubectl apply -f resources/prometheus-proxy/proxyhelm/prometheus-proxy-http-prox
 
 #### Install Kubeapps <a name="kubeapps"/>
 ```
-helm install kubeapps oci://registry-1.docker.io/bitnamicharts/kubeapps \
+helm install kubeapps bitnami/kubeapps \
 --set frontend.service.type=LoadBalancer \
 --set packaging.carvel.enabled=true \
+--set ingress.enabled=true \
+--set ingress.hostname=kubeapps.${DATA_E2E_BASE_URL} \
+--set ingress.annotations."projectcontour\.io/websocket-routes"='/' \
 --namespace kubeapps \
 --create-namespace
 kubectl apply -f resources/kubeapps-httpproxy.yaml -nkubeapps
@@ -360,7 +413,7 @@ kubectl apply -f resources/kubeapps-httpproxy.yaml -nkubeapps
 
 To get the Kubeapps Service URL (note: the URL may take several seconds to launch in a browser):
 ```
-export KUBEAPPS_SERVICE_IP=$(kubectl get svc --namespace kubeapps kubeapps -o jsonpath="{.status.loadBalancer.ingress[0].hostname}");
+export KUBEAPPS_SERVICE_IP=$(kubectl get svc --namespace kubeapps kubeapps -o jsonpath="{.status.loadBalancer.ingress[0]['hostname','ip']}");
 echo "http://${KUBEAPPS_SERVICE_IP}"
 ```
 
@@ -420,6 +473,7 @@ export GEMFIRE_NAMESPACE_NM=gemfire-system
 export GEMFIRE_VER=2.2.0
 kubectl create ns $GEMFIRE_NAMESPACE_NM || true
 kubectl create secret docker-registry image-pull-secret --namespace=gemfire-system --docker-server=registry.pivotal.io --docker-username='{{ DATA_E2E_PIVOTAL_REGISTRY_USERNAME }}' --docker-password='{{ DATA_E2E_PIVOTAL_REGISTRY_PASSWORD }}' --dry-run -o yaml | kubectl apply -f -
+kubectl annotate secret image-pull-secret secretgen.carvel.dev/image-pull-secret=""
 helm install  gemfire-crd oci://registry.tanzu.vmware.com/tanzu-gemfire-for-kubernetes/gemfire-crd --version $GEMFIRE_VER --namespace $GEMFIRE_NAMESPACE_NM --set operatorReleaseName=gemfire-operator
 helm install gemfire-operator oci://registry.tanzu.vmware.com/tanzu-gemfire-for-kubernetes/gemfire-operator --version $GEMFIRE_VER --namespace $GEMFIRE_NAMESPACE_NM
 ```
@@ -626,7 +680,7 @@ tanzu secret registry add registry-credentials \
 --server ${INSTALL_REGISTRY_HOSTNAME} \
 --export-to-all-namespaces --yes --namespace tap-install
 kubectl apply -f resources/tap-rbac.yaml -n default
-kubectl apply -f resources/tap-rbac2.yaml -n default
+kubectl apply -f resources/tap-rbac-2.yaml -n default
 
 tanzu package repository add tanzu-tap-repository \
 --url ${INSTALL_REGISTRY_HOSTNAME}/${DATA_E2E_REGISTRY_USERNAME}/tap-packages:$TAP_VERSION \
@@ -655,9 +709,10 @@ envsubst < resources/tap-values-1.5.in.yaml > resources/tap-values-1.5.yaml
 tanzu package install tap -p tap.tanzu.vmware.com -v $TAP_VERSION --values-file resources/tap-values-1.5.yaml -n tap-install
 
 # If installing TAP 1.7+:
-kubectl create serviceaccount tap-gui || true
+kubectl create ns tap-gui
+kubectl create serviceaccount tap-gui -n tap-gui || true
 kubectl create clusterrolebinding tap-gui-cluster-admin --serviceaccount=default:tap-gui --clusterrole=cluster-admin || true
-kubectl apply -f resources/tap-gui-token.yaml || true
+kubectl apply -f resources/tap-gui-token.yaml -n tap-gui || true
 export TAP_1_7_KUBECONFIG_CA=$(kubectl config view --raw --minify --flatten -o jsonpath='{.clusters[].cluster.certificate-authority-data}')
 export TAP_1_7_KUBECONFIG_CA_B64=$(echo ${TAP_1_7_KUBECONFIG_CA} | base64 --decode)
 export TAP_1_7_KUBEURL=$(kubectl config view --raw --minify --flatten -o jsonpath='{.clusters[].cluster.server}')
@@ -741,7 +796,7 @@ tanzu secret registry add tap-registry --username $DATA_E2E_PIVOTAL_REGISTRY_USE
  --export-to-all-namespaces --yes --namespace tap-install;
 tanzu package repository add tanzu-tap-repository-learningcenter \
 --url registry.tanzu.vmware.com/tanzu-application-platform/tap-packages:1.6.5 \
---namespace tap-install-learningcenter; # Accept EULA when prompted
+--namespace tap-install-learningcenter; # Accept EULA when prompted\
 tanzu package install learningcenter -p learningcenter.tanzu.vmware.com -v "> 0.0.0" \
 --values-file resources/tap-values-1.7-learningcenter.yaml --namespace tap-install-learningcenter;
 ```
@@ -785,11 +840,17 @@ tanzu acc create in-db-analytics-acc --git-repository https://github.com/agapebo
 tanzu acc create argo-pipelines-kapp-acc --git-repository https://github.com/agapebondservant/sample-argo-workflow-kappcontroller-accelerator.git --git-branch main
 tanzu acc create mlplatform --git-repository https://github.com/agapebondservant/mlplatform-accelerator.git --git-branch main
 tanzu acc create airflow --git-repository https://github.com/agapebondservant/airflow-accelerator.git --git-branch main
-tanzu acc fragment create airflow-fragment --git-repository https://github.com/agapebondservant/airflow-accelerator.git --git-branch main
 tanzu acc create postgres --git-repository https://github.com/agapebondservant/postgres-accelerator.git --git-branch main
+tanzu acc create mlplatform --git-repository https://github.com/agapebondservant/mlplatform-accelerator.git --git-branch main
+tanzu acc create mlcoderunner --git-repository https://github.com/tanzumlai/mlcode-runner.git --git-branch main
+
+tanzu acc fragment create bitnami-jupyter-fragment --git-repository https://github.com/agapebondservant/jupyter-accelerator.git --git-branch bitnami
+tanzu acc fragment create airflow-fragment --git-repository https://github.com/agapebondservant/airflow-accelerator.git --git-branch main
+tanzu acc fragment create kubeflow-pipelines-fragment --git-repository https://github.com/agapebondservant/kubeflow-pipelines-accelerator.git --git-branch bitnami
+tanzu acc fragment create bitnami-mlflow-fragment --git-repository https://github.com/agapebondservant/mlflow-accelerator.git --git-branch bitnami
 tanzu acc fragment create postgres-fragment --git-repository https://github.com/agapebondservant/postgres-accelerator.git --git-branch main
-tanzu acc create mlflow --git-repository https://github.com/agapebondservant/mlflow-accelerator.git --git-branch main
-tanzu acc fragment create mlflow-fragment --git-repository https://github.com/agapebondservant/mlflow-accelerator.git --git-branch main
+tanzu acc fragment create bitnami-ray-fragment --git-repository https://github.com/agapebondservant/ray-accelerator.git --git-branch bitnami
+
 ```
 
 Install Auto API Registration:
@@ -799,7 +860,7 @@ export API_REG_VERSION=0.4.1 # or existing Auto API package
 tanzu package install api-auto-registration \
 -p apis.apps.tanzu.vmware.com \
 --namespace tap-install \
---version $API_REG_VERSION
+--version $API_REG_VERSION \
 --values-file resources/tap-api-values.yaml
 ```
 

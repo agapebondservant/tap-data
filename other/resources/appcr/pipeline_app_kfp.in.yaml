@@ -14,7 +14,7 @@ spec:
         paths:
           - pipeline.yaml
           - values.yaml
-          - .git/HEAD
+          - #@ ".git/refs/heads/{}".format(data.values.environment_name)
 
   deploy:
     - kapp: {}

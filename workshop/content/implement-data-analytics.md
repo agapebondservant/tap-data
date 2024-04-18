@@ -6,7 +6,7 @@
 
 <font color="green">Use the Gemfire API to predict the classification for a set of sample inputs in Jupyter. When running the cell *Get latest model*, use this as the hostname:</font>
 ```execute
-kubectl get svc gemfire1-dev-api -o jsonpath="{.status.loadBalancer.ingress[0].hostname}"
+kubectl get svc gemfire1-dev-api -o jsonpath="{.status.loadBalancer.ingress[0]['hostname', 'ip']}"
 ```
 
 Deploy the Petclinic Analytics App:

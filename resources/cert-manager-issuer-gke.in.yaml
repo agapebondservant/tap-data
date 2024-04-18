@@ -1,0 +1,50 @@
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-production
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email:  ${DATA_E2E_PIVOTAL_REGISTRY_USERNAME}
+    privateKeySecretRef:
+      name: letsencrypt-production
+    solvers:
+      - dns01:
+          cloudDNS:
+            project: $DATA_E2E_GKE_PROJECT_ID
+            serviceAccountSecretRef:
+              name: clouddns-dns01-solver-svc-acct
+              key: key.json
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: ${DATA_E2E_BASE_URL}
+  namespace: projectcontour
+spec:
+  commonName: tap-gui.${DATA_E2E_BASE_URL}
+  isCA: true
+  secretName: tls
+  privateKey:
+    rotationPolicy: Always
+  dnsNames:
+    - '*.apps.${DATA_E2E_BASE_URL}'
+    - 'tap-gui.${DATA_E2E_BASE_URL}'
+    - 'metadata-store.${DATA_E2E_BASE_URL}'
+    - 'api-portal.${DATA_E2E_BASE_URL}'
+    - '*.learningcenter.${DATA_E2E_BASE_URL}'
+  issuerRef:
+    group: cert-manager.io
+    name: letsencrypt-production
+    kind: ClusterIssuer
+
+---
+apiVersion: secretgen.carvel.dev/v1alpha1
+kind: SecretExport
+metadata:
+  name: tls
+  namespace: projectcontour
+spec:
+  toNamespaces:
+    - '*'

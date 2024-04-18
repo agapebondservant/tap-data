@@ -4,7 +4,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: #@ "resubmit-workflow-" + data.read("HEAD").strip()
+  name: #@ "resubmit-workflow-" + data.read(data.values.environment_name).strip()
   annotations:
     kapp.k14s.io/change-group: "apps.big.co/argo-pipeline-job"
     kapp.k14s.io/change-rule: "upsert before upserting apps.big.co/argo-pipelines"
