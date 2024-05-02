@@ -749,10 +749,11 @@ tanzu package install tap -p tap.tanzu.vmware.com -v $TAP_VERSION --values-file 
 envsubst < resources/tap-values-1.7-buildservice.in.yaml > resources/tap-values-1.7-buildservice.yaml
 tanzu package repository add full-deps-package-repo --url ${INSTALL_REGISTRY_HOSTNAME}/${DATA_E2E_REGISTRY_USERNAME}/tbs-full-deps:$TBS_VERSION --namespace tap-install
 tanzu package install full-deps -p full-deps.buildservice.tanzu.vmware.com -v "> 0.0.0" -n tap-install --values-file resources/tap-values-1.7-buildservice.yaml
+kubectl apply -f resources/clusterbuilders.yaml -ndefault
 
 tanzu package installed delete tap -n tap-install -y 
 # may require manually clearing the finalizers for each stuck package - get the list of stuck packages by running 
-kubectl get packageinstal -ntap-install
+kubectl get packageinstall -ntap-install
 kubectl edit packageinstall/tap -ntap-install
 # Then edit the finalizers list to an empty list - finalizers: []
 
@@ -846,7 +847,7 @@ tanzu acc create mlcoderunner --git-repository https://github.com/tanzumlai/mlco
 
 tanzu acc fragment create bitnami-jupyter-fragment --git-repository https://github.com/agapebondservant/jupyter-accelerator.git --git-branch bitnami
 tanzu acc fragment create airflow-fragment --git-repository https://github.com/agapebondservant/airflow-accelerator.git --git-branch main
-tanzu acc fragment create kubeflow-pipelines-fragment --git-repository https://github.com/agapebondservant/kubeflow-pipelines-accelerator.git --git-branch bitnami
+tanzu acc fragment create kubeflowpipelines-fragment --git-repository https://github.com/agapebondservant/kubeflow-pipelines-accelerator.git --git-branch bitnami
 tanzu acc fragment create bitnami-mlflow-fragment --git-repository https://github.com/agapebondservant/mlflow-accelerator.git --git-branch bitnami
 tanzu acc fragment create postgres-fragment --git-repository https://github.com/agapebondservant/postgres-accelerator.git --git-branch main
 tanzu acc fragment create bitnami-ray-fragment --git-repository https://github.com/agapebondservant/ray-accelerator.git --git-branch bitnami
@@ -868,6 +869,13 @@ Verify that installation was successful:
 ```
 tanzu package installed get api-auto-registration -n tap-install
 kubectl get pods -n api-auto-registration
+```
+
+Install Flux Kustomize and Helm controllers:
+```
+brew install fluxcd/tap/flux@0.41
+flux install -n flux-system --components kustomize-controller --version v0.41.2
+flux install -n flux-system --components helm-controller --version v0.41.2
 ```
 
 * Install Analytics Apps:
