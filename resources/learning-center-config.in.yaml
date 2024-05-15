@@ -17,3 +17,20 @@ spec:
     group: cert-manager.io
     name: letsencrypt-production
     kind: ClusterIssuer
+---
+apiVersion: secretgen.carvel.dev/v1alpha1
+kind: SecretExport
+metadata:
+  name: tls
+  namespace: projectcontour
+spec:
+  toNamespaces:
+    - "*"
+---
+apiVersion: secretgen.carvel.dev/v1alpha1
+kind: SecretImport
+metadata:
+  name: tls
+  namespace: learningcenter
+spec:
+  fromNamespace: projectcontour

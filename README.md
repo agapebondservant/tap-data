@@ -126,6 +126,22 @@ kubectl patch storageclass generic -p '{"metadata": {"annotations":{"storageclas
 kubectl patch storageclass default -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
 ```
 
+* (On AWS EKS) Deploy the EBS CSI Driver (requires eksctl cli - see <a href="https://eksctl.io/installation/" target="_blank">eksctl cli</a> and <a href="https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html" target="_blank">AWS cli</a>):
+```
+eksctl create iamserviceaccount \
+    --name ebs-csi-controller-sa \
+    --namespace kube-system \
+    --cluster <your-cluster-name> \
+    --role-name AmazonEKS_EBS_CSI_DriverRole \
+    --role-only \
+    --attach-policy-arn arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy \
+    --approve
+eksctl create addon --name aws-ebs-csi-driver \
+    --cluster <your-cluster-name> \
+    --service-account-role-arn arn:aws:iam::$(aws sts get-caller-identity --query Account --output text):role/AmazonEKS_EBS_CSI_DriverRole \
+    --force
+```
+
 * (On GCP) Mark the storage class as default:
 ```
 kubectl apply -f resources/storageclass-gke.yaml
@@ -167,10 +183,10 @@ kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/
 kubectl apply -f resources/cert-manager-issuer.yaml
 ```
 
-* (On GCP): Set up ServiceAccount secret (see "Use Static Credentials": https://cert-manager.io/docs/configuration/acme/dns01/google/)
+* (On GKE): Set up ServiceAccount secret (see "Use Static Credentials": https://cert-manager.io/docs/configuration/acme/dns01/google/)
 ```
 PROJECT_ID=<YOUR-GCP-PROJECT-ID>
-gcloud iam service-accounts create dns01-solver --display-name "dns01-solver"
+gcloud iam service-accounts create dns01-solver --display-name "dns01-solver" #this should be run on GCP
 gcloud iam service-accounts keys create key.json \
    --iam-account dns01-solver@$PROJECT_ID.iam.gserviceaccount.com
 kubectl create secret generic clouddns-dns01-solver-svc-acct -n cert-manager \
@@ -800,6 +816,7 @@ tanzu package repository add tanzu-tap-repository-learningcenter \
 --namespace tap-install-learningcenter; # Accept EULA when prompted\
 tanzu package install learningcenter -p learningcenter.tanzu.vmware.com -v "> 0.0.0" \
 --values-file resources/tap-values-1.7-learningcenter.yaml --namespace tap-install-learningcenter;
+kubectl apply -f resources/learning-center-config.yaml;
 ```
 
 * (Optional) Deploy the sample Learning Center Workshop:
@@ -909,6 +926,12 @@ kubectl apply -f other/resources/analytics/anomaly-detection-demo/dashboard-http
 ### Setup Tanzu Developer Portal Backstage Configurator<a name="tdp"/>
 (NOTE: Manual used was https://github.com/benjaminleesmith/docs-tap/blob/main/tap-gui/configurator/create-plug-in-wrapper.hbs.md)
 
+Update any dependency versions (under the "dependencies" block in package.json) as appropriate - update
+```
+</path/to/frontend>/package.json #Make appropriate updates
+</path/to/backend>/package.json #Make appropriate updates
+```
+
 Build and publish the non-external Backstage frontend plugins that you wish to integrate with the Portal (update plugin version when prompted):
 ```
 cd </path/to/frontend>/src
@@ -942,7 +965,7 @@ jsonpath="{.spec.template.spec.fetch[0].imgpkgBundle.image}") -o yaml --tty=true
 "kbld.carvel.dev/id: harbor-repo.vmware.com/esback/configurator" | grep "image: " | sed 's/\simage: //g')
 envsubst < other/resources/tdp/tdp-workload.in.yaml > other/resources/tdp/tdp-workload.yaml
 kubectl apply -f other/resources/tdp/tdp-workload.yaml
-tanzu kubernetes apps workload tail tdp-configurator --since 64h
+tanzu kubernetes apps workload tail tdp-configurator --since 64h # wait until a completion shows up with "Build successful"
 ```
 
 * Update the TDP overlay secret:
@@ -959,8 +982,10 @@ source .env
 export TAP_1_7_KUBECONFIG_CA=$(kubectl config view --raw --minify --flatten -o jsonpath='{.clusters[].cluster.certificate-authority-data}')
 export TAP_1_7_KUBECONFIG_CA_B64=$(echo ${TAP_1_7_KUBECONFIG_CA} | base64 --decode)
 export TAP_1_7_KUBETOKEN=$(kubectl -n tap-gui get secret tap-gui -o=json | jq -r '.data["token"]' | base64 --decode)
-export TAP_1_7_KUBETOKEN=tap-gui
+export TAP_1_7_KUBEURL=$(kubectl config view --raw --minify --flatten -o jsonpath='{.clusters[].cluster.server}')
+#export TAP_1_7_KUBETOKEN=tap-gui
 envsubst < resources/tap-values-1.7.in.yaml > resources/tap-values-1.7.yaml
+kubectl get pod -l component=backstage-server -ntap-gui -oname | xargs kubectl delete -ntap-gui
 tanzu package installed update tap -n tap-install --values-file resources/tap-values-1.7.yaml
 ```
 

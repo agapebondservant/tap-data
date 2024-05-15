@@ -206,7 +206,8 @@ tap_gui:
     integrations:
       gitlab:
         - host: gitlab.com
-          token: ${DATA_E2E_TAP_TOKEN2}
+          token: ${DATA_E2E_GIT_TOKEN}
+          apiBaseUrl: ${DATA_E2E_GIT_TAP_CATALOG_PATH}/api/v4/
     backend:
       reading:
         allow:

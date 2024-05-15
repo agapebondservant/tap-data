@@ -389,3 +389,4 @@ resources/tanzu-aws-1.7-gke.yaml
 /Users/oawofolu/PIVOTAL/data/educates/tap/other/resources/tls/openssl.conf
 ./resources/cert-manager-issuer-gke.yaml
 tmp.py
+tmp.yaml
