@@ -1,23 +1,12 @@
 ### Exploring the Backstage ML Portal
 
 #### Launch Jupyter notebook from ML Portal
-TAP's **Tanzu Developer Portal** is a customizable portal that can be extended to incorporate different **Backstage plugins**.
-**Backstage** is an opensource framework that teams can use to configure a unified portal for all of their resources - 
-infrastructure, services and documentation.
-
-(<font color="red">NOTE:</font> For more information on **Backstage**, see the <a href="https://backstage.io/docs/overview/what-is-backstage" target="_blank">official docs<a/>.)
-
-An example of a Backstage plugin extension is the **Backstage ML Portal**.
-With this portal, data scientists can discover different Data / ML tools, pipelines and platforms that have been previously made available to them 
-by a **Platform Operator**.
-They can also use it to connect their Jupyter notebooks (and other similar IDEs) to the datasources or endpoints of their choosing.
-
 Navigate to the **ML Panel**:
 ```dashboard:open-url
 url: {{ ingress_protocol }}://tap-gui.tanzudatatap.com/mlworkflows
 ```
 
-You can see tabs for different categories of services: **Data**, **Models**, **Pipelines**, **Clusters** and **Experiments**.
+You can see tabs for different categories of services: **Home**, **Data**, **Models**, **Pipelines**, **Clusters** and **Experiments**.
 
 Thanks to **Backstage Components**, the actual items on each tab are configurable.
 Where appropriate, users can add, remove or update tiles by simply navigating to the **Catalog** page:

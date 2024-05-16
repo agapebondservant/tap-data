@@ -1,5 +1,5 @@
-ingressDomain: ${DATA_E2E_GIT_TAP_GUI_INGRESS}
-ingressSecret:
-  secretName: tls
+ingressDomain: learningcenter.${DATA_E2E_GIT_TAP_GUI_INGRESS}
+#ingressSecret:
+#  secretName: tls
 clusterSecurity:
   policyEngine: pod-security-standards

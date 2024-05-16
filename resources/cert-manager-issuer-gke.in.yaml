@@ -23,17 +23,20 @@ metadata:
   name: ${DATA_E2E_BASE_URL}
   namespace: projectcontour
 spec:
-  commonName: tap-gui.${DATA_E2E_BASE_URL}
+#  commonName: tap-gui.${DATA_E2E_BASE_URL}
   isCA: true
   secretName: tls
   privateKey:
     rotationPolicy: Always
   dnsNames:
+#    - '*.apps.${DATA_E2E_BASE_URL}'
+#    - 'tap-gui.${DATA_E2E_BASE_URL}'
+#    - 'metadata-store.${DATA_E2E_BASE_URL}'
+#    - 'api-portal.${DATA_E2E_BASE_URL}'
+#    - '*.learningcenter.${DATA_E2E_BASE_URL}'
     - '*.apps.${DATA_E2E_BASE_URL}'
-    - 'tap-gui.${DATA_E2E_BASE_URL}'
-    - 'metadata-store.${DATA_E2E_BASE_URL}'
-    - 'api-portal.${DATA_E2E_BASE_URL}'
     - '*.learningcenter.${DATA_E2E_BASE_URL}'
+    - '*.${DATA_E2E_BASE_URL}'
   issuerRef:
     group: cert-manager.io
     name: letsencrypt-production

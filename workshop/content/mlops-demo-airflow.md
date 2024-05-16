@@ -61,9 +61,9 @@ url: {{ ingress_protocol }}://tap-gui.{{ ingress_domain }}/create
 On the **Airflow Accelerator**, click **Choose**. A list of configurable entries should be displayed, as well as
 a link to the official documentation for the Airflow package. For this exercise, we'll keep the default values as is. 
 
-Click on **Explore**. Under the **resources** folder, notice that there are multiple subfolders for each configured app version of Airflow.
+Click on **Explore**. Under the **bitnami-airflow** folder, notice that there are multiple subfolders for each configured app version of Airflow.
 The version that we will use for this exercise is **2.8.1**.
-Navigate to **resources/2.8.1/values-overrides.yaml** in the displayed window, and click **Copy**. 
+Navigate to **bitnami-airflow/2.8.1/values.yaml** in the displayed window, and click **Copy**. 
 
 Now, return to **KubeApps** and replace the content of the textarea with the values you just copied.
 
