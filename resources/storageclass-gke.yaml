@@ -34,7 +34,7 @@ metadata:
   name: xfs
 parameters:
   type: pd-balanced
-  fsType: xfs
+  csi.storage.k8s.io/fstype: xfs
 provisioner: pd.csi.storage.gke.io
 reclaimPolicy: Delete
 volumeBindingMode: WaitForFirstConsumer
