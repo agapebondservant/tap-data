@@ -18,3 +18,24 @@ provisioner: pd.csi.storage.gke.io
 reclaimPolicy: Delete
 volumeBindingMode: WaitForFirstConsumer
 allowVolumeExpansion: true
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  annotations:
+    components.gke.io/component-name: pdcsi
+    components.gke.io/component-version: 0.16.18
+    components.gke.io/layer: addon
+    kapp.k14s.io/update-strategy: always-replace
+    storageclass.kubernetes.io/is-default-class: "false"
+  labels:
+    addonmanager.kubernetes.io/mode: EnsureExists
+    k8s-app: gcp-compute-persistent-disk-csi-driver
+  name: xfs
+parameters:
+  type: pd-balanced
+  fsType: xfs
+provisioner: pd.csi.storage.gke.io
+reclaimPolicy: Delete
+volumeBindingMode: WaitForFirstConsumer
+allowVolumeExpansion: true
