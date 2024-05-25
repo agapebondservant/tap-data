@@ -216,6 +216,7 @@ For instance, see the **train-model** entrypoint command which invokes the train
 ```editor:open-file
 file: ~/sample-ml-app/MLproject
 line: 16
+text: "python train_model.py"
 before: 0
 after: 0
 ```
