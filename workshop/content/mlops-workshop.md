@@ -229,9 +229,33 @@ file: ~/other/resources/appcr/pipeline_app_main.yaml
 
 Once the **AppCR** deployed, **TAP** will take care of monitoring the App's resources and tracking when there are changes to the git repo source.
 (**TAP** does this by leveraging **kapp-controller**, which is another built-in that comes with **TAP**.) 
-Normally, deploying **AppCR** should be a one-time activity.
 
-Let's go ahead and deploy the **AppCR** with the current version of our git repo:
+Normally, deploying the **AppCR** should be a one-time activity, driven by the yaml manifest file above.
+On the other hand, the git repository will store the data scientist's updates
+to the model's **code** and **config**. In many cases, this will not be a one-time activity,
+but a continuous, ongoing endeavor. What does this look like?
+For this particular pipeline, here is the **MLproject** file.
+It's the <a href="https://mlflow.org/docs/latest/projects.html" target="_blank">MLflow project configuration file</a>, which the data scientist
+can use to update different pipeline parameters:
+```editor:open-file
+file: ~/sample-ml-app/MLproject
+```
+
+Each entrypoint invokes a Python command that ultimately runs the user's ML code.
+For instance, see the **train-model** entrypoint command which invokes the training step in the pipeline:
+```editor:open-file
+file: ~/sample-ml-app/MLproject
+line: 16
+before: 0
+after: 0
+```
+
+The **train-model** entrypoint runs the **train_model.py** script, which in turn calls the actual training code:
+```editor:open-file
+file: ~/sample-ml-app/train_model.py
+```
+
+Now, let's go ahead and deploy the **AppCR** with the current version of our git repo:
 ```execute
 cp ~/other/resources/appcr/pipeline_app_main.yaml ~/sample-ml-app/pipeline_app.yaml && cp ~/other/resources/appcr/values_default.yaml ~/sample-ml-app/values.yaml && cp ~/other/resources/argo-workflows/pipeline.yaml ~/sample-ml-app/pipeline.yaml && cp ~/other/resources/appcr/job_main.yaml ~/sample-ml-app/job.yaml;
 cd ~/sample-ml-app; git config --global user.email 'eduk8s@example.com'; git config --global user.name 'Educates'; git add .; git commit -m 'New commit'; git push origin main-{{session_namespace}}; cd -; ytt -f ~/sample-ml-app/pipeline_app.yaml -f ~/sample-ml-app/values.yaml | kapp deploy -a image-procesor-pipeline-{{session_namespace}} -f - --logs -y  -n{{session_namespace}}
