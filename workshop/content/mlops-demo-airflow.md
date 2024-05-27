@@ -55,7 +55,7 @@ Updating the content will allow us to override the configuration for our deploym
 For a baseline, we can search for a predefined template with TAP's **Accelerators**.
 Launch the Accelerator view:
 ```dashboard:open-url
-url: {{ ingress_protocol }}://tap-gui.{{ ingress_domain }}/create
+url: {{ ingress_protocol }}://tap-gui.{{ DATA_E2E_BASE_URL }}/create
 ```
 
 On the **Airflow Accelerator**, click **Choose**. A list of configurable entries should be displayed, as well as

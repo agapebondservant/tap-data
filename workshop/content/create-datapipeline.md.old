@@ -16,7 +16,7 @@ clear && export DATA_E2E_WAVEFRONT_ACCESS_TOKEN={{ DATA_E2E_WAVEFRONT_ACCESS_TOK
 Let's view the Spring Cloud Data Flow dashboard:
 ```dashboard:create-dashboard
 name: Example
-url: {{ ingress_protocol }}://scdf-{{ session_namespace }}.{{ ingress_domain }}
+url: {{ ingress_protocol }}://scdf-{{ session_namespace }}.{{ DATA_E2E_BASE_URL }}
 ```
 
 Greenplum;

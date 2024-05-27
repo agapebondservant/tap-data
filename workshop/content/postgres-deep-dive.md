@@ -107,7 +107,7 @@ sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/op
 
 Now access the Operator UI:
 ```dashboard:open-url
-url: http://operator-ui-{{session_namespace}}.{{ ingress_domain }}
+url: http://operator-ui-{{session_namespace}}.{{ DATA_E2E_BASE_URL }}
 ```
 
 ##### Service Discovery via Service Offering
@@ -180,7 +180,7 @@ tanzu apps workload get pet-clinic
 
 View the newly deployed data in **pgAdmin** (use "chart@example.local/SuperSecret" as login credentials:)
 ```dashboard:open-url
-url: http://pgadmin.{{ ingress_domain }}
+url: http://pgadmin.{{ DATA_E2E_BASE_URL }}
 ```
 
 <font color="red">NOTE: Create a connection to the database by clicking on Servers -> Register -> Server and enter the following:</font>

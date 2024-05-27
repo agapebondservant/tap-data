@@ -104,7 +104,7 @@ kubectl wait --for=condition=Ready pod/rabbitcluster1-server-0 -n {{ session_nam
 
 Meanwhile, let's take a look at a pre-built Grafana dashboard. It has been integrated with a Prometheus service which has auto-detected our cluster.
 ```dashboard:open-url
-url: {{ ingress_protocol }}://grafana.{{ ingress_domain }}
+url: {{ ingress_protocol }}://grafana.{{ DATA_E2E_BASE_URL }}
 ```
 
 <font color="red">Use the credentials below to login to the Grafana dashboard:</font>
@@ -131,7 +131,7 @@ rabbit-{{ session_namespace }}
 We can also view the Management UI, which is also pre-integrated with the Tanzu RabbitMQ operator.
 ```dashboard:create-dashboard
 name: RabbitMQ
-url: {{ ingress_protocol }}://rabbit{{ session_namespace }}.{{ ingress_domain }}
+url: {{ ingress_protocol }}://rabbit{{ session_namespace }}.{{ DATA_E2E_BASE_URL }}
 ```
 
 To login, you need the UI credentials:
@@ -183,7 +183,7 @@ kubectl edit rabbitmqcluster rabbitcluster1 -n {{ session_namespace }}
 So far, the RabbitMQ  broker that we've deployed has been the OSS broker:
 ```dashboard:reload-dashboard
 name: RabbitMQ
-url: {{ ingress_protocol }}://rabbit{{ session_namespace }}.{{ ingress_domain }}
+url: {{ ingress_protocol }}://rabbit{{ session_namespace }}.{{ DATA_E2E_BASE_URL }}
 ```
 
 Upgrade the cluster to the Tanzu RabbitMQ distribution by updating the OCI image and perform a rolling upgrade. In the vim editor that comes up, edit the **image** field:
@@ -199,13 +199,13 @@ Watch the rolling upgrade as it updates each node one by one. Once it completes,
 
 In the Grafana Dashboard:
 ```dashboard:open-url
-url: {{ ingress_protocol }}://grafana.{{ ingress_domain }}
+url: {{ ingress_protocol }}://grafana.{{ DATA_E2E_BASE_URL }}
 ```
 
 In the RabbitMQ Management UI (lougout, then log back in using credentials **demo/CHANGEME**):
 ```dashboard:reload-dashboard
 name: RabbitMQ
-url: {{ ingress_protocol }}://rabbit{{ session_namespace }}.{{ ingress_domain }}
+url: {{ ingress_protocol }}://rabbit{{ session_namespace }}.{{ DATA_E2E_BASE_URL }}
 ```
 
 ### USING THE TOPOLOGY OPERATOR
@@ -227,7 +227,7 @@ kubectl rabbitmq perf-test rabbitcluster1  -C 100000 --quorum-queue --queue demo
 
 View the messages (and the newly created queue) in the Grafana dashboard:
 ```dashboard:open-url
-url: {{ ingress_protocol }}://grafana.{{ ingress_domain }}
+url: {{ ingress_protocol }}://grafana.{{ DATA_E2E_BASE_URL }}
 ```
 
 The new queue **demo.seed.queue** is a **quorum queue**. 
@@ -255,7 +255,7 @@ kubectl rabbitmq stream-perf-test rabbitcluster1  --streams demo.streaming --rat
 
 View the messages (and the newly created queue) in the Grafana dashboard:
 ```dashboard:open-url
-url: {{ ingress_protocol }}://grafana.{{ ingress_domain }}
+url: {{ ingress_protocol }}://grafana.{{ DATA_E2E_BASE_URL }}
 ```
 
 We can also view the messages in **Wavefront**:

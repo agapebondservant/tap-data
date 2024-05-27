@@ -13,7 +13,7 @@ By reusing these archetypes, they are able to cut down on their overall time-to-
 
 Navigate to the **Accelerator** view:
 ```dashboard:open-url
-url: {{ ingress_protocol }}://tap-gui.{{ ingress_domain }}/create
+url: {{ ingress_protocol }}://tap-gui.{{ DATA_E2E_BASE_URL }}/create
 ```
 
 
@@ -63,7 +63,7 @@ tanzu acc create data-catalog-{{session_namespace}} --git-repository https://${D
 
 Go to the **Accelerators** page in **TAP** and locate the new accelerator by entering "practise" in the Search Bar:
 ```dashboard:open-url
-url: {{ ingress_protocol }}://tap-gui.{{ ingress_domain }}/create
+url: {{ ingress_protocol }}://tap-gui.{{ DATA_E2E_BASE_URL }}/create
 ```
 
 

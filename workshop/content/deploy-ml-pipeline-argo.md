@@ -17,7 +17,7 @@ For this, we will use **Argo Workflows**. **Argo Workflows** is backed by the po
 
 View Argo Workflows in the TAP GUI - the Argo Workflows app should be visible:
 ```dashboard:open-url
-url: {{ ingress_protocol }}://tap-gui.{{ ingress_domain }}/supply-chain
+url: {{ ingress_protocol }}://tap-gui.{{ DATA_E2E_BASE_URL }}/supply-chain
 ```
 
 Launch Argo Workflows by retrieving the URL from the **tanzu cli** (you may need to click on the topmost menu tab on the left to see the initial screen):
@@ -83,7 +83,7 @@ cd ~/sample-ml-app; git config --global user.email 'eduk8s@example.com'; git con
 
 Our newly deployed pipeline should now be visible. 
 ```dashboard:open-url
-url: https://argo-workflows.{{ ingress_domain }}
+url: https://argo-workflows.{{ DATA_E2E_BASE_URL }}
 ```
 
 Training a CNN model can take a while. 

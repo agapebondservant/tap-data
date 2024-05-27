@@ -18,7 +18,7 @@ cp ~/other/resources/operator-ui/cli/* /home/eduk8s/bin/ && ~/other/resources/op
 
 Now access the Operator UI:
 ```dashboard:open-url
-url: http://operator-ui-{{session_namespace}}.{{ ingress_domain }}
+url: http://operator-ui-{{session_namespace}}.{{ DATA_E2E_BASE_URL }}
 ```
 
 #### Discover New Operators
@@ -36,7 +36,7 @@ Run the annotation script:
 
 The Postgres panel should appear in the UI:
 ```dashboard:open-url
-url: http://operator-ui-{{session_namespace}}.{{ ingress_domain }}
+url: http://operator-ui-{{session_namespace}}.{{ DATA_E2E_BASE_URL }}
 ```
 
 Next, deploy the MySQL operator:
@@ -51,7 +51,7 @@ Run the annotation script:
 
 The MySQL panel should appear in the UI:
 ```dashboard:open-url
-url: http://operator-ui-{{session_namespace}}.{{ ingress_domain }}
+url: http://operator-ui-{{session_namespace}}.{{ DATA_E2E_BASE_URL }}
 ```
 
 #### Discover Service Instances
@@ -69,7 +69,7 @@ kubectl apply -f ~/other/resources/mysql/mysql-cluster.yaml -n {{ session_namesp
 
 Navigate to the Operator UI to view the newly created instances:
 ```dashboard:open-url
-url: http://operator-ui-{{session_namespace}}.{{ ingress_domain }}
+url: http://operator-ui-{{session_namespace}}.{{ DATA_E2E_BASE_URL }}
 ```
 
 #### Integrate Non-VMware Operator Services
@@ -89,12 +89,12 @@ Run the annotation script:
 
 The Redis panel should appear in the UI with the Redis instance:
 ```dashboard:open-url
-url: http://operator-ui-{{session_namespace}}.{{ ingress_domain }}
+url: http://operator-ui-{{session_namespace}}.{{ DATA_E2E_BASE_URL }}
 ```
 
 #### Create Service Instances
 The Operator UI can be used to create new service instances. 
 Select a service type in the left panel, click "Create Instance", and complete and submit the displayed form:
 ```dashboard:open-url
-url: http://operator-ui-{{session_namespace}}.{{ ingress_domain }}
+url: http://operator-ui-{{session_namespace}}.{{ DATA_E2E_BASE_URL }}
 ```

@@ -33,7 +33,7 @@ making it ready to install on **TAP**.
 
 First, let's take a look at the **accelerator** that contains the reference spec for our deployment (search for "jupyter"):
 ```dashboard:open-url
-url: {{ ingress_protocol }}://tap-gui.{{ ingress_domain }}/create
+url: {{ ingress_protocol }}://tap-gui.{{ DATA_E2E_BASE_URL }}/create
 ```
 
 <div style="text-align: left; justify-content: left; align-items: center; width: 80%; margin-bottom: 20px; font-size: small">
@@ -96,7 +96,7 @@ tanzu package installed get jupyterhub -n {{session_namespace}}
 
 Next, we view it (login with the default username and password used above - jupyter/Vmware1!):
 ```dashboard:open-url
-url: {{ ingress_protocol }}://jupyter-{{session_namespace}}.{{ ingress_domain }}
+url: {{ ingress_protocol }}://jupyter-{{session_namespace}}.{{ DATA_E2E_BASE_URL }}
 ```
 
 We also need to be able to track our experiments, including properties like metrics and artifacts.

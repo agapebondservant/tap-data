@@ -6,7 +6,7 @@ Now, let's create a file ingest pipeline with **VMware Spring Cloud Data Flow**.
 Let's view the Spring Cloud Data Flow dashboard:
 ```dashboard:reload-dashboard
 name: SCDF
-url: {{ ingress_protocol }}://scdf.{{ ingress_domain }}/dashboard
+url: {{ ingress_protocol }}://scdf.{{ DATA_E2E_BASE_URL }}/dashboard
 ```
 
 <font color="red">In **Jupyter**, open the *File Ingestion Notebook* and run the *Connect to Postgres and view test database table* cell. As Jupyter Notebook is being launched for the first time, login to the Jupyter app (password "jupyter"), launch the Jupyter Terminal app and run the command below: (will be copied to the clipboard)</font>:

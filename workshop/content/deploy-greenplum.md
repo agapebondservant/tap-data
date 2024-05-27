@@ -58,7 +58,7 @@ echo -e "path = /greenplum\ndisplay_name = gpcc\nweb_port = 28080\nenable_ssl = 
 View all the events in the Greenplum Command Center (login with creds *gpmon/changeme*):
 ```dashboard:create-dashboard
 name: Greenplum
-url: {{ ingress_protocol }}://{{ session_namespace }}-greenplum.{{ ingress_domain }}
+url: {{ ingress_protocol }}://{{ session_namespace }}-greenplum.{{ DATA_E2E_BASE_URL }}
 ```
 
 Connect to the **psql** subsytem:

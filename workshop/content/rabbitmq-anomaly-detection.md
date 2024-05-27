@@ -13,7 +13,7 @@ Next, show the MLflow site:
 Next, show the Spring Cloud DataFlow dashboard:
 ```dashboard:create-dashboard
 name: SCDF
-url: {{ ingress_protocol }}://scdf.{{ ingress_domain }}/dashboard/#/streams/list
+url: {{ ingress_protocol }}://scdf.{{ DATA_E2E_BASE_URL }}/dashboard/#/streams/list
 ```
 
 Next, show the Ray dashboard:

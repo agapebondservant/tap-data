@@ -3,13 +3,13 @@
 #### Anomaly Detection App
 View the app:
 ```dashboard:open-url
-url: http://demo-ui.{{ ingress_domain }}
+url: http://demo-ui.{{ DATA_E2E_BASE_URL }}
 ```
 
 #### Management Consoles
 View the RabbitMQ console:
 ```dashboard:open-url
-url: http://rmqanomaly.{{ ingress_domain }}
+url: http://rmqanomaly.{{ DATA_E2E_BASE_URL }}
 ```
 
 Use the credentials below to login:
@@ -24,7 +24,7 @@ kubectl get secret grafana-admin --namespace monitoring-tools -o jsonpath="{.dat
 
 View the Grafana Dashboard for the RabbitMQ cluster:
 ```dashboard:open-url
-url: http://grafana.{{ ingress_domain }}
+url: http://grafana.{{ DATA_E2E_BASE_URL }}
 ```
 
 View the Wavefront Dashboard for the RabbitMQ cluster:
@@ -34,7 +34,7 @@ url: {{ DATA_E2E_WAVEFRONT_RABBIT_DASHBOARD_URL }}
 
 View the Gemfire Pulse console: (login: admin/admin)
 ```dashboard:open-url
-url: http://gfanomaly-locator.{{ ingress_domain }}/pulse
+url: http://gfanomaly-locator.{{ DATA_E2E_BASE_URL }}/pulse
 ```
 
 (Optional) View the Wavefront Dashboard for the Gemfire cluster:
@@ -54,7 +54,7 @@ echo Uu4jcDSjqlDVQ
 
 View Spring Cloud Data Flow pipeline:
 ```dashboard:open-url
-url: http://scdf.{{ ingress_domain }}/dashboard
+url: http://scdf.{{ DATA_E2E_BASE_URL }}/dashboard
 ```
 
 If necessary, create the pipeline by copying the following:

@@ -17,5 +17,5 @@ sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/pe
 View the Petclinic Analytics App:
 ```dashboard:reload-dashboard
 name: Petclinic
-url:  "{{ingress_protocol}}://petclinic-analytics-{{session_namespace}}.{{ingress_domain}}/"
+url:  "{{ingress_protocol}}://petclinic-analytics-{{session_namespace}}.{{DATA_E2E_BASE_URL}}/"
 ```

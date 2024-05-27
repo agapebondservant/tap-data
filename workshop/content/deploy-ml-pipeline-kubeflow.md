@@ -47,7 +47,7 @@ tanzu package installed list -n mlops-tools | grep kubeflow-pipelines
 
 It shows that **Kubeflow Pipelines** has already been installed for us on **TAP** - we can see it in the TAP GUI:
 ```dashboard:open-url
-url: {{ ingress_protocol }}://tap-gui.{{ ingress_domain }}/supply-chain
+url: {{ ingress_protocol }}://tap-gui.{{ DATA_E2E_BASE_URL }}/supply-chain
 ```
 
 
@@ -111,7 +111,7 @@ cd ~/sample-kubeflow-pipeline; git config --global user.email 'eduk8s@example.co
 
 Our newly deployed pipeline should now be visible.
 ```dashboard:open-url
-url: {{ ingress_protocol }}://kubeflow-pipelines-{{ session_namespace }}.{{ ingress_domain }}
+url: {{ ingress_protocol }}://kubeflow-pipelines-{{ session_namespace }}.{{ DATA_E2E_BASE_URL }}
 ```
 
 Training a CNN model can take a while.

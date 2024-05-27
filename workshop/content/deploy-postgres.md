@@ -85,7 +85,7 @@ sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/op
 
 Now access the Operator UI:
 ```dashboard:open-url
-url: http://operator-ui-{{session_namespace}}.{{ ingress_domain }}
+url: http://operator-ui-{{session_namespace}}.{{ DATA_E2E_BASE_URL }}
 ```
 
 {% endif %}
@@ -146,7 +146,7 @@ streaming replication (synchronous and asynchronous - synchronous by default).
 {% if ENV_WORKSHOP_TOPIC == 'data-with-tap' or ENV_WORKSHOP_TOPIC == 'data-with-tap-demo' %}
 First, let's add some data to our system. Navigate to the Petclinic app deployed earlier and add some pet related info:
 ```dashboard:open-url
-url: http://pet-clinic.{{ session_namespace }}.{{ ingress_domain }}
+url: http://pet-clinic.{{ session_namespace }}.{{ DATA_E2E_BASE_URL }}
 ```
 {% endif %}
 
@@ -159,7 +159,7 @@ kubectl exec -it pginstance-1-1 -- bash -c 'pg_autoctl show state'
 {% if ENV_WORKSHOP_TOPIC == 'data-with-tap' or ENV_WORKSHOP_TOPIC == 'data-with-tap-demo' %}
 Confirm that the data added has not been lost:
 ```dashboard:open-url
-url: http://pet-clinic.{{ session_namespace }}.{{ ingress_domain }}
+url: http://pet-clinic.{{ session_namespace }}.{{ DATA_E2E_BASE_URL }}
 ```
 {% endif %}
 
@@ -524,7 +524,7 @@ Eventually, the pods for the new cluster should start showing up in the lower co
 Meanwhile, ensure that you are able to access your databases. **pgAdmin** is a popular graphical interface for many database adminstration tasks.
 Launch **pgAdmin** here (use "chart@example.local/SuperSecret" as login credentials:)
 ```dashboard:open-url
-url: http://pgadmin.{{ ingress_domain }}
+url: http://pgadmin.{{ DATA_E2E_BASE_URL }}
 ```
 
 Next, create a connection to the database. Click on "Add New Server" and enter the following:

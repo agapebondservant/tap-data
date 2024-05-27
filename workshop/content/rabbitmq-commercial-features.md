@@ -38,7 +38,7 @@ bin/runjava com.rabbitmq.perf.PerfTest --uri amqp://test-user:test-password@rabb
 
 Navigate to the Grafana site: select the **Erlang Distribution** dashboard, select **rabbitcluster-uncompressed** from the cluster dropdown,  and view the **"Data sent to peer node /s"** widget:
 ```dashboard:open-url
-url: {{ ingress_protocol }}://grafana.{{ ingress_domain }}
+url: {{ ingress_protocol }}://grafana.{{ DATA_E2E_BASE_URL }}
 ```
 
 Back on the Perftest shell: exit the shell:
@@ -68,7 +68,7 @@ bin/runjava com.rabbitmq.perf.PerfTest --uri amqp://test-user:test-password@rabb
 
 Navigate again to the Grafana site: select the **Erlang Distribution** dashboard, select **rabbitcluster-compressed** from the cluster dropdown, and view the **"Data sent to peer node /s"** widget (should be much less):
 ```dashboard:open-url
-url: {{ ingress_protocol }}://grafana.{{ ingress_domain }}
+url: {{ ingress_protocol }}://grafana.{{ DATA_E2E_BASE_URL }}
 ```
 
 Back on the Perftest shell: then exit the shell:
@@ -202,7 +202,7 @@ After about 1 minute (*twice* the replication interval - 30 seconds by default),
 navigate to the Grafana website, select the **RabbitMQ-Overview** dashboard and observe that the queue is now replicated in the downstream site
 (select **rabbitcluster-downstream1** from the cluster dropdown):
 ```dashboard:open-url
-url: {{ ingress_protocol }}://grafana.{{ ingress_domain }}
+url: {{ ingress_protocol }}://grafana.{{ DATA_E2E_BASE_URL }}
 ```
 
 ##### Configuring Standby Message Replication plugin (upstream)
@@ -269,7 +269,7 @@ exit
 
 Navigate to the Grafana website, select the **RabbitMQ-Overview** dashboard and confirm that the messages were indeed successfully published (select **rabbitcluster-upstream1** from the cluster dropdown):
 ```dashboard:open-url
-url: {{ ingress_protocol }}://grafana.{{ ingress_domain }}
+url: {{ ingress_protocol }}://grafana.{{ DATA_E2E_BASE_URL }}
 ```
 
 <font color="red">Note: Use the credentials below to login to the Grafana dashboard:</font>
@@ -313,7 +313,7 @@ kubectl exec -it $downstream_replication_pod -- rabbitmqctl promote_standby_repl
 
 Observe the replicated data in the Grafana dashboard:
 ```dashboard:open-url
-url: {{ ingress_protocol }}://grafana.{{ ingress_domain }}
+url: {{ ingress_protocol }}://grafana.{{ DATA_E2E_BASE_URL }}
 ```
 
 Sometimes, the ideal use case is to leverage RabbitMQ transparently as the messaging transport layer, without having to be aware of its inner workings or semantics. For that, we can leverage  **Spring Cloud Data Flow**.

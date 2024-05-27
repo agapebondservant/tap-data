@@ -6,7 +6,7 @@ Let's proceed to  create a pipeline  with a Greenplum **source** and a Gemfire *
 Let's view the Spring Cloud Data Flow dashboard:
 ```dashboard:reload-dashboard
 name: SCDF
-url: {{ ingress_protocol }}://scdf.{{ ingress_domain }}/dashboard
+url: {{ ingress_protocol }}://scdf.{{ DATA_E2E_BASE_URL }}/dashboard
 ```
 
 Here is the pipeline we will be creating:
@@ -29,7 +29,7 @@ printf "Username: $(kubectl get secret rabbitmq -o jsonpath='{.data.rabbitmq-erl
 <font color="red">Reload the Management UI for the other RabbitMQ cluster we created earlier, if necessary:</font>
 ```dashboard:reload-dashboard
 name: RabbitMQ
-url: {{ ingress_protocol }}://rabbit{{ session_namespace }}.{{ ingress_domain }}
+url: {{ ingress_protocol }}://rabbit{{ session_namespace }}.{{ DATA_E2E_BASE_URL }}
 ```
 
 Now we should be able to view our data in our Gemfire region:

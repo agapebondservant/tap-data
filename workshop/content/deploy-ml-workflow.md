@@ -10,7 +10,7 @@ The code template has been registered as an **App Accelerator** in the TAP GUI.
 Navigate to the TAP GUI screen below and search for **tensorflow** to view the "Sample Tensorflow" accelerator:
 
 ```dashboard:open-url
-url: {{ ingress_protocol }}://tap-gui.{{ ingress_domain }}/create
+url: {{ ingress_protocol }}://tap-gui.{{ DATA_E2E_BASE_URL }}/create
 ```
 
 The code template provides a baseline for developing a Convolutional Neural Network with **Tensorflow**, 
@@ -104,8 +104,8 @@ Finally, we deploy our resource:
 ```execute
 ~/other/resources/bin/kp image create imgprocessor --tag {{DATA_E2E_REGISTRY_USERNAME}}/ml-image-processor-{{session_namespace}}  \
         --namespace {{session_namespace}} \
-        --env MLFLOW_TRACKING_URI=http://mlflow-{{session_namespace}}.{{ ingress_domain }} \
-        --env MLFLOW_S3_ENDPOINT_URL=http://minio-{{session_namespace}}.{{ ingress_domain }} \
+        --env MLFLOW_TRACKING_URI=http://mlflow-{{session_namespace}}.{{ DATA_E2E_BASE_URL }} \
+        --env MLFLOW_S3_ENDPOINT_URL=http://minio-{{session_namespace}}.{{ DATA_E2E_BASE_URL }} \
         --git=https://github.com/{{DATA_E2E_GIT_USER}}/mlcode-runner.git \
         --git-revision=main-{{session_namespace}}
 ```

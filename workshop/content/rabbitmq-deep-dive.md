@@ -80,7 +80,7 @@ kubectl wait --for=condition=Ready pod/rabbitcluster2-server-0 -n {{ session_nam
 We can also view the Management UI, which is also pre-integrated with the Tanzu RabbitMQ operator.
 ```dashboard:create-dashboard
 name: RabbitMQ
-url: {{ ingress_protocol }}://rabbit{{ session_namespace }}-2.{{ ingress_domain }}
+url: {{ ingress_protocol }}://rabbit{{ session_namespace }}-2.{{ DATA_E2E_BASE_URL }}
 ```
 
 To login, you need the UI credentials:
@@ -138,7 +138,7 @@ exit
 Create a new Stream, **test-streams**, in the RabbitMQ Admin window (under **Queues** tab):
 ```dashboard:reload-dashboard
 name: RabbitMQ
-url: {{ ingress_protocol }}://rabbit{{ session_namespace }}.{{ ingress_domain }}
+url: {{ ingress_protocol }}://rabbit{{ session_namespace }}.{{ DATA_E2E_BASE_URL }}
 ```
 
 Publish a random JSON  message - retrieve the payload from here:

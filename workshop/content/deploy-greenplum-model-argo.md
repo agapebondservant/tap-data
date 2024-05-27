@@ -62,7 +62,7 @@ Thanks to **ServiceBindings**, these are the only keys we will need to connect t
 
 Navigate to the **TAP GUI** and click on the **pgadmin** instance:
 ```dashboard:open-url
-url: {{ ingress_protocol }}://tap-gui.{{ ingress_domain }}/supply-chain
+url: {{ ingress_protocol }}://tap-gui.{{ DATA_E2E_BASE_URL }}/supply-chain
 ```
 
 Launch pgAdmin by retrieving the URL from the **tanzu cli** (login credentials: test@test.com/alwaysbekind):
@@ -135,7 +135,7 @@ In this case, it will involve a new DB change.
 
 Let's search on the **Accelerators** page for a prebuilt template that we can use - enter "in-database" in the Search field:
 ```dashboard:open-url
-url: {{ ingress_protocol }}://tap-gui.{{ ingress_domain }}/create
+url: {{ ingress_protocol }}://tap-gui.{{ DATA_E2E_BASE_URL }}/create
 ```
 
 <div style="text-align: left; justify-content: left; align-items: center; width: 80%; margin-bottom: 20px; font-size: small">
@@ -206,7 +206,7 @@ cd ~/sample-ml-app; git config --global user.email 'eduk8s@example.com'; git con
 
 Let's access the web UI (you may need to click on the topmost menu tab on the left to see the initial screen):
 ```dashboard:open-url
-url: https://argo-workflows.{{ ingress_domain }}
+url: https://argo-workflows.{{ DATA_E2E_BASE_URL }}
 ```
 
 <font color="red">NOTE:</font> If the Login page is displayed, copy the access token from here to the Login box:
@@ -218,7 +218,7 @@ The newly deployed Argo pipeline should now be displayed.
 
 At the end, the ML model will be available in the Model Registry:
 ```dashboard:open-url
-url: https://mlflow.{{ ingress_domain }}/#/models
+url: https://mlflow.{{ DATA_E2E_BASE_URL }}/#/models
 ```
 
 For **inference**: The pipeline will take the same inference code that we used for the in-memory learners

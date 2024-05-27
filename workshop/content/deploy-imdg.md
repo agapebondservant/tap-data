@@ -43,7 +43,7 @@ sed -i "s/YOUR_SESSION_NAMESPACE/{{ session_namespace }}/g" ~/other/resources/op
 
 Now access the Operator UI:
 ```dashboard:open-url
-url: http://operator-ui-{{session_namespace}}.{{ ingress_domain }}
+url: http://operator-ui-{{session_namespace}}.{{ DATA_E2E_BASE_URL }}
 ```
 
 Next, we wil launch the **gfsh** cli. **gfsh** is an interface that can be used for the lifecycle management and monitoring of Gemfire resources, including clusters and their members (locators/servers).

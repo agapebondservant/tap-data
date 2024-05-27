@@ -22,7 +22,7 @@ which make use of out-of-the-box pipelines called **Supply Chains** to manage th
 Let's see if we can reuse an existing Workload template from our **Accelerator** portal. 
 Navigate to the **TAP GUI**:
 ```dashboard:open-url
-url: {{ ingress_protocol }}://tap-gui.{{ ingress_domain }}/create
+url: {{ ingress_protocol }}://tap-gui.{{ DATA_E2E_BASE_URL }}/create
 ```
 
 Click on the "+" menu icon (left panel), and enter "project" in the search field. 
@@ -51,7 +51,7 @@ While our app is deploying, let's see a previously deployed example of what the 
 
 Navigate to a pre-existing deployment of MLflow:
 ```dashboard:open-url
-url: {{ ingress_protocol }}://mlflow.{{ ingress_domain }}
+url: {{ ingress_protocol }}://mlflow.{{ DATA_E2E_BASE_URL }}
 ```
 
 Select the **convolutional_neural_network_team_main** experiment (on the left), 
@@ -81,12 +81,12 @@ Navigate to MLflow above to change the Model Stage from the Models tab.</font>
 
 Let's also view the **OpenAPI** interface for the model's serving API - click on the link for the app, then click on the **Definitions** tab:
 ```dashboard:open-url
-url: {{ ingress_protocol }}://tap-gui.{{ ingress_domain }}/api-docs
+url: {{ ingress_protocol }}://tap-gui.{{ DATA_E2E_BASE_URL }}/api-docs
 ```
 
 Last, view the pipeline that was used to build the model:
 ```dashboard:open-url
-url: https://argo-workflows.{{ ingress_domain }}
+url: https://argo-workflows.{{ DATA_E2E_BASE_URL }}
 ```
 
 

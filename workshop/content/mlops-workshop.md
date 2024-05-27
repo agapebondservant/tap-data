@@ -3,7 +3,7 @@
 #### Launch app from TAP GUI
 View the app in TAP GUI:
 ```dashboard:open-url
-url: {{ ingress_protocol }}://tap-gui.{{ ingress_domain }}/supply-chain
+url: {{ ingress_protocol }}://tap-gui.{{ DATA_E2E_BASE_URL }}/supply-chain
 ```
 
 Launch the app by clicking on the URL from the **tanzu** cli:
@@ -24,7 +24,7 @@ it means it is waiting for a viable model to be promoted to the "Production" sta
 This is currently handled using MLFlow's **Model Registry** (see <a href="https://mlflow.org/docs/latest/model-registry.html" target="_blank">documentation</a>).
 To view the model registry, launch MLflow and click on the "Models" tab:
 ```dashboard:open-url
-url: http://mlflow.{{ ingress_domain }}
+url: http://mlflow.{{ DATA_E2E_BASE_URL }}
 ```
 
 #### Launch Jupyter Notebook
@@ -72,7 +72,7 @@ and click "Deploy".
 The Visual Editor screen should show up: enter "jupyter-test" for "name", "kubeappuser" for "Service Account", and
 change **base_domain** to the value below, then click "Deploy":
 ```copy
-{{ ingress_domain }}
+{{ DATA_E2E_BASE_URL }}
 ```
 This should trigger deployment of the Jupyterhub app (view the pods below).
 
@@ -80,7 +80,7 @@ This should trigger deployment of the Jupyterhub app (view the pods below).
 #### Option B: Launch Jupyter Notebook via tanzu cli
 View the Jupyter accelerator in TAP GUI (search for **ml** first, just to demonstrate how accelerators can be used, then search for **jupyter**):
 ```dashboard:open-url
-url: {{ ingress_protocol }}://tap-gui.{{ ingress_domain }}/create
+url: {{ ingress_protocol }}://tap-gui.{{ DATA_E2E_BASE_URL }}/create
 ```
 
 Verify that the Jupyterhub package is available:
@@ -105,7 +105,7 @@ tanzu package install jupyterhub -p jupyter.tanzu.vmware.com -v {{DATA_E2E_JUPYT
 
 View the installed package (login with the default username and password used above - jupyter/Vmware1!):
 ```dashboard:open-url
-url: {{ ingress_protocol }}://jupyter-{{session_namespace}}.{{ ingress_domain }}
+url: {{ ingress_protocol }}://jupyter-{{session_namespace}}.{{ DATA_E2E_BASE_URL }}
 ```
 
 #### Launch Catalog
@@ -133,7 +133,7 @@ For the purposes of this exercise, we will be using **DataHub** as our data cata
 
 From **TAP GUI**, go to the **Worklooads** screen:
 ```dashboard:open-url
-url: http://tap-gui.{{ ingress_domain }}/supply-chain
+url: http://tap-gui.{{ DATA_E2E_BASE_URL }}/supply-chain
 ```
 
 Click on the DataHub workload (it should show up as **datahub-tap**.) Notice that the app is in *Ready** state.
@@ -155,12 +155,12 @@ Click on the "Properties" tab to view more detail.
 #### Launch Pipeline
 View Argo Workflows in the TAP GUI - the Argo Workflows app should be visible:
 ```dashboard:open-url
-url: {{ ingress_protocol }}://tap-gui.{{ ingress_domain }}/supply-chain
+url: {{ ingress_protocol }}://tap-gui.{{ DATA_E2E_BASE_URL }}/supply-chain
 ```
 
 View Kubeflow Pipelines as well:
 ```dashboard:open-url
-url: {{ ingress_protocol }}://kubeflow-pipelines.{{ ingress_domain }}
+url: {{ ingress_protocol }}://kubeflow-pipelines.{{ DATA_E2E_BASE_URL }}
 ```
 
 <div style="text-align: left; justify-content: left; align-items: center; width: 80%; margin-bottom: 20px; font-size: small">
@@ -197,7 +197,7 @@ enterprise-compatible source of reusable templates that we can use to bootstrap 
 
 In **TAP**, navigate to the Accelerators view:
 ```dashboard:open-url
-url: {{ ingress_protocol }}://tap-gui.{{ ingress_domain }}/create
+url: {{ ingress_protocol }}://tap-gui.{{ DATA_E2E_BASE_URL }}/create
 ```
 
 In the Search field (top-left), enter **ml**.
@@ -263,7 +263,7 @@ cd ~/sample-ml-app; git config --global user.email 'eduk8s@example.com'; git con
 
 Navigate to Argo Workflows to view the newly deployed workflow:
 ```dashboard:open-url
-url: https://argo-workflows.{{ ingress_domain }}
+url: https://argo-workflows.{{ DATA_E2E_BASE_URL }}
 ```
 
 In the **Namespace** field, enter the namespace below:
@@ -275,7 +275,7 @@ Our newly deployed workflow should now be visible.
 
 The newly created experiment should also be visible in MlFlow:
 ```dashboard:open-url
-url: http://mlflow.{{ ingress_domain }}
+url: http://mlflow.{{ DATA_E2E_BASE_URL }}
 ```
 
 Now, let's make an update to our ML code.
@@ -293,7 +293,7 @@ cd ~/sample-ml-app; git config --global user.email 'eduk8s@example.com'; git con
 In a few moments, a new ML pipeline which represents our latest changes should pop up.
 Watch out for it in the Argo Workflows dashboard:
 ```dashboard:open-url
-url: https://argo-workflows.{{ ingress_domain }}
+url: https://argo-workflows.{{ DATA_E2E_BASE_URL }}
 ```
 
 (<font color="red">NOTE</font>: Most pipeline orchestrators allow the user to control the behavior of the pipelines when a pre-existing job instance is still running.
@@ -332,13 +332,13 @@ cd ~/sample-ml-app; git config --global user.email 'eduk8s@example.com'; git con
 
 Shortly, the ML pipeline should be resubmitted:
 ```dashboard:open-url
-url: https://argo-workflows.{{ ingress_domain }}
+url: https://argo-workflows.{{ DATA_E2E_BASE_URL }}
 ```
 
 This time, the training step should be launched on our Ray cluster.
 Click on "Cluster" on the Ray Dashboard, and observe new activity once the pipeline hits the "training" step:
 ```dashboard:open-url
-url: http://ray.{{ ingress_domain }}
+url: http://ray.{{ DATA_E2E_BASE_URL }}
 ```
 
 #### Launch In-Database Pipeline
@@ -402,7 +402,7 @@ Thanks to **ServiceBindings**, these are the only keys we will need to connect t
 
 Navigate to the **TAP GUI** and click on the **pgadmin** instance:
 ```dashboard:open-url
-url: {{ ingress_protocol }}://tap-gui.{{ ingress_domain }}/supply-chain
+url: {{ ingress_protocol }}://tap-gui.{{ DATA_E2E_BASE_URL }}/supply-chain
 ```
 
 Launch pgAdmin by retrieving the URL from the **tanzu cli** (login credentials: test@test.com/alwaysbekind):
@@ -511,7 +511,7 @@ cd ~/sample-ml-app; git config --global user.email 'eduk8s@example.com'; git con
 
 Let's access the web UI (you may need to click on the topmost menu tab on the left to see the initial screen):
 ```dashboard:open-url
-url: https://argo-workflows.{{ ingress_domain }}
+url: https://argo-workflows.{{ DATA_E2E_BASE_URL }}
 ```
 
 <font color="red">NOTE:</font> If the Login page is displayed, copy the access token from here to the Login box:
@@ -588,7 +588,7 @@ Notice that the **Git commits** associated with the changes are also tracked.
 #### View model metrics
 Navigate to MlFlow:
 ```dashboard:open-url
-url: {{ ingress_protocol }}://mlflow.{{ ingress_domain }}
+url: {{ ingress_protocol }}://mlflow.{{ DATA_E2E_BASE_URL }}
 ```
 
 Select the **convolutional_neural_network_team_main** experiment (on the left),
