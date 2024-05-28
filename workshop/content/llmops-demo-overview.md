@@ -1,4 +1,5 @@
 ### Rapid-fire LLMOps Demo
+Here is an overview of the LLM pipeline architecture used in this exercise:
 ![Sample LLMOps Workflow](images/sample-llm-workflow.jpg)
 
 #### Launch app from TAP GUI
