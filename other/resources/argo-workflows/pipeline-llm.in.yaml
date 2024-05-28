@@ -51,7 +51,7 @@ spec:
           - name: mlflow_stage
             value: "Staging"
           - name: git_repo
-            value: #@ data.values.git_repo
+            value: #@ "https://github.com/" + data.values.git_repo_user + "/" +  data.values.git_repo_app
           - name: experiment_name
             value: #@ data.values.experiment_name
           - name: environment_name

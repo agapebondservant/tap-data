@@ -1,3 +1,5 @@
+#@ load("@ytt:data", "data")
+---
 apiVersion: kappctrl.k14s.io/v1alpha1
 kind: App
 metadata:
@@ -12,9 +14,9 @@ spec:
   template:
     - ytt:
         paths:
-          - resources/appcr/pipeline.yaml
-          - resources/appcr/job.yaml
-          - resources/appcr/values.yaml
+          - pipeline.yaml
+          - job.yaml
+          - values.yaml
           - #@ ".git/refs/heads/{}".format(data.values.environment_name)
 
   deploy:
