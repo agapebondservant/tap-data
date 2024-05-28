@@ -1,0 +1,21 @@
+apiVersion: kappctrl.k14s.io/v1alpha1
+kind: App
+metadata:
+  name: llm-pipeline-${SESSION_NAMESPACE}
+spec:
+  serviceAccountName: default
+  fetch:
+    - git:
+        url: https://github.com/${DATA_E2E_GIT_USER}/sample-llm-app
+        ref: origin/main-${SESSION_NAMESPACE}
+
+  template:
+    - ytt:
+        paths:
+          - resources/appcr/pipeline.yaml
+          - resources/appcr/job.yaml
+          - resources/appcr/values.yaml
+          - #@ ".git/refs/heads/{}".format(data.values.environment_name)
+
+  deploy:
+    - kapp: {}

@@ -7,3 +7,4 @@ modules:
     - mlops-demo-airflow
     - mlops-backstage-plugin-overview
     - mlops-demo-overview
+    - llmops-demo-overview

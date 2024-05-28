@@ -1,0 +1,9 @@
+#@data/values
+---
+model_stage: Staging
+git_repo_user: ${DATA_E2E_GIT_USER}
+git_repo_app: sample-llm-app
+experiment_name: genai_team_${SESSION_NAMESPACE}
+environment_name: main-${SESSION_NAMESPACE}
+mlflow_tracking_uri: http://mlflow.${DATA_E2E_BASE_URL}
+mlflow_s3_uri: http://minio-ml.${DATA_E2E_BASE_URL}

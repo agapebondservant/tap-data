@@ -1,0 +1,72 @@
+#@ load("@ytt:data", "data")
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  name: llm-image-processing-workflow-${SESSION_NAMESPACE}
+  annotations:
+    kapp.k14s.io/change-group: "apps.big.co/llm-argo-pipelines"
+    kapp.k14s.io/disable-original: ""
+spec:
+  entrypoint: train
+  synchronization:
+    mutex:
+      name: llm-huggingface-${SESSION_NAMESPACE}
+  volumes:
+    - name: huggingface-repo-volume
+      configMap:
+        name: llm-pipeline-configmap
+        defaultMode: 0777
+  templates:
+    - name: train
+      steps:
+        - - name: upload-dataset
+            template: run-training
+            arguments:
+              parameters:
+                - name: mlflow_entry
+                  value: "upload_dataset"
+        - - name: train-model
+            template: run-training
+            arguments:
+              parameters:
+                - name: mlflow_entry
+                  value: "train_model"
+        - - name: evaluate-model
+            template: run-training
+            arguments:
+              parameters:
+                - name: mlflow_entry
+                  value: "evaluate_model"
+        - - name: promote-model-to-staging
+            template: run-training
+            arguments:
+              parameters:
+                - name: mlflow_entry
+                  value: "promote_model_to_staging"
+    - name: run-training
+      inputs:
+        parameters:
+          - name: mlflow_entry
+          - name: mlflow_stage
+            value: "Staging"
+          - name: git_repo
+            value: #@ data.values.git_repo
+          - name: experiment_name
+            value: #@ data.values.experiment_name
+          - name: environment_name
+            value: #@ data.values.environment_name
+      container:
+        image: oawofolu/llm-image-processor:0.0.2
+        imagePullPolicy: Always
+        command: [ python ]
+        env:
+          - name: DATA_E2E_HUGGINGFACE_TOKEN
+            value: ${DATA_E2E_HUGGINGFACE_TOKEN}
+        args:
+          - ./app/main.py
+          - mlflow_entry="{{inputs.parameters.mlflow_entry}}"
+          - mlflow_stage="{{inputs.parameters.mlflow_stage}}"
+          - git_repo="{{inputs.parameters.git_repo}}"
+          - experiment_name="{{inputs.parameters.experiment_name}}"
+          - environment_name="{{inputs.parameters.environment_name}}"

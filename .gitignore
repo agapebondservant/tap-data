@@ -390,3 +390,5 @@ resources/tanzu-aws-1.7-gke.yaml
 ./resources/cert-manager-issuer-gke.yaml
 tmp.py
 tmp.yaml
+/other/resources/argo-workflows/pipeline-llm.yaml
+/other/resources/appcr/pipeline_app_llm.yaml

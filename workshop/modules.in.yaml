@@ -95,6 +95,8 @@ modules:
       name: Demonstration
     mlops-backstage-plugin-overview:
       name: For Data Scientists
+    llmops-demo-overview:
+      name: For LLMOps Engineers
 config:
     vars:
     - name: DATA_E2E_REGISTRY_USERNAME
@@ -245,4 +247,6 @@ config:
       value: ${DATA_E2E_RAY_ADDRESS}
     - name: DATA_E2E_AIRFLOW_DAGS_REPO
       value: ${DATA_E2E_AIRFLOW_DAGS_REPO}
+    - name: DATA_E2E_HUGGINGFACE_TOKEN
+      value: ${DATA_E2E_HUGGINGFACE_TOKEN}
 

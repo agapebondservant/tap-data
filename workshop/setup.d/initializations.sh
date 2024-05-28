@@ -71,12 +71,20 @@ setupgitbranches gp-main
 setupgitbranches kfp-main
 cd - && rm -rf ~/sample-accelerator
 
+git clone https://${DATA_E2E_GIT_USER}:${DATA_E2E_GIT_TOKEN}@github.com/${DATA_E2E_GIT_USER}/sample-llm-app.git ~/sample-llm-app
+cd ~/sample-llm-app
+setupgitbranches main
+setupgitbranches gp-main
+setupgitbranches kfp-main
+cd - && rm -rf ~/sample-llm-app
+
 echo "Git branches set up."
 
 # Reset Argo Pipelines
 kapp delete -a image-procesor-pipeline-${SESSION_NAMESPACE} -n ${SESSION_NAMESPACE} -y || true
 kapp delete -a image-procesor-pipeline-gp-${SESSION_NAMESPACE} -n ${SESSION_NAMESPACE} -y || true
 kapp delete -a image-procesor-pipeline-kfp-${SESSION_NAMESPACE} -n ${SESSION_NAMESPACE} -y || true
+kapp delete -a llm-finetuning-pipeline-${SESSION_NAMESPACE} -n ${SESSION_NAMESPACE} -y || true
 echo "Argo workflow pipelines reset."
 
 # Accelerators

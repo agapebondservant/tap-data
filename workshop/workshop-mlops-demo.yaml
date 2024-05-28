@@ -6,3 +6,4 @@ modules:
     - mlops-tap-overview
     - mlops-backstage-plugin-overview
     - mlops-demo-overview
+    - llmops-demo-overview
