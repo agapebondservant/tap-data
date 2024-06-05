@@ -1,23 +1,4 @@
 ---
-apiVersion: cert-manager.io/v1
-kind: Certificate
-metadata:
-  name: ${DATA_E2E_BASE_URL}
-  namespace: learningcenter
-spec:
-  isCA: true
-  secretName: tls
-  privateKey:
-    rotationPolicy: Always
-  dnsNames:
-    - '*.apps.${DATA_E2E_BASE_URL}'
-    - '*.learningcenter.${DATA_E2E_BASE_URL}'
-    - '*.${DATA_E2E_BASE_URL}'
-  issuerRef:
-    group: cert-manager.io
-    name: letsencrypt-production
-    kind: ClusterIssuer
----
 apiVersion: secretgen.carvel.dev/v1alpha1
 kind: SecretExport
 metadata:

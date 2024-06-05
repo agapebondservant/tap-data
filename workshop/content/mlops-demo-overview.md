@@ -67,15 +67,61 @@ In the top right, select the dropdown under **Current Context**, copy the text b
 {{session_namespace}}
 ```
 
-Next, go to the **Catalog** tab, click **AI** checkbox (under "Categories" on the left), 
-click on "Jupyterhub on Tanzu",
+Next, go to the **Catalog** tab, enter **jupyter** in the search field, 
+click on "Jupyterhub",
+select **7.0.3 / App Version 4.1.5** from the **Package Version** dropdown,
 and click "Deploy". 
-The Visual Editor screen should show up: enter "jupyter-test" for "name", "kubeappuser" for "Service Account", and
-change **base_domain** to the value below, then click "Deploy":
-```copy
-{{ DATA_E2E_BASE_URL }}
+
+The Visual Editor screen should show up with the content of the **values.yaml** file.
+Updating the content will allow us to override the configuration for our deployment.
+
+For a baseline, we can search for a predefined template with TAP's **Accelerators**.
+Let's navigate to the **Accelerators** that we will need from the **Backstage ML** portal:
+```dashboard:open-url
+url: {{ ingress_protocol }}://tap-gui.{{ DATA_E2E_BASE_URL }}/mlworkflows
 ```
-This should trigger deployment of the Jupyterhub app (view the pods below).
+<font color="red"><b>NOTE:</b></font> The portal is a configurable panel of shortcuts to various sites in **TAP**.
+It has been integrated here for convenience; however, the sites can also be accessed directly.
+
+Click on the first tab (**Deploy an opensource MLOps platform**) - it should launch the **Accelerator** view below:
+```dashboard:open-url
+url: {{ ingress_protocol }}://tap-gui.{{ DATA_E2E_BASE_URL }}/create/templates/mlplatform
+```
+
+From the **Type of ML Platform** dropdown, select **ML Notebook and Experimentation**. A list of configurable entries should be displayed, as well as
+a link to the official documentation for the Airflow package. For this exercise, we'll only update the **proxy.ingress.hostname** field. 
+Replace the entry in the **proxy.ingress.hostname** field with the domain address shown below:
+```copy
+jupyter-{{ session_namespace }}.{{ DATA_E2E_BASE_URL }}
+```
+
+Click on **Explore**. The **bitnami-jupyter** folder contains subfolders for each app version of Jupyterhub that has been configured in the accelerator.
+The version that we will use for this exercise is **4.1.5**. This matches the **Package Version** that we selected earlier.
+Navigate to **bitnami-jupyter/4.1.5/values.yaml** in the displayed window, and click **Copy**.
+
+Now, return to **KubeApps** and replace the content of the textarea with the values you just copied.
+In the YAML editor, our updates to the default configuration should be visually displayed in _diff_ format.
+This allows us to validate our updates;
+it also allows us to spot any breaking changes to the YAML config that we may need to backfill before deploying.
+The editor should highlight all the overriden settings with red markers. Click on the red markers to explore some of the changes.
+
+Next, provide a name for the deployment in the **Name** field (above the YAML editor).
+Enter the name provided below:
+```copy
+jupyter-{{session_namespace}}
+```
+
+Finally, click the "Deploy" button below.
+
+
+<font color="red"><b>NOTE:</b></font> This may take up to a few minutes to deploy. Once fully deployed, **KubeApps** should display an indicator
+showing that the deployment is complete. Refresh your screen after a minute if the status doesn't show the update right away.
+
+Once **Jupyterhub** is deployed, click on the **URL** shown for Ingress.
+The Jupyterhub login page should be displayed.
+Click on the link on the bottom that shows **Sign up to create a new user**,
+create a new **admin** user (with username **admin**),
+and log in using the configured credentials you just created.
 
 #### Launch Catalog
 <font color="red"><b>NOTE: For a high-level demo, this section may be skipped as optional.</b></font><br/>

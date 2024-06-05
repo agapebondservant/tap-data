@@ -47,7 +47,10 @@ In the top right, select the dropdown under **Current Context**, copy the text b
 {{session_namespace}}
 ```
 
-Next, go to the **Catalog** tab, click on "Airflow", and click "Deploy". 
+Next, go to the **Catalog** tab, click on "Airflow".
+**KubeApps** includes a list of **chart versions** that can be deployed.
+Click on the **Package Version** dropdown on the top right, and select **16.6.0 / App Version 2.8.1**.
+Then click "Deploy". 
 
 The Visual Editor screen should show up with the content of the **values.yaml** file.
 Updating the content will allow us to override the configuration for our deployment.
@@ -62,20 +65,22 @@ On the **Airflow Accelerator**, click **Choose**. A list of configurable entries
 a link to the official documentation for the Airflow package. For this exercise, we'll keep the default values as is. 
 
 Click on **Explore**. Under the **bitnami-airflow** folder, notice that there are multiple subfolders for each configured app version of Airflow.
-The version that we will use for this exercise is **2.8.1**.
+The version that we will use for this exercise is **2.8.1**. This matches the **Package Version** that we selected earlier.
 Navigate to **bitnami-airflow/2.8.1/values.yaml** in the displayed window, and click **Copy**. 
 
 Now, return to **KubeApps** and replace the content of the textarea with the values you just copied.
-
-**KubeApps** includes a list of **chart versions** that can be deployed.
-Click on the **Package Version** dropdown on the top right, and select **16.6.0 / App Version 2.8.1**.
-This version matches the app version that we configured earlier.
-Then click "Deploy".
-
 In the YAML editor, our updates to the default configuration should be visually displayed in _diff_ format.
 This allows us to validate our updates;
 it also allows us to spot any breaking changes to the YAML config that we may need to backfill before deploying.
-Then, click the "Deploy" button below.
+The editor should highlight all the overriden settings with red markers. Click on the red markers to explore some of the changes.
+
+Next, provide a name for the deployment in the **Name** field (above the YAML editor).
+Enter the name provided below:
+```copy
+airflow-{{session_namespace}}
+```
+
+Finally, click the "Deploy" button below.
 
 
 <font color="red"><b>NOTE:</b></font> This may take up to a few minutes to deploy. Once fully deployed, **KubeApps** should display an indicator 

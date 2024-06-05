@@ -399,3 +399,5 @@ other/resources/appcr/job_llm.yaml
 other/resources/appcr/values_llm.yaml
 exercises/jupyter/.ipynb_checkpoints/Untitled-checkpoint.ipynb
 exercises/jupyter/Untitled.ipynb
+key.json
+tmp.json
