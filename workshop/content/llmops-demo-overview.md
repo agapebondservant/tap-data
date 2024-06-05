@@ -127,7 +127,11 @@ after: 0
 ```
 
 The **train_model** entrypoint runs the **train_model.py** script.
-Notice that it is currently an empty placeholder.
+Notice that it is currently an empty placeholder:
+```editor:open-file
+file: ~/sample-llm-app/train_model.py
+```
+
 The code in **train_model.py** can be updated to allow **finetuning** or **retraining** of the base LLM model.
 We will update the code later.
 
