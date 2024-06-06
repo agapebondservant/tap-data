@@ -31,7 +31,7 @@ url: http://mlflow.{{ DATA_E2E_BASE_URL }}
 <font color="red"><b>Optional; for a shorter demo, skip this section and go to "Launch Pipeline".</b> </font><br/>
 We will use TAP to discover the **tooling** that we will need for our development environment.
 
-Click on the Jupyter tab in the workshop (**jupyter** as the password), and show the **File Ingestion** notebook.
+Click on the Jupyter tab in the workshop (**jupyter** as the password), and show the **Image Processing** notebook.
 
 This is the Jupyter notebook that was used to create experiments for our training use case. 
 To migrate it to our own self-managed instance of Jupyterhub, we will self-provision Jupyterhub using **TAP**.
@@ -89,7 +89,7 @@ url: {{ ingress_protocol }}://tap-gui.{{ DATA_E2E_BASE_URL }}/create/templates/m
 ```
 
 From the **Type of ML Platform** dropdown, select **ML Notebook and Experimentation**. A list of configurable entries should be displayed, as well as
-a link to the official documentation for the Airflow package. For this exercise, we'll only update the **proxy.ingress.hostname** field. 
+a link to the official documentation for the Jupyterhub package. For this exercise, we'll only update the **proxy.ingress.hostname** field. 
 Replace the entry in the **proxy.ingress.hostname** field with the domain address shown below:
 ```copy
 jupyter-{{ session_namespace }}.{{ DATA_E2E_BASE_URL }}
