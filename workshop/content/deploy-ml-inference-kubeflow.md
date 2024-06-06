@@ -86,7 +86,7 @@ url: {{ ingress_protocol }}://tap-gui.{{ DATA_E2E_BASE_URL }}/api-docs
 Last, view the pipeline that was used to build the model:
 ```dashboard:reload-dashboard
 name: Kubeflow
-url: {{ ingress_protocol }}://kubeflow-pipelines.{{ DATA_E2E_BASE_URL }}
+url: http://kubeflow-pipelines.{{ DATA_E2E_BASE_URL }}
 ```
 
 

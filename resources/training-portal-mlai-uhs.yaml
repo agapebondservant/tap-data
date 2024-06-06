@@ -1,7 +1,7 @@
 apiVersion: learningcenter.tanzu.vmware.com/v1beta1
 kind: TrainingPortal
 metadata:
-  name: uhs-demo
+  name: texas-demo
 spec:
   workshops:
     - name: data-mlops-demo-with-airflow

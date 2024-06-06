@@ -175,7 +175,7 @@ url: {{ ingress_protocol }}://tap-gui.{{ DATA_E2E_BASE_URL }}/supply-chain
 
 View Kubeflow Pipelines as well:
 ```dashboard:open-url
-url: {{ ingress_protocol }}://kubeflow-pipelines.{{ DATA_E2E_BASE_URL }}
+url: http://kubeflow-pipelines.{{ DATA_E2E_BASE_URL }}
 ```
 
 <div style="text-align: left; justify-content: left; align-items: center; width: 80%; margin-bottom: 20px; font-size: small">

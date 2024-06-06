@@ -421,6 +421,7 @@ helm install kubeapps bitnami/kubeapps \
 --set packaging.carvel.enabled=true \
 --set ingress.enabled=true \
 --set ingress.hostname=kubeapps.${DATA_E2E_BASE_URL} \
+--set postgresql.resourcesPreset=medium \
 --set ingress.annotations."projectcontour\.io/websocket-routes"='/' \
 --namespace kubeapps \
 --create-namespace

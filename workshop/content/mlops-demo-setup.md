@@ -21,6 +21,7 @@ helm repo update;
 helm install kubeapps bitnami/kubeapps \
 --set frontend.service.type=LoadBalancer \
 --set packaging.carvel.enabled=true \
+--set postgresql.resourcesPreset=medium \
 --namespace {{ session_namespace }} || true;
 
 kubectl rollout restart deploy workflow-controller -nargo || true;
