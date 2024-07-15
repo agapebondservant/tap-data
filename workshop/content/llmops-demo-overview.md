@@ -201,7 +201,7 @@ url: https://huggingface.co/tanzuhuggingface/question-answering-finetuned
 
 You can also view metadata about the LLM that was tracked in the data catalog (login: datahub/Vmware1!):
 ```dashboard:open-url
-url: {{ ingress_protocol }}://datahub-datahub.{{ DATA_E2E_BASE_URL }}
+url: http://datahub-datahub.{{ DATA_E2E_BASE_URL }}
 ```
 
 Click on the MLModels card (under the **Explore your data** section), and click on each MLModel to view their captured metadata.

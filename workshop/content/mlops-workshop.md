@@ -1,4 +1,6 @@
 ### Rapid-fire Workshop
+Here is an overview of the ML pipeline architecture used in this exercise:
+![Sample MLOps Workflow](images/sample-ml-workflow.jpg)
 
 #### Launch app from TAP GUI
 View the app in TAP GUI:
@@ -382,7 +384,7 @@ In this exercise, we will use **VMware Greenplum** for in-database analytics.
 
 Let's go back to our datasets from the data catalog:
 ```dashboard:open-url
-url: {{ ingress_protocol }}://datahub-datahub.{{ DATA_E2E_BASE_URL }}
+url: http://datahub-datahub.{{ DATA_E2E_BASE_URL }}
 ```
 
 Login (credentials: **datahub/Vmware1!**), go to the Home Page (click on the top-left icon),

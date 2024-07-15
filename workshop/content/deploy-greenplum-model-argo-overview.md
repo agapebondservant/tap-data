@@ -31,7 +31,7 @@ In this exercise, we will use **VMware Greenplum** for in-database analytics.
 
 Let's go back to our datasets from the data catalog:
 ```dashboard:open-url
-url: {{ ingress_protocol }}://datahub-datahub.{{ DATA_E2E_BASE_URL }}
+url: http://datahub-datahub.{{ DATA_E2E_BASE_URL }}
 ```
 
 Login (credentials: **datahub/Vmware1!**), go to the Home Page (click on the top-left icon), 

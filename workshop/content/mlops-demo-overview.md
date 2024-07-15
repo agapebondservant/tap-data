@@ -1,4 +1,6 @@
 ### Rapid-fire Demo
+Here is an overview of the ML pipeline architecture used in this exercise:
+![Sample MLOps Workflow](images/sample-ml-workflow.jpg)
 
 #### Launch app from TAP GUI
 View the app in TAP GUI:
