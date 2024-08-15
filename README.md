@@ -203,7 +203,7 @@ rm key.json
 ```
 kubectl create secret docker-registry registry-credentials --docker-server=https://index.docker.io/v1/ --docker-username=${DATA_E2E_REGISTRY_USERNAME} --docker-password=${DATA_E2E_REGISTRY_PASSWORD} --dry-run -o yaml | kubectl apply -f -
 kubectl annotate secret registry-credentials secretgen.carvel.dev/image-pull-secret=""
-kubectl create secret docker-registry tanzu-image-pull-secret --docker-server=registry.tanzu.vmware.com --docker-username=${DATA_E2E_PIVOTAL_REGISTRY_USERNAME} --docker-password=${DATA_E2E_PIVOTAL_REGISTRY_PASSWORD} --dry-run -o yaml | kubectl apply -f -
+kubectl create secret docker-registry tanzu-image-pull-secret --docker-server=tanzu.packages.broadcom.com --docker-username=${DATA_E2E_BROADCOM_REGISTRY_USERNAME} --docker-password=${DATA_E2E_BROADCOM_REGISTRY_PASSWORD} --dry-run -o yaml | kubectl apply -f -
 kubectl annotate secret tanzu-image-pull-secret secretgen.carvel.dev/image-pull-secret=""
 ```
 
@@ -489,10 +489,10 @@ source .env
 export GEMFIRE_NAMESPACE_NM=gemfire-system
 export GEMFIRE_VER=2.2.0
 kubectl create ns $GEMFIRE_NAMESPACE_NM || true
-kubectl create secret docker-registry image-pull-secret --namespace=gemfire-system --docker-server=registry.pivotal.io --docker-username='{{ DATA_E2E_PIVOTAL_REGISTRY_USERNAME }}' --docker-password='{{ DATA_E2E_PIVOTAL_REGISTRY_PASSWORD }}' --dry-run -o yaml | kubectl apply -f -
+kubectl create secret docker-registry image-pull-secret --namespace=gemfire-system --docker-server=registry.pivotal.io --docker-username='{{ DATA_E2E_BROADCOM_REGISTRY_USERNAME }}' --docker-password='{{ DATA_E2E_BROADCOM_REGISTRY_PASSWORD }}' --dry-run -o yaml | kubectl apply -f -
 kubectl annotate secret image-pull-secret secretgen.carvel.dev/image-pull-secret=""
-helm install  gemfire-crd oci://registry.tanzu.vmware.com/tanzu-gemfire-for-kubernetes/gemfire-crd --version $GEMFIRE_VER --namespace $GEMFIRE_NAMESPACE_NM --set operatorReleaseName=gemfire-operator
-helm install gemfire-operator oci://registry.tanzu.vmware.com/tanzu-gemfire-for-kubernetes/gemfire-operator --version $GEMFIRE_VER --namespace $GEMFIRE_NAMESPACE_NM
+helm install  gemfire-crd oci://tanzu.packages.broadcom.com/tanzu-gemfire-for-kubernetes/gemfire-crd --version $GEMFIRE_VER --namespace $GEMFIRE_NAMESPACE_NM --set operatorReleaseName=gemfire-operator
+helm install gemfire-operator oci://tanzu.packages.broadcom.com/tanzu-gemfire-for-kubernetes/gemfire-operator --version $GEMFIRE_VER --namespace $GEMFIRE_NAMESPACE_NM
 ```
 
 #### Install Operator UI <a name="operatorui"/>
@@ -588,7 +588,7 @@ kubectl apply -f resources/cert-manager-issuer.yaml
 ```
   source .env
   kubectl create ns gemfire-system --dry-run -o yaml | kubectl apply -f -
-  kubectl create secret docker-registry image-pull-secret --namespace=gemfire-system --docker-server=registry.pivotal.io --docker-username="$DATA_E2E_PIVOTAL_REGISTRY_USERNAME" --docker-password="$DATA_E2E_PIVOTAL_REGISTRY_PASSWORD" --dry-run -o yaml | kubectl apply -f -
+  kubectl create secret docker-registry image-pull-secret --namespace=gemfire-system --docker-server=registry.pivotal.io --docker-username="$DATA_E2E_BROADCOM_REGISTRY_USERNAME" --docker-password="$DATA_E2E_BROADCOM_REGISTRY_PASSWORD" --dry-run -o yaml | kubectl apply -f -
   helm uninstall  gemfire --namespace gemfire-system; helm install gemfire other/resources/gemfire/gemfire-operator-1.0.3/ --namespace gemfire-system
 ```
 
@@ -672,17 +672,17 @@ imgpkg version
 ```
 source .env
 docker login registry-1.docker.io
-docker login registry.tanzu.vmware.com
+docker login tanzu.packages.broadcom.com
 export INSTALL_REGISTRY_USERNAME=$DATA_E2E_REGISTRY_USERNAME
 export INSTALL_REGISTRY_PASSWORD=$DATA_E2E_REGISTRY_PASSWORD
 #export TAP_VERSION=1.1.1
 #export TAP_VERSION=1.2.0
 export TAP_VERSION=1.7.1
 export INSTALL_REGISTRY_HOSTNAME=index.docker.io #https://index.docker.io/v1/ # index.docker.io
-imgpkg copy -b registry.tanzu.vmware.com/tanzu-application-platform/tap-packages:${TAP_VERSION} --to-repo ${INSTALL_REGISTRY_HOSTNAME}/${DATA_E2E_REGISTRY_USERNAME}/tap-packages
-imgpkg copy -b registry.tanzu.vmware.com/p-rabbitmq-for-kubernetes/tanzu-rabbitmq-package-repo:${DATA_E2E_RABBIT_OPERATOR_VERSION} --to-repo ${INSTALL_REGISTRY_HOSTNAME}/oawofolu/vmware-tanzu-rabbitmq
-imgpkg copy -b registry.tanzu.vmware.com/p-rabbitmq-for-kubernetes/tanzu-rabbitmq-package-repo:${DATA_E2E_RABBIT_OPERATOR_VERSION} --to-repo ${INSTALL_REGISTRY_HOSTNAME}/oawofolu/tanzu-rabbitmq-package-repo
-imgpkg copy -b registry.tanzu.vmware.com/tanzu-gemfire-for-kubernetes/gemfire-for-kubernetes-carvel-bundle:${DATA_E2E_GEMFIRE_OPERATOR_VERSION} --to-repo ${INSTALL_REGISTRY_HOSTNAME}/oawofolu/gemfire-operator
+imgpkg copy -b tanzu.packages.broadcom.com/tanzu-application-platform/tap-packages:${TAP_VERSION} --to-repo ${INSTALL_REGISTRY_HOSTNAME}/${DATA_E2E_REGISTRY_USERNAME}/tap-packages
+imgpkg copy -b tanzu.packages.broadcom.com/p-rabbitmq-for-kubernetes/tanzu-rabbitmq-package-repo:${DATA_E2E_RABBIT_OPERATOR_VERSION} --to-repo ${INSTALL_REGISTRY_HOSTNAME}/oawofolu/vmware-tanzu-rabbitmq
+imgpkg copy -b tanzu.packages.broadcom.com/p-rabbitmq-for-kubernetes/tanzu-rabbitmq-package-repo:${DATA_E2E_RABBIT_OPERATOR_VERSION} --to-repo ${INSTALL_REGISTRY_HOSTNAME}/oawofolu/tanzu-rabbitmq-package-repo
+imgpkg copy -b tanzu.packages.broadcom.com/tanzu-gemfire-for-kubernetes/gemfire-for-kubernetes-carvel-bundle:${DATA_E2E_GEMFIRE_OPERATOR_VERSION} --to-repo ${INSTALL_REGISTRY_HOSTNAME}/oawofolu/gemfire-operator
 ```
 
 #### Install TAP
@@ -709,8 +709,8 @@ tanzu package available get tap.tanzu.vmware.com/$TAP_VERSION --values-schema --
 export TBS_VERSION=1.9.0 # if installing TAP 1.3
 export TBS_VERSION=1.10.8 # if installing TAP 1.5
 export TBS_VERSION=1.7.1 # if installing TAP 1.7.1
-imgpkg copy -b registry.tanzu.vmware.com/tanzu-application-platform/full-tbs-deps-package-repo:${TBS_VERSION} --to-repo index.docker.io/oawofolu/tbs-full-deps # for TAP <1.7
-imgpkg copy -b registry.tanzu.vmware.com/tanzu-application-platform/full-deps-package-repo:${TBS_VERSION} \
+imgpkg copy -b tanzu.packages.broadcom.com/tanzu-application-platform/full-tbs-deps-package-repo:${TBS_VERSION} --to-repo index.docker.io/oawofolu/tbs-full-deps # for TAP <1.7
+imgpkg copy -b tanzu.packages.broadcom.com/tanzu-application-platform/full-deps-package-repo:${TBS_VERSION} \
 --to-repo index.docker.io/oawofolu/tbs-full-deps # for TAP 1.7+
 
 #If installing TAP 1.2:
@@ -805,15 +805,15 @@ tanzu package install learning-center -p learningcenter.tanzu.vmware.com --versi
 kubectl get all -n learningcenter
 tanzu package available list workshops.learningcenter.tanzu.vmware.com --namespace tap-install
 ```
-For TAP 1.7 (Installs the package repository in a separate namespace; the default package repository for TAP 1.7 no longer includes LearningCenter)
+For TAP 1.7 with broadcom registry (Installs the package repository in a separate namespace; the default package repository for TAP 1.7 no longer includes LearningCenter)
 ```
 envsubst < resources/tap-values-1.7-learningcenter.in.yaml > resources/tap-values-1.7-learningcenter.yaml;
 kubectl create ns tap-install-learningcenter;
-tanzu secret registry add tap-registry --username $DATA_E2E_PIVOTAL_REGISTRY_USERNAME \
- --password $DATA_E2E_PIVOTAL_REGISTRY_PASSWORD --server registry.tanzu.vmware.com \
+tanzu secret registry add tap-registry --username $DATA_E2E_BROADCOM_REGISTRY_USERNAME \
+ --password $DATA_E2E_BROADCOM_REGISTRY_PASSWORD --server tanzu.packages.broadcom.com \
  --export-to-all-namespaces --yes --namespace tap-install;
 tanzu package repository add tanzu-tap-repository-learningcenter \
---url registry.tanzu.vmware.com/tanzu-application-platform/tap-packages:1.6.5 \
+--url tanzu.packages.broadcom.com/tanzu-application-platform/tap-packages:1.6.5 \
 --namespace tap-install-learningcenter; # Accept EULA when prompted\
 tanzu package install learningcenter -p learningcenter.tanzu.vmware.com -v "> 0.0.0" \
 --values-file resources/tap-values-1.7-learningcenter.yaml --namespace tap-install-learningcenter;
@@ -1035,9 +1035,9 @@ Setup pre-reqs for various packages required by workshops with Tanzu cli:
 ```
 source <path-to-your-env-file>
 echo $DATA_E2E_REGISTRY_PASSWORD | docker login registry-1.docker.io --username=$DATA_E2E_REGISTRY_USERNAME --password-stdin
-echo $DATA_E2E_PIVOTAL_REGISTRY_PASSWORD | docker login registry.tanzu.vmware.com --username=$DATA_E2E_PIVOTAL_REGISTRY_USERNAME --password-stdin
+echo $DATA_E2E_BROADCOM_REGISTRY_PASSWORD | docker login tanzu.packages.broadcom.com --username=$DATA_E2E_BROADCOM_REGISTRY_USERNAME --password-stdin
 export TDS_VERSION=1.0.0
-imgpkg copy -b registry.tanzu.vmware.com/packages-for-vmware-tanzu-data-services/tds-packages:$TDS_VERSION --to-repo $DATA_E2E_REGISTRY_USERNAME/tds-packages
+imgpkg copy -b tanzu.packages.broadcom.com/packages-for-vmware-tanzu-data-services/tds-packages:$TDS_VERSION --to-repo $DATA_E2E_REGISTRY_USERNAME/tds-packages
 ```
 
 ##### Deploy "Tanzu Data With TAP"<a name="workshopa"/>
