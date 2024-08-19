@@ -862,6 +862,7 @@ tanzu acc create airflow --git-repository https://github.com/agapebondservant/ai
 tanzu acc create postgres --git-repository https://github.com/agapebondservant/postgres-accelerator.git --git-branch main
 tanzu acc create mlplatform --git-repository https://github.com/agapebondservant/mlplatform-accelerator.git --git-branch main
 tanzu acc create mlcoderunner --git-repository https://github.com/tanzumlai/mlcode-runner.git --git-branch main
+tanzu acc create llmfinetune --git-repository https://github.com/agapebondservant/llm-finetuning-accelerator.git --git-branch main
 
 tanzu acc fragment create bitnami-jupyter-fragment --git-repository https://github.com/agapebondservant/jupyter-accelerator.git --git-branch bitnami
 tanzu acc fragment create airflow-fragment --git-repository https://github.com/agapebondservant/airflow-accelerator.git --git-branch main
