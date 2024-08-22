@@ -49,7 +49,7 @@ In the top right, select the dropdown under **Current Context**, copy the text b
 
 Next, go to the **Catalog** tab, click on "Airflow".
 **KubeApps** includes a list of **chart versions** that can be deployed.
-Click on the **Package Version** dropdown on the top right, and select **16.6.0 / App Version 2.8.1**.
+Click "Deploy", click on the **Package Version** dropdown on the top right, and select **17.0.0 / App Version 2.8.2**.
 Then click "Deploy". 
 
 The Visual Editor screen should show up with the content of the **values.yaml** file.
@@ -65,8 +65,8 @@ On the **Airflow Accelerator**, click **Choose**. A list of configurable entries
 a link to the official documentation for the Airflow package. For this exercise, we'll keep the default values as is. 
 
 Click on **Explore**. Under the **bitnami-airflow** folder, notice that there are multiple subfolders for each configured app version of Airflow.
-The version that we will use for this exercise is **2.8.1**. This matches the **Package Version** that we selected earlier.
-Navigate to **bitnami-airflow/2.8.1/values.yaml** in the displayed window, and click **Copy**. 
+The version that we will use for this exercise is **2.8.2**. This matches the **Package Version** that we selected earlier.
+Navigate to **bitnami-airflow/2.8.2/values.yaml** in the displayed window, and click **Copy**. 
 
 Now, return to **KubeApps** and replace the content of the textarea with the values you just copied.
 In the YAML editor, our updates to the default configuration should be visually displayed in _diff_ format.
